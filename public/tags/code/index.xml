@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Code on Computational Clinical Science</title>
-    <link>https://haines-lab.com/tags/code/</link>
+    <link>/tags/code/</link>
     <description>Recent content in Code on Computational Clinical Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -12,10 +12,10 @@
     
     <item>
       <title>Code</title>
-      <link>https://haines-lab.com/project/code/</link>
+      <link>/project/code/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>https://haines-lab.com/project/code/</guid>
+      <guid>/project/code/</guid>
       <description>&lt;p&gt;Currently under construction.&lt;/p&gt;
 </description>
     </item>

@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Reinforcement Learning on Computational Clinical Science</title>
-    <link>https://haines-lab.com/categories/reinforcement-learning/</link>
+    <link>/categories/reinforcement-learning/</link>
     <description>Recent content in Reinforcement Learning on Computational Clinical Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -12,10 +12,10 @@
     
     <item>
       <title>Human Choice and Reinforcement Learning (2)</title>
-      <link>https://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/</link>
+      <link>/post/2017-04-07-human-choice-and-reinforcement-learning-2/</link>
       <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/</guid>
+      <guid>/post/2017-04-07-human-choice-and-reinforcement-learning-2/</guid>
       <description>&lt;div id=&#34;answer-to-post-1&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Answer to post 1&lt;/h2&gt;
 &lt;p&gt;In the previous &lt;a href=&#34;http://haines-lab.com/2017/04/04/human-choice-and-reinforcement-learning-1/&#34;&gt;post&lt;/a&gt;, I reviewed the Rescorla-Wagner updating (Delta) rule and its contemporary instantiation. At the end, I asked the following question:&lt;/p&gt;
@@ -83,7 +83,7 @@ p &amp;lt;- ggplot(all_data, aes(x = trial, y = values, color = Approach)) +
   xlab(&amp;quot;Trial Number&amp;quot;) +
   ylab(&amp;quot;Expected Win Probability&amp;quot;)
 p&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2_files/figure-html/2017-04-07_fig1-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-04-07-human-choice-and-reinforcement-learning-2_files/figure-html/2017-04-07_fig1-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
 &lt;p&gt;As you can see in the plots, both the Delta rule and the power series approach yield the same exact expectations when iterated for each trial. However, the power series form requires each past observation while the Delta rule only requires the last expectation–this feature makes the Delta rule form of the equation much more plausible as a processes that people may use to estimate the value of a choice. This is because the computational cost does not increase with the number of past observations.&lt;/p&gt;
 &lt;p&gt;Through this example, those familiar with &lt;a href=&#34;http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_averages&#34;&gt;economics&lt;/a&gt; or &lt;a href=&#34;https://en.wikipedia.org/wiki/Signal_processing&#34;&gt;signal processing&lt;/a&gt; may find the Delta rule familiar. Essentially, we can think of the Delta rule as a smoothing function or a &lt;a href=&#34;https://en.wikipedia.org/wiki/High-pass_filter#Algorithmic_implementation&#34;&gt;high- or low-pass filter&lt;/a&gt;–albeit in the time as opposed to frequency domain–which effectively attenuates the effect of past or current outcomes, respectively. What makes this specific form interesting is again the fact that it can be iterated (i.e. it is recursive), making it a realistic approximation to the computations performed by the brain when estimating some value.&lt;/p&gt;
 &lt;p&gt;With the above intuitions in mind, we will now get back to the question. How do we change the learning rate to ensure that the current expectation is always the simple average of all past outcomes? Since the above example showed that the Delta rule is really just a moving average where past outcomes are given exponentially decreasing weights, our goal is to make all outcomes equally represented. In other words, we want to weight past and current outcomes equally–this is a &lt;a href=&#34;https://en.wikipedia.org/wiki/Moving_average#Cumulative_moving_average&#34;&gt;&lt;em&gt;cumulative moving average&lt;/em&gt;&lt;/a&gt;. Using our slot machine example, the cumulative moving average formula (in its most common form) is written as follows:&lt;/p&gt;
@@ -134,10 +134,10 @@ p&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Human Choice and Reinforcement Learning (1)</title>
-      <link>https://haines-lab.com/post/2017-04-04-choice_rl_1/</link>
+      <link>/post/2017-04-04-choice_rl_1/</link>
       <pubDate>Tue, 04 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haines-lab.com/post/2017-04-04-choice_rl_1/</guid>
+      <guid>/post/2017-04-04-choice_rl_1/</guid>
       <description>&lt;div id=&#34;short-history&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Short history&lt;/h2&gt;
 &lt;p&gt;In 1972, Robert Rescorla and Allan Wagner developed a formal theory of associative learning, the process through which multiple stimuli are associated with one-another. The most widely used example (Fig. 1) of associative learning comes straight from Psychology 101–Pavlov’s dog.&lt;/p&gt;
@@ -217,7 +217,7 @@ p &amp;lt;- ggplot(all_data, aes(x = trial, y = values, color = Beta)) +
   xlab(&amp;quot;Trial Number&amp;quot;) + 
   ylab(&amp;quot;Expected Pr(win)&amp;quot;)  
 p&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://haines-lab.com/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig1-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig1-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
 &lt;p&gt;It is easy to see that the higher learning rates (i.e. &amp;gt; 0.05) are jumping around the true win rate (0.7, dashed line) quite a bit, whereas setting &lt;span class=&#34;math inline&#34;&gt;\(\beta = 0.05\)&lt;/span&gt; allows for a more stable estimate. Let’s try again with learning rates closer to 0.05.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Learning rates closer to 0.05
 beta_01 &amp;lt;- rw_update(lambda = payoff, beta = 0.01, init = 0)
@@ -244,7 +244,7 @@ p2 &amp;lt;- ggplot(all_data, aes(x = trial, y = values, color = Beta)) +
   xlab(&amp;quot;Trial Number&amp;quot;) + 
   ylab(&amp;quot;Expected Pr(win)&amp;quot;)
 p2&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://haines-lab.com/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig2-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig2-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
 &lt;p&gt;These results look a bit better. However, it is apparent that setting &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; too low is making the updating very sluggish. If we run more trials, however, we should see the expectation converge.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Number of &amp;#39;trials&amp;#39;
 num_trials &amp;lt;- 500
@@ -277,7 +277,7 @@ p2 &amp;lt;- ggplot(all_data, aes(x = trial, y = values, color = Beta)) +
   xlab(&amp;quot;Trial Number&amp;quot;) + 
   ylab(&amp;quot;Expected Pr(win)&amp;quot;)
 p2&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://haines-lab.com/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig3-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig3-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
 &lt;p&gt;Over 500 trials, the expected value for the win rate converges to the true win rate, 70%.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;summary&#34; class=&#34;section level2&#34;&gt;
