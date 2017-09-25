@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.27.1" />
+  <meta name="author" content="Nathaniel Haines">
+  <meta name="description" content="Psychology Graduate Student">
+
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/rstudio.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.1/css/academicons.min.css" integrity="sha512-NThgw3XKQ1absAahW6to7Ey42uycrVvfNfyjqcFNgCmOCQ5AR4AO0SiXrN+8ZtYeappp56lk1WtvjVmEa+VR6A==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
+  <link rel="stylesheet" href="/css/hugo-academic.css">
+  
+  <link rel="stylesheet" href="/css/rstudio.css">
+  
+
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-106994238-1', 'auto');
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  <link rel="alternate" href="https://haines-lab.com/index.xml" type="application/rss+xml" title="Computational Clinical Science">
+  <link rel="feed" href="https://haines-lab.com/index.xml" type="application/rss+xml" title="Computational Clinical Science">
+
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/apple-touch-icon.png">
+
+  <link rel="canonical" href="https://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/">
+
+  
+
+  <title>Human Choice and Reinforcement Learning (2) | Computational Clinical Science</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#navbar-main" data-offset="71">
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Computational Clinical Science</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>Home</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#publications_selected">
+            
+            <span>Publications</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>Posts</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#projects">
+            
+            <span>Projects</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#teaching">
+            
+            <span>Teaching</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>Contact</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+  <div class="article-container">
+    <h1 itemprop="name">Human Choice and Reinforcement Learning (2)</h1>
+    
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+    <time datetime="2017-04-07 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+      Apr 7, 2017
+    </time>
+  </span>
+
+  
+  
+  
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="/categories/reinforcement-learning">Reinforcement Learning</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+  
+  <span class="article-tags">
+    <i class="fa fa-tags"></i>
+    
+    <a href="/tags/r">R</a
+    >, 
+    
+    <a href="/tags/modeling">Modeling</a
+    >, 
+    
+    <a href="/tags/learning">Learning</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f"
+         target="_blank">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29&amp;url=https%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f"
+         target="_blank">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f&amp;title=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29"
+         target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=https%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f&amp;title=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29"
+         target="_blank">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29&amp;body=https%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+    <div class="article-style" itemprop="articleBody">
+      <div id="answer-to-post-1" class="section level2">
+<h2>Answer to post 1</h2>
+<p>In the previous <a href="http://haines-lab.com/2017/04/04/human-choice-and-reinforcement-learning-1/">post</a>, I reviewed the Rescorla-Wagner updating (Delta) rule and its contemporary instantiation. At the end, I asked the following question:</p>
+<ul>
+<li><strong>How should you change the learning rate so that the expected win rate is always the average of all past outcomes?</strong></li>
+</ul>
+<p>We will go over the answer to this question before progressing to the use of the Delta rule in modeling human choice. To begin, refer back to the Delta rule written in the following form:</p>
+<p><span class="math display">\[Pr(win)_{t+1} = (1 - \beta) \cdot Pr(win)_{t} + \beta \cdot \lambda_{t}\]</span></p>
+<p>Here, we see that in the Delta rule the expected win probability for the next trial is equal to the <a href="https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average"><em>exponentially weighted moving average</em></a> of the past expectation and the current outcome. It is easy to show this through a visualization of the expectation over time. For example, imagine that we have a vector of outcomes <span class="math inline">\(\lambda = [1,0,0,1,1,1,0,1,1,1]\)</span>, where 0 and 1 represent losing and winning slot machine rolls, respectively. Note that in this example, the placement of these outcomes within the vector <span class="math inline">\(\lambda\)</span> indicates their temporal order (i.e. <span class="math inline">\(\lambda_{1}=1\)</span>, <span class="math inline">\(\lambda_{2}=0\)</span>, etc.). Now, if we set an arbitrary learning rate such as <span class="math inline">\(\beta = 0.05\)</span>, what is the expected win rate after iterating through outcomes <span class="math inline">\(\lambda\)</span>? The R code below demonstrates the use of the Delta rule and an alternative exponential weighting scheme–which takes the form of a <a href="https://en.wikipedia.org/wiki/Power_series#Examples"><em>power series</em></a>–to determine the expectation on each trial:</p>
+<pre class="r"><code># For pretty plots
+library(ggplot2)
+
+# Assign lambda (lambda[1] == first trial)
+lambda &lt;- c(1,0,0,1,1,1,0,1,1,1)
+
+# Set learning rate
+beta &lt;- 0.05
+
+### Iterative prediction error (Delta rule) approach ###
+
+# Function that iterates the Rescorla-Wagner rule 
+  # This function is slightly modified from the last post
+  # to ensure that that final expectation is stored
+rw_update &lt;- function(lambda, beta, init) {
+  # To store expected value for each trial
+  Pr_win &lt;- vector(length=length(lambda)+1)
+  # Set initial value
+  Pr_win[1] &lt;- init
+  for (t in 1:(length(lambda))) {
+    Pr_win[t+1] &lt;- Pr_win[t] + beta * (lambda[t] - Pr_win[t])
+  }
+  return(Pr_win)
+}
+
+# With initial expectation = 0, iterate Delta rule
+delta_results &lt;- rw_update(lambda = lambda, 
+                           beta   = beta, 
+                           init   = 0)[-1]
+                          #             ^
+                          # Remove initial value (0)
+
+### Power series approach ###
+
+# Direct exponential weighting (saving all expectations)
+power_ser &lt;- NULL
+for (i in 1:10) {
+  power_ser[i] &lt;- beta * sum((1-beta)^(0:(i-1))*lambda[i:1])
+}
+
+### Comparison of both approaches ###
+all(round(delta_results, 8) == round(power_ser, 8))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code># data.frame for ggplot
+all_data &lt;- stack(data.frame(delta = delta_results,
+                             pow_s = power_ser))
+# Add trial 
+all_data[[&quot;trial&quot;]] &lt;- rep(1:10, 2)
+names(all_data)[2] &lt;- &quot;Approach&quot;
+
+# Visually
+p &lt;- ggplot(all_data, aes(x = trial, y = values, color = Approach)) + 
+  geom_line() +
+  facet_grid(facets = &quot;Approach ~ .&quot;) + 
+  ggtitle(&quot;Comparison of approaches&quot;) +
+  xlab(&quot;Trial Number&quot;) +
+  ylab(&quot;Expected Win Probability&quot;)
+p</code></pre>
+<p><img src="/post/2017-04-07-human-choice-and-reinforcement-learning-2_files/figure-html/2017-04-07_fig1-1.svg" width="672" style='height: 100%; width: 100%; object-fit: contain' /></p>
+<p>As you can see in the plots, both the Delta rule and the power series approach yield the same exact expectations when iterated for each trial. However, the power series form requires each past observation while the Delta rule only requires the last expectation–this feature makes the Delta rule form of the equation much more plausible as a processes that people may use to estimate the value of a choice. This is because the computational cost does not increase with the number of past observations.</p>
+<p>Through this example, those familiar with <a href="http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_averages">economics</a> or <a href="https://en.wikipedia.org/wiki/Signal_processing">signal processing</a> may find the Delta rule familiar. Essentially, we can think of the Delta rule as a smoothing function or a <a href="https://en.wikipedia.org/wiki/High-pass_filter#Algorithmic_implementation">high- or low-pass filter</a>–albeit in the time as opposed to frequency domain–which effectively attenuates the effect of past or current outcomes, respectively. What makes this specific form interesting is again the fact that it can be iterated (i.e. it is recursive), making it a realistic approximation to the computations performed by the brain when estimating some value.</p>
+<p>With the above intuitions in mind, we will now get back to the question. How do we change the learning rate to ensure that the current expectation is always the simple average of all past outcomes? Since the above example showed that the Delta rule is really just a moving average where past outcomes are given exponentially decreasing weights, our goal is to make all outcomes equally represented. In other words, we want to weight past and current outcomes equally–this is a <a href="https://en.wikipedia.org/wiki/Moving_average#Cumulative_moving_average"><em>cumulative moving average</em></a>. Using our slot machine example, the cumulative moving average formula (in its most common form) is written as follows:</p>
+<p><span class="math display">\[Pr(win)_{t+1} = \frac{\lambda_{t} + (t-1) \cdot Pr(win)_{t}}{t}\]</span></p>
+<p>We can re-write the above equation into one that is more familiar to us:</p>
+<p><span class="math display">\[Pr(win)_{t+1} = (1-\frac{1}{t}) \cdot Pr(win)_{t} + \frac{1}{t} \cdot \lambda_{t} \]</span></p>
+<p>In the above form, you can see that the cumulative moving average can be computed using the Delta rule by setting the learning rate to <span class="math inline">\(\frac{1}{t}\)</span>, where <span class="math inline">\(t\)</span> is the trial number. Looking at the equation, you will notice that as <span class="math inline">\(t\)</span> increases, the weight <span class="math inline">\((1-\frac{1}{t})\)</span> placed on the past probability estimate <span class="math inline">\(Pr(win)_{t}\)</span> becomes larger while the weight <span class="math inline">\(\frac{1}{t}\)</span> on the current outcome <span class="math inline">\(\lambda_{t}\)</span> shrinks. This behavior ensures that past outcomes are not discounted at a higher rate than current ones.</p>
+</div>
+<div id="choice-mechanisms" class="section level2">
+<h2>Choice mechanisms</h2>
+<p><img src="http://az616578.vo.msecnd.net/files/2016/08/19/636072180885324217301014601_shoes.jpg" alt="Figure 1" style="height: 100%; width: 100%; object-fit: contain"/></p>
+<p>With the Delta rule, we can approximate how people with a certain learning rate may update their expectations about an outcome on a trial-by-trial basis, but how does this translate to choice? In the slot machine example, we only had a single choice (i.e. pull the lever and see if you win), so this question never applied to us. <strong>But what if we have 2 slot machines and we want to select the one that will win most frequently?</strong> In this case, we can use the Delta rule to update win probability expectations for each slot machine separately, but what do we do with these values after they are computed? Below, I will describe three different methods that can be used to translate expected values to choice.</p>
+</div>
+<div id="greedy-choice" class="section level2">
+<h2>Greedy choice</h2>
+<p>Greedy choice is simple–choose the option with the highest expected value on each trial (i.e. pick the <em>greedy</em> option):</p>
+<p><span class="math display">\[c_{t} = \underset{s \in S}{argmax}(V(s_{t}))\]</span> where <span class="math inline">\(c_{t}\)</span> indicates the choice made on trial <span class="math inline">\(t\)</span> and <span class="math inline">\(V(s_{t})\)</span> represents the value associated with Slot machine <span class="math inline">\(s\)</span> on trial <span class="math inline">\(t\)</span>. Applying this logic to our example, this would equate to choosing the slot machine with the highest expected win probability. While this may sound like a good idea, it is important to remember that we do not know what the true win rate is for either slot machine. Instead, we estimate it after each outcome. With this in mind, a simple example (below) shows why the greedy choice method fails in practical applications.</p>
+<p>Imagine you are choosing between 2 slot machines, where machine A (<span class="math inline">\(Slot_{A}\)</span>) has a true win rate of 0.9, and machine B (<span class="math inline">\(Slot_{B}\)</span>) has a true win rate of 0.5. Obviously, <span class="math inline">\(Slot_{A}\)</span> is a better option, but this is something you need to learn by making a choice and updating your expectations. Assuming that you start off thinking that each slot machine has a win rate of 0 (which is typical in human decision making models), your first choice will be a random selection between the equivalent options. In our example, imagine that you randomly choose <span class="math inline">\(Slot_{B}\)</span>, the slot machine spins, and then you win! Great, so now (regardless of your learning rate), you will update your expectation of the win rate for <span class="math inline">\(Slot_{B}\)</span> to a positive, non-zero value. On the next trial, you are greedy, so you again choose <span class="math inline">\(Slot_{B}\)</span>–it has a higher expected win rate than <span class="math inline">\(Slot_{A}\)</span>. In fact, you will continue to choose <span class="math inline">\(Slot_{B}\)</span> on each trial without ever considering <span class="math inline">\(Slot_{A}\)</span>! In this case, even though <span class="math inline">\(Slot_{A}\)</span> it the optimal choice, you never allow yourself to <em>explore</em> alternative choices. Here, we come across a classical problem in reward-learning paradigms–<a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0095693"><strong><em>the exploration-exploitation tradeoff</em></strong></a>. The crux of this problem is this: how do you know that a “good” choice is better than other choices that you have yet to explore? Think of it like choosing a job. I chose to study psychology, and I continue to exploit this choice (i.e. I am not exploring other education). How do I know that psychology is for me, though? It is possible that I would have gained more from a computer science degree, but I did not explore that option. In the same way, this compromise exists in simple reinforcement learning paradigms such as choosing the best slot machine. Below, we will explore two methods that address the exploration-exploitation problem.</p>
+</div>
+<div id="epsilon-greedy-choice" class="section level2">
+<h2><span class="math inline">\(\epsilon\)</span>-Greedy choice</h2>
+<p>The <span class="math inline">\(\epsilon\)</span>-greedy method is a simple extention of the greedy method above. Instead of always choosing the option with the highest expected value, we sometimes (with probability <span class="math inline">\(\epsilon\)</span>) randomly choose another option:</p>
+<p><span class="math display">\[c_{t} = \cases{
+          \underset{s \in S}{argmax}(V(s_{t}))  &amp; \text{with } Pr(1 - \epsilon) \cr
+          \text{random choice} &amp; \text{with } Pr(\epsilon)
+                }
+\]</span></p>
+<p>By choosing a random option with <span class="math inline">\(Pr(\epsilon)\)</span>, we can avoid getting stuck choosing the non-optimal slot machine. While this method solves our dilemma, it suffers another problem–when randomly selecting options, it gives equal probabilities to each option. Intuitively, a better method would be to choose options <em>probabilistically with respect to their expected values</em> (i.e. give high probability to relatively good options and <em>vice-versa</em>).</p>
+</div>
+<div id="softmax-choice" class="section level2">
+<h2>Softmax choice</h2>
+<p>Also known as the <a href="https://en.wikipedia.org/wiki/Luce%27s_choice_axiom">Luce choice rule</a>, the softmax allows choices to be probabilistic with weights respective to expected value:</p>
+<p><span class="math display">\[Pr(c_{t} = s \in S) = \frac{e^{V_{s}(t)}}{\sum_{s = 1}^S e^{V_{s}(t)}}\]</span></p>
+<p>where <span class="math inline">\(e^{V_{s}(t)}\)</span> is the exponentiated expected value of slot machine <span class="math inline">\(s\)</span> on trial <span class="math inline">\(t\)</span>, and <span class="math inline">\(\sum_{s = 1}^S e^{V_{s}(t)}\)</span> is the summation of the exponentiated expected value of both slot machines (there are 2 in our example). When the expected values are entered, the softmax equation returns a probability of selecting each slot machine which we can then use to make an actual choice. In practice, the softmax function is used most often in decision making research–moving forward, we will use the softmax choice mechanism to model human decision making.</p>
+</div>
+<div id="implementation" class="section level2">
+<h2>Implementation</h2>
+<p>We now have a full model describing each of the following steps:</p>
+<ul>
+<li>Evaluating an outcome,</li>
+<li>Updating previous representations of choice options, and</li>
+<li>Generating a probability of selecting each choice on the next trial.</li>
+</ul>
+<p>This model is simple, but it provides the basic building blocks for more complex models that are found in neuroscience, cognitive science, and decision making literature today. In the next post, we will explore various methods which can be used to estimate the <em>free parameters</em> in the model (e.g. the learning rate) when all we have are the person’s choices.</p>
+</div>
+
+    </div>
+  </div>
+
+</article>
+
+
+
+<div class="article-container">
+  <h3>Related</h3>
+  <ul>
+    
+    <li><a href="/post/2017-04-04-choice_rl_1/">Human Choice and Reinforcement Learning (1)</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="container">
+  <nav>
+  <ul class="pager">
+    
+    <li class="previous"><a href="https://haines-lab.com/post/2017-04-04-choice_rl_1/"><span
+      aria-hidden="true">&larr;</span> Human Choice and Reinforcement Learning (1)</a></li>
+    
+
+    
+  </ul>
+</nav>
+
+</div>
+
+<div class="article-container">
+  
+
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2017 Nathaniel Haines &middot; 
+
+      Powered by the <a href="https://github.com/gcushen/hugo-academic" target="_blank">Academic
+      theme</a> for <a href="http://gohugo.io" target="_blank">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.2/imagesloaded.pkgd.min.js" integrity="sha512-iHzEu7GbSc705hE2skyH6/AlTpOfBmkx7nUqTLGzPYR+C1tRaItbRlJ7hT/D3YQ9SV0fqLKzp4XY9wKulTBGTw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js" integrity="sha512-Z5heTz36xTemt1TbtbfXtTq5lMfYnOkXM2/eWcTTiLU01+Sw4ku1i7vScDc8fWhrP2abz9GQzgKH5NGBLoYlAw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/plugins/ScrollToPlugin.min.js" integrity="sha512-CDeU7pRtkPX6XJtF/gcFWlEwyaX7mcAp5sO3VIu/ylsdR74wEw4wmBpD5yYTrmMAiAboi9thyBUr1vXRPA7t0Q==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/r.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+
+  </body>
+</html>
+

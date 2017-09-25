@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Recent &amp; Upcoming Talks on Computational Clinical Science</title>
+    <link>https://haines-lab.com/talk/</link>
+    <description>Recent content in Recent &amp; Upcoming Talks on Computational Clinical Science</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
+    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/talk/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Linking emotion to decision making through model-based facial expression analysis</title>
+      <link>https://haines-lab.com/talk/math_psych_2017/</link>
+      <pubDate>Sun, 23 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://haines-lab.com/talk/math_psych_2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>A new reinforcement learning model of the Iowa Gambling Task</title>
+      <link>https://haines-lab.com/talk/cog_brown_1/</link>
+      <pubDate>Wed, 30 Nov 2016 12:10:00 +0000</pubDate>
+      
+      <guid>https://haines-lab.com/talk/cog_brown_1/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
