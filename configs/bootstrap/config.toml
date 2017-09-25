@@ -1,0 +1,81 @@
+baseurl         = "http://haines-lab.com/"
+relativeurls    = false
+languageCode    = "en-us"
+title           = "Nathaniel Haines"
+theme           = "academic"
+paginate        = 3
+canonifyurls    = true
+googleAnalytics = ""
+disqusShortname = ""
+ignoreFiles     = ["\\.Rmd$", "_files$", "_cache$"]
+
+[permalinks]
+    post = "/:year/:month/:day/:slug/"
+
+[[menu.main]]
+    name = "Home"
+    weight = -90
+    identifier = "home"
+    url = "/"
+[[menu.main]]
+    name = "About"
+    pre = "<i class='fa fa-info-circle'></i>"
+    weight = -90
+    identifier = "about"
+    url = "/about/"
+[[menu.main]]
+    name = "GitHub"
+    url = "https://github.com/Nathaniel-Haines/"
+[[menu.main]]
+    name = "Twitter"
+    url = "https://twitter.com/nate__haines"
+[[menu.main]]
+    name = "Code"
+    url = "https://ccs-lab.github.io/code/"
+[[menu.main]]
+    name = "TAGS"
+    pre = "<i class='fa fa-tags'></i>"
+    weight = -110
+    identifier = "tags"
+    url = "/tags/"
+[[menu.main]]
+    name = "CATEGORIES"
+    pre = "<i class='fa fa-folder-open'></i>"
+    weight = -100
+    identifier = "categories"
+    url = "/categories/"
+    
+[[menu.footer]]
+    name = "DISCLAIMER"
+    weight = -110
+    identifier = "disclaimer"
+    url = "/page/disclaimer/"
+[[menu.footer]]
+    name = "LICENSE"
+    weight = -120
+    identifier = "license"
+    url = "/page/license/"
+
+[params]
+    description = "Computational Methods"
+    BrandImage = "/images/logo.pdf" #top header brand image.
+    highlight = "rstudio"
+    
+    
+    # options for highlight.js (version, additional languages, and theme)
+    highlightjsVersion = "9.9.0"
+    highlightjsLang = ["r", "yaml"]
+    highlightjsTheme = "rstudio"
+
+    [params.logo]
+    url = "logo.png"
+    width = 50
+    height = 50
+    alt = "Logo"
+    
+    [params.widgets]
+    recent_articles = true
+    categories = true
+    tags = true
+    tag_cloud = true
+
