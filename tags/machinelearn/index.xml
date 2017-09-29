@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Machinelearn on Computational Clinical Science</title>
-    <link>https://haines-lab.com/tags/machinelearn/</link>
+    <link>http://haines-lab.com/tags/machinelearn/</link>
     <description>Recent content in Machinelearn on Computational Clinical Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -12,10 +12,10 @@
     
     <item>
       <title>easyml</title>
-      <link>https://haines-lab.com/project/easyml/</link>
+      <link>http://haines-lab.com/project/easyml/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>https://haines-lab.com/project/easyml/</guid>
+      <guid>http://haines-lab.com/project/easyml/</guid>
       <description>&lt;p&gt;Currently under construction.&lt;/p&gt;
 </description>
     </item>

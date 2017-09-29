@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Cogmod on Computational Clinical Science</title>
-    <link>https://haines-lab.com/tags/cogmod/</link>
+    <link>http://haines-lab.com/tags/cogmod/</link>
     <description>Recent content in Cogmod on Computational Clinical Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -12,10 +12,10 @@
     
     <item>
       <title>hBayesDM</title>
-      <link>https://haines-lab.com/project/hbayesdm/</link>
+      <link>http://haines-lab.com/project/hbayesdm/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>https://haines-lab.com/project/hbayesdm/</guid>
+      <guid>http://haines-lab.com/project/hbayesdm/</guid>
       <description>&lt;p&gt;Currently under construction.&lt;/p&gt;
 </description>
     </item>
