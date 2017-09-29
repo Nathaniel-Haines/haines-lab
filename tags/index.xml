@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Computational Clinical Science</title>
-    <link>/tags/</link>
+    <link>https://haines-lab.com/tags/</link>
     <description>Recent content in Tags on Computational Clinical Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -12,56 +12,56 @@
     
     <item>
       <title>Content tagged as &#39;Academic&#39;</title>
-      <link>/tags/academic/</link>
+      <link>https://haines-lab.com/tags/academic/</link>
       <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/tags/academic/</guid>
+      <guid>https://haines-lab.com/tags/academic/</guid>
       <description>&lt;p&gt;Here is a list of all the content that has been tagged as &lt;em&gt;academic&lt;/em&gt;.&lt;/p&gt;
 </description>
     </item>
     
     <item>
-      <title>Code</title>
-      <link>/tags/code/</link>
+      <title>Cogmod</title>
+      <link>https://haines-lab.com/tags/cogmod/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>/tags/code/</guid>
+      <guid>https://haines-lab.com/tags/cogmod/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Learning</title>
-      <link>/tags/learning/</link>
+      <link>https://haines-lab.com/tags/learning/</link>
       <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>/tags/learning/</guid>
+      <guid>https://haines-lab.com/tags/learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Machinelearn</title>
+      <link>https://haines-lab.com/tags/machinelearn/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://haines-lab.com/tags/machinelearn/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Modeling</title>
-      <link>/tags/modeling/</link>
+      <link>https://haines-lab.com/tags/modeling/</link>
       <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>/tags/modeling/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Psych</title>
-      <link>/tags/psych/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/psych/</guid>
+      <guid>https://haines-lab.com/tags/modeling/</guid>
       <description></description>
     </item>
     
     <item>
       <title>R</title>
-      <link>/tags/r/</link>
+      <link>https://haines-lab.com/tags/r/</link>
       <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>/tags/r/</guid>
+      <guid>https://haines-lab.com/tags/r/</guid>
       <description></description>
     </item>
     

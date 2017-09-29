@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Projects on Computational Clinical Science</title>
-    <link>/project/</link>
+    <link>https://haines-lab.com/project/</link>
     <description>Recent content in Projects on Computational Clinical Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -11,21 +11,21 @@
     <atom:link href="/project/" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Code</title>
-      <link>/project/code/</link>
+      <title>easyml</title>
+      <link>https://haines-lab.com/project/easyml/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>/project/code/</guid>
+      <guid>https://haines-lab.com/project/easyml/</guid>
       <description>&lt;p&gt;Currently under construction.&lt;/p&gt;
 </description>
     </item>
     
     <item>
-      <title>Psychopathology</title>
-      <link>/project/psych/</link>
+      <title>hBayesDM</title>
+      <link>https://haines-lab.com/project/hbayesdm/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>/project/psych/</guid>
+      <guid>https://haines-lab.com/project/hbayesdm/</guid>
       <description>&lt;p&gt;Currently under construction.&lt;/p&gt;
 </description>
     </item>
