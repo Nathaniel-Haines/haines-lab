@@ -21,10 +21,10 @@
     
     <item>
       <title>Human Choice and Reinforcement Learning (2)</title>
-      <link>http://haines-lab.com/2017/04/human-choice-and-reinforcement-learning-2/</link>
+      <link>http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/</link>
       <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://haines-lab.com/2017/04/human-choice-and-reinforcement-learning-2/</guid>
+      <guid>http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/</guid>
       <description>&lt;div id=&#34;answer-to-post-1&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Answer to post 1&lt;/h2&gt;
 &lt;p&gt;In the previous &lt;a href=&#34;http://haines-lab.com/2017/04/04/human-choice-and-reinforcement-learning-1/&#34;&gt;post&lt;/a&gt;, I reviewed the Rescorla-Wagner updating (Delta) rule and its contemporary instantiation. At the end, I asked the following question:&lt;/p&gt;
@@ -143,10 +143,10 @@ p&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Human Choice and Reinforcement Learning (1)</title>
-      <link>http://haines-lab.com/2017/04/human-choice-and-reinforcement-learning-1/</link>
+      <link>http://haines-lab.com/post/2017-04-04-choice_rl_1/</link>
       <pubDate>Tue, 04 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://haines-lab.com/2017/04/human-choice-and-reinforcement-learning-1/</guid>
+      <guid>http://haines-lab.com/post/2017-04-04-choice_rl_1/</guid>
       <description>&lt;div id=&#34;short-history&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Short history&lt;/h2&gt;
 &lt;p&gt;In 1972, Robert Rescorla and Allan Wagner developed a formal theory of associative learning, the process through which multiple stimuli are associated with one-another. The most widely used example (Fig. 1) of associative learning comes straight from Psychology 101–Pavlov’s dog.&lt;/p&gt;
