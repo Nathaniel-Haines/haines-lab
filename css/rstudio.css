@@ -5,8 +5,9 @@ Default Rstudio-like styling by: Nathaniel Haines <haines-lab.com>
 */
 
 .hljs {
-  display: inline-box;
-  overflow-x: auto;
+  display: inline-block;
+  overflow: auto;
+  white-space: pre;
   padding: 0.0em;
   color: black;
   background: #f4f5f4;
