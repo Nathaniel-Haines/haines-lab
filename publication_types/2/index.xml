@@ -7,8 +7,26 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
-    <lastBuildDate>Mon, 06 Mar 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 31 Oct 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="/publication_types/2/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Easyml: Easily Build And Evaluate Machine Learning Models</title>
+      <link>http://haines-lab.com/publication/easyml/</link>
+      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/publication/easyml/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>The Indirect Effect of Emotion Regulation on Minority Stress and Problematic Substance Use in Lesbian, Gay, and Bisexual Individuals</title>
+      <link>http://haines-lab.com/publication/minority_stress/</link>
+      <pubDate>Wed, 25 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/publication/minority_stress/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Revealing Neurocomputational Mechanisms of Reinforcement Learning and Decision-Making With the hBayesDM Package</title>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Facial Expressions on Computational Psych</title>
+    <link>http://haines-lab.com/tags/facial-expressions/</link>
+    <description>Recent content in Facial Expressions on Computational Psych</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
+    <lastBuildDate>Mon, 22 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/tags/facial-expressions/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>FEAT</title>
+      <link>http://haines-lab.com/project/feat/</link>
+      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/project/feat/</guid>
+      <description>&lt;p&gt;This project is currently at the beginning stages of development. Come back in a few months for an update!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
