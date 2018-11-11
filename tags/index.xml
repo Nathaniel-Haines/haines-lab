@@ -8,7 +8,9 @@
     <language>en-us</language>
     <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
     <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://haines-lab.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Content tagged as &#39;Academic&#39;</title>
@@ -16,8 +18,7 @@
       <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
       
       <guid>http://haines-lab.com/tags/academic/</guid>
-      <description>&lt;p&gt;Here is a list of all the content that has been tagged as &lt;em&gt;academic&lt;/em&gt;.&lt;/p&gt;
-</description>
+      <description>Here is a list of all the content that has been tagged as academic.</description>
     </item>
     
     <item>
@@ -41,7 +42,7 @@
     <item>
       <title>Learning</title>
       <link>http://haines-lab.com/tags/learning/</link>
-      <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 08 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>http://haines-lab.com/tags/learning/</guid>
       <description></description>
@@ -59,7 +60,7 @@
     <item>
       <title>Modeling</title>
       <link>http://haines-lab.com/tags/modeling/</link>
-      <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 08 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>http://haines-lab.com/tags/modeling/</guid>
       <description></description>
@@ -68,7 +69,7 @@
     <item>
       <title>R</title>
       <link>http://haines-lab.com/tags/r/</link>
-      <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 08 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>http://haines-lab.com/tags/r/</guid>
       <description></description>

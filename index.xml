@@ -11,6 +11,89 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>The Outcome‐Representation Learning Model: A Novel Reinforcement Learning Model of the Iowa Gambling Task</title>
+      <link>http://haines-lab.com/publication/haines_cog_sci_2018/</link>
+      <pubDate>Fri, 05 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/publication/haines_cog_sci_2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Human Choice and Reinforcement Learning (3)</title>
+      <link>http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/</link>
+      <pubDate>Sat, 08 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/</guid>
+      <description>&lt;div id=&#34;goals-of-paramter-estimation&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Goals of Paramter Estimation&lt;/h2&gt;
+&lt;p&gt;When estimating paramters for a given model, we typically aim to make an inference on an individual’s underlying decision process. We may be inferring a variety of different factors, such as the rate at which someone updates their expectations, the way that someone subjectively values an outcome, or the amount of exploration versus exploitation that someone engages in. Once we estimnate an individual’s parameters, we can compare then to other people or even other groups of people. Further, we can compare paramters within subjects after an experimental manipulation (e.g., &lt;em&gt;does drug X affect a person’s learning rate?&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;Below, we will explore muliple paremter estimation methods. Specifically, we will use: (1) maximum likelihood estimation, (2) maximum a posteriori estimation, (3) and Bayesian estimation. First, we will simulate data from models described in the previous post on a simple 2-armed bandit task. Importantly, we will simulated from &lt;em&gt;known parameter values&lt;/em&gt;, which we will then try to estimate from the simulated data alone. We will refer to the known paramters as the &lt;em&gt;true paramters&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;simulation&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Simulation&lt;/h2&gt;
+&lt;p&gt;For our simulation, we will simulate choice from a model using delta-rule learning and softmax choice. To keep things simple, the learning rate will be the only free paramter in the model. Additionally, we will simulate choices in a task where there are two choices, where choice 1 has a mean payoff of 1 and choice 2 has a mean payoff of -1. Therefore, a learning agent should be able to learn that choice 1 is optimal and make selections accordingly. However, we will add noise to each choice payoff (&lt;em&gt;sigma&lt;/em&gt; below) to make things more realistic.&lt;/p&gt;
+&lt;p&gt;The following R code simulates 100 trials using the model ans task described above:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# For pretty plots
+library(ggplot2)
+library(foreach)
+
+# Simulation paramters
+mu    &amp;lt;- c(1, -1)  # Mean payoff for choices 1 and 2 
+sigma &amp;lt;- 5         # SD of payoff distributions
+n_tr  &amp;lt;- 100       # Number of trials 
+beta  &amp;lt;- 0.1       # True learning rate
+
+# Initial expected value
+ev &amp;lt;- c(0, 0) 
+
+# Softmax choice function
+logsumexp &amp;lt;- function (x) {
+  y &amp;lt;- max(x)
+  y + log(sum(exp(x - y)))
+}
+softmax &amp;lt;- function (x) {
+  exp(x - logsumexp(x))
+}
+
+# Simulate data
+sim_dat &amp;lt;- foreach(t=1:n_tr, .combine = &amp;quot;rbind&amp;quot;) %do% {
+  # Generate choice probability with softmax
+  pr &amp;lt;- softmax(ev)
+  
+  # Use choice probability to sample choice
+  choice &amp;lt;- sample(c(1,2), size = 1, prob = pr)
+  
+  # Generate outcome based on choice
+  outcome &amp;lt;- rnorm(1, mean = mu[choice], sd = sigma)
+  
+  # Delta-rule learning
+  ev[choice] &amp;lt;- ev[choice] + beta * (outcome - ev[choice])
+  
+  # Save data
+  data.frame(trial   = t,
+             ev_1    = ev[1],
+             ev_2    = ev[2],
+             choice  = choice,
+             outcome = outcome)
+}
+
+# Change in expected values across tirals
+qplot(data = sim_dat, x = trial, y = ev_1, geom = &amp;quot;line&amp;quot;, color = I(&amp;quot;red&amp;quot;)) +
+  geom_line(aes(y = ev_2), color = I(&amp;quot;blue&amp;quot;)) +
+  ggtitle(&amp;quot;Red = Choice 1\nBlue = Choice 2&amp;quot;) +
+  xlab(&amp;quot;Trial&amp;quot;) +
+  ylab(&amp;quot;Expected Value&amp;quot;) +
+  theme_minimal(base_size = 20)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig1-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;maximum-likelihood&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Maximum Likelihood&lt;/h2&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>FEAT</title>
       <link>http://haines-lab.com/project/feat/</link>
       <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>

@@ -7,12 +7,14 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
-    <atom:link href="/categories/" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://haines-lab.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Reinforcement Learning</title>
       <link>http://haines-lab.com/categories/reinforcement-learning/</link>
-      <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 08 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>http://haines-lab.com/categories/reinforcement-learning/</guid>
       <description></description>
