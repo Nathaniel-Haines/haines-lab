@@ -262,8 +262,8 @@
 </div>
 
     <div class="article-style" itemprop="articleBody">
-      <div id="short-history" class="section level2">
-<h2>Short history</h2>
+      <div id="short-history" class="section level1">
+<h1>1. Short history</h1>
 <p>In 1972, Robert Rescorla and Allan Wagner developed a formal theory of associative learning, the process through which multiple stimuli are associated with one-another. The most widely used example (Fig. 1) of associative learning comes straight from Psychology 101–Pavlov’s dog.</p>
 <div id="figure-1" class="section level4">
 <h4>Figure 1</h4>
@@ -281,8 +281,8 @@
 <p>While the original Rescorla-Wagner model was successful for explaining associative learning for classical conditioning paradigms, what of operant conditioning? What if we are interested in how people learn to make decisions? In most current research, we are not interested in knowing how people learn to associate lights or tones with some reward. Instead, we would like a model that can describe how people learn to select the <em>best choice</em> among <em>multiple choices</em>. This model would need to explain how people assign values to multiple options as well as how they decide which option to choose. In statistical terms, we want to know how people solve the <a href="https://en.wikipedia.org/wiki/Multi-armed_bandit"><em>multi-armed bandit</em></a> problem. In the following section, we will begin to solve this problem.</p>
 </div>
 </div>
-<div id="current-implementations" class="section level2">
-<h2>Current Implementations</h2>
+<div id="current-implementations" class="section level1">
+<h1>2. Current Implementations</h1>
 <p><img src="http://777click.com/assets/templates/777/img/777banner.jpg" alt="Figure 2" style="height: 100%; width: 100%; object-fit: contain"/></p>
 <p>As a motivating example, we will explore the simple problem of learning the probability that a slot machine will payoff (i.e. that you will win any amount after pulling the lever). To do so, the above equations only need minor modifications. Additionally, we will change the terminology–instead of learning an associative strength, we will now be learning the <em>probability of a winning outcome</em>. To start, we take the first equation above and write it for a single stimulus <span class="math inline">\(V\)</span>, but exchange <span class="math inline">\(V\)</span> with the probability of observing a win:</p>
 <p><span class="math display">\[\Delta Pr(win) = \alpha \beta (\lambda - Pr(win))\]</span></p>
@@ -292,8 +292,8 @@
 <p><span class="math display">\[Pr(win)_{t+1} = Pr(win)_{t} + \beta (\lambda_{t} - Pr(win)_{t})\]</span></p>
 <p>The model is now much easier to interpret. The term <span class="math inline">\((\lambda_{t} - Pr(win)_{t})\)</span> can be thought of as the <em>prediction error</em>–the difference between the actual value <span class="math inline">\(\lambda_{t}\)</span> revealed after the choice was made and the expected value of the choice <span class="math inline">\(Pr(win)_{t}\)</span> for that trial. <span class="math inline">\(\beta\)</span> (the learning rate) then updates the current expectation <span class="math inline">\(Pr(win)_{t}\)</span> in the direction of the prediction error <span class="math inline">\((\lambda_{t} - Pr(win)_{t})\)</span>.</p>
 </div>
-<div id="r-example" class="section level2">
-<h2>R Example</h2>
+<div id="r-example" class="section level1">
+<h1>3. R Example</h1>
 <p>To see the Rescorla-Wagner rule in action, let’s generate some fake data using the binomial distribution and try to estimate the rate parameter using various different values for the learning rate.</p>
 <pre class="r"><code># For pretty images
 library(ggplot2)
@@ -404,8 +404,8 @@ p2</code></pre>
 <p><img src="/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig3-1.svg" width="672" style='height: 100%; width: 100%; object-fit: contain' /></p>
 <p>Over 500 trials, the expected value for the win rate converges to the true win rate, 70%.</p>
 </div>
-<div id="summary" class="section level2">
-<h2>Summary</h2>
+<div id="summary" class="section level1">
+<h1>4. Summary</h1>
 <p>In this post, we reviewed the original Rescorla-Wagner updating rule (a.k.a. the <em>Delta Rule</em>) and explored its contemporary instantiation. I have shown that the Delta Rule can be used to estimate the win rate of a slot machine on a trial-by-trial basis. While this example may first appear trivial (e.g. why not just take the average of all past outcomes?), we will explore more practical usages in later posts. For now, try playing with the above code yourself! If you want a slightly more challenging problem, try finding the solution to the following question:</p>
 <ul>
 <li><p><strong>How should you change the learning rate so that the expected win rate is always the average of all past outcomes?</strong></p></li>

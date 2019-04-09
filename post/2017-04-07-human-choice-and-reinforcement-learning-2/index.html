@@ -262,8 +262,8 @@
 </div>
 
     <div class="article-style" itemprop="articleBody">
-      <div id="answer-to-post-1" class="section level2">
-<h2>Answer to post 1</h2>
+      <div id="answer-to-post-1" class="section level1">
+<h1>1. Answer to post 1</h1>
 <p>In the previous <a href="http://haines-lab.com/2017/04/04/human-choice-and-reinforcement-learning-1/">post</a>, I reviewed the Rescorla-Wagner updating (Delta) rule and its contemporary instantiation. At the end, I asked the following question:</p>
 <ul>
 <li><strong>How should you change the learning rate so that the expected win rate is always the average of all past outcomes?</strong></li>
@@ -338,19 +338,18 @@ p</code></pre>
 <p><span class="math display">\[Pr(win)_{t+1} = (1-\frac{1}{t}) \cdot Pr(win)_{t} + \frac{1}{t} \cdot \lambda_{t} \]</span></p>
 <p>In the above form, you can see that the cumulative moving average can be computed using the Delta rule by setting the learning rate to <span class="math inline">\(\frac{1}{t}\)</span>, where <span class="math inline">\(t\)</span> is the trial number. Looking at the equation, you will notice that as <span class="math inline">\(t\)</span> increases, the weight <span class="math inline">\((1-\frac{1}{t})\)</span> placed on the past probability estimate <span class="math inline">\(Pr(win)_{t}\)</span> becomes larger while the weight <span class="math inline">\(\frac{1}{t}\)</span> on the current outcome <span class="math inline">\(\lambda_{t}\)</span> shrinks. This behavior ensures that past outcomes are not discounted at a higher rate than current ones.</p>
 </div>
-<div id="choice-mechanisms" class="section level2">
-<h2>Choice mechanisms</h2>
+<div id="choice-mechanisms" class="section level1">
+<h1>2. Choice mechanisms</h1>
 <p><img src="http://az616578.vo.msecnd.net/files/2016/08/19/636072180885324217301014601_shoes.jpg" alt="Figure 1" style="height: 100%; width: 100%; object-fit: contain"/></p>
 <p>With the Delta rule, we can approximate how people with a certain learning rate may update their expectations about an outcome on a trial-by-trial basis, but how does this translate to choice? In the slot machine example, we only had a single choice (i.e. pull the lever and see if you win), so this question never applied to us. <strong>But what if we have 2 slot machines and we want to select the one that will win most frequently?</strong> In this case, we can use the Delta rule to update win probability expectations for each slot machine separately, but what do we do with these values after they are computed? Below, I will describe three different methods that can be used to translate expected values to choice.</p>
-</div>
 <div id="greedy-choice" class="section level2">
-<h2>Greedy choice</h2>
+<h2>2.1 Greedy choice</h2>
 <p>Greedy choice is simple–choose the option with the highest expected value on each trial (i.e. pick the <em>greedy</em> option):</p>
 <p><span class="math display">\[c_{t} = \underset{s \in S}{argmax}(V(s_{t}))\]</span> where <span class="math inline">\(c_{t}\)</span> indicates the choice made on trial <span class="math inline">\(t\)</span> and <span class="math inline">\(V(s_{t})\)</span> represents the value associated with Slot machine <span class="math inline">\(s\)</span> on trial <span class="math inline">\(t\)</span>. Applying this logic to our example, this would equate to choosing the slot machine with the highest expected win probability. While this may sound like a good idea, it is important to remember that we do not know what the true win rate is for either slot machine. Instead, we estimate it after each outcome. With this in mind, a simple example (below) shows why the greedy choice method fails in practical applications.</p>
 <p>Imagine you are choosing between 2 slot machines, where machine A (<span class="math inline">\(Slot_{A}\)</span>) has a true win rate of 0.9, and machine B (<span class="math inline">\(Slot_{B}\)</span>) has a true win rate of 0.5. Obviously, <span class="math inline">\(Slot_{A}\)</span> is a better option, but this is something you need to learn by making a choice and updating your expectations. Assuming that you start off thinking that each slot machine has a win rate of 0 (which is typical in human decision making models), your first choice will be a random selection between the equivalent options. In our example, imagine that you randomly choose <span class="math inline">\(Slot_{B}\)</span>, the slot machine spins, and then you win! Great, so now (regardless of your learning rate), you will update your expectation of the win rate for <span class="math inline">\(Slot_{B}\)</span> to a positive, non-zero value. On the next trial, you are greedy, so you again choose <span class="math inline">\(Slot_{B}\)</span>–it has a higher expected win rate than <span class="math inline">\(Slot_{A}\)</span>. In fact, you will continue to choose <span class="math inline">\(Slot_{B}\)</span> on each trial without ever considering <span class="math inline">\(Slot_{A}\)</span>! In this case, even though <span class="math inline">\(Slot_{A}\)</span> it the optimal choice, you never allow yourself to <em>explore</em> alternative choices. Here, we come across a classical problem in reward-learning paradigms–<a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0095693"><strong><em>the exploration-exploitation tradeoff</em></strong></a>. The crux of this problem is this: how do you know that a “good” choice is better than other choices that you have yet to explore? Think of it like choosing a job. I chose to study psychology, and I continue to exploit this choice (i.e. I am not exploring other education). How do I know that psychology is for me, though? It is possible that I would have gained more from a computer science degree, but I did not explore that option. In the same way, this compromise exists in simple reinforcement learning paradigms such as choosing the best slot machine. Below, we will explore two methods that address the exploration-exploitation problem.</p>
 </div>
 <div id="epsilon-greedy-choice" class="section level2">
-<h2><span class="math inline">\(\epsilon\)</span>-Greedy choice</h2>
+<h2>2.2 <span class="math inline">\(\epsilon\)</span>-Greedy choice</h2>
 <p>The <span class="math inline">\(\epsilon\)</span>-greedy method is a simple extention of the greedy method above. Instead of always choosing the option with the highest expected value, we sometimes (with probability <span class="math inline">\(\epsilon\)</span>) randomly choose another option:</p>
 <p><span class="math display">\[c_{t} = \cases{
           \underset{s \in S}{argmax}(V(s_{t}))  &amp; \text{with } Pr(1 - \epsilon) \cr
@@ -360,13 +359,14 @@ p</code></pre>
 <p>By choosing a random option with <span class="math inline">\(Pr(\epsilon)\)</span>, we can avoid getting stuck choosing the non-optimal slot machine. While this method solves our dilemma, it suffers another problem–when randomly selecting options, it gives equal probabilities to each option. Intuitively, a better method would be to choose options <em>probabilistically with respect to their expected values</em> (i.e. give high probability to relatively good options and <em>vice-versa</em>).</p>
 </div>
 <div id="softmax-choice" class="section level2">
-<h2>Softmax choice</h2>
+<h2>2.3 Softmax choice</h2>
 <p>Also known as the <a href="https://en.wikipedia.org/wiki/Luce%27s_choice_axiom">Luce choice rule</a>, the softmax allows choices to be probabilistic with weights respective to expected value:</p>
 <p><span class="math display">\[Pr(c_{t} = s \in S) = \frac{e^{V_{s}(t)}}{\sum_{s = 1}^S e^{V_{s}(t)}}\]</span></p>
 <p>where <span class="math inline">\(e^{V_{s}(t)}\)</span> is the exponentiated expected value of slot machine <span class="math inline">\(s\)</span> on trial <span class="math inline">\(t\)</span>, and <span class="math inline">\(\sum_{s = 1}^S e^{V_{s}(t)}\)</span> is the summation of the exponentiated expected value of both slot machines (there are 2 in our example). When the expected values are entered, the softmax equation returns a probability of selecting each slot machine which we can then use to make an actual choice. In practice, the softmax function is used most often in decision making research–moving forward, we will use the softmax choice mechanism to model human decision making.</p>
 </div>
-<div id="implementation" class="section level2">
-<h2>Implementation</h2>
+</div>
+<div id="implementation" class="section level1">
+<h1>3. Implementation</h1>
 <p>We now have a full model describing each of the following steps:</p>
 <ul>
 <li>Evaluating an outcome,</li>
