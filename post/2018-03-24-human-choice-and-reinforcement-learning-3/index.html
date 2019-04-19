@@ -438,29 +438,29 @@ map_results &lt;- optim(par      = 0.5,             # Initial guess for beta
 cat(&quot;The MAP for beta is: &quot; , round(map_results$par, 3))</code></pre>
 <pre><code>## The MAP for beta is:  0.145</code></pre>
 <p>Woah! The simple addition of prior information pushed our estimate of <span class="math inline">\(\hat{\beta} =\)</span> <span class="math inline">\(0.079\)</span> to <span class="math inline">\(\hat{\beta} =\)</span> <span class="math inline">\(0.145\)</span>. Notice that the MAP estimator was pulled toward the mean of the prior distribution. However, is this a good thing? When is this behavior beneficial? After all, both estimates are about equidistant from <span class="math inline">\(\beta_{true}\)</span>.</p>
-<p>To demonstrate the benefit of prior information, let’s take the simulated data from our learner (i.e. <span class="math inline">\(\beta = 0.1\)</span>), but only fit the model using the first 10 trials worth of data:</p>
-<pre class="r"><code># Use MLE to fit the first 10 trials
-mle_results_10tr &lt;- optim(par      = 0.5,             
+<p>To demonstrate the benefit of prior information, let’s take the simulated data from our learner (i.e. <span class="math inline">\(\beta = 0.1\)</span>), but only fit the model using the first 15 trials worth of data:</p>
+<pre class="r"><code># Use MLE to fit the first 15 trials
+mle_results_15tr &lt;- optim(par      = 0.5,             
                           fn       = mle_bandit,      
                           method   = &quot;L-BFGS-B&quot;,      
                           lower    = 0,               
                           upper    = 1,               
-                          X        = sim_dat$Choice[1:15],  # Only using first 10 trials
+                          X        = sim_dat$Choice[1:15],  # Only using first 15 trials
                           outcomes = sim_dat$Outcome[1:15]) 
 
-# Use MAP to fit the first 10 trials
-map_results_10tr &lt;- optim(par      = 0.5,             
+# Use MAP to fit the first 15 trials
+map_results_15tr &lt;- optim(par      = 0.5,             
                           fn       = map_bandit,      
                           method   = &quot;L-BFGS-B&quot;,      
                           lower    = 0,               
                           upper    = 1,               
-                          X        = sim_dat$Choice[1:15],  # Only using first 10 trials
+                          X        = sim_dat$Choice[1:15],  # Only using first 15 trials
                           outcomes = sim_dat$Outcome[1:15]) 
 
-cat(&quot;The MLE for beta with 10 trials is: &quot; , round(mle_results_10tr$par, 3), &quot;\n&quot;, 
-    &quot;The MAP for beta with 10 trials is: &quot; , round(map_results_10tr$par, 3))</code></pre>
-<pre><code>## The MLE for beta with 10 trials is:  0.06 
-##  The MAP for beta with 10 trials is:  0.099</code></pre>
+cat(&quot;The MLE for beta with 15 trials is: &quot; , round(mle_results_15tr$par, 3), &quot;\n&quot;, 
+    &quot;The MAP for beta with 15 trials is: &quot; , round(map_results_15tr$par, 3))</code></pre>
+<pre><code>## The MLE for beta with 15 trials is:  0.06 
+##  The MAP for beta with 15 trials is:  0.099</code></pre>
 <p>Look at that! MLE underestimates the learning rate, whereas MAP gives us a great estimate. There are two main take-aways from this toy example:</p>
 <ol style="list-style-type: decimal">
 <li>MLE is prone to biased estimates in low data settings, which can push parameters to the edge of the parameter space (i.e. 0 when the range is from 0 to 1), and</li>
