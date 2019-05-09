@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Machine Learning on Computational Psychology</title>
+    <link>http://haines-lab.com/tags/machine-learning/</link>
+    <description>Recent content in Machine Learning on Computational Psychology</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
+    <lastBuildDate>Mon, 06 May 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://haines-lab.com/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>On the equivalency between frequentist Ridge (and LASSO) regression and hierarchial Bayesian regression</title>
+      <link>http://haines-lab.com/post/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/</link>
+      <pubDate>Mon, 06 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/post/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/</guid>
+      <description>Introduction In this post, we will explore frequentist and Bayesian analogues of regularized/penalized linear regression models (e.g., LASSO [L1 penalty], Ridge regression [L2 penalty]), which are an extention of traditional linear regression models of the form:
+\[y = \beta_{0}+X\beta + \epsilon\tag{1}\] where \(\epsilon\) is the squared error, which is normally distributed as:
+\[\epsilon \sim \mathcal{N}(0, \sigma)\tag{2}\] Unlike these traditional linear regression models, regularized linear regression models produce biased estimates for the \(\beta\) weights.</description>
+    </item>
+    
+  </channel>
+</rss>
