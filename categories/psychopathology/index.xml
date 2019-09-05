@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Psychopathology on Computational Psychology</title>
+    <link>/categories/psychopathology/</link>
+    <description>Recent content in Psychopathology on Computational Psychology</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
+    <lastBuildDate>Wed, 29 May 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/psychopathology/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</title>
+      <link>/post/future/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/</link>
+      <pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/future/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/</guid>
+      <description>Motivation In August of 2015, the Open Science Collaboration estimated that a mere 39% of statistically significant results published across major psychological science journals could be replicated upon repeating the original study:
+Yet, the methods we use to test our psychological theories lead us to believe that we should be right about 95% of the time. With this in mind, the goals of the current post are to:
+explore the implications of the replication crisis for psychological theories, describe a statistical phenomenon that plays a role in impeding replicability, and offer a partial solution to (2)  Given my background in clinical psychology, the examples throughout this post will be from a clinical perspective.</description>
+    </item>
+    
+  </channel>
+</rss>
