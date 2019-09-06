@@ -504,7 +504,7 @@ parameters {
 }
 transformed parameters {
   // Individual-level parameter off-sets (for non-centered parameterization)
-  matrix[N,2] beta_delta_tilde;
+  matrix[2,N] beta_delta_tilde;
   
   // Individual-level parameters 
   matrix[N,2] beta_con;
