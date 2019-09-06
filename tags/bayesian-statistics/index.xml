@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
-    <lastBuildDate>Mon, 06 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 05 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://haines-lab.com/tags/bayesian-statistics/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</title>
+      <link>http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/</link>
+      <pubDate>Thu, 05 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/</guid>
+      <description>The Reliability Paradox Defining Reliability In 2017, Hedge, Powell, and Sumner (2017) conducted a study to determine the reliability of a variety of of behavioral tasks. Reliability has many different meanings throughout the psychological literature, but what Hedge et al. were interested in was how well a behavioral measure consistently ranks individuals. In other words, when I have people perform a task and then measure their performance, does the measure that I use to summarize their behavior show high test-retest reliability?</description>
+    </item>
     
     <item>
       <title>On the equivalency between frequentist Ridge (and LASSO) regression and hierarchial Bayesian regression</title>

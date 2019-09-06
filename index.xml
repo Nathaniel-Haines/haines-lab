@@ -11,6 +11,743 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</title>
+      <link>http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/</link>
+      <pubDate>Thu, 05 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/</guid>
+      <description>&lt;div id=&#34;the-reliability-paradox&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;The Reliability Paradox&lt;/h1&gt;
+&lt;div id=&#34;defining-reliability&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Defining &lt;em&gt;Reliability&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;In 2017, &lt;a href=&#34;https://link.springer.com/article/10.3758/s13428-017-0935-1&#34;&gt;Hedge, Powell, and Sumner (2017)&lt;/a&gt; conducted a study to determine the &lt;strong&gt;&lt;em&gt;reliability&lt;/em&gt;&lt;/strong&gt; of a variety of of behavioral tasks. Reliability has many different meanings throughout the psychological literature, but what Hedge et al. were interested in was how well a behavioral measure &lt;em&gt;consistently ranks individuals&lt;/em&gt;. In other words, when I have people perform a task and then measure their performance, does the measure that I use to summarize their behavior show high &lt;em&gt;test-retest reliability&lt;/em&gt;? Those studying individual differences—including but not limited to personality psychologists, clinical psychologists, and many developmental psychologists—are likley to be familiar with test-retest reliability, as we often desire measures that help us understand differences between people.&lt;/p&gt;
+&lt;p&gt;Despite what many of us may first think when we hear the word &lt;em&gt;reliable&lt;/em&gt;, as Hedge et al. note, test-retest reliability is only one of many different definitions of reliable used throughout the psychological literature. For example, when someone states that an effect is reliable, they often mean that the effect is &lt;em&gt;easily replicable&lt;/em&gt;.&lt;/p&gt;
+&lt;div id=&#34;replicable-behavioral-effects-arent-reliabile&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Replicable Behavioral Effects Aren’t Reliabile?&lt;/h3&gt;
+&lt;p&gt;A commonly cited example of a &lt;em&gt;replicable effect&lt;/em&gt; is the &lt;a href=&#34;https://en.wikipedia.org/wiki/Stroop_effect&#34;&gt;Stroop effect&lt;/a&gt;, which is often measured as the mean difference in response time between incongruent and congruent word-color pairs. For example, when tasked with responding to the color of a word, people tend to respond much more quickly when the word is consistent with its color (“Red” colored red) compared to when it is not (“Red” colored blue). Since the &lt;a href=&#34;http://psychclassics.yorku.ca/Stroop/&#34;&gt;original study in 1935&lt;/a&gt;, this basic effect of an average difference in response times between congruent and incongruent trials has been replicated countless times (see &lt;a href=&#34;https://psycnet.apa.org/fulltext/1991-14380-001.html&#34;&gt;MacLeod, 1991&lt;/a&gt;), thereby becoming one of the most well-known effects in all of psychology. In fact, at the time of writing this post, the original 1935 paper has &lt;em&gt;almost 20,000 citations&lt;/em&gt; on Google Scholar alone.&lt;/p&gt;
+&lt;p&gt;Despite how replicable it is, Hedge et al. show that the Stroop effect is &lt;em&gt;unreliable&lt;/em&gt;, in that it shows low test-retest reliability. While Hedge et al. assess many examples of such effects, we will focus on the Stroop effect throughout this post for brevity. Using their first experiment as an example, they had a a group of 50 college students complete a Stroop task two separate times separated by a period of three weeks. The Stroop task consisted of three conditions containing 240 trials each: (1) incongruent, (2) neutral, and (3) congruent conditions (for 720 trials total). On each trial, participants responded to the color of a word presented on a computer monitor which could be colored either red, blue, green, and yellow. Responses were collected from key presses. The word could be the same as the font color (congruent condition; e.g., “Red” colored red), unrelated to the font color (neutral; e.g., “lot” colored red), or conflicting with the font color (incongruent; e.g., “Blue” colored red).&lt;/p&gt;
+&lt;p&gt;After subjects completed the above Stroop task at both timepoints, Hedge et al. used the following &lt;em&gt;behavioral model&lt;/em&gt; to estimate each individual’s Stroop effect at both timepoints:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{aligned}
+  Stroop_{i,\text{time}} &amp;amp; = \overline{RT}_{i,\text{time},\text{incongruent}} - \overline{RT}_{i,\text{time}, \text{congruent}}
+\end{aligned}\tag{1}
+\]&lt;/span&gt; In plain English, for each person &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; at timepoint &lt;span class=&#34;math inline&#34;&gt;\(\text{time}\)&lt;/span&gt;, the Stroop effect is equal to the average response time across incongruent trials (&lt;span class=&#34;math inline&#34;&gt;\(\overline{RT}_{i,\text{time},\text{incongruent}}\)&lt;/span&gt;) minus the average response time across congruent trials (&lt;span class=&#34;math inline&#34;&gt;\(\overline{RT}_{i,\text{time},\text{congruent}}\)&lt;/span&gt;). Then, to estimate test-retest reliability, Hedge et al. use an Intraclass Correlation Coefficient (ICC) using a two-way random effects model for absolute agreement (&lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1)\)&lt;/span&gt;). The &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1)\)&lt;/span&gt; is similar to a traditional Pearson’s &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt;, except that it is also sensitive to differences in the mean rather than just the variance of our observations. For example, if &lt;span class=&#34;math inline&#34;&gt;\(A = \{1,2,3\}\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(B = \{4,5,6\}\)&lt;/span&gt;, the Pearson’s &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; between &lt;span class=&#34;math inline&#34;&gt;\(A\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(B\)&lt;/span&gt; is &lt;span class=&#34;math inline&#34;&gt;\(1\)&lt;/span&gt;. However, the ICC(2,1) between these vectors is attenuated to &lt;span class=&#34;math inline&#34;&gt;\(.18\)&lt;/span&gt; because the corresponding elements of each vector differ on average by some value (3 in this example). This is important when our aim is to ensure that, for example, two different coders give the same ratings to a set of stimuli.&lt;/p&gt;
+&lt;p&gt;Importantly, Hedge et al. found that the test-retest reliability of the Stroop effect as measured using equation 1 was &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1) = .6\)&lt;/span&gt;, which is a surprisingly low number given how robust the Stroop effect is at the group level! As Hedge et al. discuss, with such low reliability, any research that correlates individual-level Stroop estimates with other measures (e.g., BOLD fMRI signals, personality measures, etc.) should be correcting the estimated correlations for the high measurement error of the Stroop effect, which substantially increases the sample size required to make reasonably-powered statistical inferences. Because Hedge et al. replicated this result of low test-retest reliability across both multiple groups of participants and multiple different tasks (e.g., Flanker, Navon, Go/No-go, Stop-signal), their general conclusion naturally follows that &lt;strong&gt;behavioral tasks such as the Stroop task are severely limited in their ability to distinguish between individuals, thereby calling into question their utility for individual-differences research.&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;revisiting-the-reliability-paradox&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Revisiting the Reliability Paradox&lt;/h1&gt;
+&lt;div id=&#34;thinking-generatively-improves-reliability&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Thinking Generatively Improves Reliability&lt;/h2&gt;
+&lt;p&gt;This post will show that the conclusions drawn by Hedge et al. are highly dependent on the implict assumptions of their methodology. Specifically, we will develop a statistical model that is more consistent with the &lt;strong&gt;&lt;em&gt;data-generating mechanism&lt;/em&gt;&lt;/strong&gt; underlying the group-level Stroop effect, which will allow us to estimate more precise individual-level effects. In turn, we achieve higher test-retest reliability estimates. This work is similar in kind to that of &lt;a href=&#34;https://link.springer.com/article/10.3758/s13423-018-1558-y&#34;&gt;Rouder &amp;amp; Haaf (2019)&lt;/a&gt;, although we will have a more specific focus on estimating test-retest reliability and go into a bit more depth when discussing the implications of our results in reference to the current standard practices in psychology (&lt;em&gt;I was also unfortunately not aware of this fantastic work until shortly after completing this project!&lt;/em&gt;). Additionally, we will use a model parameterization that is more familiar to those who regularly work with R with packages such as &lt;code&gt;brms&lt;/code&gt; (e.g., compare the model we develop below to this &lt;code&gt;brms&lt;/code&gt; &lt;a href=&#34;https://bookdown.org/ajkurz/Statistical_Rethinking_recoded/adventures-in-covariance.html&#34;&gt;write-up&lt;/a&gt;), which I hope will help readers more readily generalize this material to their own work.&lt;/p&gt;
+&lt;p&gt;In the following sections, we will download the Stroop data used by Hedge et al., walk through a new behavioral model of the Stroop effect, fit the new model to the data from Hedge et al., extract test-retest reliability estimates from our new model, and compare them to those that are estimated using the traditional model (equation 1). We will end by discussing the implications of our findings for individual-differences research, including suggestions for future research.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;preprocessing-and-summarizing-the-stroop-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Preprocessing and Summarizing the Stroop Data&lt;/h2&gt;
+&lt;p&gt;To start, we can download the Stroop data from experiment 1 of Hedge et al., which is hosted on the Open Science Foundation webpage &lt;a href=&#34;https://osf.io/cwzds/&#34;&gt;linked here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Then, we use the following R code to read in and preprocess the Stroop data:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# For easy data manipulation
+library(foreach)
+library(dplyr)
+library(tidyr)
+library(broom)
+# For pretty plots
+library(ggplot2)
+# For nice tables
+library(knitr)
+# For intra-class correlations
+library(irr)
+# For Bayesian modeling
+library(rstan)
+# For some useful utility functions
+library(hBayesDM)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Data path and individual subject file names
+data_path &amp;lt;- &amp;quot;~/Downloads/Study1-Stroop/&amp;quot;
+files_t1 &amp;lt;- list.files(data_path, pattern = &amp;quot;*1.csv&amp;quot;)
+files_t2 &amp;lt;- list.files(data_path, pattern = &amp;quot;*2.csv&amp;quot;)
+
+# Create long-format stroop task data including all subjects
+long_stroop &amp;lt;- foreach(i=seq_along(files_t1), .combine = &amp;quot;rbind&amp;quot;) %do% {
+  # For time 1
+  tmp_t1 &amp;lt;- read.csv(file.path(data_path, files_t1[i]), header = F) %&amp;gt;%
+    mutate(subj_num = i,
+           time = 1)
+  # For time 2 (about 3 weeks apart)
+  tmp_t2 &amp;lt;- read.csv(file.path(data_path, files_t2[i]), header = F) %&amp;gt;%
+    mutate(subj_num = i,
+           time = 2)
+  # Condition (0 = congruent, 1=neutral, 2=incongruent), 
+  # Correct (1) or incorrect (0), 
+  # Reaction time is in seconds
+  names(tmp_t1)[1:6] &amp;lt;- names(tmp_t2)[1:6] &amp;lt;- c(&amp;quot;Block&amp;quot;, &amp;quot;Trial&amp;quot;, &amp;quot;Unused&amp;quot;, 
+                                                &amp;quot;Condition&amp;quot;, &amp;quot;Correct&amp;quot;, &amp;quot;RT&amp;quot;)
+  rbind(tmp_t1, tmp_t2)
+}
+
+# Compute Stroop effect for each person at each time (equation 1)
+sum_stroop &amp;lt;- long_stroop %&amp;gt;%
+  group_by(subj_num, time) %&amp;gt;%
+  summarize(stroop_eff = mean(RT[Condition==2]) - mean(RT[Condition==0]))
+
+# Peak at the data
+kable(head(sum_stroop), digits = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;right&#34;&gt;subj_num&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;time&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;stroop_eff&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.068&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.025&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.053&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.012&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;3&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.066&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;3&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.073&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Now, we have a Stroop effect estimate for each subject at each timepoint, which we can use for further analyses. One thing to note is that unlike Hedge et al., we are not using any heiristic data cleaning rules. Specifically, Hedge et al. did not include response times (RTs) that were below 100 ms or above 3 times an indivual’s absolute median deviation of RTs in their computation of the Stroop effect. One other note is that the RTs in the raw data are in seconds (not ms). Here are the basic descriptives of our data:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Means and SDs of Stroop effect at each timepoint
+sum_stroop %&amp;gt;%
+  ungroup() %&amp;gt;%
+  group_by(time) %&amp;gt;%
+  summarize(N = n(),
+            Mean = round(mean(stroop_eff), 3),
+            SD = round(sd(stroop_eff), 3)) %&amp;gt;%
+  kable(digits = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;right&#34;&gt;time&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;N&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Mean&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;SD&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;47&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.081&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.036&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;47&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.059&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.030&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div id=&#34;traditional-analyses&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Traditional Analyses&lt;/h2&gt;
+&lt;div id=&#34;testing-for-a-group-level-stroop-effect&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Testing for a Group-level Stroop Effect&lt;/h3&gt;
+&lt;p&gt;It is pretty clear from the descriptives above that there is a group-level Stroop effect, but we can conduct a &lt;em&gt;t&lt;/em&gt;-test at each timepoint regardless:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Test for group-level Stroop effect at time 1
+sum_stroop %&amp;gt;%
+  filter(time==1) %&amp;gt;%
+  {t.test(.$stroop_eff)} %&amp;gt;%
+  tidy() %&amp;gt;%
+  kable(digits = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;right&#34;&gt;estimate&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;statistic&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;p.value&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;parameter&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;conf.low&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;conf.high&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;method&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;alternative&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;0.081&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;15.418&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;46&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.071&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.092&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;One Sample t-test&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;two.sided&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Here, you can see that the Stroop effect is apparent at time 1, with a mean increase in RT during the incongruent trials of about .08 seconds (80 ms). We can also check time 2:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Test for group-level Stroop effect at time 2
+sum_stroop %&amp;gt;%
+  filter(time==2) %&amp;gt;%
+  {t.test(.$stroop_eff)} %&amp;gt;%
+  tidy() %&amp;gt;%
+  kable(digits = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;right&#34;&gt;estimate&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;statistic&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;p.value&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;parameter&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;conf.low&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;conf.high&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;method&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;alternative&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;0.059&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;13.633&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;46&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.05&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.068&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;One Sample t-test&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;two.sided&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Looks good! The Stroop effect is slightly lower at time 2, but still comes out significant at the group level. From these analyses, it is clear that the Stroop effect is indeed replicable using equation 1.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;test-retest-reliability&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Test-retest Reliability&lt;/h3&gt;
+&lt;p&gt;To compute test-retest reliability as in Hedge et al., we will first reformat the data so that it can be used with the &lt;code&gt;irr&lt;/code&gt; package, which allows us to estimate the &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1)\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Format for test-retest analysis
+stroop_unpooled &amp;lt;- sum_stroop %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(time = ifelse(time==1, &amp;quot;Stroop_T1&amp;quot;, &amp;quot;Stroop_T2&amp;quot;),
+         pooled = &amp;quot;No&amp;quot;, 
+         Replication = &amp;quot;Sample Mean&amp;quot;) %&amp;gt;% # these &amp;quot;pooled&amp;quot; and Replication variables will come in later
+  spread(key = time, value = stroop_eff)
+
+# Intraclass correlation of stroop effect at time 1 and 2
+stroop_unpooled %&amp;gt;%
+  select(Stroop_T1, Stroop_T2) %&amp;gt;%
+  {icc(., model = &amp;quot;twoway&amp;quot;, type = &amp;quot;agreement&amp;quot;, unit = &amp;quot;average&amp;quot;)[c(1, 7:15)]} %&amp;gt;%
+  as.data.frame() %&amp;gt;%
+  kable(digits = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;right&#34;&gt;subjects&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;value&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;r0&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Fvalue&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;df1&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;df2&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;p.value&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;conf.level&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;lbound&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;ubound&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;47&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.578&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;2.951&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;46&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;13.419&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.017&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.95&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.059&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.793&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Here, we see that the &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1) = .58\)&lt;/span&gt;, which is slightly lower compared to the results reported in Hedge et al. (&lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1) = .6\)&lt;/span&gt;). Remember, we did not use the same pre-processing steps as Hedge et al. (i.e. we used all trials to compute RTs, rather than removing those beyond certain thresholds), which is why we have slightly different results. We can additionally compute a traditional Pearson’s &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; to assess test-retest reliability, which offers similar conclusions:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Pearson&amp;#39;s correlation
+stroop_unpooled %&amp;gt;%
+  select(Stroop_T1, Stroop_T2) %&amp;gt;%
+  {cor.test(.$Stroop_T1, .$Stroop_T2)} %&amp;gt;%
+  tidy() %&amp;gt;%
+  kable(digits = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;right&#34;&gt;estimate&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;statistic&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;p.value&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;parameter&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;conf.low&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;conf.high&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;method&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;alternative&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;right&#34;&gt;0.503&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;3.908&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;45&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.253&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.691&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Pearson’s product-moment correlation&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;two.sided&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;In fact, Pearson’s &lt;span class=&#34;math inline&#34;&gt;\(r = .5\)&lt;/span&gt;—even lower than the &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1)\)&lt;/span&gt; estimate! This happens because the model we are using for the &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1)\)&lt;/span&gt; estimate treats the individual-level Stroop effect estimates as average units (since they are averages across all trials), which affects how variance is estimated. Still, the main conclusion holds—with a test-retest reliability estimate of only &lt;span class=&#34;math inline&#34;&gt;\(.5\)&lt;/span&gt; to &lt;span class=&#34;math inline&#34;&gt;\(.58\)&lt;/span&gt;, the utility of the Stroop effect for individual-differences research is limited relative to more reliable measures.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;building-a-generative-model&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Building a Generative Model&lt;/h2&gt;
+&lt;p&gt;While the above results paint a clear picture, there are a few problems with the methodology that could be improved upon to make better inference on individual-level Stroop estimates.&lt;/p&gt;
+&lt;p&gt;First, when we average across the RT data before including the averages in a model (i.e. to compute the &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1)\)&lt;/span&gt;), we are throwing away useful information by making the assumption that individual-level Stroop effects can be estimated without measurement error. We should be able to do much better by including &lt;em&gt;all trials&lt;/em&gt; (not just averages) in the statistical model that we use to estimate test-retest reliability, which will allow us to build a hierarchical model that can pool information across individuals. By building our model to respect the structure of our data (e.g., trials within timepoints within subjects), we are able to gain a better understanding of the data-generating process that gives rise to the Stroop effect.&lt;/p&gt;
+&lt;p&gt;Second, the Stroop task exhibits practice effects, which could attenuate &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1)\)&lt;/span&gt; estimates. For example, if everyone becomes faster by timepoint 2, then the &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1)\)&lt;/span&gt; will go down even if their are consistent individual differences across timepoints. In fact, plotting out the Stroop effects at each timepoint reveals evidence for practice effects:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Test-retest plot
+stroop_unpooled %&amp;gt;%
+  ggplot(aes(x = Stroop_T1, y = Stroop_T2)) +
+  geom_abline(intercept = 0, slope = 1, linetype = 2, color = &amp;quot;black&amp;quot;, size = 1) +
+  geom_point(color = I(&amp;quot;#b5000c&amp;quot;)) +
+  theme_minimal(base_size = 20) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-9-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Above, the black dotted line indicates the identity line, which is where all the red points (unpooled individual-level Stroop estimates) would fall if all subjects had the same Stroop effect estimates at each timepoint. Overall, we see that Stroop effects at time 2 are generally lower than at time 1, which is indicative of some form of practice effect.&lt;/p&gt;
+&lt;div id=&#34;the-hierarchical-bayesian-approach&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;The Hierarchical Bayesian Approach&lt;/h3&gt;
+&lt;p&gt;Hierarchical Bayesian Analysis (HBA) offers a statistical framework that allows us to develop a model that better captures the data-generating distribution of the group-level Stroop effect. Specifically, HBA simultaneously: (1) uses information from each individual subject to inform a group-level estimate, and (2) uses group-level information to inform all individual-level estimates. Also known as partial pooling, the structure imposed by a hierarchical model therefore allows us to more precisely estimate individual-level effects compared to methods that do not use pooling, which can lead to better estimates of data-generating parameters (e.g., &lt;a href=&#34;https://ccs-lab.github.io/papers/ahn2011jnpe/&#34;&gt;Ahn et al., 2011&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Before walking through the equations, let’s first determine how we would like to structure our hierarchical model in a way that captures our assumptions. When most psychologists think of hierarchical modeling, they think of estimating “random slopes” or “random intercepts”, or some combination of the two. This style of thinking can sometimes obscure our actual intentions. Instead, we will think of hierarchical models as a way to encode our assumptions regarding different behavioral effects in the Stroop task. Spefically, we want a model that does the following:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Captures uncertainty in individual-level Stroop estimates from within-subject variability,&lt;/li&gt;
+&lt;li&gt;Estimates the difference in RT between incongruent and congruent trials,&lt;/li&gt;
+&lt;li&gt;Estimates the correlation between the difference score from (2) between timepoint 1 and 2 across subjects (i.e. &lt;em&gt;test-retest reliability&lt;/em&gt;), and&lt;/li&gt;
+&lt;li&gt;Does 1-3 within a single hierarchical model&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;It is worth emphasizing that there are multiple ways we could construct a model to encode these assumptions (see Rouder &amp;amp; Haaf’s word mentioned previously), and the model we will develop is only one example. Now, here is the model we will use:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{align*}
+\text{RT}_{i,t} &amp;amp; \sim \text{Normal} (\mu_{i,t}, \sigma_{\text{condition}}) \\
+\mu_{i,t} &amp;amp; = (\beta_{\text{congruent}_{1,i}} + \beta_{\Delta_{1,i}} \cdot I_{\text{condition}}) \cdot I_\text{time} + \\
+      &amp;amp; ~~~~~ (\beta_{\text{congruent}_{2,i}} + \beta_{\Delta_{2,i}}  \cdot I_{\text{condition}}) \cdot (1-I_\text{time}) \\
+\begin{bmatrix} \beta_{\Delta_{1,i}} \\ \beta_{\Delta_{2,i}} \end{bmatrix} &amp;amp; \sim \text{MVNormal} \bigg (\begin{bmatrix} \mu_{\beta_{\Delta_{1}}} \\ \mu_{\beta_{\Delta_{2}}} \end{bmatrix}, \mathbf{S}  \bigg ) \\
+\mathbf S     &amp;amp; = \begin{pmatrix} \sigma_{\beta_{\Delta_{1}}} &amp;amp; 0 \\ 0 &amp;amp; \sigma_{\beta_{\Delta_{2}}} \end{pmatrix} \mathbf R \begin{pmatrix} \sigma_{\beta_{\Delta_{1}}} &amp;amp; 0 \\ 0 &amp;amp; \sigma_{\beta_{\Delta_{2}}} \end{pmatrix} \\
+\beta_{\text{congruent}_{1,i}} &amp;amp; \sim \text{Normal} (\mu_{\beta_{\text{congruent}_1}}, \sigma_{\beta_{\text{congruent}_1}}) \\
+\beta_{\text{congruent}_{2,i}} &amp;amp; \sim \text{Normal} (\mu_{\beta_{\text{congruent}_2}}, \sigma_{\beta_{\text{congruent}_2}}) \\
+\mu_{\beta_{\text{congruent}}}    &amp;amp; \sim \text{Normal} (0, 1) \\
+\mu_{\beta_{\Delta}}            &amp;amp; \sim \text{Normal} (0, 1) \\
+\sigma_{\beta_{\text{congruent}}} &amp;amp; \sim \text{HalfCauchy} (0, 1) \\
+\sigma_{\beta_{\Delta}}         &amp;amp; \sim \text{HalfCauchy} (0, 1) \\
+\sigma_{\text{condition}}           &amp;amp; \sim \text{HalfCauchy} (0, 1) \\
+\mathbf R                           &amp;amp; \sim \text{LKJcorr} (1)
+\end{align*}\tag{2}
+\]&lt;/span&gt; Obviously, there is a lot going on here—yet, at its core, the model is not much different from a traditional linear regression model. Above, &lt;span class=&#34;math inline&#34;&gt;\(\text{RT}_{i,t}\)&lt;/span&gt; indicates the response time for subject &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; on trial &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt;. We assume that each &lt;span class=&#34;math inline&#34;&gt;\(\text{RT}_{i,t}\)&lt;/span&gt; is distributed normally, with a mean &lt;span class=&#34;math inline&#34;&gt;\(\mu_{i,t}\)&lt;/span&gt; and standard deviation &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{condition}}\)&lt;/span&gt;. Note that a different standard deviation is assumed for the incongruent versus congruent conditions (indicated by &lt;span class=&#34;math inline&#34;&gt;\(\text{condition}\)&lt;/span&gt;).&lt;/p&gt;
+&lt;p&gt;The &lt;span class=&#34;math inline&#34;&gt;\(\mu_{i,t}\)&lt;/span&gt; term is determined as a linear combination of some &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; weights that we are estimating across conditions and timepoints. Specifically, &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\text{congruent}_{1, i}}\)&lt;/span&gt; can be thought of as an “intercept”, which captures the average &lt;span class=&#34;math inline&#34;&gt;\(\text{RT}\)&lt;/span&gt; at timepoint 1 for subject &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; (i.e. the first time they took the Stroop task). Then, &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\Delta_{1, i}}\)&lt;/span&gt; is a “slope” (or different score) that is added to the intercept term when the condition identifier (&lt;span class=&#34;math inline&#34;&gt;\(I_\text{condition}\)&lt;/span&gt;) returns 1. Note that &lt;span class=&#34;math inline&#34;&gt;\(I_\text{condition}\)&lt;/span&gt; returns 1 only for the incongruent trials, and returns 0 otherwise. In this way, &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\Delta_{1, i}}\)&lt;/span&gt; &lt;em&gt;is our estimate for the Stroop effect&lt;/em&gt; for subject &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; at the first timepoint. Importantly, the entire term representing the first timpeoint is then multiplied by &lt;span class=&#34;math inline&#34;&gt;\(I_\text{time}\)&lt;/span&gt;, which indicates whether the current trial is from the first (1) or second (0) timepoint. Then, &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\text{congruent}_{2, i}}\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\Delta_{2, i}}\)&lt;/span&gt; are interpreted in the same way, except they represent corresponding estimates for the second timepoint.&lt;/p&gt;
+&lt;p&gt;To estimate test-retest reliability, we then make the assumption that our individual-level estimates for &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\Delta_{1, i}}\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\Delta_{2, i}}\)&lt;/span&gt; (i.e. the Stroop effect estimates for each subject at timepoints 1 and 2) are drawn from a multivariate normal distribution, which allows us to estimate the Pearson’s correlation between Stroop effect timepoints across subjects &lt;strong&gt;in the same model that we use to estimate individual-level Stroop effects&lt;/strong&gt;. The multivariate normal distribution assumes that the individual-level effects are drawn from group-level Stroop effects for timepoint 1 (&lt;span class=&#34;math inline&#34;&gt;\(\mu_{\beta_{\Delta_{1}}}\)&lt;/span&gt;) and timepoint 2 (&lt;span class=&#34;math inline&#34;&gt;\(\mu_{\beta_{\Delta_{2}}}\)&lt;/span&gt;), and with covariance matrix &lt;span class=&#34;math inline&#34;&gt;\(\bf{S}\)&lt;/span&gt;. Covariance matrix &lt;span class=&#34;math inline&#34;&gt;\(\bf{S}\)&lt;/span&gt; is itself constructed with the estimated SDs of each of the Stroop effects and correlation matrix &lt;span class=&#34;math inline&#34;&gt;\(\bf{R}\)&lt;/span&gt;. &lt;span class=&#34;math inline&#34;&gt;\(\bf{R}\)&lt;/span&gt; is where we get our test-retest reliability estimate.&lt;/p&gt;
+&lt;p&gt;Then, we assume that the individual-level &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\text{congruent}}\)&lt;/span&gt; weights for each timepoint are drawn from separate group-level normal distributions, with means indicated by &lt;span class=&#34;math inline&#34;&gt;\(\mu_{\beta_{\text{congruent}_1}}\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\mu_{\beta_{\text{congruent}_2}}\)&lt;/span&gt; and SDs indicated by &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\beta_{\text{congruent}_1}}\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\beta_{\text{congruent}_2}}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Lastly, we have the prior distributions on the group-level parameters. These priors in particular are not really very informative, given that the RTs are in seconds (see the descriptives above). The one prior worth mentioning is the the &lt;span class=&#34;math inline&#34;&gt;\(\text{LKJcorr}\)&lt;/span&gt; distribution, which specifies a prior on a correlation matrix. Since we specified 1 as the shape parameter and we are only estimating the correlation between two values, this particular prior is uniform from -1 to 1, which assumes that all possible correlations for test-retest reliability of the Stroop effect are equally likely. We could certainly do better, but this will be fine for a first pass at the data. For a more detailed description of this particular distribution and some informative visualizations, check out &lt;a href=&#34;https://www.psychstatistics.com/2014/12/27/d-lkj-priors/&#34;&gt;this great blog post&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Now that we have walked through the model, here is the &lt;a href=&#34;https://mc-stan.org/&#34;&gt;Stan&lt;/a&gt; code that we will use to fit it:&lt;/p&gt;
+&lt;pre class=&#34;stan&#34;&gt;&lt;code&gt;data {
+    int N;      // # of subjects
+    int N_cond; // # of conditions
+    int N_time; // # of timepoints
+    int T_max;  // max # of trials across subjects
+    real RT[N, N_cond, N_time, T_max]; // Reaction times for each subject, condition, timepoint, and trial
+}
+parameters {
+  // Correlation matrix for Stroop effect test-retest reliability
+  corr_matrix[N_time] R;
+  
+  // SDs for group-level parameters  
+  vector&amp;lt;lower=0&amp;gt;[N_time] sigma_con;
+  vector&amp;lt;lower=0&amp;gt;[N_time] sigma_delta;
+  
+  // SDs for normal model on RTs
+  vector&amp;lt;lower=0&amp;gt;[N_cond] sigma_RT;  
+  
+  // Means for group-level parameters
+  vector[N_time] mu_beta_con;  
+  vector[N_time] mu_beta_delta;
+  
+  // Individual-level parameters
+  vector[N_time] beta_con[N];
+  vector[N_time] beta_delta[N];
+}
+transformed parameters {
+  // Construct covariance matrix from SDs and correlation matrix
+  cov_matrix[N_time] S; 
+  S = quad_form_diag(R, sigma_delta);
+}
+model {
+  // Priors on group-level SDs and correlation matrix
+  R ~ lkj_corr(1); 
+  sigma_delta ~ normal(0, 1);
+  sigma_con   ~ normal(0, 1);
+  sigma_RT    ~ normal(0, 1); 
+  
+  // Priors on group-level means
+  mu_beta_con   ~ normal(0,1);
+  mu_beta_delta ~ normal(0,1);
+  
+  // Priors on individual parameters
+  beta_con[1] ~ normal(mu_beta_con[1], sigma_con[1]);
+  beta_con[2] ~ normal(mu_beta_con[2], sigma_con[2]);
+  beta_delta  ~ multi_normal(mu_beta_delta, S);
+    
+  // For each subject
+  for (i in 1:N) {
+    // Congruent at time 1
+    RT[i,1,1,:] ~ normal(beta_con[i,1], sigma_RT[1]);
+    // Incongruent at time 1
+    RT[i,2,1,:] ~ normal(beta_con[i,1] + beta_delta[i,1], sigma_RT[2]);
+    // Congruent at time 2
+    RT[i,1,2,:] ~ normal(beta_con[i,2], sigma_RT[1]);
+    // Incongruent at time 2
+    RT[i,2,2,:] ~ normal(beta_con[i,2] + beta_delta[i,2], sigma_RT[2]);
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The comments describe much of what is going on in the code, and I wrote it to match equation 2 as best as possible. The only major change worth noting is that as opposed to using identifiers as in equation 2 (e.g., &lt;span class=&#34;math inline&#34;&gt;\(I_\text{condition}\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(I_\text{time}\)&lt;/span&gt;), the Stan model has the different conditions and timepoints stored in different dimensions of a single array, which is more efficient. The underlying model is equivalent to equaiton 2.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;fitting-and-refining-our-model&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Fitting and Refining Our Model&lt;/h3&gt;
+&lt;p&gt;Now, we can prepare the data and fit the Stan model:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Number of subjects
+n_subj &amp;lt;- length(unique(long_stroop$subj_num))
+# Number of conditions 
+n_cond &amp;lt;- 2
+# Number of timepoints
+n_time &amp;lt;- 2
+# All subjects have 240 trials within each condition within timepoints
+T_max &amp;lt;- 240
+
+# Create RT data array for stan; dims = (subject, condition, time, trial)
+RT &amp;lt;- array(NA, dim = c(n_subj, n_cond, n_time, T_max))
+for (i in 1:n_subj) {
+  # RTs for congruent condition at time 1
+  RT[i, 1, 1,] = with(long_stroop, RT[subj_num==i &amp;amp; Condition==0 &amp;amp; time==1])
+  # RTs for incongruent condition at time 1
+  RT[i, 2, 1,] = with(long_stroop, RT[subj_num==i &amp;amp; Condition==2 &amp;amp; time==1])
+  # RTs for congruent condition at time 2
+  RT[i, 1, 2,] = with(long_stroop, RT[subj_num==i &amp;amp; Condition==0 &amp;amp; time==2])
+  # RTs for incongruent condition at time 2
+  RT[i, 2, 2,] = with(long_stroop, RT[subj_num==i &amp;amp; Condition==2 &amp;amp; time==2])
+}
+
+# Stan-ready data list
+stan_dat &amp;lt;- list(N      = n_subj,
+                 N_cond = n_cond,
+                 N_time = n_time,
+                 T_max  = T_max,
+                 RT     = RT)
+
+# Fit the hierarchical model
+fit_m1 &amp;lt;- sampling(stroop_m1, 
+                   data    = stan_dat,
+                   iter    = 2000, 
+                   warmup  = 500,
+                   chains  = 3,
+                   cores   = 3, 
+                   seed    = 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Great! The model runs fine, although we get warning messages about divergent transitions. This happens in Stan because the sampler used (i.e. the No-U-Turn Hamiltonian Monte Carlo sampler) returns &lt;em&gt;divergences&lt;/em&gt; when the sampler explores difficult parts of the parameter space. Such a large number of divergences is problematic, suggesting that we may not have explored important parts of the parameter space. This often happens when the means and SDs of hierarchical parameters are correlated in strange ways, which we can confirm by checking the bivariate distributions:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Pairs plot of the group-level congruent cond. means and SDs
+pairs(fit_m1, pars = c(&amp;quot;mu_beta_con&amp;quot;, &amp;quot;sigma_con&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-12-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The red dots above indicate the divergent transitions. It is clear that the divergences are occuring most frequently in parts of the parameter space that are funnel-shaped. Now known as &lt;a href=&#34;https://mc-stan.org/docs/2_18/stan-users-guide/reparameterization-section.html&#34;&gt;Neal’s funnel&lt;/a&gt;, we can take care of this problem by re-parameterizing the model such that the hierarchical means and SDs are less dependent on each other (i.e. a non-centered parameterization). Additionally, we will re-parameterize the correlation matrix using a &lt;a href=&#34;https://en.wikipedia.org/wiki/Cholesky_decomposition&#34;&gt;Cholesky decomposition&lt;/a&gt;, which will also help with estimation a bit. I will not go into more detail about why Cholesky decomposition is useful, and instead refer interested readers to the wiki page referred to above.&lt;/p&gt;
+&lt;p&gt;The updated Stan code below uses a &lt;a href=&#34;https://mc-stan.org/docs/2_18/stan-users-guide/reparameterization-section.html&#34;&gt;non-centered parameterization&lt;/a&gt; to estimate all hierarchical parameters, which is mathematically identical to the model above but allows for better parameter estimation due to changes in the shape of the parameter space that Stan’s NUTS-HMC sampler needs to explore.&lt;/p&gt;
+&lt;pre class=&#34;stan&#34;&gt;&lt;code&gt;data {
+    int N;      // # of subjects
+    int N_cond; // # of conditions
+    int N_time; // # of timepoints
+    int T_max;  // max # of trials across subjects
+    real RT[N, N_cond, N_time, T_max]; // Reaction times for each subject, condition, timepoint, and trial
+}
+parameters {
+  // Group-level correlation matrix (cholesky factor for faster computation)
+  cholesky_factor_corr[2] R_cholesky; 
+  
+  // Group-level parameter SDs
+  vector&amp;lt;lower=0&amp;gt;[2] sigma_con;
+  vector&amp;lt;lower=0&amp;gt;[2] sigma_delta; 
+  
+  // Group-level SDs for normal model
+  vector&amp;lt;lower=0&amp;gt;[2] sigma_RT;
+  
+  // Group-level parameter means
+  vector[2] mu_beta_con;        
+  vector[2] mu_beta_delta;      
+  
+  // Individual-level parameters (before being transformed)
+    matrix[N,2] beta_con_pr;  
+    matrix[2,N] beta_delta_pr; // order flipped here for operation below
+}
+transformed parameters {
+  // Individual-level parameter off-sets (for non-centered parameterization)
+  matrix[N,2] beta_delta_tilde;
+  
+  // Individual-level parameters 
+  matrix[N,2] beta_con;
+  matrix[N,2] beta_delta;
+  
+  // Construct inidividual offsets (for non-centered parameterization)
+  beta_delta_tilde = diag_pre_multiply(sigma_delta, R_cholesky) * beta_delta_pr; 
+  
+  // Compute individual-level parameters from non-centered parameterization
+  for (i in 1:N) {
+    // Congruent at time 1
+    beta_con[i,1] = mu_beta_con[1] + sigma_con[1] * beta_con_pr[i,1];
+    // Congruent at time 2
+    beta_con[i,2] = mu_beta_con[2] + sigma_con[2] * beta_con_pr[i,2];
+    // Stroop effect at time 1
+    beta_delta[i,1] = mu_beta_delta[1] + beta_delta_tilde[1, i];
+    // Stroop effect at time 2
+    beta_delta[i,2] = mu_beta_delta[2] + beta_delta_tilde[2, i];
+  }
+}
+model {
+  // Prior on cholesky factor of correlation matrix
+  R_cholesky ~ lkj_corr_cholesky(1); 
+  
+  // Priors on group-level SDs
+  sigma_delta ~ cauchy(0, 1);
+  sigma_con   ~ cauchy(0, 1);
+  sigma_RT    ~ cauchy(0, 1); 
+  
+  // Priors on individual-level parameters
+  to_vector(beta_delta_pr) ~ normal(0, 1); 
+  to_vector(beta_con_pr)   ~ normal(0, 1);
+    
+  // For each subject
+  for (i in 1:N) {
+    // Congruent at time 1
+    RT[i,1,1,:] ~ normal(beta_con[i,1], sigma_RT[1]);
+    // Incongruent at time 1
+    RT[i,2,1,:] ~ normal(beta_con[i,1] + beta_delta[i,1], sigma_RT[2]);
+    // Congruent at time 2
+    RT[i,1,2,:] ~ normal(beta_con[i,2], sigma_RT[1]);
+    // Incongruent at time 2
+    RT[i,2,2,:] ~ normal(beta_con[i,2] + beta_delta[i,2], sigma_RT[2]);
+  }
+}
+generated quantities { 
+  corr_matrix[2] R;
+    // Reconstruct correlation matrix from cholesky factor
+  R = R_cholesky * R_cholesky&amp;#39;;
+} &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, let’s fit the non-centered model:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Fit the non-centered hierarchical model
+fit_m2 &amp;lt;- sampling(stroop_m2, 
+                   data    = stan_dat,
+                   iter    = 2000, 
+                   warmup  = 500,
+                   chains  = 3,
+                   cores   = 3, 
+                   seed    = 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And just like that, no divergent transitions! Also, we get the added bonus of slightly faster computation. We can again look at the pairs plot to see what happened to Neal’s funnel:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Pairs plot of the group-level congruent cond. means and SDs
+pairs(fit_m2, pars = c(&amp;quot;mu_beta_con&amp;quot;, &amp;quot;sigma_con&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-15-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Above, you can see that the funnel has disappeared completely. Instead, we have well-behaved, more-or-less elliptical bivariate distributions (which MCMC samplers love).&lt;/p&gt;
+&lt;p&gt;We also need to check convergence more generally, using both visual and quantitative diagnostics. First, we can graph the traceplots, which should look like “furry caterpillars”:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Check all group-level parameters (and test-retest correlation estimate)
+traceplot(fit_m2, pars = c(&amp;quot;mu_beta_con&amp;quot;, &amp;quot;mu_beta_delta&amp;quot;, &amp;quot;sigma_con&amp;quot;, &amp;quot;sigma_delta&amp;quot;, &amp;quot;sigma_RT&amp;quot;, &amp;quot;R[1,2]&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-16-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;These look good. We would usually also check individual-level parameters, but for the sake of brevity we can look at some quantitative diagnostics. In particular, &lt;span class=&#34;math inline&#34;&gt;\(\hat{R}\)&lt;/span&gt; (a.k.a. the Gelman-Rubin statistic) is a measure of within- relative to between-chain variance, which should be close to 1 for all parameters if chains mix well. We can easily plot a distribution of &lt;span class=&#34;math inline&#34;&gt;\(\hat{R}\)&lt;/span&gt; for all parameters in the model as follows:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# rstan&amp;#39;s default plotting method
+stan_rhat(fit_m2, bins = 30)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Removed 3 rows containing non-finite values (stat_bin).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-17-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Here, all the &lt;span class=&#34;math inline&#34;&gt;\(\hat{R}\)&lt;/span&gt; statistics are very close to 1. In combination with the traceplots above and lack of divergences, we can be pretty sure that the three chains we used have converged.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;making-inference-with-our-model&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Making Inference with Our Model&lt;/h3&gt;
+&lt;p&gt;Now, the next step is to extract the parameter estimates and check the estimated correlation (i.e. test-retest estimate) across the individual-level Stroop effect parameters at each timepoint! First, we can plot the posterior distribution of the test-retest correlation:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Extract parameters from model
+pars &amp;lt;- extract(fit_m2)
+
+# Plot density of test-retest correlation estimate
+qplot(pars$R[,1,2], geom = &amp;quot;density&amp;quot;, fill = I(&amp;quot;#b5000c&amp;quot;)) +
+  ggtitle(paste0(&amp;quot;Posterior Mode = &amp;quot;, round(estimate_mode(pars$R[,1,2]), 2))) +
+  xlab(&amp;quot;Test-Retest Correlation&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-18-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The results are quite stunning—the mass of the posterior is up against 1, with a mode of &lt;span class=&#34;math inline&#34;&gt;\(0.95\)&lt;/span&gt;. Such a high test-retest reliability estimate is clearly at odds with the findings of Hedge et al., who reported an estimate of &lt;span class=&#34;math inline&#34;&gt;\(ICC(2,1) = .6\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;As discussed before, it is the pooling of information both across individual subjects and across timepoints within subjects that gives us these results. Now that our model is fit, we can readily visualize this pooling. The plot below shows the unpooled estimates from equation 1 (shown in our first figure at the start of the post), and the pooled estimates from our non-centered hierarchical model:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Extracting posterior modes of individual-level Stroop effect estimates
+stroop_pooled &amp;lt;- apply(pars$beta_delta, c(2,3), mean) %&amp;gt;%
+  as.data.frame() %&amp;gt;%
+  rename(Stroop_T1 = V1,
+         Stroop_T2 = V2) %&amp;gt;%
+  mutate(subj_num = row_number(),
+         pooled = &amp;quot;Yes&amp;quot;)
+# Pooled correlation
+pooled_cor &amp;lt;- with(stroop_pooled, round(cor(Stroop_T1[pooled==&amp;quot;Yes&amp;quot;], Stroop_T2[pooled==&amp;quot;Yes&amp;quot;]), 2))
+
+# My favorite visualization of all time
+bind_rows(stroop_unpooled, stroop_pooled) %&amp;gt;%
+  mutate(subj_num = as.factor(subj_num)) %&amp;gt;%
+  ggplot(aes(x = Stroop_T1, y = Stroop_T2)) +
+  ggtitle(paste0(&amp;quot;Posterior Means r = &amp;quot;, pooled_cor)) +
+  geom_abline(intercept = 0, slope = 1, linetype = 2, color = &amp;quot;black&amp;quot;, size = 1) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=1/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=2/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=3/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=4/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=5/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=6/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=7/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=8/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=9/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=.99, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  geom_line(aes(group = subj_num), size = 1/4) +
+  geom_point(aes(group = subj_num, color = pooled)) +
+  scale_color_manual(&amp;quot;Pooled?&amp;quot;,
+                     values = c(&amp;quot;#990000&amp;quot;, &amp;quot;#fee8c8&amp;quot;)) +
+  theme_minimal(base_size = 20) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-19-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Here, we can see that the pooled estimates (individual-level posterior means pictured here) are actually highly consistent across timepoints within individuals. In fact, the correlation between the posterior means of the individual-level Stroop effects at time 1 versus time 2 is &lt;span class=&#34;math inline&#34;&gt;\(r = 0.97\)&lt;/span&gt;. We cannot really get much better than that! Of course, there is more uncertainty in the correlation matrix we estimated (pictured above), but this plot shows just how powerful the pooling from a well-constructed hierarchical model can be. Moreover, the hierarchical pooling removes the need to get rid of outliers at the individual-subject level—as you can see, data-points that fall far from the group average (which usually show large variance) shrink more strongly toward the group-level average.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;on-averaging-before-modeling&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;On Averaging Before Modeling&lt;/h2&gt;
+&lt;p&gt;If you are not yet convinced that the traditional practice of averaging across trials before modeling a correlation is sub-optimal, we can actually view such practices as a special case within the context of the generative model that we developed above (equation 2). Specifically, equation 1 assumes that individual-level Stroop effects can be estimated with no measurement error—but how much does this actually affect our inference? We will explore this question below before summarizing our findings and discussing implications for future research on behavioral tasks.&lt;/p&gt;
+&lt;p&gt;Let’s begin with a thought experiment. If we were to encode the assumption of 0 measurement error into the generative model that we developed, how would we do so? At first, we may think to change the prior distributions, the likelihood of the model, or some other aspect of the model that can encode certainty/uncertainty. However, an idea that leads to better intuition of the implications is that we could:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Take our dataset containing all trials from all subjects in each condition/timepoint,&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;em&gt;Append our dataset to itself an infinite number of times&lt;/em&gt;&lt;/strong&gt; (yes, literally copy pasting your dataset repeatedly to create infinite data for each subject), and&lt;/li&gt;
+&lt;li&gt;Fit the data using the generative model from equation 2.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;If we follow these three steps, the test-retest correlation we estimate in equation 2 will converge to the correlation we get by using the traditional analysis described by equation 1 and surrounding text. This follows because as we continue to artificially replicate our dataset ad infinitum, the estimates for each individual-level estimate will approach the sample mean, and the uncertainty estimates will reduce to single points—this is identical to what we are doing in equation 1. Therefore, &lt;strong&gt;the traditional practice of averaging before modeling is as functionally problematic as artificially replicating our datasets an infinite number of times before fitting our model&lt;/strong&gt;. In fact, we can demonstrate this by observing what happens as we artificially replicate our dataset an increasing number of times. Of course, we cannot do this anywhere near an infinite number of times, but we can at least get a sense of the problem using this method. The R code below does exactly this, varying the number of artificially replicated datasets &lt;span class=&#34;math inline&#34;&gt;\(\in \{1, 2, 4, 8, 16, 32\}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Number of artificially replicated datasets
+reps &amp;lt;- c(1, 2, 4, 8, 16, 32)
+
+# Looping through each replication and saving model fits
+results &amp;lt;- foreach(r=reps) %do% {
+  # Same as above
+  n_subj &amp;lt;- length(unique(long_stroop$subj_num))
+  n_cond &amp;lt;- 2
+  n_time &amp;lt;- 2
+  # If we multiply T_max by the reps variable, the number of trials alloted in 
+  # the `RT` array for each condition/timepoint will increase accordingly
+  T_max &amp;lt;- 240 * r
+  
+  # Create RT data array for stan; dims = (subject, condition, time, trial)
+  RT &amp;lt;- array(NA, dim = c(n_subj, n_cond, n_time, T_max))
+  for (i in 1:n_subj) {
+    # Because we created an array that is larger than the vector of data that
+    # we assigned to it, R will (by default) replicate the observations we are
+    # assigning to each condition/timepoint to fill the corresponding RT array
+    RT[i, 1, 1,] = with(long_stroop, RT[subj_num==i &amp;amp; Condition==0 &amp;amp; time==1])
+    RT[i, 2, 1,] = with(long_stroop, RT[subj_num==i &amp;amp; Condition==2 &amp;amp; time==1])
+    RT[i, 1, 2,] = with(long_stroop, RT[subj_num==i &amp;amp; Condition==0 &amp;amp; time==2])
+    RT[i, 2, 2,] = with(long_stroop, RT[subj_num==i &amp;amp; Condition==2 &amp;amp; time==2])
+  }
+  
+  # Stan-ready data list
+  rep_dat &amp;lt;- list(N      = n_subj,
+                  N_cond = n_cond,
+                  N_time = n_time,
+                  T_max  = T_max,
+                  RT     = RT)
+
+  # Fit the model with artificially replicated data
+  tmp_fit &amp;lt;- sampling(stroop_m2,
+                      data    = rep_dat,
+                      iter    = 2000, 
+                      warmup  = 500,
+                      chains  = 3,
+                      cores   = 3, 
+                      seed    = 2)
+  
+  # Save model fit in list (`results`) 
+  tmp_fit
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;After fitting everything, we can visualize how the estimated test-retest correlation changes with respect the the number of times we artificially replicated our data (remember that the correlation should converge to the unpooled sample correlation):&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Plot posterior distribution of test-retest correlation across replications
+foreach(i=seq_along(results), .combine = &amp;quot;rbind&amp;quot;) %do% {
+    data.frame(R = rstan::extract(results[[i]])$R[,1,2]) %&amp;gt;%
+        mutate(Replication = as.factor(reps[i]))
+} %&amp;gt;%
+    ggplot(aes(x = Replication, y = R)) +
+    geom_violin(fill = I(&amp;quot;#b5000c&amp;quot;)) +
+    stat_summary(aes(x = Replication, y = R), fun.y = mean, geom = &amp;quot;point&amp;quot;, size = 2) +
+    geom_hline(yintercept = .5, linetype = 2, color = I(&amp;quot;black&amp;quot;)) +
+    theme_minimal(base_size = 20) +
+    theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-21-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As expected, as we artificially replicated our dataset more and more, the model-estimated test-retest correlation (posterior means indicated by black points) converges toward the unpooled sample Pearson’s correlation (indicated by the dashed black line). Next, let’s take a look at this effect at the individual-level by plotting out the changes in posterior means with respect to the number of artificially replicated datasets:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Plot convergence of estimated individual-level posterior means with sample means (Sample Means = equation 1/unpooled estimates)
+foreach(i=seq_along(results), .combine = &amp;quot;rbind&amp;quot;) %do% {
+  apply(rstan::extract(results[[i]])$beta_delta, c(2,3), mean) %&amp;gt;%
+  as.data.frame() %&amp;gt;%
+  rename(Stroop_T1 = V1,
+         Stroop_T2 = V2) %&amp;gt;%
+  mutate(subj_num = row_number(),
+         Replication = as.character(reps[i]))
+} %&amp;gt;%
+  bind_rows(stroop_unpooled) %&amp;gt;%
+  mutate(subj_num = as.factor(subj_num),
+         Replication = factor(Replication, 
+                              levels = c(&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;, &amp;quot;4&amp;quot;, &amp;quot;8&amp;quot;, &amp;quot;16&amp;quot;, &amp;quot;32&amp;quot;, &amp;quot;Sample Mean&amp;quot;),
+                              labels = c(&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;, &amp;quot;4&amp;quot;, &amp;quot;8&amp;quot;, &amp;quot;16&amp;quot;, &amp;quot;32&amp;quot;, &amp;quot;Sample Mean&amp;quot;))) %&amp;gt;%
+  ggplot(aes(x = Stroop_T1, y = Stroop_T2)) +
+  geom_abline(intercept = 0, slope = 1, linetype = 2, color = &amp;quot;black&amp;quot;, size = 1) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=1/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=2/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=3/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=4/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=5/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=6/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=7/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=8/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=9/10, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  stat_ellipse(geom=&amp;quot;polygon&amp;quot;, type=&amp;quot;norm&amp;quot;, level=.99, size=0, alpha=1/10, fill=&amp;quot;gray&amp;quot;) +
+  geom_line(aes(group = subj_num), size = 1/4) +
+  geom_point(aes(group = subj_num, color = Replication)) +
+  scale_color_brewer(&amp;quot;Number of\nReplications&amp;quot;,
+                     type = &amp;quot;seq&amp;quot;,
+                     palette = &amp;quot;Reds&amp;quot;) +
+  theme_minimal(base_size = 20) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-22-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Similar to the group-level test-retest correlation estimate, we see that the individual posterior means converge to the unpooled sample means as we increase the number of times we artificially replicate our data before fitting the model.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;discussion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Discussion&lt;/h1&gt;
+&lt;p&gt;In this post, we showed that hierarchical models can: (1) pool information across individual subjects to more precisely estimate individual-level behavioral effects, and subsequently (2) increase test-retest reliability esimtates to the extent that we can infer strong, reliable individual differences between subjects in behavioral tasks. Therefore, our findings show that despite the conclusions drawn by Hedge et al., robust effects can in fact be reliable, with the caveat that we need to use more computationally expensive models that are more difficult to work with. Our findings are consistent with &lt;a href=&#34;https://link.springer.com/article/10.3758/s13423-018-1558-y&#34;&gt;Rouder &amp;amp; Haaf (2019)&lt;/a&gt;, who similarly showed that hierarchical models (even using a different functional form) are necessary to properly account for the high measurement error of behavioral effects when the goal is to make inference on individual-differences. I would highly recommend taking a look at Rouder &amp;amp; Haaf’s work if you are interested in reading more about the benefits of hierarchical modeling in the context of behavioral tasks.&lt;/p&gt;
+&lt;p&gt;More broadly, our results show the benefits of thinking about the data-generating process when analyzing behavioral data. For example, traditional analyses (e.g., equation 1) fail to consider variability within subjects, which is detrimental when we aim to make inference at the individual-subject level. Specifically, by failing to consider within-subject variability, we implicitly assume that behavioral summary statistics are infinitely precise—when made explicit, it is apparent just how inconsistent such assumptions are with our existing knowledge regarding behavioral data.&lt;/p&gt;
+&lt;p&gt;Equally important to the statistical issues that our results reveal are the ethical concerns brought forth by our last analysis. Specifically, we showed that averaging across trials before analyzing behavioral summary statistics is equivalent to artificially replicating each subject’s data an infinite number of times before fitting an inferential statistical model. Put in these terms, we can see just how problematic measurement error is when not properly accounted for. For example, if a researcher were caught artificially replicating their data before analyzing it, they would immediately be ridiculed—and likely formally investigated—for committing research misconduct and/or fraud. However, as it currently stands, researchers regularly commit to the practice of averaging before modeling, and we would never think to suggest that such behavior is outright fraud. This raises the question—should we?&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Thanks for reading! I learned quite a lot writing this post, and I hope you gained some insight reading it&lt;/em&gt; :D&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>On the equivalency between frequentist Ridge (and LASSO) regression and hierarchial Bayesian regression</title>
       <link>http://haines-lab.com/post/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/</link>
       <pubDate>Mon, 06 May 2019 00:00:00 +0000</pubDate>
