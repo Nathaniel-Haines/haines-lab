@@ -1286,21 +1286,22 @@ cowplot::plot_grid(p3, p4, ncol = 2)&lt;/code&gt;&lt;/pre&gt;
       <description>&lt;div id=&#34;goals-of-paramter-estimation&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;1. Goals of Paramter Estimation&lt;/h1&gt;
 &lt;p&gt;When estimating paramters for a given model, we typically aim to make an inference on an individual’s underlying decision process. We may be inferring a variety of different factors, such as the rate at which someone updates their expectations, the way that someone subjectively values an outcome, or the amount of exploration versus exploitation that someone engages in. Once we estimate an individual’s parameters, we can compare then to other people or even other groups of people. Further, we can compare parameters within subjects after an experimental manipulation (e.g., &lt;em&gt;does drug X affect a person’s learning rate?&lt;/em&gt;).&lt;/p&gt;
-&lt;p&gt;Below, we will explore multiple paremter estimation methods. Specifically, we will use: (1) maximum likelihood estimation, (2) maximum a posteriori estimation, (3) and fully Bayesian estimation. First, we will simulate data from models described in the previous post on a simple 2-armed bandit task. Importantly, we will simulate data using &lt;em&gt;known parameter values&lt;/em&gt;, which we will then try to recover from the simulated data. We will refer to the known paramters as the &lt;em&gt;true paramters&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Below, we will explore multiple paremter estimation methods. Specifically, we will use: (1) maximum likelihood estimation, (2) maximum a posteriori estimation, (3) and fully Bayesian estimation. First, we will simulate data from models described in the previous post on a simple 2-armed bandit task. Importantly, we will simulate data using &lt;em&gt;known parameter values&lt;/em&gt;, which we will then try to recover from the simulated data. We will refer to the known paramters as the &lt;em&gt;true parameters&lt;/em&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;simulation&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;2. Simulation&lt;/h1&gt;
 &lt;p&gt;For our simulation, we will simulate choice from a model using delta-rule learning and softmax choice. To keep things simple, the learning rate will be the only free paramter in the model. Additionally, we will simulate choices in a task where there are two choices, where choice 1 has a mean payoff of 1 and choice 2 has a mean payoff of -1. Therefore, a learning agent should be able to learn that choice 1 is optimal and make selections accordingly. However, we will add noise to each choice payoff (&lt;em&gt;sigma&lt;/em&gt; below) to make things more realistic.&lt;/p&gt;
-&lt;p&gt;The following R code simulates 100 trials using the model ans task described above:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# For pretty plots
+&lt;p&gt;The following R code simulates 200 trials using the model and task described above:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# For pretty plots and data manipulation
 library(ggplot2)
 library(foreach)
+library(dplyr)
 
 # Simulation paramters
 set.seed(1)        # Random seed for replication
 mu    &amp;lt;- c(1, -1)  # Mean payoff for choices 1 and 2 
-sigma &amp;lt;- 2         # SD of payoff distributions
-n_tr  &amp;lt;- 100       # Number of trials 
+sigma &amp;lt;- 3         # SD of payoff distributions
+n_tr  &amp;lt;- 200       # Number of trials 
 beta  &amp;lt;- 0.1       # True learning rate
 
 # Initial expected value
@@ -1345,7 +1346,7 @@ ggplot(sim_dat, aes(x = Trial, y = EV, geom = &amp;quot;line&amp;quot;, color = 
   ylab(&amp;quot;Expected Value&amp;quot;) +
   theme_minimal(base_size = 20)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig1-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
-&lt;p&gt;The above graph shows the simulated agent’s expected value (&lt;em&gt;EV&lt;/em&gt;) for options 1 and 2 across the 100 trials. We can also view the probability of selecting each option across trials:&lt;/p&gt;
+&lt;p&gt;The above graph shows the simulated agent’s expected value (&lt;em&gt;EV&lt;/em&gt;) for options 1 and 2 across the 200 trials. We can also view the probability of selecting each option across trials:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Change in probability of selecting each option across tirals
 ggplot(sim_dat, aes(x = Trial, y = Pr, geom = &amp;quot;line&amp;quot;, color = Option)) +
   geom_line() +
@@ -1395,25 +1396,30 @@ mle_bandit &amp;lt;- function(X, beta, outcomes)  {
   sum(-1*ll)
 }
 
+# Because data were simulated and output into long format, we need to
+# remove every other observation so that we do not double-count
+fit_dat &amp;lt;- sim_dat %&amp;gt;%
+  filter(Option == 1)
+
 # Use optim to minimize the (minus) log-likelihood function
 mle_results &amp;lt;- optim(par      = 0.5,             # Initial guess for beta
                      fn       = mle_bandit,      # Function we are minimizing
                      method   = &amp;quot;L-BFGS-B&amp;quot;,      # Specific algorithm used
                      lower    = 0,               # Lower bound for beta 
                      upper    = 1,               # Upper bound for beta
-                     X        = sim_dat$Choice,  # Simulated choices
-                     outcomes = sim_dat$Outcome) # Simulated choice outcomes
+                     X        = fit_dat$Choice,  # Simulated choices
+                     outcomes = fit_dat$Outcome) # Simulated choice outcomes
 
 # Print results
 cat(&amp;quot;The MLE for beta is: &amp;quot; , round(mle_results$par, 3))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## The MLE for beta is:  0.079&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Not bad! &lt;strong&gt;optim&lt;/strong&gt; returns a MLE of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.079\)&lt;/span&gt;. Given that &lt;span class=&#34;math inline&#34;&gt;\(\beta_{true} = 0.1\)&lt;/span&gt; (since we determined the value for the simulations), our estimate &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt; is not that far off. One potential downside of the MLE approach we used above is that we only receive a single value for the MLE, which makes it difficult to know how certain the estimate is. For example, our simulation was for 100 trials, but surely we would be more confident in the estimate if the simulation was for 1,000’s of trials! MLE alone does not offer an explicit measure of uncertainty in the parameter estimates without additional analyses (and additional assumptions), which is one reason that Bayesian methods are easier to interpret.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## The MLE for beta is:  0.09&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Not bad! &lt;strong&gt;optim&lt;/strong&gt; returns a MLE of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.09\)&lt;/span&gt;. Given that &lt;span class=&#34;math inline&#34;&gt;\(\beta_{true} = 0.1\)&lt;/span&gt; (since we determined the value for the simulations), our estimate &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt; is not that far off. One potential downside of the MLE approach we used above is that we only receive a single value for the MLE, which makes it difficult to know how certain the estimate is. For example, our simulation was for 200 trials, but surely we would be more confident in the estimate if the simulation was for 1,000’s of trials? MLE alone does not offer an explicit measure of uncertainty in the parameter estimates without additional analyses (and additional assumptions), which is one reason that Bayesian methods are easier to interpret.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;maximum-a-poseriori-map-estimation&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;3.2 Maximum A Poseriori (MAP) Estimation&lt;/h2&gt;
-&lt;p&gt;MAP estimation is a straightforward extention of MLE, which allows us to incorporate prior information about the parameter that we are trying to estimate into the estimation procedure. In our example, we may know from prior studies that learning rates for a given task typically fall in the range of 0.05-0.4. MAP estimation allows us to formalize this prior research in a very simple way! We simply parameterize a prior distribution (&lt;span class=&#34;math inline&#34;&gt;\(Pr(\beta)\)&lt;/span&gt;) that is consistent with estimates from prior studies. For example, a normal distribution with a &lt;span class=&#34;math inline&#34;&gt;\(\mu = .2\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma = 0.5\)&lt;/span&gt; captures the above range nicely but does not constrain the values too much:&lt;/p&gt;
+&lt;p&gt;MAP estimation is a straightforward extention of MLE, which allows us to incorporate prior information about the parameter that we are trying to estimate into the estimation procedure. In our example, we may know from prior studies that learning rates for a given task typically fall in the range of 0.01-0.4. MAP estimation allows us to formalize this prior research in a very simple way! We simply parameterize a prior distribution (&lt;span class=&#34;math inline&#34;&gt;\(Pr(\beta)\)&lt;/span&gt;) that is consistent with estimates from prior studies. For example, a normal distribution with a &lt;span class=&#34;math inline&#34;&gt;\(\mu = .15\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma = 0.25\)&lt;/span&gt; captures the above range nicely but does not constrain the values too much:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- seq(0, 1, length=1000)
-y &amp;lt;- dnorm(x, mean = .2, sd = .5)
+y &amp;lt;- dnorm(x, mean = .15, sd = .25)
 qplot(x = x, y = y, geom = &amp;quot;line&amp;quot;, xlab = expression(beta[prior]), ylab = &amp;quot;Density&amp;quot;) +
   theme_minimal(base_size = 20)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig4-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
@@ -1436,7 +1442,7 @@ map_bandit &amp;lt;- function(X, beta, outcomes)  {
     like &amp;lt;- pr[X[t]]
     
     # Likelihood of current beta according to prior distribution
-    prior &amp;lt;- dnorm(x = beta, mean = .2, sd = 0.5)
+    prior &amp;lt;- dnorm(x = beta, mean = .15, sd = 0.25)
     
     # Log of like*prior
     log(like*prior)
@@ -1452,13 +1458,13 @@ map_results &amp;lt;- optim(par      = 0.5,             # Initial guess for beta
                      method   = &amp;quot;L-BFGS-B&amp;quot;,      # Specific algorithm used
                      lower    = 0,               # Lower bound for beta 
                      upper    = 1,               # Upper bound for beta
-                     X        = sim_dat$Choice,  # Simulated choices
-                     outcomes = sim_dat$Outcome) # Simulated choice outcomes
+                     X        = fit_dat$Choice,  # Simulated choices
+                     outcomes = fit_dat$Outcome) # Simulated choice outcomes
 
 # Print results
 cat(&amp;quot;The MAP for beta is: &amp;quot; , round(map_results$par, 3))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## The MAP for beta is:  0.145&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Woah! The simple addition of prior information pushed our estimate of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.079\)&lt;/span&gt; to &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.145\)&lt;/span&gt;. Notice that the MAP estimator was pulled toward the mean of the prior distribution. However, is this a good thing? When is this behavior beneficial? After all, both estimates are about equidistant from &lt;span class=&#34;math inline&#34;&gt;\(\beta_{true}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## The MAP for beta is:  0.136&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Woah! The simple addition of prior information pushed our estimate of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.09\)&lt;/span&gt; to &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.136\)&lt;/span&gt;. Notice that the MAP estimator was pulled toward the mean of the prior distribution. However, is this a good thing? When is this behavior beneficial? After all, our MAP estimate is actually further than our MLE estimate from &lt;span class=&#34;math inline&#34;&gt;\(\beta_{true}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;To demonstrate the benefit of prior information, let’s take the simulated data from our learner (i.e. &lt;span class=&#34;math inline&#34;&gt;\(\beta = 0.1\)&lt;/span&gt;), but only fit the model using the first 15 trials worth of data:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Use MLE to fit the first 15 trials
 mle_results_15tr &amp;lt;- optim(par      = 0.5,             
@@ -1466,8 +1472,8 @@ mle_results_15tr &amp;lt;- optim(par      = 0.5,
                           method   = &amp;quot;L-BFGS-B&amp;quot;,      
                           lower    = 0,               
                           upper    = 1,               
-                          X        = sim_dat$Choice[1:15],  # Only using first 15 trials
-                          outcomes = sim_dat$Outcome[1:15]) 
+                          X        = fit_dat$Choice[1:15],  # Only using first 15 trials
+                          outcomes = fit_dat$Outcome[1:15]) 
 
 # Use MAP to fit the first 15 trials
 map_results_15tr &amp;lt;- optim(par      = 0.5,             
@@ -1475,19 +1481,19 @@ map_results_15tr &amp;lt;- optim(par      = 0.5,
                           method   = &amp;quot;L-BFGS-B&amp;quot;,      
                           lower    = 0,               
                           upper    = 1,               
-                          X        = sim_dat$Choice[1:15],  # Only using first 15 trials
-                          outcomes = sim_dat$Outcome[1:15]) 
+                          X        = fit_dat$Choice[1:15],  # Only using first 15 trials
+                          outcomes = fit_dat$Outcome[1:15]) 
 
 cat(&amp;quot;The MLE for beta with 15 trials is: &amp;quot; , round(mle_results_15tr$par, 3), &amp;quot;\n&amp;quot;, 
     &amp;quot;The MAP for beta with 15 trials is: &amp;quot; , round(map_results_15tr$par, 3))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## The MLE for beta with 15 trials is:  0.06 
-##  The MAP for beta with 15 trials is:  0.099&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Look at that! MLE underestimates the learning rate, whereas MAP gives us a great estimate. There are two main take-aways from this toy example:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## The MLE for beta with 15 trials is:  0.234 
+##  The MAP for beta with 15 trials is:  0.169&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Look at that! MLE overestimates the learning rate, and MAP gives us a much better estimate. There are two main take-aways from this toy example:&lt;/p&gt;
 &lt;ol style=&#34;list-style-type: decimal&#34;&gt;
-&lt;li&gt;MLE is prone to degenerate behavior in low data settings, which can push parameters to the edge of the parameter space (i.e. 0 when the range is from 0 to 1), and&lt;/li&gt;
+&lt;li&gt;MLE is prone to degenerate behavior in low data settings, which can push parameters to the edge of the parameter space or lead to otherwise unreliable estimates, and&lt;/li&gt;
 &lt;li&gt;Introduction of our own, theory-based form of bias (i.e. regularization from the prior distribution) can help us avoid estimation problems—espectially in low data settings! (this will become clearer in future posts)&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;In fact, you may have realized through the above example (or math) that MLE is just a sepcial case of MAP estimation! If it is not already intuitive, think of this—what would happen to our MAP estimate if we assumed that the prior distribution was uniform (i.e. all values between 0 and 1 are equally likely for learning rate &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;)? Well, we would have to multiply &lt;span class=&#34;math inline&#34;&gt;\(Pr(Choice_{t}|\hat{\beta})\)&lt;/span&gt; by 1 for each guess of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt;! See this yourself by observing the likelihood of different values for &lt;code&gt;x&lt;/code&gt; drawn from a uniform distribution (code: &lt;code&gt;dunif(x = .2, min = 0, max = 1)&lt;/code&gt;). Therfore, MAP is analytically equivalent to MLE when we assume a uniform prior distibution. Of course, in many settings, we know that certain paremter values are very unlikely (e.g., a learning rate of .2 is more reasonable than of .99 in most settings). It follows that assuming a uniform distribution for the prior can be quite (mis)informative!&lt;/p&gt;
+&lt;p&gt;In fact, you may have realized through the above example (or math) that MLE is just a sepcial case of MAP estimation! If it is not already intuitive, think of this—what would happen to our MAP estimate if we assumed that the prior distribution was uniform (i.e. all values between 0 and 1 are equally likely for learning rate &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;)? Well, we would have to multiply &lt;span class=&#34;math inline&#34;&gt;\(Pr(Choice_{t}|\hat{\beta})\)&lt;/span&gt; by 1 for each guess of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt;! See this yourself by observing the likelihood of different values for &lt;code&gt;x&lt;/code&gt; drawn from a uniform distribution (code: &lt;code&gt;dunif(x = .15, min = 0, max = 1)&lt;/code&gt;). Therefore, MAP is analytically equivalent to MLE when we assume a uniform prior distibution. Of course, in many settings, we know that certain paremter values are very unlikely (e.g., a learning rate of .2 is more reasonable than of .99 in most settings). It follows that assuming a uniform distribution for the prior can be quite (mis)informative!&lt;/p&gt;
 &lt;p&gt;Note that MAP, like MLE, only offers a point estimate. Again, we would ideally like a proper representation of uncertainty for our estimate.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;markov-chain-monte-carlo-mcmc-estimation&#34; class=&#34;section level2&#34;&gt;
@@ -1532,7 +1538,7 @@ calc_like &amp;lt;- function(beta, X, outcomes) {
     like &amp;lt;- pr[X[t]]
     
     # Likelihood of current beta according to prior distribution
-    prior &amp;lt;- dnorm(x = beta, mean = .2, sd = 0.5)
+    prior &amp;lt;- dnorm(x = beta, mean = .15, sd = 0.25)
     
     # log of like*prior
     log(like*prior)
@@ -1550,8 +1556,8 @@ posterior &amp;lt;- foreach(n=1:samples, .combine = &amp;quot;c&amp;quot;) %do% 
   # If proposal is outside of parameter bounds, keep current sample, else continue
   if (0 &amp;lt; beta_proposal &amp;amp; beta_proposal &amp;lt; 1) {
     # Step 2: Calculate acceptance ratio
-    like_proposal &amp;lt;- exp(calc_like(beta_proposal, sim_dat$Choice, sim_dat$Outcome))
-    like_current  &amp;lt;- exp(calc_like(beta_n, sim_dat$Choice, sim_dat$Outcome))
+    like_proposal &amp;lt;- exp(calc_like(beta_proposal, fit_dat$Choice, fit_dat$Outcome))
+    like_current  &amp;lt;- exp(calc_like(beta_n, fit_dat$Choice, fit_dat$Outcome))
     accept &amp;lt;- like_proposal/like_current
     
     # Step 3: Generate uniform random number on [0,1]
@@ -1575,15 +1581,17 @@ qplot(x = 1:samples, y = posterior, geom = &amp;quot;line&amp;quot;) +
   ylab(expression(hat(beta))) +
   theme_minimal(base_size = 20)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig7-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
-&lt;p&gt;This &lt;em&gt;traceplot&lt;/em&gt; shows each accepted proposal across all 5,000 samples that we drew from the posterior distribution. As you can see, the samples are all distributed around the true value once they converge to a stable estimate. The samples at the beginning (before reaching convergence) will be discarded (termed &lt;em&gt;burn-in&lt;/em&gt; samples) for further analyses because they do not represent the posterior distribution. Unlike for MLE or MAP estimation, all the posterior samples after burn-in can be used to represent the uncertainty in the learning rate parameter! We simply plot a histogram of the samples:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;qplot(posterior[200:5000], geom = &amp;quot;histogram&amp;quot;) +
+&lt;p&gt;This &lt;em&gt;traceplot&lt;/em&gt; shows each accepted proposal across all 5,000 samples that we drew from the posterior distribution. As you can see, the samples are all distributed near the true value once they converge to a stable estimate. The samples at the beginning (before reaching convergence) will be discarded (termed &lt;em&gt;burn-in&lt;/em&gt; samples) for further analyses because they do not represent the posterior distribution. Unlike for MLE or MAP estimation, all the posterior samples after burn-in can be used to represent the uncertainty in the learning rate parameter! We simply plot the density of the samples (with the prior density shown in the black, dotted line for an idea of what we have learned):&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;qplot(posterior[200:5000], geom = &amp;quot;density&amp;quot;, fill = I(&amp;quot;gray&amp;quot;)) +
+  geom_line(aes(x = x, y = y), linetype = 2) +
   geom_vline(aes(xintercept= beta, linetype = &amp;quot;True Beta&amp;quot;), color= &amp;#39;red&amp;#39;) +
   scale_linetype_manual(name = &amp;quot;&amp;quot;, values = 2) +
+  coord_cartesian(xlim = c(0, 1)) +
   xlab(expression(hat(beta))) +
-  ylab(&amp;quot;Frequency&amp;quot;) +
+  ylab(&amp;quot;Density&amp;quot;) +
   theme_minimal(base_size = 20)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig8-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
+&lt;p&gt;Clearly, the results are not perfect. Yet, our posterior distribution does contain the true value, and it is rather precise (i.e. it is narrow) relative to the prior distribution (black line) and parameter space.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div id=&#34;wrapping-up&#34; class=&#34;section level1&#34;&gt;
