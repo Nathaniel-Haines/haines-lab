@@ -7,10 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
-    <lastBuildDate>Tue, 05 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 03 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://haines-lab.com/publication_types/2/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>A computational model of the Cambridge gambling task with applications to substance use disorders</title>
+      <link>http://haines-lab.com/publication/romeu_haines_dad_2019/</link>
+      <pubDate>Sun, 03 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/publication/romeu_haines_dad_2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Using automated computer vision and machine learning to code facial expressions of affect and arousal: Implications for emotion dysregulation research</title>
+      <link>http://haines-lab.com/publication/haines_dev_psych_2019/</link>
+      <pubDate>Mon, 01 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/publication/haines_dev_psych_2019/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Using computer-vision and machine learning to automate facial coding of positive and negative affect intensity</title>
@@ -18,15 +36,6 @@
       <pubDate>Tue, 05 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>http://haines-lab.com/publication/haines_plos_one_2019/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Using automated computer vision and machine learning to code facial expressions of affect and arousal: Implications for emotion dysregulation research</title>
-      <link>http://haines-lab.com/publication/haines_dev_psych_2019/</link>
-      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/publication/haines_dev_psych_2019/</guid>
       <description></description>
     </item>
     

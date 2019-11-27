@@ -11,6 +11,15 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>A computational model of the Cambridge gambling task with applications to substance use disorders</title>
+      <link>http://haines-lab.com/publication/romeu_haines_dad_2019/</link>
+      <pubDate>Sun, 03 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/publication/romeu_haines_dad_2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</title>
       <link>http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/</link>
       <pubDate>Thu, 05 Sep 2019 00:00:00 +0000</pubDate>
@@ -1260,20 +1269,20 @@ cowplot::plot_grid(p3, p4, ncol = 2)&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
+      <title>Using automated computer vision and machine learning to code facial expressions of affect and arousal: Implications for emotion dysregulation research</title>
+      <link>http://haines-lab.com/publication/haines_dev_psych_2019/</link>
+      <pubDate>Mon, 01 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/publication/haines_dev_psych_2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Using computer-vision and machine learning to automate facial coding of positive and negative affect intensity</title>
       <link>http://haines-lab.com/publication/haines_plos_one_2019/</link>
       <pubDate>Tue, 05 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>http://haines-lab.com/publication/haines_plos_one_2019/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Using automated computer vision and machine learning to code facial expressions of affect and arousal: Implications for emotion dysregulation research</title>
-      <link>http://haines-lab.com/publication/haines_dev_psych_2019/</link>
-      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/publication/haines_dev_psych_2019/</guid>
       <description></description>
     </item>
     
@@ -1946,16 +1955,6 @@ p2&lt;/code&gt;&lt;/pre&gt;
       
       <guid>http://haines-lab.com/talk/cog_brown_1/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>easyml</title>
-      <link>http://haines-lab.com/project/easyml/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/project/easyml/</guid>
-      <description>&lt;p&gt;Currently under construction.&lt;/p&gt;
-</description>
     </item>
     
   </channel>
