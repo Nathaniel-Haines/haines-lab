@@ -1269,6 +1269,15 @@ cowplot::plot_grid(p3, p4, ncol = 2)&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
+      <title>Using automated computer vision and machine learning to code facial expressions of affect and arousal: Implications for emotion dysregulation research</title>
+      <link>http://haines-lab.com/publication/haines_dev_psych_2019/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/publication/haines_dev_psych_2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>The Outcome‐Representation Learning Model: A Novel Reinforcement Learning Model of the Iowa Gambling Task</title>
       <link>http://haines-lab.com/publication/haines_cog_sci_2018/</link>
       <pubDate>Fri, 05 Oct 2018 00:00:00 +0000</pubDate>
@@ -1945,16 +1954,6 @@ p2&lt;/code&gt;&lt;/pre&gt;
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
       
       <guid>http://haines-lab.com/project/easyml/</guid>
-      <description>&lt;p&gt;Currently under construction.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>hBayesDM</title>
-      <link>http://haines-lab.com/project/hbayesdm/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/project/hbayesdm/</guid>
       <description>&lt;p&gt;Currently under construction.&lt;/p&gt;
 </description>
     </item>
