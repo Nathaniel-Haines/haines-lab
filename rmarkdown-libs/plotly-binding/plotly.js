@@ -4,21 +4,7 @@ HTMLWidgets.widget({
   type: "output",
 
   initialize: function(el, width, height) {
-    // when upgrading plotly.js,
-    // uncomment this console.log(), then do `load_all(); plot_ly()` 
-    // open in chrome, right-click on console output: "save-as" -> "schema.json"
-    // Schema <- jsonlite::fromJSON("~/Downloads/schema.json")
-    // devtools::use_data(Schema, overwrite = T, internal = T)
-    // console.log(JSON.stringify(Plotly.PlotSchema.get()));
-    
-    return {
-      // Push JavaScript closures onto this list, and renderValue
-      // will pop them off and run them one at a time the next
-      // time it runs. Use this to dispose of e.g. old event
-      // registrations.
-      onNextRender: []
-    };
-    
+    return {};
   },
 
   resize: function(el, width, height, instance) {
@@ -30,18 +16,46 @@ HTMLWidgets.widget({
   },  
   
   renderValue: function(el, x, instance) {
-
-    // Release previously registered crosstalk event listeners
-    while (instance.onNextRender.length > 0) {
-      instance.onNextRender.pop()();
-    }
+    
+    // Plotly.relayout() mutates the plot input object, so make sure to 
+    // keep a reference to the user-supplied width/height *before*
+    // we call Plotly.plot();
+    var lay = x.layout || {};
+    instance.width = lay.width;
+    instance.height = lay.height;
+    instance.autosize = lay.autosize || true;
+    
+    /* 
+    / 'inform the world' about highlighting options this is so other
+    / crosstalk libraries have a chance to respond to special settings 
+    / such as persistent selection. 
+    / AFAIK, leaflet is the only library with such intergration
+    / https://github.com/rstudio/leaflet/pull/346/files#diff-ad0c2d51ce5fdf8c90c7395b102f4265R154
+    */
+    var ctConfig = crosstalk.var('plotlyCrosstalkOpts').set(x.highlight);
       
-    var shinyMode;
     if (typeof(window) !== "undefined") {
-      // make sure plots don't get created outside the network
+      // make sure plots don't get created outside the network (for on-prem)
       window.PLOTLYENV = window.PLOTLYENV || {};
       window.PLOTLYENV.BASE_URL = x.base_url;
-      shinyMode = !!window.Shiny;
+      
+      // Enable persistent selection when shift key is down
+      // https://stackoverflow.com/questions/1828613/check-if-a-key-is-down
+      var persistOnShift = function(e) {
+        if (!e) window.event;
+        if (e.shiftKey) { 
+          x.highlight.persistent = true; 
+          x.highlight.persistentShift = true;
+        } else {
+          x.highlight.persistent = false; 
+          x.highlight.persistentShift = false;
+        }
+      };
+      
+      // Only relevant if we haven't forced persistent mode at command line
+      if (!x.highlight.persistent) {
+        window.onmousemove = persistOnShift;
+      }
     }
 
     var graphDiv = document.getElementById(el.id);
@@ -142,36 +156,66 @@ HTMLWidgets.widget({
       }
     }
     
-    // remove "sendDataToCloud", unless user has specified they want it
-    var config = x.config || {};
-    if (!config.cloud) {
-      x.config.modeBarButtonsToRemove = config.modeBarButtonsToRemove || [];
-      x.config.modeBarButtonsToRemove.push("sendDataToCloud");
-    }
-    
     // if no plot exists yet, create one with a particular configuration
     if (!instance.plotly) {
       
       var plot = Plotly.plot(graphDiv, x);
       instance.plotly = true;
-      instance.autosize = x.layout.autosize || true;
-      instance.width = x.layout.width;
-      instance.height = x.layout.height;
       
     } else {
       
       // this is essentially equivalent to Plotly.newPlot(), but avoids creating 
       // a new webgl context
       // https://github.com/plotly/plotly.js/blob/2b24f9def901831e61282076cf3f835598d56f0e/src/plot_api/plot_api.js#L531-L532
-      
+
       // TODO: restore crosstalk selections?
       Plotly.purge(graphDiv);
       // TODO: why is this necessary to get crosstalk working?
       graphDiv.data = undefined;
       graphDiv.layout = undefined;
       var plot = Plotly.plot(graphDiv, x);
-      
     }
+    
+    // Trigger plotly.js calls defined via `plotlyProxy()`
+    plot.then(function() {
+      if (HTMLWidgets.shinyMode) {
+        Shiny.addCustomMessageHandler("plotly-calls", function(msg) {
+          var gd = document.getElementById(msg.id);
+          if (!gd) {
+            throw new Error("Couldn't find plotly graph with id: " + msg.id);
+          }
+          // This isn't an official plotly.js method, but it's the only current way to 
+          // change just the configuration of a plot 
+          // https://community.plot.ly/t/update-config-function/9057
+          if (msg.method == "reconfig") {
+            Plotly.react(gd, gd.data, gd.layout, msg.args);
+            return;
+          }
+          if (!Plotly[msg.method]) {
+            throw new Error("Unknown method " + msg.method);
+          }
+          var args = [gd].concat(msg.args);
+          Plotly[msg.method].apply(null, args);
+        });
+      }
+      
+      // plotly's mapbox API doesn't currently support setting bounding boxes
+      // https://www.mapbox.com/mapbox-gl-js/example/fitbounds/
+      // so we do this manually...
+      // TODO: make sure this triggers on a redraw and relayout as well as on initial draw
+      var mapboxIDs = graphDiv._fullLayout._subplots.mapbox || [];
+      for (var i = 0; i < mapboxIDs.length; i++) {
+        var id = mapboxIDs[i];
+        var mapOpts = x.layout[id] || {};
+        var args = mapOpts._fitBounds || {};
+        if (!args) {
+          continue;
+        }
+        var mapObj = graphDiv._fullLayout[id]._subplot.map;
+        mapObj.fitBounds(args.bounds, args.options);
+      }
+      
+    });
     
     // Attach attributes (e.g., "key", "z") to plotly event data
     function eventDataWithKey(eventData) {
@@ -185,6 +229,16 @@ HTMLWidgets.widget({
           x: pt.x,
           y: pt.y
         };
+        
+        // If 'z' is reported with the event data, then use it!
+        if (pt.hasOwnProperty("z")) {
+          obj.z = pt.z;
+        }
+        
+        if (pt.hasOwnProperty("customdata")) {
+          obj.customdata = pt.customdata;
+        }
+        
         /* 
           TL;DR: (I think) we have to select the graph div (again) to attach keys...
           
@@ -198,68 +252,110 @@ HTMLWidgets.widget({
         var gd = document.getElementById(el.id);
         var trace = gd.data[pt.curveNumber];
         
-        // Add other attributes here, if desired
         if (!trace._isSimpleKey) {
-          var attrsToAttach = ["key", "z"];
+          var attrsToAttach = ["key"];
         } else {
           // simple keys fire the whole key
           obj.key = trace.key;
-          var attrsToAttach = ["z"];
+          var attrsToAttach = [];
         }
         
         for (var i = 0; i < attrsToAttach.length; i++) {
           var attr = trace[attrsToAttach[i]];
           if (Array.isArray(attr)) {
-              // pointNumber can be an array (e.g., heatmaps)
-              // TODO: can pointNumber be 3D?
-              obj[attrsToAttach[i]] = typeof pt.pointNumber === "number" ? 
-                attr[pt.pointNumber] : attr[pt.pointNumber[0]][pt.pointNumber[1]];
+            if (typeof pt.pointNumber === "number") {
+              obj[attrsToAttach[i]] = attr[pt.pointNumber];
+            } else if (Array.isArray(pt.pointNumber)) {
+              obj[attrsToAttach[i]] = attr[pt.pointNumber[0]][pt.pointNumber[1]];
+            } else if (Array.isArray(pt.pointNumbers)) {
+              obj[attrsToAttach[i]] = pt.pointNumbers.map(function(idx) { return attr[idx]; });
+            }
           }
         }
         return obj;
       });
     }
     
-    // send user input event data to shiny
-    if (shinyMode) {
-      // https://plot.ly/javascript/zoom-events/
-      graphDiv.on('plotly_relayout', function(d) {
-        Shiny.onInputChange(
-          ".clientValue-plotly_relayout-" + x.source, 
-          JSON.stringify(eventDataWithKey(d))
-        );
-      });
-      graphDiv.on('plotly_hover', function(d) {
-        Shiny.onInputChange(
-          ".clientValue-plotly_hover-" + x.source, 
-          JSON.stringify(eventDataWithKey(d))
-        );
-      });
-      graphDiv.on('plotly_click', function(d) {
-        Shiny.onInputChange(
-          ".clientValue-plotly_click-" + x.source, 
-          JSON.stringify(eventDataWithKey(d))
-        );
-      });
-      graphDiv.on('plotly_selected', function(d) {
-        Shiny.onInputChange(
-          ".clientValue-plotly_selected-" + x.source, 
-          JSON.stringify(eventDataWithKey(d))
-        );
-      });
-      graphDiv.on('plotly_unhover', function(eventData) {
-        Shiny.onInputChange(".clientValue-plotly_hover-" + x.source, null);
-      });
-      graphDiv.on('plotly_doubleclick', function(eventData) {
-        Shiny.onInputChange(".clientValue-plotly_click-" + x.source, null);
-      });
-      // 'plotly_deselect' is code for doubleclick when in select mode
-      graphDiv.on('plotly_deselect', function(eventData) {
-        Shiny.onInputChange(".clientValue-plotly_selected-" + x.source, null);
-        Shiny.onInputChange(".clientValue-plotly_click-" + x.source, null);
-      });
-    } 
     
+    var legendEventData = function(d) {
+      // if legendgroup is not relevant just return the trace
+      var trace = d.data[d.curveNumber];
+      if (!trace.legendgroup) return trace;
+      
+      // if legendgroup was specified, return all traces that match the group
+      var legendgrps = d.data.map(function(trace){ return trace.legendgroup; });
+      var traces = [];
+      for (i = 0; i < legendgrps.length; i++) {
+        if (legendgrps[i] == trace.legendgroup) {
+          traces.push(d.data[i]);
+        }
+      }
+      
+      return traces;
+    };
+
+    
+    // send user input event data to shiny
+    if (HTMLWidgets.shinyMode && Shiny.setInputValue) {
+      
+      // Some events clear other input values
+      // TODO: always register these?
+      var eventClearMap = {
+        plotly_deselect: ["plotly_selected", "plotly_selecting", "plotly_brushed", "plotly_brushing", "plotly_click"],
+        plotly_unhover: ["plotly_hover"],
+        plotly_doubleclick: ["plotly_click"]
+      };
+    
+      Object.keys(eventClearMap).map(function(evt) {
+        graphDiv.on(evt, function() {
+          var inputsToClear = eventClearMap[evt];
+          inputsToClear.map(function(input) {
+            Shiny.setInputValue(input + "-" + x.source, null, {priority: "event"});
+          });
+        });
+      });
+      
+      var eventDataFunctionMap = {
+        plotly_click: eventDataWithKey,
+        plotly_sunburstclick: eventDataWithKey,
+        plotly_hover: eventDataWithKey,
+        plotly_unhover: eventDataWithKey,
+        // If 'plotly_selected' has already been fired, and you click
+        // on the plot afterwards, this event fires `undefined`?!?
+        // That might be considered a plotly.js bug, but it doesn't make 
+        // sense for this input change to occur if `d` is falsy because,
+        // even in the empty selection case, `d` is truthy (an object),
+        // and the 'plotly_deselect' event will reset this input
+        plotly_selected: function(d) { if (d) { return eventDataWithKey(d); } },
+        plotly_selecting: function(d) { if (d) { return eventDataWithKey(d); } },
+        plotly_brushed: function(d) {
+          if (d) { return d.range ? d.range : d.lassoPoints; }
+        },
+        plotly_brushing: function(d) {
+          if (d) { return d.range ? d.range : d.lassoPoints; }
+        },
+        plotly_legendclick: legendEventData,
+        plotly_legenddoubleclick: legendEventData,
+        plotly_clickannotation: function(d) { return d.fullAnnotation }
+      };
+      
+      var registerShinyValue = function(event) {
+        var eventDataPreProcessor = eventDataFunctionMap[event] || function(d) { return d ? d : el.id };
+        // some events are unique to the R package
+        var plotlyJSevent = (event == "plotly_brushed") ? "plotly_selected" : (event == "plotly_brushing") ? "plotly_selecting" : event;
+        // register the event
+        graphDiv.on(plotlyJSevent, function(d) {
+          Shiny.setInputValue(
+            event + "-" + x.source,
+            JSON.stringify(eventDataPreProcessor(d)),
+            {priority: "event"}
+          );
+        });
+      }
+    
+      var shinyEvents = x.shinyEvents || [];
+      shinyEvents.map(registerShinyValue);
+    }
     
     // Given an array of {curveNumber: x, pointNumber: y} objects,
     // return a hash of {
@@ -275,29 +371,30 @@ HTMLWidgets.widget({
           continue;
         }
         
+        // set defaults for this keySet
+        // note that we don't track the nested property (yet) since we always 
+        // emit the union -- http://cpsievert.github.io/talks/20161212b/#21
+        keysBySet[trace.set] = keysBySet[trace.set] || {
+          value: [],
+          _isSimpleKey: trace._isSimpleKey
+        };
+        
+        // Use pointNumber by default, but aggregated traces should emit pointNumbers
+        var ptNum = points[i].pointNumber;
+        var hasPtNum = typeof ptNum === "number";
+        var ptNum = hasPtNum ? ptNum : points[i].pointNumbers;
+        
         // selecting a point of a "simple" trace means: select the 
         // entire key attached to this trace, which is useful for,
         // say clicking on a fitted line to select corresponding observations 
-        if (trace._isSimpleKey) {
-          keysBySet[trace.set] = {value: trace.key, _isSimpleKey: true};
-          // TODO: could this be made more efficient by looping at the trace level first?
-          continue;
-        }
+        var key = trace._isSimpleKey ? trace.key : Array.isArray(ptNum) ? ptNum.map(function(idx) { return trace.key[idx]; }) : trace.key[ptNum];
+        // http://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
+        var keyFlat = trace._isNestedKey ? [].concat.apply([], key) : key;
         
-        // set defaults for this key set
-        keysBySet[trace.set] = keysBySet[trace.set] || 
-          {value: [], _isSimpleKey: false};
-        
-        // the key for this point (could be "nested" -- i.e. a 2D array)
-        var key = trace.key[points[i].pointNumber];
-        if (trace._isNestedKey) {
-          // TODO: is this faster than pushing?
-          keysBySet[trace.set].value = keysBySet[trace.set].value.concat(key);
-        } else {
-          keysBySet[trace.set].value.push(key);
-        }
-        
+        // TODO: better to only add new values?
+        keysBySet[trace.set].value = keysBySet[trace.set].value.concat(keyFlat);
       }
+      
       return keysBySet;
     }
     
@@ -321,22 +418,91 @@ HTMLWidgets.widget({
       }
     }
 
-    if (allSets.length > 0) {
+    // register event listeners for all sets
+    for (var i = 0; i < allSets.length; i++) {
+      
+      var set = allSets[i];
+      var selection = new crosstalk.SelectionHandle(set);
+      var filter = new crosstalk.FilterHandle(set);
+      
+      var filterChange = function(e) {
+        removeBrush(el);
+        traceManager.updateFilter(set, e.value);
+      };
+      filter.on("change", filterChange);
+      
+      
+      var selectionChange = function(e) {
+        
+        // Workaround for 'plotly_selected' now firing previously selected
+        // points (in addition to new ones) when holding shift key. In our case,
+        // we just want the new keys 
+        if (x.highlight.on === "plotly_selected" && x.highlight.persistentShift) {
+          // https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
+          Array.prototype.diff = function(a) {
+              return this.filter(function(i) {return a.indexOf(i) < 0;});
+          };
+          e.value = e.value.diff(e.oldValue);
+        }
+        
+        // array of "event objects" tracking the selection history
+        // this is used to avoid adding redundant selections
+        var selectionHistory = crosstalk.var("plotlySelectionHistory").get() || [];
+        
+        // Construct an event object "defining" the current event. 
+        var event = {
+          receiverID: traceManager.gd.id,
+          plotlySelectionColour: crosstalk.group(set).var("plotlySelectionColour").get()
+        };
+        event[set] = e.value;
+        // TODO: is there a smarter way to check object equality?
+        if (selectionHistory.length > 0) {
+          var ev = JSON.stringify(event);
+          for (var i = 0; i < selectionHistory.length; i++) {
+            var sel = JSON.stringify(selectionHistory[i]);
+            if (sel == ev) {
+              return;
+            }
+          }
+        }
+        
+        // accumulate history for persistent selection
+        if (!x.highlight.persistent) {
+          selectionHistory = [event];
+        } else {
+          selectionHistory.push(event);
+        }
+        crosstalk.var("plotlySelectionHistory").set(selectionHistory);
+        
+        // do the actual updating of traces, frames, and the selectize widget
+        traceManager.updateSelection(set, e.value);
+        // https://github.com/selectize/selectize.js/blob/master/docs/api.md#methods_items
+        if (x.selectize) {
+          if (!x.highlight.persistent || e.value === null) {
+            selectize.clear(true);
+          }
+          selectize.addItems(e.value, true);
+          selectize.close();
+        }
+      }
+      selection.on("change", selectionChange);
       
       // Set a crosstalk variable selection value, triggering an update
-      graphDiv.on(x.highlight.on, function turnOn(e) {
+      var turnOn = function(e) {
         if (e) {
           var selectedKeys = pointsToKeys(e.points);
           // Keys are group names, values are array of selected keys from group.
           for (var set in selectedKeys) {
             if (selectedKeys.hasOwnProperty(set)) {
-              crosstalk.group(set).var("selection")
-                .set(selectedKeys[set].value, {sender: el});
+              selection.set(selectedKeys[set].value, {sender: el});
             }
           }
-          
         }
-      });
+      };
+      if (x.highlight.debounce > 0) {
+        turnOn = debounce(turnOn, x.highlight.debounce);
+      }
+      graphDiv.on(x.highlight.on, turnOn);
       
       graphDiv.on(x.highlight.off, function turnOff(e) {
         // remove any visual clues
@@ -344,113 +510,51 @@ HTMLWidgets.widget({
         // remove any selection history
         crosstalk.var("plotlySelectionHistory").set(null);
         // trigger the actual removal of selection traces
-        for (var i = 0; i < allSets.length; i++) {
-          crosstalk.group(allSets[i]).var("selection").set(null, {sender: el});
-        }
+        selection.set(null, {sender: el});
       });
-      
-
-      for (var i = 0; i < allSets.length; i++) {
-        (function() {
-          var set = allSets[i];
-          var grp = crosstalk.group(set);
           
-          // Create a selectize widget for each group
-          if (x.selectize) {
-            var selectizeID = Object.keys(x.selectize)[i];
-            var items = x.selectize[selectizeID].items;
-            var first = [{value: "", label: "(All)"}];
-            var opts = {
-              options: first.concat(items),
-              searchField: "label",
-              valueField: "value",
-              labelField: "label",
-              maxItems: 50
-            };
-            var select = $("#" + selectizeID).find("select")[0];
-            var selectize = $(select).selectize(opts)[0].selectize;
-            // NOTE: this callback is triggered when *directly* altering 
-            // dropdown items
-            selectize.on("change", function() {
-              var currentItems = traceManager.groupSelections[set] || [];
-              if (!x.highlight.persistent) {
-                removeBrush(el);
-                for (var i = 0; i < currentItems.length; i++) {
-                  selectize.removeItem(currentItems[i], true);
-                }
-              }
-              var newItems = selectize.items.filter(function(idx) { 
-                return currentItems.indexOf(idx) < 0;
-              });
-              if (newItems.length > 0) {
-                traceManager.updateSelection(set, newItems);
-              } else {
-                // Item has been removed...
-                // TODO: this logic won't work for dynamically changing palette 
-                traceManager.updateSelection(set, null);
-                traceManager.updateSelection(set, selectize.items);
-              }
-            });
-          }
-          
-          
-          var crosstalkSelectionChange = function(e) {
-            
-            // array of "event objects" tracking the selection history
-            // this is used to avoid adding redundant selections
-            var selectionHistory = crosstalk.var("plotlySelectionHistory").get() || [];
-            
-            // Construct an event object "defining" the current event. 
-            var event = {
-              receiverID: traceManager.gd.id,
-              plotlySelectionColour: crosstalk.group(set).var("plotlySelectionColour").get()
-            };
-            event[set] = e.value;
-            // TODO: is there a smarter way to check object equality?
-            if (selectionHistory.length > 0) {
-              var ev = JSON.stringify(event);
-              for (var i = 0; i < selectionHistory.length; i++) {
-                var sel = JSON.stringify(selectionHistory[i]);
-                if (sel == ev) {
-                  return;
-                }
-              }
-            }
-            
-            // accumulate history for persistent selection
-            if (!x.highlight.persistent) {
-              selectionHistory = [event];
-            } else {
-              selectionHistory.push(event);
-            }
-            crosstalk.var("plotlySelectionHistory").set(selectionHistory);
-            
-            // e.value is either null, or an array of newly selected values
-            traceManager.updateSelection(set, e.value);
-            // https://github.com/selectize/selectize.js/blob/master/docs/api.md#methods_items
-            if (x.selectize) {
-              if (!x.highlight.persistent || e.value === null) {
-                selectize.clear(true);
-              }
-              selectize.addItems(e.value, true);
-              selectize.close();
-            }
-            
-          }
-          
-          grp.var("selection").on("change", crosstalkSelectionChange);
-
-
-          grp.var("filter").on("change", function crosstalk_filter_change(e) {
+      // register a callback for selectize so that there is bi-directional
+      // communication between the widget and direct manipulation events
+      if (x.selectize) {
+        var selectizeID = Object.keys(x.selectize)[i];
+        var items = x.selectize[selectizeID].items;
+        var first = [{value: "", label: "(All)"}];
+        var opts = {
+          options: first.concat(items),
+          searchField: "label",
+          valueField: "value",
+          labelField: "label",
+          maxItems: 50
+        };
+        var select = $("#" + selectizeID).find("select")[0];
+        var selectize = $(select).selectize(opts)[0].selectize;
+        // NOTE: this callback is triggered when *directly* altering 
+        // dropdown items
+        selectize.on("change", function() {
+          var currentItems = traceManager.groupSelections[set] || [];
+          if (!x.highlight.persistent) {
             removeBrush(el);
-            traceManager.updateFilter(set, e.value);
+            for (var i = 0; i < currentItems.length; i++) {
+              selectize.removeItem(currentItems[i], true);
+            }
+          }
+          var newItems = selectize.items.filter(function(idx) { 
+            return currentItems.indexOf(idx) < 0;
           });
-  
-        })();
+          if (newItems.length > 0) {
+            traceManager.updateSelection(set, newItems);
+          } else {
+            // Item has been removed...
+            // TODO: this logic won't work for dynamically changing palette 
+            traceManager.updateSelection(set, null);
+            traceManager.updateSelection(set, selectize.items);
+          }
+        });
       }
-    }
-  }
-});
+    } // end of selectionChange
+    
+  } // end of renderValue
+}); // end of widget definition
 
 /**
  * @param graphDiv The Plotly graph div
@@ -468,7 +572,7 @@ function TraceManager(graphDiv, highlight) {
   // avoid doing this over and over
   this.origOpacity = [];
   for (var i = 0; i < this.origData.length; i++) {
-    this.origOpacity[i] = this.origData[i].opacity || 1;
+    this.origOpacity[i] = this.origData[i].opacity === 0 ? 0 : (this.origData[i].opacity || 1);
   }
 
   // key: group name, value: null or array of keys representing the
@@ -530,8 +634,8 @@ TraceManager.prototype.updateSelection = function(group, keys) {
   var nNewTraces = this.gd.data.length - this.origData.length;
   if (keys === null || !this.highlight.persistent && nNewTraces > 0) {
     var tracesToRemove = [];
-    for (var i = this.origData.length; i < this.gd.data.length; i++) {
-      tracesToRemove.push(i);
+    for (var i = 0; i < this.gd.data.length; i++) {
+      if (this.gd.data[i]._isCrosstalkTrace) tracesToRemove.push(i);
     }
     Plotly.deleteTraces(this.gd, tracesToRemove);
     this.groupSelections[group] = keys;
@@ -559,9 +663,6 @@ TraceManager.prototype.updateSelection = function(group, keys) {
     var selectionColour = crosstalk.group(group).var("plotlySelectionColour").get() || 
       this.highlight.color[0];
 
-    // selection brush attributes
-    var selectAttrs = Object.keys(this.highlight.selected);
-
     for (var i = 0; i < this.origData.length; i++) {
       // TODO: try using Lib.extendFlat() as done in  
       // https://github.com/plotly/plotly.js/pull/1136 
@@ -578,49 +679,35 @@ TraceManager.prototype.updateSelection = function(group, keys) {
         if (!trace._isSimpleKey) {
           trace = subsetArrayAttrs(trace, matches);
         }
-        // Apply selection brush attributes (supplied from R)
-        // TODO: it would be neat to have a dropdown to dynamically specify these
-        for (var j = 0; j < selectAttrs.length; j++) {
-          var attr = selectAttrs[j];
-          trace[attr] = this.highlight.selected[attr];
-        }
+        // reach into the full trace object so we can properly reflect the 
+        // selection attributes in every view
+        var d = this.gd._fullData[i];
+        
+        /* 
+        / Recursively inherit selection attributes from various sources, 
+        / in order of preference:
+        /  (1) official plotly.js selected attribute
+        /  (2) highlight(selected = attrs_selected(...))
+        */
+        // TODO: it would be neat to have a dropdown to dynamically specify these!
+        $.extend(true, trace, this.highlight.selected);
         
         // if it is defined, override color with the "dynamic brush color""
-        var d = this.gd._fullData[i];
         if (d.marker) {
-          trace.marker = d.marker;
-          trace.marker.color =  selectionColour || trace.marker.color;
-          
-          // adopt any user-defined styling for the selection
-          var selected = this.highlight.selected.marker || {};
-          var attrs = Object.keys(selected);
-          for (var j = 0; j < attrs.length; j++) {
-            trace.marker[attrs[j]] = selected[attrs[j]];
-          }
+          trace.marker = trace.marker || {};
+          trace.marker.color =  selectionColour || trace.marker.color || d.marker.color;
         }
-        
         if (d.line) {
-          trace.line = d.line;
-          trace.line.color =  selectionColour || trace.line.color;
-          
-          // adopt any user-defined styling for the selection
-          var selected = this.highlight.selected.line || {};
-          var attrs = Object.keys(selected);
-          for (var j = 0; j < attrs.length; j++) {
-            trace.line[attrs[j]] = selected[attrs[j]];
-          }
+          trace.line = trace.line || {};
+          trace.line.color =  selectionColour || trace.line.color || d.line.color;
         }
-        
         if (d.textfont) {
-          trace.textfont = d.textfont;
-          trace.textfont.color =  selectionColour || trace.textfont.color;
-          
-          // adopt any user-defined styling for the selection
-          var selected = this.highlight.selected.textfont || {};
-          var attrs = Object.keys(selected);
-          for (var j = 0; j < attrs.length; j++) {
-            trace.textfont[attrs[j]] = selected[attrs[j]];
-          }
+          trace.textfont = trace.textfont || {};
+          trace.textfont.color =  selectionColour || trace.textfont.color || d.textfont.color;
+        }
+        if (d.fillcolor) {
+          // TODO: should selectionColour inherit alpha from the existing fillcolor?
+          trace.fillcolor = selectionColour || trace.fillcolor || d.fillcolor;
         }
         // attach a sensible name/legendgroup
         trace.name = trace.name || keys.join("<br />");
@@ -630,6 +717,7 @@ TraceManager.prototype.updateSelection = function(group, keys) {
         // (necessary for updating frames to reflect the selection traces)
         trace._originalIndex = i;
         trace._newIndex = this.gd._fullData.length + traces.length;
+        trace._isCrosstalkTrace = true;
         traces.push(trace);
       }
     }
@@ -719,6 +807,8 @@ TraceManager.prototype.updateSelection = function(group, keys) {
       
       if (tracesToDim.length > 0) {
         Plotly.restyle(this.gd, {"opacity": opacities}, tracesToDim);
+        // turn off the selected/unselected API
+        Plotly.restyle(this.gd, {"selectedpoints": null});
       }
       
     }
@@ -822,69 +912,24 @@ function removeBrush(el) {
   }
 }
 
-/* Currently not used
 
-// Given an array of strings, return an object that hierarchically
-// represents the corresponding curves/points.
-//
-// For example, the following data:
-//
-// [
-//   {curveNumber: 0, pointNumber: 1},
-//   {curveNumber: 0, pointNumber: 2},
-//   {curveNumber: 2, pointNumber: 1}
-// ]
-//
-// would be returned as:
-// {
-//   "0": [1, 2],
-//   "2": [1]
-// }
+// https://davidwalsh.name/javascript-debounce-function
 
-// # Begin Crosstalk support
-    
-// ## Crosstalk point/key translation functions
-//
-// Plotly.js uses curveNumber/pointNumber addressing to refer
-// to data points (i.e. when plotly_selected is received). We
-// prefer to let the R user use key-based addressing, where
-// a string is used that uniquely identifies a data point (we
-// can also use row numbers in a pinch).
-//
-// The pointsToKeys and keysToPoints functions let you convert
-// between the two schemes.
-
-// Combine the name of a set and key into a single string, suitable for
-// using as a keyCache key.
-function joinSetAndKey(set, key) {
-  return set + "\n" + key;
-}
-
-// To allow translation from sets+keys to points in O(1) time, we
-// make a cache that lets us map keys to objects with
-// {curveNumber, pointNumber} properties.
-var keyCache = {};
-for (var i = 0; i < x.data.length; i++) {
-  var trace = x.data[i];
-  if (!trace.key || !trace.set) {
-    continue;
-  }
-  for (var j = 0; j < trace.key.length; j++) {
-    var nm = joinSetAndKey(trace.set, trace.key[j]);
-    keyCache[nm] = {curveNumber: i, pointNumber: j};
-  }
-}
-
-function keysToPoints(set, keys) {
-  var curves = {};
-  for (var i = 0; i < keys.length; i++) {
-    var pt = keyCache[joinSetAndKey(set, keys[i])];
-    if (!pt) {
-      throw new Error("Unknown key " + keys[i]);
-    }
-    curves[pt.curveNumber] = curves[pt.curveNumber] || [];
-    curves[pt.curveNumber].push(pt.pointNumber);
-  }
-  return curves;
-}
-*/
+// Returns a function, that, as long as it continues to be invoked, will not
+// be triggered. The function will be called after it stops being called for
+// N milliseconds. If `immediate` is passed, trigger the function on the
+// leading edge, instead of the trailing.
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
