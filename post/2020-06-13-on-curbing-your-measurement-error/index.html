@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.48" />
+  <meta name="author" content="Nathaniel Haines">
+  <meta name="description" content="Psychology Graduate Student">
+
+  
+  
+  
+    
+  
+  
+    
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/rstudio.min.css">
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.1/css/academicons.min.css" integrity="sha512-NThgw3XKQ1absAahW6to7Ey42uycrVvfNfyjqcFNgCmOCQ5AR4AO0SiXrN+8ZtYeappp56lk1WtvjVmEa+VR6A==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
+  <link rel="stylesheet" href="/css/hugo-academic.css">
+  
+  <link rel="stylesheet" href="/css/rstudio.css">
+  
+
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-106994238-1', 'auto');
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Computational Psychology">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Computational Psychology">
+
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/apple-touch-icon.png">
+
+  <link rel="canonical" href="/post/2020-06-13-on-curbing-your-measurement-error/">
+
+  
+
+  <title>On Curbing Your Measurement Error: From Classical Corrections to Generative Models | Computational Psychology</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#navbar-main" data-offset="71">
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Computational Psychology</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>Home</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#publications_selected">
+            
+            <span>Publications</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>Posts</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#projects">
+            
+            <span>Projects</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#teaching">
+            
+            <span>Teaching</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>Contact</span>
+          </a>
+        </li>
+
+        
+        
+
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+  <div class="article-container">
+    <h1 itemprop="name">On Curbing Your Measurement Error: From Classical Corrections to Generative Models</h1>
+    
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+    <time datetime="2020-06-13 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+      Jun 13, 2020
+    </time>
+  </span>
+
+  
+  
+  
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="/categories/statistical-modeling">Statistical Modeling</a
+    >, 
+    
+    <a href="/categories/measurement-error">Measurement Error</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+  
+  <span class="article-tags">
+    <i class="fa fa-tags"></i>
+    
+    <a href="/tags/r">R</a
+    >, 
+    
+    <a href="/tags/bayesian-statistics">Bayesian Statistics</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f"
+         target="_blank">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models&amp;url=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f"
+         target="_blank">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f&amp;title=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models"
+         target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f&amp;title=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models"
+         target="_blank">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models&amp;body=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+    <div class="article-style" itemprop="articleBody">
+      <div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In this post, we will explore how measurement error arising from imprecise parameter estimation can be corrected for. Specifically, we will explore the case where our goal is to estimate the correlation between a self-report and behavioral measure–a common situation throughout the social and behavioral sciences.</p>
+<p>For example, as someone who studies impulsivity and externalizing psychopathology, I am often interested in whether self-reports of trait impulsivity (e.g., the <a href="http://www.impulsivity.org/measurement/bis11">Barratt Impulsiveness Scale</a>) correlate with performance on tasks designed to measure impulsive behavior (e.g., the <a href="http://www.impulsivity.org/measurement/BART">Balloon Analogue Risk task</a>). In these cases, it is common for researchers to compute summed or averaged scores on the self-report measure (e.g., summing item responses and divding by the number of items) and use summary statistics of behavioral performance (e.g., percent risky choices) for each subject’s behavioral measure, wherein the resulting estimates are then entered into a secondary statistical model to make inference (e.g., correlation between self-reported trait and behavioral measures). Importantly, this two-stage approach to inference assumes that our summary measures both contain no measurement error, or alternatively that we have estimated these summary mesaures with perfect precision–a very strong assumption that is surely not met in practice.</p>
+<p>Here, we will explore how such assumptions can bias our statistical inferences on individual differences. As we will show, this bias arises because these two-stage approaches ignore important sources of measurement error. We will begin with an exploration of traditional methods developed within the context of classical test theory, and we will then transition to the use of more contemporary generative models. Throughout, we will explore relationships between classical and generative approaches, which are actually more similar than they are different in many ways.</p>
+</div>
+<div id="classical-corrections" class="section level1">
+<h1>Classical Corrections</h1>
+<div id="imprecision-and-reliability" class="section level2">
+<h2>Imprecision and Reliability</h2>
+<p>At the level of a single measure, we can think of reliability as directly corresponding to precision–or how close our estimates are to the underlying “true score”. As our estimates become more precise at the individual-level, we should be able to better infer differences between individuals.</p>
+<p>For example, assume that we are interested estimating a trait score for an individual, which we measure using a 10 item self-report questionnaire. For simplicity, let’s also assume that each item requires a yes/no endorse/not endorse response (coded 1 and 0, respectively), no items are reverse scored, and all items share the same difficulty. A typical approach to score this questionnaire would be to sum up the individual items <span class="math inline">\(t\)</span> and divide the sum by the number of items <span class="math inline">\(T\)</span> (i.e. taking the average). So, the vector of responses <span class="math inline">\(\textbf{x}\)</span> for a single subject may look something like:</p>
+<p><span class="math display">\[\textbf{x} = [1, 0, 1, 0, 1, 1, 1, 0, 1, 1]\]</span></p>
+<p>We then compute our observed score like so:</p>
+<p><span class="math display">\[X = \frac{1}{T}\sum^{T}_{t=1}\textbf{x}_{t}\]</span></p>
+<p>The resulting observed score <span class="math inline">\(X\)</span> is simply the proportion of yes/endorsed responses, which is <span class="math inline">\(X = .7\)</span> in this example. We then interpret <span class="math inline">\(X\)</span> as a quantitative measure of the underlying contruct. However, there are a few important, related questions worth asking regarding this estimate:</p>
+<ol style="list-style-type: decimal">
+<li>How close is our observed score measure <span class="math inline">\(X\)</span> to the “true score” we aim to measure?</li>
+<li>Can we use this measurement approach to make inference on individual differences?</li>
+<li>If so, how can we best estimate the “true score” for each individual?</li>
+</ol>
+<p>From the perspective of classical test theory, we can answer these questions by determining the reliability of our measure. Below, we will define reliability and discuss how it can be used to answer the questions above.</p>
+<div id="defining-reliability" class="section level3">
+<h3>Defining Reliability</h3>
+<p>In psychology and education, reliability is often discussed within the context of classical test theory, which assumes that our estimates reflect some combination of the unobserved “true score” plus some error:</p>
+<p><span class="math display">\[X = \theta + \epsilon\]</span>
+where <span class="math inline">\(\epsilon\)</span> is measurement error that contaminates the “true score” <span class="math inline">\(\theta\)</span>. Note that there are different interpretations of what the truth actually is, but here we will use the following definition: <strong>the true score is the expected value of the observed score over many independent realizations</strong> (for alternative definitions of the true score, see Lord &amp; Novick, 1968). Mathematically, we can represent this as:</p>
+<p><span class="math display">\[\theta = \mathbb{E}[X]\]</span>
+Following this definition, the error for a single realization is then defined as:</p>
+<p><span class="math display">\[\epsilon = X - \mathbb{E}[X]\]</span>
+where <span class="math inline">\(\mathbb{E}[\epsilon] = 0\)</span> and <span class="math inline">\(\text{Cov}(\epsilon, \theta) = 0\)</span>. In english, the expected error is 0, and the correlation/covariance between the error and true score is 0.</p>
+<p>Given these assumptions, reliability is then defined as the squared correlation between the true score and observed score, or <span class="math inline">\(\rho^{2}_{X, \theta}\)</span>. Inuitively, <span class="math inline">\(\rho^{2}_{X, \theta} \rightarrow 1\)</span> as <span class="math inline">\(X \rightarrow \theta\)</span>, and <span class="math inline">\(\rho^{2}_{X, \theta}\)</span> is attenuated to the extent that <span class="math inline">\(X \ne \theta\)</span>.</p>
+<p>As a consequence of the assumption that <span class="math inline">\(\text{Cov}(\epsilon, \theta) = 0\)</span>, the observed, true, and error variances have the following relationship:</p>
+<p><span class="math display">\[\sigma^{2}_X = \sigma^{2}_\theta + \sigma^{2}_\epsilon\]</span></p>
+<p>Therefore, <span class="math inline">\(\rho^{2}_{X, \theta}\)</span> can also be thought of as the proportion of variance that the true score accounts for in the observed score (similar to <span class="math inline">\(R^2\)</span> in regression), or alternatively as 1 minus the ratio of error variance relative to observed score variance:</p>
+<p><span class="math display">\[\rho^{2}_{X, \theta} = \frac{\sigma^{2}_\theta}{\sigma^{2}_{X}} = 1 - \frac{\sigma^{2}_{\epsilon}}{\sigma^{2}_{X}}\]</span></p>
+<p>We now have a few different ways to think about reliability. Now, it is time to estimate it.</p>
+</div>
+<div id="estimating-reliability" class="section level3">
+<h3>Estimating Reliability</h3>
+<p>To estimate <span class="math inline">\(\rho^{2}_{X, \theta}\)</span>, we need to somehow estimate either the true score or error variance, neither of which are directly observed. How do we do this? The answer is actually quite nuanced, and it all comes down to how we want to conceptualize the error variance <span class="math inline">\(\sigma^{2}_\epsilon\)</span>.</p>
+<p>If we are simply interested in how precisely we can estimate the true score from observed data, it may be best to think of <span class="math inline">\(\sigma^{2}_\epsilon\)</span> as the uncertainty in our estimate across administrations of an identical mesaure (termed <strong>precision</strong> or <strong>parallel forms reliability</strong>). If we are interested in whether or not multiple items on a scale capture the same underlying construct, we may use something like Chronbach’s <span class="math inline">\(\alpha\)</span> (termed <strong>internal consistency</strong>). If we are interested in consistency of a measure over time, then <span class="math inline">\(\sigma^{2}_\epsilon\)</span> may best be thought of as uncommon variance across different administrations of the same measure over an arbitrary period of time (termed <strong>termporal consistency</strong> or <strong>test-retest reliability</strong>). Crucially, the equations above underlie all these different forms of reliability–the big difference being how we conceptualize and compute <span class="math inline">\(\sigma^{2}_\epsilon\)</span>.</p>
+<p>Given our focus here on precision, the current post will explore the first form of reliability mentioned above–parallel forms reliability. Typically, parallel forms reliability is estimated by having a group people take two <em>identical versions</em> of the same measure and then estimating the correlation between measures across individuals. Here, <em>identical</em> means that the measures tap into the same underlying trait/construct (i.e. the underlying true score is the same), share the same item characteristics, and have the same error variance <span class="math inline">\(\sigma^{2}_\epsilon\)</span>. Under these assumptions, the correlation between the observed scores across measure 1 and 2 (<span class="math inline">\(r_{X,X&#39;}\)</span>) is equivalent to <span class="math inline">\(\rho^{2}_{X, \theta}\)</span>:</p>
+<p><span class="math display">\[r_{X,X&#39;} = \frac{\sigma^{2}_\theta}{\sigma^{2}_{X}} = \rho^{2}_{X, \theta}\]</span>
+This relationship allows us to think of reliability in two different ways: (1) as the correlation between observed scores of identical measures, or (2) as the ratio of true score variance to observed score variance.</p>
+<p>However, what if we do not have parallel forms? Obviously, having two identical measures is infeasible in many settings. Assuming that there are no practice effects, we could always have our subjects re-take the measure and then estimate <span class="math inline">\(\rho^{2}_{X, \theta}\)</span> as the correlation between their scores across administrations, although this would still demand more time on the part of participants.</p>
+<div id="reliability-as-measurement-precision" class="section level4">
+<h4>Reliability as Measurement Precision</h4>
+<p>One of the key of framing reliability in terms of precision is that we can estimate <span class="math inline">\(\rho^{2}_{X, \theta}\)</span> from a single administration of our measure. In this section, we will employ this method and compare it to the parallel forms/test-retest method where reliability is characterized as the correlation between observed scores of identical measures.</p>
+<p>Using precision to estimate the error variance of our measure is actually pretty straightforward. Returning to the example in the introduction, say we have a vector of yes/no responses for a single indivdual <span class="math inline">\(i\)</span> who responded to 10 items: <span class="math inline">\(\textbf{x}_i = [1, 0, 1, 0, 1, 1, 1, 0, 1, 1]\)</span>. As before, if we take the mean of this vector as the observed score, we have <span class="math inline">\(X_i = \frac{1}{T}\sum^{T}_{t=1}\textbf{x}_{i,t} = .7\)</span>.</p>
+<p>Because we have binary observed data, we can view each response as a bernoulli trial, allowing us to use the bernoulli distribution to estimate the error variance and <a href="https://stats.stackexchange.com/questions/29641/standard-error-for-the-mean-of-a-sample-of-binomial-random-variables">standard error</a>. According to the wisdom of <a href="https://en.wikipedia.org/wiki/Bernoulli_distribution">Wikipedia</a>, the mean of a bernoulli distribution is <span class="math inline">\(p\)</span>, where <span class="math inline">\(p\)</span> is the success probability (i.e. probability of observing 1 rather than 0). In our case, <span class="math inline">\(p\)</span> is estimated by the observed mean <span class="math inline">\(X_i\)</span>.</p>
+<p>Again taking from Wikipedia, the variance of a sum of bernoulli trials is given by <span class="math inline">\(pq\)</span>, where <span class="math inline">\(p\)</span> is as defined above and <span class="math inline">\(q\)</span> is the failure probability, <span class="math inline">\(1-p\)</span>. We can then compute the standard error of measurement for this individual <span class="math inline">\(\sigma_{\epsilon,i}\)</span> (which we can square to get <span class="math inline">\(\sigma^{2}_{\epsilon,i}\)</span>) by dividing the variance by <span class="math inline">\(T-1\)</span>, where <span class="math inline">\(T\)</span> is the number of items:</p>
+<p><span class="math display">\[\sigma^{2}_{\epsilon,i} = \frac{pq}{T-1} = \frac{.7 \times (1-.7)}{10-1} = 0.021\]</span>
+The standard error of measurement corresponds to the strandard deviation of the <em>sampling distribution</em> of our observed score. The standard error of measurement thus gives us useful information about how close our observed score is to the true score. In particular, as we increase the number of items on our measure, the sampling distribution of the mean becomes more concentrated. In turn, on average, our observed score becomes closer to the true score.</p>
+<p>If these ideas are unfamiliar to you, it is useful to visualize what happens to the sampling distribution as we increase the number of items on the questionnaire. The R code below simulates the sampling distribution for each of a set of item sizes ranging from 10 to 100, using a success probability of .7:</p>
+<pre class="r"><code># First load some packages we will use
+library(dplyr)
+library(foreach)
+library(ggplot2)
+library(ggridges)</code></pre>
+<pre class="r"><code># num of items and success probability
+n_items    &lt;- seq(10, 100, by = 5)
+success_pr &lt;- .7
+
+# number of samples from sampling distribution
+n_reps &lt;- 10000
+
+# Generate binomial sampling distribution
+results &lt;- foreach(i=seq_along(n_items), .combine = &quot;rbind&quot;) %do% {
+  data.frame(T = rep(n_items[i], n_reps),
+             X = replicate(n_reps, 
+                           mean(rbinom(n_items[i], 1, prob = success_pr))))
+}
+
+# Compute standard deviation of the sampling distribution 
+# (aka the standard error of the mean)
+sem &lt;- results %&gt;%
+  mutate(T = factor(T, levels = rev(unique(sort(T))))) %&gt;%
+  group_by(T) %&gt;%
+  summarize(se_lo = mean(X) - sd(X), # mean - 1 SEM
+            se_hi = mean(X) + sd(X)) # mean + 1 SEM
+
+# Plot some cool ridges
+results %&gt;% 
+  mutate(T = factor(T, levels = rev(unique(sort(T))))) %&gt;%
+  ggplot(aes(x = X, y = T, group = T)) +
+  geom_density_ridges(aes(fill = I(&quot;#DCBCBC&quot;), color = I(&quot;white&quot;)), 
+                      stat = &quot;binline&quot;, binwidth = .01, scale = 3) +
+  geom_segment(aes(x = se_lo, xend = se_lo, y = as.numeric(T),
+                   yend = as.numeric(T) + 1),
+               data = sem, size = 1) +
+  geom_segment(aes(x = se_hi, xend = se_hi, y = as.numeric(T),
+                   yend = as.numeric(T) + 1),
+               data = sem, size = 1) +
+  coord_cartesian(xlim = c(.3, 1)) +
+  ggtitle(&quot;The Bernoulli Sampling Distribution&quot;) +
+  xlab(&quot;Sample Mean (X)&quot;) +
+  ylab(&quot;# Items (T)&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &quot;none&quot;)</code></pre>
+<p><img src="/post/2020-06-13-on-curbing-your-measurement-error_files/figure-html/unnamed-chunk-2-1.svg" width="672" /></p>
+<p>Here, the black bars on either side of each distribution represent the mean <span class="math inline">\(\pm ~1\)</span> standard deviation of the sampling distribution. As you can see, with an increasing number of items, the sampling distribution becomes more concentrated and more normal (i.e. Gaussian). For us, this means that the range of possible observed scores decreases as we use more items–therefore, an obsvered score computed with a measure containing many items is probably closer to the true score than a measure with a low number of items. In other words, our uncertainty becomes lower, and our estimate more precise.</p>
+<p>Importantly, the standard error of measurement has a direct relationship to the reliability of our measure. As described by <a href="https://onlinelibrary.wiley.com/doi/pdf/10.1002/j.2333-8504.1955.tb00054.x">Lord (1955)</a> (see also <a href="https://doi.org/10.1177/001316445701700407">Lord, 1957</a>), if we calculate <span class="math inline">\(\sigma^{2}_{\epsilon,i}\)</span> for all <span class="math inline">\(N\)</span> individuals, the average of the resulting squared standard errors of measurement corresponds to the error variance we use to estimate reliability:</p>
+<p><span class="math display">\[\sigma^{2}_\epsilon = \frac{1}{N}\sum_{i=1}^{N}\sigma^{2}_{\epsilon,i}\]</span>
+Then, if <span class="math inline">\(X\)</span> is the vector of observed scores for each individual, the total or observed variance is simply:</p>
+<p><span class="math display">\[\sigma^{2}_X = \text{Var}(X)\]</span>
+Remember, <span class="math inline">\(X\)</span> here is a vector of observed scores across all individuals. Reliability is then computed using the same formula as always:</p>
+<p><span class="math display">\[\rho^{2}_{X,\theta} = 1 - \frac{\sigma^{2}_\epsilon}{\sigma^{2}_X}\]</span>
+The implication here is that we can actually use what we know about the standard error/precision of our estimates for each individual to estimate reliability pretty easily from just a single measure. In fact, assuming that the underlying true score is equivalent across measures/timepoints, this approach is equivalent to the parallel forms or test-retest reliability estimate that we discussed above. We can check this correspondence with a quick simulation, wherein we can look at the reliability estimates for each approach as a function of the number of items:</p>
+<pre class="r"><code>set.seed(43202)
+
+# Number of subjects and items
+n_subjs &lt;- 30
+n_items &lt;- seq(10, 500, length.out = 30)
+
+# Random sample of &quot;true&quot; scores around success prob. p = .7
+theta &lt;- rnorm(n_subjs, .7, .1)
+
+# Estimate standard error of measurement (squared)
+est_se2 &lt;- function(x) {
+  # Success and failure probability
+  n &lt;- length(x)
+  p &lt;- mean(x)
+  q &lt;- 1 - p
+
+  sig2_ep_i &lt;- (p*q)/(n-1)
+
+  return(sig2_ep_i)
+}
+
+# Estimate observed and true score
+rel_dat &lt;- foreach(t=seq_along(n_items), .combine = &quot;rbind&quot;) %do% {
+    # Parallel form 1 (or timepoint 1 administration)
+    X_all_f1 &lt;- foreach(i=seq_along(theta), .combine = &quot;rbind&quot;) %do% {
+      # Simulate from binomial distribution
+      rbinom(n_items[t], 1, prob = theta[i])
+    }
+    # Parallel form 2 (or timepoint 2 administration)
+    X_all_f2 &lt;- foreach(i=seq_along(theta), .combine = &quot;rbind&quot;) %do% {
+      # note theta here is equivalent to above (i.e. true scores are the same)
+      rbinom(n_items[t], 1, prob = theta[i])  
+    }
+    
+    # Computing X_i (p) for each individual
+    X_f1 &lt;- rowMeans(X_all_f1)
+    X_f2 &lt;- rowMeans(X_all_f2)
+    
+    # Standard arror of measurement approach (just using form/timepoint 1)
+    sig2_ep &lt;- mean(apply(X_all_f1, 1, est_se2)) 
+    sig2_X   &lt;- var(X_f1)
+    
+    data.frame(n_items  = n_items[t],
+               rho2_pf  = cor(X_f1, X_f2), # Parallel form/test-retest approach
+               rho2_sem = 1 - (sig2_ep/sig2_X))
+}
+# ooooooh nice :D
+rel_dat %&gt;%
+  ggplot() +
+  geom_line(aes(x = n_items, y = rho2_pf), color = I(&quot;#DCBCBC&quot;)) +
+  geom_line(aes(x = n_items, y = rho2_sem), color = I(&quot;#8F2727&quot;)) +
+  ggtitle(&quot;Approaches to estimating reliability&quot;) +
+  xlab(&quot;Number of Items&quot;) +
+  ylab(bquote(&quot;Reliability (&quot; ~rho[X~~&quot;,&quot;~theta]^2~ &quot;)&quot;)) +
+  annotate(&quot;text&quot;, x = 220, y = 1, label = &quot;Parallel Forms&quot;, 
+           color = &quot;#DCBCBC&quot;, size = 5) +
+  annotate(&quot;text&quot;, x = 320, y = .8, label = &quot;Standard Error of\nMeasurement&quot;, 
+           color = &quot;#8F2727&quot;, size = 5) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="/post/2020-06-13-on-curbing-your-measurement-error_files/figure-html/unnamed-chunk-3-1.svg" width="672" /></p>
+<p>It is clear from the above figure that both approaches give the same reliability estimates on average, although there is some noise due to the probabilistic nature of the simulation.</p>
+</div>
+<div id="using-reliability-to-improve-individual-level-inference" class="section level4">
+<h4>Using Reliability to Improve Individual-level Inference</h4>
+<p>Importantly, we can use our reliability estimate to improve our inference on individual-level true scores.</p>
+<p>Specifically, Kelley demonstrated–in as early as 1920 (see also Kelley, 1947)–that we can estimate the true scores for each individual, <span class="math inline">\(\hat{\theta}_i\)</span>, by regressing the observed scores on the reliability estimate:</p>
+<p><span class="math display">\[\hat{\theta}_i = (1-\rho^{2}_{X,\theta})\bar{X} + \rho^{2}_{X,\theta}X_i\]</span></p>
+<p>Here, <span class="math inline">\(\bar{X}\)</span> is the mean of the observed scores across all subjects, given by <span class="math inline">\(\bar{X} = \frac{1}{N}\sum_{i=1}^{N}X_i\)</span>. Intuitively, the true score for each subject is estimated by pooling the their observed score toward the group-level mean score in proportion to the reliability of the individual-level estimate. If <span class="math inline">\(\rho^{2}_{X,\theta} = 1\)</span>, then <span class="math inline">\(X_i = \hat{\theta}_i\)</span> for all individuals–there is no pooling. Conversely, as <span class="math inline">\(\rho^{2}_{X,\theta} \rightarrow 0\)</span>, the individual-level observed scores have no weight at all, and the estimated true score is simply the group-level mean for each individual.</p>
+<p>In addition to estimating the true scores as observed scores pooled toward the group mean, Kelley also showed that the standard error of true scores is reduced in the following manner (for a derivation see this <a href="https://education.uiowa.edu/sites/education.uiowa.edu/files/documents/centers/casma/publications/casma-technical-report-5.pdf">technical report by Brennan, 2012</a>):</p>
+<p><span class="math display">\[\hat{\sigma}_{\epsilon} = \sigma_{X}\sqrt{1-\rho^{2}_{X,\theta}}\sqrt{\rho^{2}_{X,\theta}}\]</span>
+This standard error of the true score estimates is lower than that of the observed scores, which is given by <span class="math inline">\(\hat{\sigma}_{\epsilon} = \sigma_{X}\sqrt{1-\rho^{2}_{X,\theta}}\)</span>. Comparing the equations, we see that the true score standard error incorporates an additional term, <span class="math inline">\(\sqrt{\rho^{2}_{X,\theta}}\)</span>.</p>
+<p>These equations are rather interesting for a few reasons. First, they were discovered in 1920 (100 years ago!), long before James-Stein estimators (which similarly pool individual-level estimates toward the group-level mean) made their way into statistics (check out <a href="http://cda.psych.uiuc.edu/web_407_spring_2014/prediction_week5.pdf">these slides</a> for some cool historical notes on this).</p>
+<p>Second, they have a Bayesian interpretation! In particular, if we assume that the “true scores” have a normal prior distribution, and that true scores are distributed normally with respect to the observed scores, empirical Bayesian estimation produces posterior means that are equivalent to the Kelley true score point estimates described above (see page 22 of <a href="https://books.google.com/books?id=dMnoX8YnYgsC&amp;lpg=PA22&amp;ots=reS41nEOre&amp;dq=kelley%201947%20regress&amp;pg=PP11#v=onepage&amp;q=kelley%201947%20regress&amp;f=false">de Gruijter &amp; van der Kamp, 2008</a>). It is also worth noting that many popular multilevel/hierarchical modeling software packages work using something akin to empirical Bayesian estimation (e.g., <a href="https://mc-stan.org/users/documentation/case-studies/tutorial_rstanarm.html"><code>lmer</code> in R</a>). It goes without saying that using group-level information can be exceedingly useful to improve individual-level inference.</p>
+<p>OK, so this has all been a bit abstract. To make things more concrete, we can run a simulation to observe how the true score estimation/pooling described above works. The R code below simulates data from a binomial distribution for 20 “subjects” with success probabilities centered around <span class="math inline">\(.7\)</span>. Additionally, we will use item sizes of 10, 30, and 100 to demonstrate how pooling effects changes as a function of the number of items in a measure (due to the effect of number of items on resulting reliability).</p>
+<pre class="r"><code>set.seed(43202)
+
+# Number of subjects and items
+n_subj  &lt;- 20
+n_items &lt;- c(10, 30, 100)
+
+# Random sample of &quot;true&quot; scores around .7
+theta  &lt;- rnorm(n_subj, .7, .1)
+
+# Estimate observed and true score
+dis_dat &lt;- foreach(i=seq_along(n_items), .combine = &quot;rbind&quot;) %do% {
+  # Generate observed data for each subject using &quot;true&quot; score
+  X_all &lt;- foreach(t=seq_along(theta), .combine = &quot;rbind&quot;) %do% {
+   rbinom(n_items[i], 1, prob = theta[t]) 
+  }
+  
+  # group average observed score
+  X_bar &lt;- mean(rowMeans(X_all))
+  
+  # Reliability
+  X &lt;- rowMeans(X_all)
+  
+  # Standard arror of measurement approach
+  sig2_ep  &lt;- mean(apply(X_all, 1, est_se2)) 
+  sig2_X   &lt;- var(X)
+  rho      &lt;- 1 - (sig2_ep/sig2_X)
+
+  foreach(t=seq_along(theta), .combine = &quot;rbind&quot;) %do% {
+    # Using observed scores from parallel form 1
+    X_obs &lt;- X_all[t,]
+    X_i   &lt;- mean(X_obs)
+    
+    data.frame(subj_num  = t,
+               n_items   = n_items[i],
+               theta     = theta[t],
+               rho       = rho,
+               X         = X_i,
+               se_obs    = sd(X)*sqrt(1-rho),
+               se_hat    = sd(X)*sqrt(1-rho)*sqrt(rho),
+               theta_hat = (1-rho)*X_bar + rho*X_i)
+  }
+}
+
+# Plot true, observed, and estimated true scores
+dis_dat %&gt;%
+  mutate(subj_num = reorder(subj_num, theta)) %&gt;%
+  ggplot(aes(x = subj_num, y = theta)) + 
+  geom_point(color = I(&quot;black&quot;)) +
+  geom_point(aes(x = subj_num, y = X),
+             color = I(&quot;#DCBCBC&quot;),
+             position = position_jitter(width=.2, height=0, seed = 1)) +
+  geom_linerange(aes(x = subj_num,
+                    ymin = X - 1.96*se_obs,
+                    ymax = X + 1.96*se_obs),
+                color = I(&quot;#DCBCBC&quot;),
+                position = position_jitter(width=.2, height=0, seed = 1)) +
+  geom_point(aes(x = subj_num, y = theta_hat), 
+             color = I(&quot;#8F2727&quot;),
+             position = position_jitter(width=.2, height=0, seed = 2)) +
+  geom_linerange(aes(x = subj_num, 
+                    ymin = theta_hat - 1.96*se_hat, 
+                    ymax = theta_hat + 1.96*se_hat), 
+                color = I(&quot;#8F2727&quot;), 
+                position = position_jitter(width=.2, height=0, seed = 2)) +
+  geom_hline(yintercept = X_bar, linetype = 2, color = I(&quot;gray&quot;)) +
+  annotate(&quot;text&quot;, x = 15, y = .4, label = expression(&quot;True&quot;~theta[i]), 
+           color = &quot;black&quot;, size = 5) +
+  annotate(&quot;text&quot;, x = 15, y = .3, label = expression(&quot;Obs&quot;~X[i]),
+           color = &quot;#DCBCBC&quot;, size = 5) +
+  annotate(&quot;text&quot;, x = 15, y = .2, label = expression(&quot;Est&quot;~hat(theta)[i]),
+           color = &quot;#8F2727&quot;, size = 5) +
+  facet_wrap(c(&quot;n_items&quot;), nrow = 1) +
+  ggtitle(&quot;Regression-Based True Score Estimates&quot;) +
+  xlab(&quot;Subject&quot;) +
+  ylab(&quot;Value&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        axis.text.x.bottom = element_blank())</code></pre>
+<p><img src="/post/2020-06-13-on-curbing-your-measurement-error_files/figure-html/unnamed-chunk-4-1.svg" width="672" /></p>
+<p>I don’t know about you, but I think this is pretty cool for a technique developed in 1920 :D. What we see is that the Kelley regression-based point estimates are pooled toward the group-level average (represented by the horizontal gray dotted line) in proportion to the reliability of the measure, which increases as a function of the number of items. Further, the confidence intervals for the estimated true scores <span class="math inline">\(\hat{\theta}_i\)</span> are much narrower than those of the observed scores–yet they still exhibit good coverage properties of the underlying true scores <span class="math inline">\(\theta_i\)</span>.</p>
+</div>
+<div id="a-brief-note-on-assumptions" class="section level4">
+<h4>A Brief Note on Assumptions</h4>
+<p>It is worth noting that the models we have discussed so far make many assumptions that might not be met in practice (i.e. normality of the sampling distribution, which is clearly not true when the number of items is low). Much of applied frequentist modeling relies on similar assumptions regarding normality when computing standard errors and p-values. Additionally, our model assumes that responses to each item are random with respect the the underlying true score, which is not true if items are of different difficulties. The need to relax these latter assumptions was the impetus for the development of what is now called <em>Generalizability Theory</em>, or <em>G-Theory</em>, which seeks to tease apart these various sources of error.</p>
+</div>
+</div>
+</div>
+<div id="using-reliability-to-disattenuate-a-correlation" class="section level2">
+<h2>Using Reliability to Disattenuate a Correlation</h2>
+<p>So, it is now clear that correcting for low reliability can improve inference on individual-level true scores. However, how do these ideas then translate to measuring the correlation between true scores of two different measures? When we are interested in such quantities, we need to take into account measurement error–else we obtain an attenuted, or biased, correlation estimate, and we may falsely infer that a relationship does not exist when it does at the level of true scores.</p>
+<p>The equation for attenutation is actually quite straightforward, and it is similar to Kelley’s regression-based true score estimation equation above. If we have two measures, say measures <span class="math inline">\(M_1\)</span> and <span class="math inline">\(M_2\)</span>, each with corresponding reliability estimates of <span class="math inline">\(\rho^{2}_{M_1,\theta_1}\)</span> and <span class="math inline">\(\rho^{2}_{M_2,\theta_2}\)</span>, the correlation between the osberved scores of the measures <span class="math inline">\(r_{M_1,M_2}\)</span> is <em>attenuated</em> as follows:</p>
+<p><span class="math display">\[r_{M_1,M_2} = \hat{r}_{\theta_1,\theta_2}\sqrt{\rho^{2}_{M_1,\theta_1}\rho^{2}_{M_2,\theta_2}}\]</span>
+Here, <span class="math inline">\(\hat{r}_{\theta_1,\theta_2}\)</span> is our estimate for what the correlation between true scores should be, but our observed correlation is <span class="math inline">\(r_{M_1,M_2}\)</span> is attenuated by the reliability of each measure. Inuitively, if <span class="math inline">\(\rho^{2}_{M_1,\theta_1} = \rho^{2}_{M_2,\theta_2} = 1\)</span>, then the observed scores on each measure are equal to the true scores (i.e. all <span class="math inline">\(\theta_1 = M_1\)</span> and <span class="math inline">\(\theta_2 = M_2\)</span>), and there is no attenuation. Otherwise, the true correlation becomes attenuated in proportion to the square root of the product of each measure’s reliability.</p>
+<p>To disattenuate the observed correlation, we can just use some algebra to rearrange the equation to get:</p>
+<p><span class="math display">\[\hat{r}_{\theta_1,\theta_2} = \frac{r_{M_1,M_2}}{\sqrt{\rho^{2}_{M_1,\theta_1}\rho^{2}_{M_2,\theta_2}}}\]</span></p>
+<p>Although this disattenuation formula is widely accepted, how to best estimate the corresponding confidence interval–which is necessary for making statistical inference–is much more controversial. For our purposes, we will use a simplified approach, which applies the disattenuation formula above to the lower and upper bounds of the observed correlation confidence interval (see <a href="https://www.jstor.org/stable/1434905?seq=1#metadata_info_tab_contents">Winne &amp; Belfry, 1982</a>):</p>
+<p><span class="math display">\[\frac{Lower}{\sqrt{\rho^{2}_{M_1,\theta_1}\rho^{2}_{M_2,\theta_2}}} &lt; \hat{r}_{\theta_1,\theta_2} &lt; \frac{Upper}{\sqrt{\rho^{2}_{M_1,\theta_1}\rho^{2}_{M_2,\theta_2}}}\]</span></p>
+<p>We will explore these disattenuation corrections in more detail after we cover generative models below.</p>
+<div id="a-brief-note-on-disattenuation-and-the-meaning-of-test-retest-reliability" class="section level4">
+<h4>A Brief Note on Disattenuation and the Meaning of Test-retest Reliability</h4>
+<p>Before moving on, it is worth emphasizing the implications of the above attenuation equation for research on changes in individual differences over time. For example, if I am interested in how a psychological construct changes over the span of 1 month, I may have a group of participants take the same measure at two separate timepoints, followed by computing a correlation to determine if individual differences at time 1 are consistent at time 2. In this case, we would actually need to correct this correlation by the reliability of each measure if we wanted to infer whether or not observed changes result from actual changes in the underlying, supposedly trait-like construct (i.e. true score), versus measurement error resulting from imprecision. This is an important distinction, because confusion between these different sources of variation (i.e. actual change versus low precision) can result in strong conclusions regarding the utility of certain measures for individual differences research. If you are interested in more on this topic, I cover it in detail in <a href="http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/">a previous blog post</a>, where I dive into the so-called “Reliability Paradox”. In fact, it isn’t so paradoxical after all.</p>
+</div>
+</div>
+</div>
+<div id="generative-modeling" class="section level1">
+<h1>Generative Modeling</h1>
+<p>Generative models can accomplish all of what we described above pertaining to classical test theory, but in a more intuitive and easy to implement way–or at least that is what I hope to convince you of by the end of this post.</p>
+<p>When building generative models, as opposed to thinking about “true” and “observed” scores, we will think about “true” and “estimated” data-generating parameters, respectively. As opposed to referring to “error variance” or “standard errors of the mean”, we will discuss “uncertainty”–or precision–in our parameter estimates. Finally, as opposed to relying on the asymptotic assumptions necessary for us to estimate error variances using normal approximations, we will use hierarchical Bayesian modeling to jointly account for our uncertainty across all parameters of interest.</p>
+<div id="the-goal-of-generative-modeling" class="section level2">
+<h2>The Goal of Generative Modeling</h2>
+<p>From the perspective of generative modeling, our goal is to specify a joint probability distribution that describes both the relationships between parameters within our model and the relationship between model parameters and observed data. By specifiying a generative model, all of our assumptions are made explicit, which is a useful practice conducive to theory development and testing.</p>
+<p>For the current application, we are interested in the relationship between a trait and behavioral measure, which are captured using a questionnaire and response time task, respectively. Our goal is to determine if individual differences in one measure relate to individual differences in the other. Therefore, we need to develop models of the data-generating process underlying both: (1) responding to questionnaire items, (2) response time distributions, and (3) the relationship between parameters of 1 and 2. Additionally, we need to ensure that our model accounts for the uncertainty in our individual-level parameter estimates (analagous to dissociating error from observed scores to get true scores within classical test theory). Finally, we will compare how well the generative model can uncover individual differences compared to the disattentuation approach used within the context of classical test theory.</p>
+<div id="generative-model-of-questionnaire-data" class="section level3">
+<h3>Generative Model of Questionnaire Data</h3>
+<p>For the questionnaire data, we will use the bernoulli distribution, where the response to each item can be thought of as a bernoulli trial. Recall that we used the bernoulli distribution within the classical test theory example to estimate the standard error for our reliability calculation.</p>
+<p>The <em>bernoulli model</em>, as we will now refer to it, is given by:</p>
+<p><span class="math display">\[\text{Pr}(x_{i,t}=1) = p_{i} = 1 - \text{Pr}(x_{i,t}=0) = 1 - q_i\]</span></p>
+<p>Pretty simple! As in the classical test theory example, <span class="math inline">\(p_i\)</span> is the success probability, or the probability that the response of individual <span class="math inline">\(i\)</span> is 1. Then, <span class="math inline">\(q_i\)</span> is the failure probability, or the probability that the response is 0 (which is simply <span class="math inline">\(1-p_i\)</span>). We will then define <span class="math inline">\(p_i\)</span> such that:</p>
+<p><span class="math display">\[p_i = \frac{1}{1+\text{exp}(-\theta_i)}\]</span>
+where <span class="math inline">\(\theta_i ~(-\infty &lt; \theta_i &lt; +\infty)\)</span> is unbounded, and the logistic function transforms <span class="math inline">\(\theta_i\)</span> to ensure that <span class="math inline">\(p_i\)</span> is between 0 and 1. Note that we use this transformation because <span class="math inline">\(p_i\)</span> is a probability, and therefore must be between 0 and 1. We could use other types of tranformations, but I chose to use the logistic function because it may be more familiar to readers (logistic regression!) compared to other functions.</p>
+<p>Given the above generative specification, the parameter that we actually need to estimate for each individual is <span class="math inline">\(\theta_i\)</span>, where <span class="math inline">\(p_i\)</span> is then determined by the logistic function.</p>
+<p>However, in addition to specifying how the observed responses are generated, we also need to specify how the individual-level <span class="math inline">\(\theta_i\)</span> parameters are generated. Similar to how the classical test theory approach requires us to assume a population-level sampling distribution, the generative modeling approach requires us to assume a group-level generative distribution. For simplicity, we may assume that the individual-level <span class="math inline">\(\theta_i\)</span> parameters are generated by a standard normal distribution:</p>
+<p><span class="math display">\[\theta_i \sim \mathcal{N}(0,1)\]</span>
+In Bayesian terminology, such a group-level distribution is often referred to as a <em>prior distribution</em> on <span class="math inline">\(\theta\)</span>, but I actually do not like this terminology–I instead prefer to think of is as our generative model of the parameters themselves. My reasoning is simple–we do not actually need to specify the parameters of the group-level normal distribution like we did above. Instead, we could estimate these group-level parameters from the data itself:</p>
+<p><span class="math display">\[\theta_i \sim \mathcal{N}(\mu_{\theta},\sigma_{\theta})\]</span></p>
+<p>Then, we need to make a generative assumption regarding the group level mean and standard deviation parameters (or a prior on the group-level parameters in typical Bayes speak). In our case, we will assume that <span class="math inline">\(\mu_{\theta} \sim \mathcal{N}(0,1)\)</span> and <span class="math inline">\(\text{log}(\sigma_{\theta}) \sim \mathcal{N}(0,1)\)</span>. Note that the generative model is now considered hierarchical–as we fit the model, the the individual-level parameters will influence the group-level parameters, which will in turn influence the all individual-level parameters. Much like for the regression-based true score estimates in classical test theory, our individual-level parameters will become pooled toward the group-level mean, which will also shrink the uncertainty intervals at the individual-level.</p>
+<p>Because it is difficult to get a sense of how to interpret these generative assumptions with respect to the outcome, we can generate samples from the model to observe the distribution of <span class="math inline">\(p_i\)</span> and ensure that it aligns with our expectations:</p>
+<pre class="r"><code># Number of samples we will draw from the priors on group-level dist
+n_draw &lt;- 12
+# Number of individual-level theta paramaeter drawn from group dist 
+n_subj &lt;- 30
+
+# Loop through and plot
+foreach(i=1:n_draw, .combine = &quot;rbind&quot;) %do% {
+  # Sample group-level parameters from priors 
+  mu_theta &lt;- rnorm(1,0,1)
+  sig_theta &lt;- exp(rnorm(1,0,1))
+  
+  # Sample individual level parameters from group distribution
+  theta &lt;- rnorm(n_subj, mu_theta, sig_theta)
+  # Logistic transform to ensure 0 &lt; p &lt; 1
+  p &lt;- 1/(1+exp(theta))
+  data.frame(n_draw = rep(i, n_subj),
+             p      = p)
+} %&gt;%
+  ggplot(aes(x = p)) +
+  geom_histogram(fill = I(&quot;#8F2727&quot;)) +
+  xlab(expression(p[i])) +
+  facet_wrap(&quot;n_draw&quot;, ncol = 3, scales = &quot;free_y&quot;) +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="/post/2020-06-13-on-curbing-your-measurement-error_files/figure-html/unnamed-chunk-5-1.svg" width="672" /></p>
+<p>Note that each of these 12 panels are separate samples from the priors on the group-level distribution (i.e. separate samples from <span class="math inline">\(\mu_{\theta} \sim \mathcal{N}(0,1)\)</span> and <span class="math inline">\(\text{log}(\sigma_{\theta}) \sim \mathcal{N}(0,1)\)</span>). Within each panel, 30 individual-level <span class="math inline">\(\theta_i\)</span> parameters have been sampled, which we then transformed to the bernoulli success probability <span class="math inline">\(p_i\)</span> plotted above.</p>
+<p>From the panels, we can see that our generative specification can produce many different distributions of possible success probabilities–in other words, our model is relatively uninformative with respect to what the individual-level success probabilities will be. For our application, this is just fine! Because this is such a simple model, I feel comfortable looking at only the success probability generated from our model. When models are more complex, it is useful to do more rigorous prior predictive simulations, which simulate to the level of observed data.</p>
+<div id="generative-model-parameters-vs-classical-test-theory-true-scores" class="section level4">
+<h4>Generative Model Parameters vs Classical Test Theory True Scores</h4>
+<p>Before moving on, we can take a look at how the generative model estimates compare to the classical test theory regression-based true score estimates that we computed above. As a refresher, the regression-based true score estimates were pooled toward the group-level mean, and they were also more precise (i.e. smaller confidence intervals) compared to the observed score counterparts.</p>
+<p>First, here is the Stan code we will use to fit the generative bernoulli model (note that the model is saved in the R envirnoment to the variable <code>m_bernoulli</code>):</p>
+<pre class="r"><code># Load in rstan first
+library(rstan)</code></pre>
+<pre class="stan"><code>data {
+    int N;      // # of subjects
+    int N_items; // # of timepoints
+    int Y[N, N_items]; // Responses for each subject and item
+}
+parameters {
+  // Group-level parameters
+  // SDs
+  real&lt;lower=0&gt; sigma_theta;
+  // means
+  real mu_theta;
+  
+  // Individual-level parameters
+    vector[N] theta_pr;
+}
+transformed parameters {
+  // Individual-level parameters 
+  vector[N] theta;
+  
+  // Compute individual-level parameters from non-centered parameterization
+  theta = mu_theta + sigma_theta * theta_pr;
+}
+model {
+  // Priors on group-level means
+  mu_theta ~ normal(0, 1);
+  
+  // Priors on group-level SDs
+  sigma_theta ~ normal(0, 1);
+  
+  // Priors on individual-level parameters
+  theta_pr ~ normal(0, 1);
+    
+  // For each subject
+  for (i in 1:N) {
+    // self-report model
+    Y[i,:] ~ bernoulli_logit(theta[i]);
+  }
+}
+generated quantities {
+  vector[N] p;
+  // Success probability estimate for each individual
+  p = inv_logit(theta);
+}
+</code></pre>
+<p>The Stan code above uses a <a href="https://mc-stan.org/docs/2_18/stan-users-guide/reparameterization-section.html">non-centered parameterization</a> of the group-level portion of the model <a href="http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/">for reasons described in a previous post</a>, but otherwise is mathematically equivalent to the generative model as described by the equations above.</p>
+<p>The R code below fits the generative bernoulli model to the same data we used above when estimating true scores, with item sizes of 10, 30, and 100 to demonstrate the effects of pooling:</p>
+<pre class="r"><code># seeded to reproduce same theta&#39;s and data as above for comparison
+set.seed(43202) 
+
+# Number of subjects and items
+n_subj  &lt;- 20
+n_items &lt;- c(10, 30, 100)
+
+# Random sample of &quot;true&quot; scores around .7
+theta  &lt;- rnorm(n_subj, .7, .1)
+
+# Estimate observed and true score
+gen_dat &lt;- foreach(i=seq_along(n_items), .combine = &quot;rbind&quot;) %do% {
+  # Generate observed data for each subject using &quot;true&quot; score
+  X_all &lt;- foreach(t=seq_along(theta), .combine = &quot;rbind&quot;) %do% {
+   rbinom(n_items[i], 1, prob = theta[t]) # theta same as in above example
+  }
+  # Fit generative model
+  fit_bernoulli &lt;- sampling(m_bernoulli,
+                            data   = list(N = n_subj,
+                                          N_items = n_items[i],
+                                          Y = X_all),
+                            iter   = 3000,
+                            warmup = 500,
+                            chains = 4,
+                            cores  = 4,
+                            seed  = 43202) 
+  pars &lt;- rstan::extract(fit_bernoulli)
+  foreach(t=seq_along(theta), .combine = &quot;rbind&quot;) %do% {
+    # Using observed scores from parallel form 1
+    bayes_est &lt;- pars$p[,t]
+    hdi &lt;- hBayesDM::HDIofMCMC(bayes_est)
+    
+    data.frame(subj_num  = t,
+               n_items   = n_items[i],
+               theta     = theta[t],
+               bayes_theta = mean(bayes_est),
+               bayes_lo    = hdi[1],
+               bayes_hi    = hdi[2])
+  }
+}
+
+# Plot true, observed, and estimated true scores
+dis_dat %&gt;%
+  full_join(gen_dat) %&gt;%
+  mutate(subj_num = reorder(subj_num, theta)) %&gt;%
+  ggplot(aes(x = subj_num, y = theta)) + 
+  geom_point(color = I(&quot;black&quot;)) +
+  geom_point(aes(x = subj_num, y = theta_hat), 
+             color = I(&quot;#DCBCBC&quot;),
+             position = position_jitter(width=.3, height=0, seed = 2)) +
+  geom_linerange(aes(x = subj_num, 
+                    ymin = theta_hat - 1.96*se_hat, 
+                    ymax = theta_hat + 1.96*se_hat), 
+                color = I(&quot;#DCBCBC&quot;), 
+                position = position_jitter(width=.3, height=0, seed = 2)) +
+  geom_point(aes(x = subj_num, y = bayes_theta), 
+             color = I(&quot;#8F2727&quot;),
+             position = position_jitter(width=.3, height=0, seed = 1)) +
+  geom_linerange(aes(x = subj_num, 
+                    ymin = bayes_lo, 
+                    ymax = bayes_hi), 
+                color = I(&quot;#8F2727&quot;),
+                position = position_jitter(width=.3, height=0, seed = 1)) +
+  geom_hline(yintercept = X_bar, linetype = 2, color = I(&quot;gray&quot;)) +
+  annotate(&quot;text&quot;, x = 15, y = .4, label = expression(&quot;True&quot;~theta[i]), 
+           color = &quot;black&quot;, size = 5) +
+  annotate(&quot;text&quot;, x = 15, y = .3, label = expression(&quot;Est&quot;~hat(theta)[i]),
+           color = &quot;#DCBCBC&quot;, size = 5) +
+  annotate(&quot;text&quot;, x = 15, y = .2, label = expression(&quot;Gen&quot;~hat(theta)[i]), 
+           color = &quot;#8F2727&quot;, size = 5) +
+  facet_wrap(c(&quot;n_items&quot;), nrow = 1) +
+  ggtitle(&quot;Regression-Based True Scores vs\nGenerative Model Estimates&quot;) +
+  xlab(&quot;Subject&quot;) +
+  ylab(&quot;Value&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        axis.text.x.bottom = element_blank())</code></pre>
+<p><img src="/post/2020-06-13-on-curbing-your-measurement-error_files/figure-html/unnamed-chunk-8-1.svg" width="672" /></p>
+<p>Again, I think this is super cool! What we see is that the generative model expectations (i.e. the posterior means) and uncertainty intervals (i.e. the 95% highest density intervals) are <em>very</em> similar to the corresponding regression-based true score estimates and 95% confidence intervals. In fact, the point esitmates for both approaches are almost indistinguishable. Given that the regression-based true scores have a Bayesian interpretation, this should not be too surprising, yet it is still nice to see it work out empirically.</p>
+<p>More generally, this example demonstrates that generative models can give us the same “true scores” that classical test theory does, yet we do not have to compute reliability, etc., to get there. Instead, we made generative, distributional assumptions regarding how our model parameters related to each other (e.g., the group-level generative model) and to the observed data. Then, we took the posterior expectation (i.e. the posterior mean) of the individual-level parameters to get our best estimates of the “true” underlying data-generating parameters.</p>
+</div>
+</div>
+<div id="generative-model-of-response-time-data" class="section level3">
+<h3>Generative Model of Response Time Data</h3>
+<p>For the response time model, we will assume that response times for each individual <span class="math inline">\(i\)</span> and for each trial <span class="math inline">\(t\)</span> arise from a normal distribution, which we will term the <em>normal model</em>:</p>
+<p><span class="math display">\[\text{RT}_{i,t} \sim \mathcal{N}(\delta_i, \sigma_i)\]</span>
+Here, <span class="math inline">\(\delta_i\)</span> and <span class="math inline">\(\sigam_i\)</span> indicate the mean and standard deviation, respectively, of the response time distribution for individual <span class="math inline">\(i\)</span>. Of course, response times are not typically normally distributed in many beahvioral tasks, but we will ignore that for this demonstration.</p>
+<p>Like the bernoulli model for the questionnaire data, we can then assume that the
+individual-level normal model parameters are themselves generated by normal distributions such that <span class="math inline">\(\delta_i \sim \mathcal{N}(\mu_{\delta},\sigma_{\delta})\)</span> and <span class="math inline">\(\text{log}(\sigma_i) \sim \mathcal{N}(\mu_{\sigma},\sigma_{\sigma})\)</span>. To specify the group-level parameters, it is important to remember that response times are positive valued, and typically greater than 200 milliseconds. We could encode this into the model in the prior distribution. However, for the sake of brevity, we will not focus too much on this.</p>
+<p>For the <span class="math inline">\(\delta\)</span> parameters, we can assume that <span class="math inline">\(\mu_{\delta} \sim \mathcal{N}(1,1)\)</span> and <span class="math inline">\(\text{log}(\sigma_{\delta}) \sim \mathcal{N}(0,0.5)\)</span>. Next, for the <span class="math inline">\(\sigma\)</span> parameters, we can assume that <span class="math inline">\(\mu_{\sigma} \sim \mathcal{N}(-1,0.2)\)</span> and <span class="math inline">\(\text{log}(\sigma_{\sigma}) \sim \mathcal{N}(0,0.5)\)</span>. This parameterization whould ensure that response times are generally above 0, but there is still a good amount of variation. It is much harder to form an intuition for what types of response time distributions these priors would produce. Therefore, let us simulate!</p>
+<pre class="r"><code># Number of samples we will draw from the priors on group-level dist
+n_draw &lt;- 10
+# Number of individual-level theta paramaeter drawn from group dist 
+n_subj &lt;- 5
+# Number of trials to simulate from individual-level normal distributions
+n_trials &lt;- 200
+
+# Loop through and plot
+foreach(d=1:n_draw, .combine = &quot;rbind&quot;) %do% {
+  # Sample group-level parameters from priors 
+  mu_delta  &lt;- rnorm(1,1,1)
+  sig_delta &lt;- exp(rnorm(1,0,.5))
+  mu_sigma  &lt;- rnorm(1,0,1)
+  sig_sigma &lt;- exp(rnorm(1,0,1))
+  
+  # Sample individual-level parameters from group dist
+  delta &lt;- rnorm(n_subj, mu_delta, sig_delta)
+  sigma &lt;- exp(rnorm(n_subj, mu_sigma, sig_sigma))
+    
+  foreach(i=1:n_subj, .combine = &quot;rbind&quot;) %do% {
+    # Sample individual level response times from indiv dist
+    RT &lt;- rnorm(n_trials, delta[i], sigma[i])
+    
+    data.frame(n_draw = rep(d, n_trials),
+               n_subj = rep(i, n_trials),
+               RT     = RT)
+  }
+} %&gt;%
+  ggplot(aes(x = RT)) +
+  geom_histogram(fill = I(&quot;#8F2727&quot;), binwidth = .5) +
+  xlab(&quot;Response Time&quot;) +
+  facet_grid(n_draw ~ n_subj, scales = &quot;free&quot;) +
+  coord_cartesian(xlim = c(-2, 2)) +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="/post/2020-06-13-on-curbing-your-measurement-error_files/figure-html/unnamed-chunk-9-1.svg" width="672" /></p>
+<p>Here, the rows represent different draws for the group-level distribution parameters, where the columns are the response time distributions generated by 5 different “subjects” drawn from the given group-level parameters. Note also that I have zoomed in so that the x-axis is between -2 and 2. There are clearly some aspects that we could improve on. For example, many response times are below 0, which is not possible (although this is not relevant for our example given our use of simulated data). That said, feel free to modify the priors to get a sense of what happens!</p>
+</div>
+<div id="a-joint-generative-model-of-questionnaire-and-response-time-data" class="section level3">
+<h3>A Joint Generative Model of Questionnaire and Response Time Data</h3>
+<p>We have now demonstrated how generative models relate to classical test theory through the use of regression-based true score estimates, and we have developed generative models for both the questionnaire and response time data that we would like to use to make inference on individual differences. In the current application, this amounts to estimating a correlation between the generative parameters for each task, or the correlation between <span class="math inline">\(\theta_i\)</span> and <span class="math inline">\(\delta_i\)</span>.</p>
+<p>Although there are many ways to estimate such a correlation, one straightforward method is to assume that <span class="math inline">\(\theta_i\)</span> and <span class="math inline">\(\delta_i\)</span> are drawn from a multivariate normal distribution as opposed to from independent normal distributions. Mathematically, we can make this change by modifying <span class="math inline">\(\theta_i \sim \mathcal{N}(\mu_{\theta},\sigma_{\theta})\)</span> and <span class="math inline">\(\delta_i \sim \mathcal{N}(\mu_{\delta},\sigma_{\delta})\)</span> to instead be:</p>
+<p><span class="math display">\[\begin{bmatrix} \theta_{i} \\ \delta_{i} \end{bmatrix} \sim \text{MVNormal} \bigg (\begin{bmatrix} \mu_{\theta} \\ \mu_{\delta} \end{bmatrix}, \mathbf{S}  \bigg )\]</span>
+Here, <span class="math inline">\(\mathbf S\)</span> is a covariance matrix, which can be decomposed into the group-level standard deviations and a 2 by 2 correlation matrix <span class="math inline">\(\mathbf R\)</span> that captures the correlation between the individual-level generative parameters:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf S &amp; = \begin{pmatrix} \sigma_{\theta} &amp; 0 \\ 0 &amp; \sigma_{\delta} \end{pmatrix} \mathbf R \begin{pmatrix} \sigma_{\theta} &amp; 0 \\ 0 &amp; \sigma_{\delta} \end{pmatrix}
+\end{align*}\]</span></p>
+<p>Here, the correlation matrix contains one free parameter on the off-diagonal, <span class="math inline">\(\rho_{\theta,\delta}\)</span>, which is the correlation of interest:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf R &amp; = \begin{pmatrix} 1 &amp; \rho_{\theta,\delta} \\ \rho_{\theta,\delta} &amp; 1 \end{pmatrix}
+\end{align*}\]</span></p>
+<p>The only other change we need to make is to set a prior distribution on the correlation matrix–or just <span class="math inline">\(\rho_{\theta,\delta}\)</span> in our case. For our purposes, we will assume a non-informative prior, given by <span class="math inline">\(\mathbf R \sim \text{LKJcorr} (1)\)</span>. The <a href="http://bois.caltech.edu/distribution_explorer/multivariate_continuous/lkj.html">LKJ distribution</a> assumes that the correlations on the off-diagonal are <a href="https://en.wikipedia.org/wiki/Beta_distribution">beta-distributed</a>, ensuring that our correlation is between 0 and 1. In our case, the distribution is uniform across -1 to 1.</p>
+<p>We are now ready to fit the model! The Stan code is given by the following script, which is assigned to the <code>m_joint_RT_Bern</code> variable in the R environment:</p>
+<pre class="stan"><code>data {
+    int N;             // # of subjects
+    int N_items;       // # of items
+    int T;             // max # of RT trials across subjects
+    real RT[N, T];     // Reaction times for each subject and trial
+    int Y[N, N_items]; // Responses for each subject and item
+}
+parameters {
+  // Group-level parameters
+  // correlation matrix (cholesky factor for faster computation)
+  cholesky_factor_corr[2] R_chol;  
+  // SDs
+  vector&lt;lower=0&gt;[2] pars_sigma; 
+  real&lt;lower=0&gt; sigma_SD;
+  // means
+  vector[2] pars_mu;
+  real sigma_mu;
+  
+  // Individual-level parameters
+    matrix[2,N] pars_pr; 
+    vector[N] sigma_pr;
+}
+transformed parameters {
+  // Individual-level parameter off-sets (for non-centered parameterization)
+  matrix[2,N] pars_tilde;
+  
+  // Individual-level parameters 
+  vector[N] theta;
+  vector[N] delta;
+  vector[N] sigma;
+  
+  // Construct inidividual offsets (for non-centered parameterization)
+  pars_tilde = diag_pre_multiply(pars_sigma, R_chol) * pars_pr;
+  
+  // Compute individual-level parameters from non-centered parameterization
+  for (i in 1:N) {
+    theta[i] = pars_mu[1] + pars_tilde[1, i];
+    delta[i] = pars_mu[2] + pars_tilde[2, i];
+    sigma[i] = exp(sigma_mu + sigma_SD * sigma_pr[i]);
+  }
+}
+model {
+  // Prior on cholesky factor of correlation matrix
+  R_chol ~ lkj_corr_cholesky(1);
+  
+  // Priors on group-level means
+  pars_mu[1]  ~ normal(0, 1);
+  pars_mu[2]  ~ normal(1, 1);
+  sigma_mu ~ normal(-1, .2);
+  
+  // Priors on group-level SDs
+  pars_sigma[1] ~ normal(0, 1);
+  pars_sigma[2] ~ normal(0, .5);
+  sigma_SD   ~ normal(0, .5);
+  
+  // Priors on individual-level parameters
+  to_vector(pars_pr)  ~ normal(0, 1);
+  to_vector(sigma_pr) ~ normal(0, 1);
+    
+  // For each subject
+  for (i in 1:N) {
+    // response time model
+    RT[i,1:T] ~ normal(delta[i], sigma[i]);
+    
+    // self-report model
+    Y[i,:] ~ bernoulli_logit(theta[i]);
+  }
+}
+generated quantities { 
+  corr_matrix[2] R;
+    // Reconstruct correlation matrix from cholesky factor
+  R = R_chol * R_chol&#39;;
+} 
+</code></pre>
+<p>Like the Stan code for the bernoulli model, the code above is using a non-centered parameterization for the group-level portion of the model. Additionally, we are using a Cholesky decomposition to better estimate the correlation matrix. These are not important for the results, and for our current purposes we can think of these modification as simply ways to more efficiently fit the models. Regardless, the model in the Stan code above is mathematically equivalent to the model described by the equations in the text.</p>
+<p>Time to fit! First, we will load some relevant R packages:</p>
+<pre class="r"><code>library(mvtnorm)
+library(doParallel)
+library(rstan)
+library(hBayesDM)</code></pre>
+<p>Now, the R code below will simulate data where the correlation between the individual-level generative parameters <span class="math inline">\(\theta_i\)</span> and <span class="math inline">\(\delta_i\)</span> (or the “true scores”) varies from 0 to 1. Then, we will use the classical, reliability-based disattenuation formula along with the joint generative model to recover the true correlation.</p>
+<p>The simulation uses 100 “participants”. Additionally, the questionnaire has 10 items, and the response time task has 50 trials. To the code!:</p>
+<pre class="r"><code>set.seed(43202)
+
+# Number of subjects and items/trials for questionnaire/task
+n_subj   &lt;- 100
+n_items  &lt;- 10
+n_trials &lt;- 50
+
+# Create grid of true generating correlations in (0,1)
+true_r &lt;- seq(0,1,length.out = 20)
+
+# Parallel cluster
+cl &lt;- makeCluster(4)
+registerDoParallel(cl)
+
+# Parallelize across grid of true correlations
+joint_dat &lt;- foreach(r=seq_along(true_r), .combine = &quot;rbind&quot;, 
+                   .packages = c(&quot;mvtnorm&quot;, &quot;dplyr&quot;, 
+                                 &quot;foreach&quot;, &quot;rstan&quot;, &quot;hBayesDM&quot;)) %dopar% {
+  
+  # Contruct correlation and covariance matrices
+  M  &lt;- c(0, .8) # group-level means for theta and delta
+  SD &lt;- c(1, .1) # group-level standard deviations for theta and delta
+  R  &lt;- matrix(c(1, true_r[r], true_r[r], 1), nrow = 2)
+  S  &lt;- diag(SD) %*% R %*% diag(SD)
+    
+  # Draw individual-level parameters from multivariate normal
+  pars &lt;- rmvnorm(n_subj, M, S) %&gt;%
+    as.data.frame()
+  theta &lt;- pars[,1] # for bernoulli model
+  delta &lt;- pars[,2] # for normal model
+  sigma &lt;- rnorm(n_subj, .4, .05) # for normal model
+  
+  # Simulate questionnaire data (i.e. bernoulli generative model)
+  X_Q_all &lt;- foreach(i=1:n_subj, .combine = &quot;rbind&quot;) %do% {
+    p  &lt;- 1/(1 + exp(-theta[i])) # logistic transform
+    rbinom(n_items, 1, prob = p)
+  }
+  # Simulate resposne time data (i.e. normal generative model)
+  X_RT_all &lt;- foreach(i=1:n_subj, .combine = &quot;rbind&quot;) %do% {
+    rnorm(n_trials, delta[i], sigma[i])
+  }
+  
+  # group averages of observed scores
+  X_bar_Q  &lt;- mean(rowMeans(X_Q_all))
+  X_bar_RT &lt;- mean(rowMeans(X_RT_all))
+  
+  # individual-level observed scores
+  X_Q  &lt;- rowMeans(X_Q_all)
+  X_RT &lt;- rowMeans(X_RT_all)
+  
+  # Average of individual-level error variances 
+  sig2_ep_Q  &lt;- mean(apply(X_Q_all, 1, est_se2)) # same SE function from earlier 
+  sig2_ep_RT &lt;- mean(apply(X_RT_all, 1, function(x) var(x)/(length(x)-1)))
+  
+  # Group-level observed score variance
+  sig2_X_Q  &lt;- var(X_Q)
+  sig2_X_RT &lt;- var(X_RT)
+  
+  # Compute reliability using SEM approach
+  rho_Q  &lt;- 1 - (sig2_ep_Q/sig2_X_Q)
+  rho_RT &lt;- 1 - (sig2_ep_RT/sig2_X_RT)
+
+  # Observed correlation and 50% confidence interval
+  obs_cor &lt;- cor.test(X_Q, X_RT, conf.level = .5)
+  obs_r   &lt;- obs_cor$estimate
+  obs_ci  &lt;- obs_cor$conf.int
+  
+  # Disattenuated correlation and 50% confidence interval
+  dis_r  &lt;- obs_r / sqrt(rho_Q*rho_RT)
+  dis_ci &lt;- obs_ci / sqrt(rho_Q*rho_RT)
+    
+  # Stan data for joint generative model
+  stan_data &lt;- list(N       = n_subj,
+                    N_items = n_items,
+                    T       = n_trials,
+                    Y       = X_Q_all,
+                    RT      = X_RT_all)
+  
+  # Fit joint generative model
+  fit_joint &lt;- sampling(m_joint_RT_Bern, 
+                        data   = stan_data,
+                        iter   = 1000,
+                        warmup = 200, 
+                        chains = 1, 
+                        cores  = 1,
+                        seed   = 43201)
+  pars &lt;- rstan::extract(fit_joint) # extract parameters
+  
+  # Generative model correlation and 50% highest density interval
+  bayes_r &lt;- mean(pars$R[,1,2])
+  hdi &lt;- hBayesDM::HDIofMCMC(pars$R[,1,2], credMass = .5)
+  
+  # Save out data
+  data.frame(true_r    = true_r[r],
+             obs_r     = obs_r,
+             obs_lo    = obs_ci[1],
+             obs_hi    = obs_ci[2],
+             dis_r     = dis_r,
+             dis_lo    = dis_ci[1],
+             dis_hi    = dis_ci[2],
+             bayes_r   = bayes_r,
+             bayes_lo  = hdi[1],
+             bayes_hi  = hdi[2])
+}
+# Stop the parallel boi
+stopCluster(cl)
+
+# Hacky way to get some ggplot
+qplot() +
+  geom_line(aes(x = true_r, y = true_r), col = I(&quot;black&quot;),
+            linetype = 2, size = 1) +
+  geom_ribbon(aes(x = true_r,
+                  ymin = joint_dat$obs_lo,
+                  ymax = joint_dat$obs_hi,
+                  fill = I(&quot;gray&quot;)), alpha = .2) +
+  geom_ribbon(aes(x = true_r,
+                  ymin = joint_dat$bayes_lo,
+                  ymax = joint_dat$bayes_hi,
+                  fill = I(&quot;#8F2727&quot;)), alpha = .2) +
+  geom_ribbon(aes(x = true_r,
+                  ymin = joint_dat$dis_lo,
+                  ymax = joint_dat$dis_hi,
+                  fill = I(&quot;#DCBCBC&quot;)), alpha = .2) +
+  geom_line(aes(x = true_r, y = joint_dat$obs_r, col = I(&quot;gray&quot;))) +
+  geom_line(aes(x = true_r, y = joint_dat$dis_r, col = I(&quot;#DCBCBC&quot;))) +
+  geom_line(aes(x = true_r, y = joint_dat$bayes_r, col = I(&quot;#8F2727&quot;))) +
+  annotate(&quot;text&quot;, x = .8, y = .45, label = &quot;Observed&quot;, 
+           color = &quot;gray&quot;, size = 5) +
+  annotate(&quot;text&quot;, x = .35, y = .6, label = &quot;Disattenuated&quot;, 
+           color = &quot;#DCBCBC&quot;, size = 5) +
+  annotate(&quot;text&quot;, x = .9, y = .8, label = &quot;Generative&quot;, 
+           color = &quot;#8F2727&quot;, size = 5) +
+  coord_cartesian(xlim = c(0,1), ylim = c(0,1)) +
+  ggtitle(&quot;Self-report &amp; Behavioral Task Convergence&quot;) +
+  xlab(&quot;True Generating Correlation&quot;) +
+  ylab(&quot;Estimated Correlation&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="/post/2020-06-13-on-curbing-your-measurement-error_files/figure-html/unnamed-chunk-12-1.svg" width="672" /></p>
+<p>And there we have it! The generative and classical disattenuation approaches produce almost identical correlation estimates and 50% uncertainty intervals. In fact, if you are having trouble identifying the classical disattenutation line and intervals, it is because they are just that hard to distinguish from those of the generative model.</p>
+<p>Note that there is some noise across the range of “true” (or generating) correlations, which arises from the probabilistic nature of the simulated data. We could get a better sense of what the approaches produce in expectation by running many iterations for each true/generating correlation, but I prefer the above approach to get a sense of how each may work in a single study.</p>
+</div>
+</div>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<p>The current post demonstrated that generative models are well-suited to make inference on individual differences, and in fact they can give us results similar to approaches developed within the framework of classical test theory (i.e. the correction for attenuation, true score estimation, etc.). Regardless of the approach you take, the results here make it clear that accounting for uncertainty (or reliability) is very important when our goal is to make inference on individual differences. Otherwise, our statistical inferences will be biased and overconfident. Moving forward, I hope that you consider accounting for such uncertainty in your models, regardless of the approach you decide to take.</p>
+<p>More generally, the generative modeling approach is easily extendable. Unlike the classical test theory approach, generative models do not require us to work out a new sampling distribution each time we modify the assumed data-generating model. Instead, we specify the model in a way that is consistent with our theory, and the joint estimation of all parameters allows us to account for uncertainty (or the lack of precision of parameter estimates) across all levels of analysis. Therefore, when doing generative modeling, we do not necessarily need to think about the reliability of our measure–instead we can think about uncertanity in our model parameters. The model can then be refined, extended, and even simulated forward to generate predictions for observed data, and once we are happy with our generative model, we can use Bayesian estimation to condition on the data. The result is a joint probability distribution that contains all the information we need to make subsequent inferences and decisions–in our case, a self-report to behavioral task correlation. If our uncertainty intervals are too wide to make a good decision, we can collect more data. Further, we can conduct formal decision analyses (e.g., see <a href="https://twiecki.io/blog/2019/01/14/supply_chain/">Wiecki &amp; Kumar, 2019</a>). Altogether, generative modeling provides a flexible framework for developing and testing theories.</p>
+</div>
+<div id="a-final-note" class="section level1">
+<h1>A Final Note</h1>
+<p>I hope that this post was useful for you! I sure learned a lot throughout, and it was great to finally delve into the relationships between classical test theory and generative modeling. Perhaps you will consider generative modeling for your next research project :D.</p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.6.0 (2019-04-26)
+## Platform: x86_64-apple-darwin15.6.0 (64-bit)
+## Running under: macOS High Sierra 10.13.6
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] parallel  stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
+## 
+## other attached packages:
+##  [1] hBayesDM_1.0.2     Rcpp_1.0.1         doParallel_1.0.14 
+##  [4] iterators_1.0.10   mvtnorm_1.0-10     rstan_2.19.2      
+##  [7] StanHeaders_2.19.0 ggridges_0.5.1     ggplot2_3.1.1     
+## [10] foreach_1.4.4      dplyr_0.8.3       
+## 
+## loaded via a namespace (and not attached):
+##  [1] pillar_1.4.1       compiler_3.6.0     formatR_1.7       
+##  [4] plyr_1.8.4         prettyunits_1.0.2  tools_3.6.0       
+##  [7] pkgbuild_1.0.3     digest_0.6.19      evaluate_0.14     
+## [10] tibble_2.1.3       gtable_0.3.0       pkgconfig_2.0.2   
+## [13] rlang_0.4.5        cli_1.1.0          yaml_2.2.0        
+## [16] blogdown_0.13      xfun_0.7           loo_2.1.0         
+## [19] gridExtra_2.3      withr_2.1.2        stringr_1.4.0     
+## [22] knitr_1.23         stats4_3.6.0       grid_3.6.0        
+## [25] tidyselect_0.2.5   data.table_1.12.2  inline_0.3.15     
+## [28] glue_1.3.1         R6_2.4.0           processx_3.3.1    
+## [31] rmarkdown_1.13     bookdown_0.11      reshape2_1.4.3    
+## [34] callr_3.2.0        purrr_0.3.3        magrittr_1.5      
+## [37] matrixStats_0.54.0 ps_1.3.0           scales_1.0.0      
+## [40] codetools_0.2-16   htmltools_0.3.6    assertthat_0.2.1  
+## [43] colorspace_1.4-1   labeling_0.3       stringi_1.4.3     
+## [46] lazyeval_0.2.2     munsell_0.5.0      crayon_1.3.4</code></pre>
+</div>
+
+    </div>
+  </div>
+
+</article>
+
+
+
+<div class="article-container">
+  <h3>Related</h3>
+  <ul>
+    
+    <li><a href="/post/2020-05-16-hamiltonian-monte-carlo-in-r/">Hamiltonian Monte Carlo in R</a></li>
+    
+    <li><a href="/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/">Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</a></li>
+    
+    <li><a href="/post/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/">On the equivalency between frequentist Ridge (and LASSO) regression and hierarchial Bayesian regression</a></li>
+    
+    <li><a href="/post/2018-03-24-human-choice-and-reinforcement-learning-3/">Human Choice and Reinforcement Learning (3)</a></li>
+    
+    <li><a href="/post/2017-04-07-human-choice-and-reinforcement-learning-2/">Human Choice and Reinforcement Learning (2)</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="container">
+  <nav>
+  <ul class="pager">
+    
+    <li class="previous"><a href="/post/2020-05-16-hamiltonian-monte-carlo-in-r/"><span
+      aria-hidden="true">&larr;</span> Hamiltonian Monte Carlo in R</a></li>
+    
+
+    
+  </ul>
+</nav>
+
+</div>
+
+<div class="article-container">
+  
+<section id="comments">
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "haines-lab-com" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; 2017 Nathaniel Haines &middot; 
+
+      Powered by the <a href="https://github.com/gcushen/hugo-academic" target="_blank">Academic
+      theme</a> for <a href="http://gohugo.io" target="_blank">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.2/imagesloaded.pkgd.min.js" integrity="sha512-iHzEu7GbSc705hE2skyH6/AlTpOfBmkx7nUqTLGzPYR+C1tRaItbRlJ7hT/D3YQ9SV0fqLKzp4XY9wKulTBGTw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js" integrity="sha512-Z5heTz36xTemt1TbtbfXtTq5lMfYnOkXM2/eWcTTiLU01+Sw4ku1i7vScDc8fWhrP2abz9GQzgKH5NGBLoYlAw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/plugins/ScrollToPlugin.min.js" integrity="sha512-CDeU7pRtkPX6XJtF/gcFWlEwyaX7mcAp5sO3VIu/ylsdR74wEw4wmBpD5yYTrmMAiAboi9thyBUr1vXRPA7t0Q==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/r.min.js"></script>
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
+    
+    
+
+  </body>
+</html>
+
+
+
+<div id="disqus_thread"></div>
+<script>
+
+
+
+
+
+};
+(function() { 
+var d = document, s = d.createElement('script');
+s.src = 'https://haines-lab-com.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
