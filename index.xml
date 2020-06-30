@@ -760,9 +760,9 @@ qplot() +
   geom_line(aes(x = true_r, y = joint_dat$bayes_r, col = I(&amp;quot;#8F2727&amp;quot;))) +
   annotate(&amp;quot;text&amp;quot;, x = .8, y = .45, label = &amp;quot;Observed&amp;quot;, 
            color = &amp;quot;gray&amp;quot;, size = 5) +
-  annotate(&amp;quot;text&amp;quot;, x = .35, y = .6, label = &amp;quot;Disattenuated&amp;quot;, 
+  annotate(&amp;quot;text&amp;quot;, x = .35, y = .72, label = &amp;quot;Disattenuated&amp;quot;, 
            color = &amp;quot;#DCBCBC&amp;quot;, size = 5) +
-  annotate(&amp;quot;text&amp;quot;, x = .9, y = .8, label = &amp;quot;Generative&amp;quot;, 
+  annotate(&amp;quot;text&amp;quot;, x = .85, y = .75, label = &amp;quot;Generative&amp;quot;, 
            color = &amp;quot;#8F2727&amp;quot;, size = 5) +
   coord_cartesian(xlim = c(0,1), ylim = c(0,1)) +
   ggtitle(&amp;quot;Self-report &amp;amp; Behavioral Task Convergence&amp;quot;) +
