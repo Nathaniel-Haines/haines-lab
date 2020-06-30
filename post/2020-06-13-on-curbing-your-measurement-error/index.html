@@ -48,13 +48,13 @@
     
   
 
-  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Computational Psychology">
-  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Computational Psychology">
+  <link rel="alternate" href="http://haines-lab.com/index.xml" type="application/rss+xml" title="Computational Psychology">
+  <link rel="feed" href="http://haines-lab.com/index.xml" type="application/rss+xml" title="Computational Psychology">
 
   <link rel="icon" type="image/png" href="/img/icon.png">
   <link rel="apple-touch-icon" type="image/png" href="/img/apple-touch-icon.png">
 
-  <link rel="canonical" href="/post/2020-06-13-on-curbing-your-measurement-error/">
+  <link rel="canonical" href="http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/">
 
   
 
@@ -221,35 +221,35 @@
   <ul class="share">
     <li>
       <a class="facebook"
-         href="https://www.facebook.com/sharer.php?u=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f"
+         href="https://www.facebook.com/sharer.php?u=http%3a%2f%2fhaines-lab.com%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f"
          target="_blank">
         <i class="fa fa-facebook"></i>
       </a>
     </li>
     <li>
       <a class="twitter"
-         href="https://twitter.com/intent/tweet?text=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models&amp;url=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f"
+         href="https://twitter.com/intent/tweet?text=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models&amp;url=http%3a%2f%2fhaines-lab.com%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f"
          target="_blank">
         <i class="fa fa-twitter"></i>
       </a>
     </li>
     <li>
       <a class="linkedin"
-         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f&amp;title=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2fhaines-lab.com%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f&amp;title=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models"
          target="_blank">
         <i class="fa fa-linkedin"></i>
       </a>
     </li>
     <li>
       <a class="weibo"
-         href="http://service.weibo.com/share/share.php?url=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f&amp;title=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models"
+         href="http://service.weibo.com/share/share.php?url=http%3a%2f%2fhaines-lab.com%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f&amp;title=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models"
          target="_blank">
         <i class="fa fa-weibo"></i>
       </a>
     </li>
     <li>
       <a class="email"
-         href="mailto:?subject=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models&amp;body=%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f">
+         href="mailto:?subject=On%20Curbing%20Your%20Measurement%20Error%3a%20From%20Classical%20Corrections%20to%20Generative%20Models&amp;body=http%3a%2f%2fhaines-lab.com%2fpost%2f2020-06-13-on-curbing-your-measurement-error%2f">
         <i class="fa fa-envelope"></i>
       </a>
     </li>
@@ -288,7 +288,7 @@
 <h3>Defining Reliability</h3>
 <p>In psychology and education, reliability is often discussed within the context of classical test theory, which assumes that our estimates reflect some combination of the unobserved “true score” plus some error:</p>
 <p><span class="math display">\[X = \theta + \epsilon\]</span>
-where <span class="math inline">\(\epsilon\)</span> is measurement error that contaminates the “true score” <span class="math inline">\(\theta\)</span>. Note that there are different interpretations of what the truth actually is, but here we will use the following definition: <strong>the true score is the expected value of the observed score over many independent realizations</strong> (for alternative definitions of the true score, see Lord &amp; Novick, 1968). Mathematically, we can represent this as:</p>
+where <span class="math inline">\(\epsilon\)</span> is measurement error that contaminates the “true score” <span class="math inline">\(\theta\)</span>. Note that there are different interpretations of what the truth actually is, but here we will use the following definition: <strong>the true score is the expected value of the observed score over many independent realizations</strong> (for alternative definitions of the true score, see <a href="https://psycnet.apa.org/record/1968-35040-000">Lord, Novick, &amp; Birnbaum, 1968</a>). Mathematically, we can represent this as:</p>
 <p><span class="math display">\[\theta = \mathbb{E}[X]\]</span>
 Following this definition, the error for a single realization is then defined as:</p>
 <p><span class="math display">\[\epsilon = X - \mathbb{E}[X]\]</span>
@@ -438,13 +438,13 @@ rel_dat %&gt;%
 <div id="using-reliability-to-improve-individual-level-inference" class="section level4">
 <h4>Using Reliability to Improve Individual-level Inference</h4>
 <p>Importantly, we can use our reliability estimate to improve our inference on individual-level true scores.</p>
-<p>Specifically, Kelley demonstrated–in as early as 1920 (see also Kelley, 1947)–that we can estimate the true scores for each individual, <span class="math inline">\(\hat{\theta}_i\)</span>, by regressing the observed scores on the reliability estimate:</p>
+<p>Specifically, Kelley demonstrated–in as early as 1920 (see <a href="https://psycnet.apa.org/record/1951-05849-000">Kelley, 1947</a>)–that we can estimate the true scores for each individual, <span class="math inline">\(\hat{\theta}_i\)</span>, by regressing the observed scores on the reliability estimate:</p>
 <p><span class="math display">\[\hat{\theta}_i = (1-\rho^{2}_{X,\theta})\bar{X} + \rho^{2}_{X,\theta}X_i\]</span></p>
 <p>Here, <span class="math inline">\(\bar{X}\)</span> is the mean of the observed scores across all subjects, given by <span class="math inline">\(\bar{X} = \frac{1}{N}\sum_{i=1}^{N}X_i\)</span>. Intuitively, the true score for each subject is estimated by pooling the their observed score toward the group-level mean score in proportion to the reliability of the individual-level estimate. If <span class="math inline">\(\rho^{2}_{X,\theta} = 1\)</span>, then <span class="math inline">\(X_i = \hat{\theta}_i\)</span> for all individuals–there is no pooling. Conversely, as <span class="math inline">\(\rho^{2}_{X,\theta} \rightarrow 0\)</span>, the individual-level observed scores have no weight at all, and the estimated true score is simply the group-level mean for each individual.</p>
 <p>In addition to estimating the true scores as observed scores pooled toward the group mean, Kelley also showed that the standard error of true scores is reduced in the following manner (for a derivation see this <a href="https://education.uiowa.edu/sites/education.uiowa.edu/files/documents/centers/casma/publications/casma-technical-report-5.pdf">technical report by Brennan, 2012</a>):</p>
 <p><span class="math display">\[\hat{\sigma}_{\epsilon} = \sigma_{X}\sqrt{1-\rho^{2}_{X,\theta}}\sqrt{\rho^{2}_{X,\theta}}\]</span>
 This standard error of the true score estimates is lower than that of the observed scores, which is given by <span class="math inline">\(\hat{\sigma}_{\epsilon} = \sigma_{X}\sqrt{1-\rho^{2}_{X,\theta}}\)</span>. Comparing the equations, we see that the true score standard error incorporates an additional term, <span class="math inline">\(\sqrt{\rho^{2}_{X,\theta}}\)</span>.</p>
-<p>These equations are rather interesting for a few reasons. First, they were discovered in 1920 (100 years ago!), long before James-Stein estimators (which similarly pool individual-level estimates toward the group-level mean) made their way into statistics (check out <a href="http://cda.psych.uiuc.edu/web_407_spring_2014/prediction_week5.pdf">these slides</a> for some cool historical notes on this).</p>
+<p>These equations are rather interesting for a few reasons. First, they were discovered in 1920 (100 years ago!), long before <a href="https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator">James-Stein estimators</a> (which similarly pool individual-level estimates toward the group-level mean) made their way into statistics (check out <a href="http://cda.psych.uiuc.edu/web_407_spring_2014/prediction_week5.pdf">these slides</a> for some cool historical notes on this).</p>
 <p>Second, they have a Bayesian interpretation! In particular, if we assume that the “true scores” have a normal prior distribution, and that true scores are distributed normally with respect to the observed scores, empirical Bayesian estimation produces posterior means that are equivalent to the Kelley true score point estimates described above (see page 22 of <a href="https://books.google.com/books?id=dMnoX8YnYgsC&amp;lpg=PA22&amp;ots=reS41nEOre&amp;dq=kelley%201947%20regress&amp;pg=PP11#v=onepage&amp;q=kelley%201947%20regress&amp;f=false">de Gruijter &amp; van der Kamp, 2008</a>). It is also worth noting that many popular multilevel/hierarchical modeling software packages work using something akin to empirical Bayesian estimation (e.g., <a href="https://mc-stan.org/users/documentation/case-studies/tutorial_rstanarm.html"><code>lmer</code> in R</a>). It goes without saying that using group-level information can be exceedingly useful to improve individual-level inference.</p>
 <p>OK, so this has all been a bit abstract. To make things more concrete, we can run a simulation to observe how the true score estimation/pooling described above works. The R code below simulates data from a binomial distribution for 20 “subjects” with success probabilities centered around <span class="math inline">\(.7\)</span>. Additionally, we will use item sizes of 10, 30, and 100 to demonstrate how pooling effects changes as a function of the number of items in a measure (due to the effect of number of items on resulting reliability).</p>
 <pre class="r"><code>set.seed(43202)
@@ -739,7 +739,7 @@ dis_dat %&gt;%
 <h3>Generative Model of Response Time Data</h3>
 <p>For the response time model, we will assume that response times for each individual <span class="math inline">\(i\)</span> and for each trial <span class="math inline">\(t\)</span> arise from a normal distribution, which we will term the <em>normal model</em>:</p>
 <p><span class="math display">\[\text{RT}_{i,t} \sim \mathcal{N}(\delta_i, \sigma_i)\]</span>
-Here, <span class="math inline">\(\delta_i\)</span> and <span class="math inline">\(\sigam_i\)</span> indicate the mean and standard deviation, respectively, of the response time distribution for individual <span class="math inline">\(i\)</span>. Of course, response times are not typically normally distributed in many beahvioral tasks, but we will ignore that for this demonstration.</p>
+Here, <span class="math inline">\(\delta_i\)</span> and <span class="math inline">\(\sigma_i\)</span> indicate the mean and standard deviation, respectively, of the response time distribution for individual <span class="math inline">\(i\)</span>. Of course, response times are not typically normally distributed in many beahvioral tasks, but we will ignore that for this demonstration.</p>
 <p>Like the bernoulli model for the questionnaire data, we can then assume that the
 individual-level normal model parameters are themselves generated by normal distributions such that <span class="math inline">\(\delta_i \sim \mathcal{N}(\mu_{\delta},\sigma_{\delta})\)</span> and <span class="math inline">\(\text{log}(\sigma_i) \sim \mathcal{N}(\mu_{\sigma},\sigma_{\sigma})\)</span>. To specify the group-level parameters, it is important to remember that response times are positive valued, and typically greater than 200 milliseconds. We could encode this into the model in the prior distribution. However, for the sake of brevity, we will not focus too much on this.</p>
 <p>For the <span class="math inline">\(\delta\)</span> parameters, we can assume that <span class="math inline">\(\mu_{\delta} \sim \mathcal{N}(1,1)\)</span> and <span class="math inline">\(\text{log}(\sigma_{\delta}) \sim \mathcal{N}(0,0.5)\)</span>. Next, for the <span class="math inline">\(\sigma\)</span> parameters, we can assume that <span class="math inline">\(\mu_{\sigma} \sim \mathcal{N}(-1,0.2)\)</span> and <span class="math inline">\(\text{log}(\sigma_{\sigma}) \sim \mathcal{N}(0,0.5)\)</span>. This parameterization whould ensure that response times are generally above 0, but there is still a good amount of variation. It is much harder to form an intuition for what types of response time distributions these priors would produce. Therefore, let us simulate!</p>
@@ -878,7 +878,7 @@ library(rstan)
 library(hBayesDM)</code></pre>
 <p>Now, the R code below will simulate data where the correlation between the individual-level generative parameters <span class="math inline">\(\theta_i\)</span> and <span class="math inline">\(\delta_i\)</span> (or the “true scores”) varies from 0 to 1. Then, we will use the classical, reliability-based disattenuation formula along with the joint generative model to recover the true correlation.</p>
 <p>The simulation uses 100 “participants”. Additionally, the questionnaire has 10 items, and the response time task has 50 trials. To the code!:</p>
-<pre class="r"><code>set.seed(43202)
+<pre class="r"><code>set.seed(43201)
 
 # Number of subjects and items/trials for questionnaire/task
 n_subj   &lt;- 100
@@ -1082,8 +1082,6 @@ qplot() +
   <h3>Related</h3>
   <ul>
     
-    <li><a href="/post/2020-05-16-hamiltonian-monte-carlo-in-r/">Hamiltonian Monte Carlo in R</a></li>
-    
     <li><a href="/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/">Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</a></li>
     
     <li><a href="/post/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/">On the equivalency between frequentist Ridge (and LASSO) regression and hierarchial Bayesian regression</a></li>
@@ -1091,6 +1089,8 @@ qplot() +
     <li><a href="/post/2018-03-24-human-choice-and-reinforcement-learning-3/">Human Choice and Reinforcement Learning (3)</a></li>
     
     <li><a href="/post/2017-04-07-human-choice-and-reinforcement-learning-2/">Human Choice and Reinforcement Learning (2)</a></li>
+    
+    <li><a href="/post/2017-04-04-choice_rl_1/">Human Choice and Reinforcement Learning (1)</a></li>
     
   </ul>
 </div>
@@ -1100,8 +1100,8 @@ qplot() +
   <nav>
   <ul class="pager">
     
-    <li class="previous"><a href="/post/2020-05-16-hamiltonian-monte-carlo-in-r/"><span
-      aria-hidden="true">&larr;</span> Hamiltonian Monte Carlo in R</a></li>
+    <li class="previous"><a href="http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/"><span
+      aria-hidden="true">&larr;</span> Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</a></li>
     
 
     

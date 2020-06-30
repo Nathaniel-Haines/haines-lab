@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
-    <lastBuildDate>Thu, 05 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://haines-lab.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>On Curbing Your Measurement Error: From Classical Corrections to Generative Models</title>
+      <link>http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/</link>
+      <pubDate>Sat, 13 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/</guid>
+      <description>Introduction In this post, we will explore how measurement error arising from imprecise parameter estimation can be corrected for. Specifically, we will explore the case where our goal is to estimate the correlation between a self-report and behavioral measure–a common situation throughout the social and behavioral sciences.
+For example, as someone who studies impulsivity and externalizing psychopathology, I am often interested in whether self-reports of trait impulsivity (e.g., the Barratt Impulsiveness Scale) correlate with performance on tasks designed to measure impulsive behavior (e.</description>
+    </item>
     
     <item>
       <title>Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</title>
