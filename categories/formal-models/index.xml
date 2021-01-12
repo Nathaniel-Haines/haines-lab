@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Measurement Error on Computational Psychology</title>
-    <link>http://haines-lab.com/categories/measurement-error/</link>
-    <description>Recent content in Measurement Error on Computational Psychology</description>
+    <title>Formal Models on Computational Psychology</title>
+    <link>http://haines-lab.com/categories/formal-models/</link>
+    <description>Recent content in Formal Models on Computational Psychology</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
     <lastBuildDate>Sun, 10 Jan 2021 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://haines-lab.com/categories/measurement-error/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://haines-lab.com/categories/formal-models/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -21,16 +21,6 @@
       <description>Introduction The Dunning-Kruger effect is perhaps one of the most well-known effects in all of social psychology, defined as the phenomenon wherein people with low “objective” skill tend to over-estimate their objective skill, whereas people with high objective skill tend to under-estimate their skill. In the popular media, the Dunning-Kruger effect is often summarized in a figure like the one below (source):
 Caption: The Dunning-Kruger Effect in Popular Media
  Despite the widespread use of figures such as the one above, the specific form of the effect is misleading–it suggests that people with low objective skill perceive their skill to be higher than those with the highest skill, which is not what Dunning and Kruger actually found in their original 1999 study.</description>
-    </item>
-    
-    <item>
-      <title>On Curbing Your Measurement Error: From Classical Corrections to Generative Models</title>
-      <link>http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/</link>
-      <pubDate>Sat, 13 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/</guid>
-      <description>Introduction In this post, we will explore how measurement error arising from imprecise parameter estimation can be corrected for. Specifically, we will explore the case where our goal is to estimate the correlation between a self-report and behavioral measure–a common situation throughout the social and behavioral sciences.
-For example, as someone who studies impulsivity and externalizing psychopathology, I am often interested in whether self-reports of trait impulsivity (e.g., the Barratt Impulsiveness Scale) correlate with performance on tasks designed to measure impulsive behavior (e.</description>
     </item>
     
   </channel>

@@ -11,6 +11,921 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>A Series on Building Formal Models of Classic Psychological Effects: Part 1, the Dunning-Kruger Effect</title>
+      <link>http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/</guid>
+      <description>&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;The Dunning-Kruger effect is perhaps one of the most well-known effects in all of social psychology, defined as the phenomenon wherein people with low “objective” skill tend to over-estimate their objective skill, whereas people with high objective skill tend to under-estimate their skill. In the popular media, the Dunning-Kruger effect is often summarized in a figure like the one below (&lt;a href=&#34;https://www.businesstimes.com.sg/brunch/not-so-blissful-ignorance-the-dunning-kruger-effect-at-work&#34;&gt;source&lt;/a&gt;):&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;http://haines-lab.com/img/dunning-kruger_misinterpretation.png&#34; alt=&#34;Caption: The Dunning-Kruger Effect in Popular Media&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Caption: The Dunning-Kruger Effect in Popular Media&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Despite the widespread use of figures such as the one above, the specific form of the effect is misleading–it suggests that people with low objective skill perceive their skill to be &lt;em&gt;higher than those with the highest skill&lt;/em&gt;, which is not what Dunning and Kruger actually found in their &lt;a href=&#34;https://doi.org/10.1037/0022-3514.77.6.1121&#34;&gt;original 1999 study&lt;/a&gt;. As clarified by many others (e.g., see &lt;a href=&#34;https://www.talyarkoni.org/blog/2010/07/07/what-the-dunning-kruger-effect-is-and-isnt/&#34;&gt;here&lt;/a&gt;), Dunning and Kruger actually found the following:&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;http://haines-lab.com/img/orig_dunning-kruger_plots.png&#34; alt=&#34;Caption: Original Data from Dunning &amp;amp; Kruger (1999)&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Caption: Original Data from Dunning &amp;amp; Kruger (1999)&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;The basic pattern across all these different domains is consistent with our original definition of the effect–that people with low objective skill tend to over-estimate their skill to quite a large extent, yet those with high objective skill under-estimate their skill, but to a lesser extent. However, unlike the popularized interpretation, the relationship between objective and perceived skill appears to be monotonic, such that, on average, people with low skill still perceive themselves to be less skilled compared to high-skilled people.&lt;/p&gt;
+&lt;p&gt;Regardless of misinterpretations in the popular media, the notoriety of the Dunning-Kruger effect cannot be understated. As of January 2021, the original study has been cited upwards of 6500 times on Google Scholar alone, and the basic Dunning-Kruger effect has been consistently replicated across samples, domains, and contexts (see &lt;a href=&#34;https://doi.org/10.1016/B978-0-12-385522-0.00005-6&#34;&gt;here&lt;/a&gt;). In many ways, research on the Dunning-Kruger effect theorefore embodies the highest ideals of contemporary psychological science, passing the bar on replicability, generalizability, and robustness that psychological scientists have been striving for since the advent of the &lt;a href=&#34;https://en.wikipedia.org/wiki/Replication_crisis&#34;&gt;replication crisis&lt;/a&gt; (see also &lt;a href=&#34;https://www.psychologytoday.com/us/blog/how-do-you-know/202012/dunning-kruger-isnt-real&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;There is just one small problem…&lt;/p&gt;
+&lt;div id=&#34;wait-the-dunning-kruger-effect-is-just-measurement-error&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Wait, the Dunning-Kruger Effect is just Measurement Error?&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/img/measurement_error_meme.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Perhaps surprisingly, the traditional methods used to measure the Dunning-Kruger effect have always been heavily scrutinized–even the original authors acknowledged potential issues with measurement error. Specifically, it is unclear to what extent that the classic effect arises due to an actual psychological bias, versus more mundain statistical measurement error resulting from regression to the mean. In fact, in their 1999 article, Dunning and Kruger explicitly recognize this possibility (p. 1124):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“… the reader may point to the regression effect as an alternative interpretation of our results. … Because perceptions of ability are imperfectly correlated with actual ability, the regression effect virtually guarantees this result. … Despite the inevitability of the regression effect, we believe that the overestimation we observed was more psychological than artifactual. For one, if regression alone were to blame for our results, then the magnitude of miscalibration among the bottom quartile would be comparable with that of the top quartile. A glance at Figure 1 quickly disabuses one of this notion.”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Although Dunning and Kruger were willing to state their belief that their results were attributable more so to psychological rather than statistical effects, they did not provide an explicit generative model for their pattern of results. Their reasoning appears sound (i.e. that differences in magnitude of mis-estimation for those under/over average indicates something beyond regression to the mean), but without a generative model, it is unclear how much faith we should place in the authors’ beliefs.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;simulating-the-dunning-kruger-effect&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Simulating the Dunning-Kruger Effect&lt;/h2&gt;
+&lt;p&gt;Fortunately, a number of simulation studies have since been conducted to show exactly how measurement error can generate data consistent with the Dunning-Kruger effect. &lt;a href=&#34;https://doi.org/10.1016/S0191-8869(01)00174-X&#34;&gt;Ackerman et al. (2002)&lt;/a&gt; was one of the first, which showed how the pattern found in Dunning and Kruger’s original study could arise from plotting any two variables with less than a perfect correlation (i.e. &lt;span class=&#34;math inline&#34;&gt;\(r=1\)&lt;/span&gt;) using the objective skill quantile versus perceived skill percentile convention from the original study. For example, if observed objective skill and perceived skill are correlated at &lt;span class=&#34;math inline&#34;&gt;\(r=.19\)&lt;/span&gt;, using the standard plotting convention, Ackerman et al. (2002) obtained the following pattern:&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;http://haines-lab.com/img/ackerman_2002.png&#34; alt=&#34;Caption: Figure 1 from Ackerman et al. (2002)&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Caption: Figure 1 from Ackerman et al. (2002)&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;The take-away from the above results is that any less-than-perfect correlation between two variables will produce the general pattern found in Dunning and Kruger’s original study, which results from a statistical phenomenon termed &lt;a href=&#34;https://en.wikipedia.org/wiki/Regression_toward_the_mean&#34;&gt;&lt;em&gt;regression to the mean&lt;/em&gt;&lt;/a&gt;. If the concept of regression to the mean seems a bit magical (it certainly was for me when I was first introduced), it is useful to simulate data to get a sense of what is going on. The R code below replicates previous simulation studies, but at three different correlations between objective and perceived skill:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Libraries we will use throughout the post
+library(mvtnorm)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(gghighlight)
+library(patchwork)
+library(foreach)
+library(rstan)
+library(bayesplot)
+library(hBayesDM)
+library(httr)
+
+# RNG seed for reproducing
+set.seed(43202)
+
+# Number of simulated participants
+n &amp;lt;- 100
+
+# Group-level means/SDs on &amp;quot;objective&amp;quot; and perceived skill assessments 
+mu    &amp;lt;- c(0,0)
+sigma &amp;lt;- c(1,1)
+
+# Three different correlations between objective and perceived skill
+obj_per_cor &amp;lt;- c(0, .5, 1)
+
+# Simulate data
+sim_dk_plots &amp;lt;- foreach(i=obj_per_cor) %do% {
+  # Make correlation matrix
+  R &amp;lt;- matrix(c(1, i,
+                i, 1),
+            ncol = 2)
+
+  # Construct covariance matrix
+  Epsilon &amp;lt;- diag(sigma)%*%R%*%diag(sigma)
+  
+  # Simulate correlated data
+  sim &amp;lt;- rmvnorm(n, mu, Epsilon)
+  
+  # Compute quantiles, summarize and save out plot for given correlation
+  sim %&amp;gt;%
+    as.data.frame() %&amp;gt;%
+    rename(obs_obj = V1,
+           obs_per = V2) %&amp;gt;%
+    mutate(quantile = cut_number(obs_obj, n = 4, labels = F)) %&amp;gt;%
+    group_by(quantile) %&amp;gt;%
+    summarize(mu_obj = mean(obs_obj),
+              mu_per = mean(obs_per)) %&amp;gt;%
+    ggplot() +
+    geom_point(aes(x = 1:4, y = mu_obj), color = I(&amp;quot;black&amp;quot;)) +
+    geom_line(aes(x = 1:4, y = mu_obj), color = I(&amp;quot;black&amp;quot;)) +
+    geom_point(aes(x = 1:4, y = mu_per), color = I(&amp;quot;#8F2727&amp;quot;)) +
+    geom_line(aes(x = 1:4, y = mu_per), color = I(&amp;quot;#8F2727&amp;quot;)) +
+    annotate(&amp;quot;text&amp;quot;, label = &amp;quot;Objective&amp;quot;, x = 2.5, y = -1, 
+             color = I(&amp;quot;black&amp;quot;), size = 5) +
+    annotate(&amp;quot;text&amp;quot;, label = &amp;quot;Perceived&amp;quot;, x = 1.8, y = .5, 
+             color = I(&amp;quot;#8F2727&amp;quot;), size = 5) +
+    ggtitle(paste0(&amp;quot;r = &amp;quot;, i)) +
+    xlab(&amp;quot;Quantile&amp;quot;) +
+    ylab(&amp;quot;Score&amp;quot;) +
+    ylim(-1.7, 1.5) +
+    theme_minimal(base_size = 15) +
+    theme(panel.grid = element_blank(), 
+          plot.title = element_text(hjust=.5))
+}
+
+# Plot objective versus perceived quantiles
+sim_dk_plots[[1]] | sim_dk_plots[[2]] | sim_dk_plots[[3]]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-1-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Very interesting! We are able to replicate the simulation studies from before. More importantly, the interpretation of the Dunning-Kruger effect is not looking so good. As in previous simulation studies, our simulated data looks strikingly similar to that reported by Dunning and Kruger in their original study, yet our model contains no psychological mechanisms that could produce the effect–the results are purely due to the lack of correlation between objective and perceived skill, which could result from a number of sources including measurement error. In fact, a few recent studies (see &lt;a href=&#34;http://dx.doi.org/10.5038/1936-4660.9.1.4&#34;&gt;here&lt;/a&gt;, and &lt;a href=&#34;http://dx.doi.org/10.5038/1936-4660.10.1.4&#34;&gt;here&lt;/a&gt;) have used this line of reasoning to claim that the traditional psychological interpretation of the Dunning-Kruger effect is likely incorrect, and a recent &lt;a href=&#34;mcgill.ca/oss/article/critical-thinking/dunning-kruger-effect-probably-not-real&#34;&gt;scicomm article&lt;/a&gt; brought the controversy to academic Twitter (&lt;a href=&#34;https://twitter.com/Nate__Haines/status/1345859629444706304?s=20&#34;&gt;which I participated in&lt;/a&gt;, inspiring this post!).&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;building-a-generative-model-of-the-dunning-kruger-effect&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Building a Generative Model of the Dunning-Kruger Effect&lt;/h1&gt;
+&lt;div id=&#34;a-simple-noise-bias-model&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;A Simple Noise + Bias Model&lt;/h2&gt;
+&lt;p&gt;So far, we have found that the group-level Dunning-Kruger effect can be simulated through regression to the mean, which we expect to see anytime we are observing the relationship between any two variables that have less than a perfect correlation. However, there are two problems with relying on regression to the mean &lt;strong&gt;&lt;em&gt;as an explanation&lt;/em&gt;&lt;/strong&gt; for how the Dunning-Kruger effect is generated:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Regression to the mean alone cannot account for the differences in mis-estimation found in real data between those with high versus low objective skill, and&lt;/li&gt;
+&lt;li&gt;Regression to the mean results from the correlation between two variables, but what is it exactly that causes a high or low correlation between objective and perceived skill?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Regarding (1), if you compare the simulated data from either Ackerman et al. (2002) or from our own example in the preceeding section to the emprical data in Dunning and Kruger (1999), you will see that our simulated data indeed misses this difference in mis-estimation. In the emprical data, the perceived skill line is shifted upward relative to what we would expect. Therefore, it is clear that regression to the mean alone will not re-produce all aspects of the traditional Dunning-Kruger effect.&lt;/p&gt;
+&lt;p&gt;Point (2) is a bit more nuanced, and it is something that we can only really answer by thinking about the data-generating process hollistically. For example, if we assume that there is some latent, underlying skill that leads to both observed performance on an objective measure and perceived performance on a subjective measure, how could this single latent skill produce patterns that are consistent with real-world data? &lt;a href=&#34;https://doi.org/10.1037/0022-3514.90.1.60&#34;&gt;Burson et al. (2006)&lt;/a&gt; took exactly this approach, which &lt;strong&gt;&lt;em&gt;I term the generative approach&lt;/em&gt;&lt;/strong&gt; (see &lt;a href=&#34;https://psyarxiv.com/xr7y3&#34;&gt;here&lt;/a&gt;, &lt;a href=&#34;http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/&#34;&gt;here&lt;/a&gt;, and &lt;a href=&#34;http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/&#34;&gt;here&lt;/a&gt;). They proposed a noise + bias model (see their model specification in the appendix, on p. 77), which assumes that each participant &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt;’s observed perceived skill rating &lt;span class=&#34;math inline&#34;&gt;\(y_{i,\text{per}}\)&lt;/span&gt; results from their objective underlying skill level &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;, in addition to some noise &lt;span class=&#34;math inline&#34;&gt;\(\epsilon\)&lt;/span&gt; and a bias term &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt; that captures over-confidence. Conceptually, there are many ways we could implement such a noise + bias model, but the authors chose to implement it as a linear model with normally distributed errors (note that the original model assumes that &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\epsilon\)&lt;/span&gt; can vary across participants, but I simplified here for illustration):&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{align} 
+  y_{i,\text{per}} &amp;amp; = \theta_i+ b + \epsilon \\
+  \epsilon &amp;amp; \sim \mathcal{N}(0,\sigma)
+\end{align}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;It is useful to take a moment and reflect on the difference between how the problem is formulated here, as opposed to, say, thinking only in terms of the observed correlation between objective and perceived skill. The above formulation puts forth a generative model of how the person-level observed data arise, and the parameters now have direct psychological interpretations. For example, &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt; is interpreted as a psychological bias that leads to over-confident perceptions if &lt;span class=&#34;math inline&#34;&gt;\(b&amp;gt;0\)&lt;/span&gt;, and &lt;span class=&#34;math inline&#34;&gt;\(\sigma\)&lt;/span&gt; can be thought of as a “perception noise” parameter that controls how far one’s observed perception judgements deviate from their objective underlying skill &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;. Before, when thinking about the problem in terms of the observed correlation, there was not a clear mapping from our psychological theory to the observed data. Our statistical toolbox consisted only of group-level means, standard deviations, and correlations, yet our target for inference was on person-level psychological processes that give rise to observed data. As a result, the theoretical value of our statistical model suffered.&lt;/p&gt;
+&lt;p&gt;Now, before using our generative model to explain the Dunning-Kruger effect, we first need to make a small extention. Specifically, Burson et al. (2006) specified the relationship between &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; (the underlying “objective” skill) and &lt;span class=&#34;math inline&#34;&gt;\(y_{i,\text{per}}\)&lt;/span&gt; (the observed perception ratings), but they did not specify how &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; produces observed data on the “objective” skill measure, which we will term &lt;span class=&#34;math inline&#34;&gt;\(y_{i,\text{obj}}\)&lt;/span&gt;. To do so, we will add a second noise term to the model that is specific to the objective measure, which gives us the following:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{align} 
+  y_{i,\text{obj}} &amp;amp; = \theta_i + \epsilon_{\text{obj}} \\
+  y_{i,\text{per}} &amp;amp; = \theta_i + b + \epsilon_{\text{per}} \\
+  \epsilon_{\text{obj}} &amp;amp; \sim \mathcal{N}(0,\sigma_{\text{obj}}) \\
+  \epsilon_{\text{per}} &amp;amp; \sim \mathcal{N}(0,\sigma_{\text{per}})
+\end{align}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;After this modification, we have a model of how one’s underlying skill (&lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;) generates observed data on both the objective measure (&lt;span class=&#34;math inline&#34;&gt;\(y_{i,\text{obj}}\)&lt;/span&gt;) and the subjective measure (&lt;span class=&#34;math inline&#34;&gt;\(y_{i,\text{per}}\)&lt;/span&gt;). Therefore, we can simulate person-level data from the model. Before doing so, however, I prefer to rearrange the terms on the model to clarify the generative structure (see also &lt;a href=&#34;https://drbenvincent.medium.com/the-dunning-kruger-effect-probably-is-real-9c778ffd9d1b&#34;&gt;Ben Vincent’s recent blog&lt;/a&gt;, in which he formulates the same generative model; note also that we have added an assumption about how &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; parameters are distributed):&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{align} 
+  \theta_i &amp;amp; \sim \mathcal{N}(0,1) \\
+  y_{i,\text{obj}} &amp;amp; \sim \mathcal{N}(\theta_i, \sigma_{\text{obj}}) \\
+  y_{i,\text{per}} &amp;amp; \sim \mathcal{N}(\theta_i + b, \sigma_{\text{per}})
+\end{align}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Despite being mathematically identical to the first formulation, I believe this new formulation makes our assumptions more clear–that each person’s observed data are generated by a normal distribution with a mean determined by their latent skill (&lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;), which is shifted by a bias term (&lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt;) when making perceived jugdements on their skill. Additionally, there is a context-specific &lt;span class=&#34;math inline&#34;&gt;\(\sigma\)&lt;/span&gt; parameter, which controls how much oberved performance on the objective measure and perceived ratings of skill vary around the objective underlying skill. Because the observed data are assumed to follow a normal distribution, I will term this the &lt;strong&gt;&lt;em&gt;normal noise + bias model&lt;/em&gt;&lt;/strong&gt;. However, it is worth emphasizing that this model is only one implementation of the core theoretical constructs of perception noise and bias, and we would need to modify the model–while retaining these core theoretical constructs–to extend it into domains wherein we do not expect continuous data. For example, if participants performed a True/False test to measure skill in some domain, a generative model should respect the structure of the observed data by producing dichotomous responses.&lt;/p&gt;
+&lt;p&gt;Alright! Enough on assumptions and limitations (for now :D), here is what happens when we simulate data from the normal noise + bias model, and then summarize the results using the traditional Dunning-Kruger plotting convention:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# RNG seed for reproducing
+set.seed(43204)
+
+# Number of simulated participants
+n &amp;lt;- 100
+
+# Latent &amp;quot;objective&amp;quot; skill
+theta &amp;lt;- rnorm(n, 0, 1)
+
+# Set noise parameters
+sigma_obj &amp;lt;- 1
+sigma_per &amp;lt;- 1
+
+# Set bias parameter
+b &amp;lt;- 1
+
+# Simulate objective and perceived observed data
+sim_obj &amp;lt;- rnorm(n, theta, sigma_obj)
+sim_per &amp;lt;- rnorm(n, theta + b, sigma_per)
+  
+# Compute quantiles, summarize and plot 
+data.frame(sim_obj = sim_obj,
+           sim_per = sim_per) %&amp;gt;%
+  mutate(quantile = cut_number(sim_obj, n = 4, labels = F)) %&amp;gt;%
+  group_by(quantile) %&amp;gt;%
+  summarize(mu_obj = mean(sim_obj),
+            mu_per = mean(sim_per)) %&amp;gt;%
+  ggplot() +
+  geom_point(aes(x = 1:4, y = mu_obj), color = I(&amp;quot;black&amp;quot;), size = 2) +
+  geom_line(aes(x = 1:4, y = mu_obj), color = I(&amp;quot;black&amp;quot;), size = 1) +
+  geom_point(aes(x = 1:4, y = mu_per), color = I(&amp;quot;#8F2727&amp;quot;), size = 2) +
+  geom_line(aes(x = 1:4, y = mu_per), color = I(&amp;quot;#8F2727&amp;quot;), size = 1) +
+  annotate(&amp;quot;text&amp;quot;, label = &amp;quot;Objective&amp;quot;, x = 2.2, y = -1, 
+           color = I(&amp;quot;black&amp;quot;), size = 5) +
+  annotate(&amp;quot;text&amp;quot;, label = &amp;quot;Perceived&amp;quot;, x = 1.8, y = .5, 
+           color = I(&amp;quot;#8F2727&amp;quot;), size = 5) +
+  xlab(&amp;quot;Quantile&amp;quot;) +
+  ylab(&amp;quot;Score&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-2-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Like before, we are able to re-produce the Dunning-Kruger effect quite well! Unlike before, our generative model assumes that the effect arises through two psychological mechanisms–a general overconfidence (i.e. &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt;), and perception noise (i.e. &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{obj}}\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{per}}\)&lt;/span&gt;). Importantly, it is the perception noise parameters that actually lead to a discrepancy between the observed objective and subjective responses. Intuitively, if &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{obj}} = \sigma_{\text{per}} = 0\)&lt;/span&gt;, then &lt;span class=&#34;math inline&#34;&gt;\(y_{i,\text{obj}} = \theta_i\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(y_{i,\text{per}} = \theta_i + b\)&lt;/span&gt;. In this case, the correlation between &lt;span class=&#34;math inline&#34;&gt;\(\text{cor}(\mathbf{y}_{\text{obj}}, \mathbf{y}_{\text{per}}) = 1\)&lt;/span&gt;, and there is subsequently no regression to the mean. Instead, the perception ratings are simply shifted upward according to &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt;. Conversely, as either &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{obj}}\)&lt;/span&gt; or &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{per}}\)&lt;/span&gt; increase toward &lt;span class=&#34;math inline&#34;&gt;\(+\infty\)&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;\(\text{cor}(\mathbf{y}_{\text{obj}}, \mathbf{y}_{\text{per}}) \to 0\)&lt;/span&gt;, and we get results like those shown in our previous simulations where &lt;span class=&#34;math inline&#34;&gt;\(r=0\)&lt;/span&gt; (although the perception ratings line would still be shifted upward by &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt;).&lt;/p&gt;
+&lt;div id=&#34;extending-the-noise-bias-model-to-dichotomous-data&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Extending the Noise + Bias Model to Dichotomous Data&lt;/h3&gt;
+&lt;p&gt;Before moving on, we need to modify the model for application in settings where the observed data are dichotomous in nature. The primary purpose for this is not theoretical, but instead to prepare ourselves for fitting the model to a real-world dataset in upcoming sections. In other words, we would like to modify only the part of our model that connects the core theoretical constructs of perception noise and bias to the observed data. We will get into specific details regarding the dataset later on, but for now, it is sufficient to say that we want a model that could generate data in a setting where:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;“Objective” skill is assessed on an “objective” multiple item test, where each item is scored correct or incorrect, and&lt;/li&gt;
+&lt;li&gt;Perceived skill is assessed by having participants estimate how many questions they answered correctly on the objective test.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;There are many possible ways to approach this general problem, but for our purposes, we will begin with the simplest model: the bernoulli model. As described in a &lt;a href=&#34;http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/&#34;&gt;previous post&lt;/a&gt;, the bernoulli distribution describes data that arise through a “biased coin flipping” process. For example, imagine that we have a biased coin, such that it lands “heads” 70% of the time, and “tails” 30% of the time. But suppose that we do not know the actual bias of the coin–how might we figure it out? Well, clearly we should flip the coin a few times! But how would we then estimate the underlying “success probability” (if we arbitrarily define success as landing “heads”)? This is exactly the same problem we encounter when aiming to estimate the underlying “objective skill” of a person from an objective test where each item is scored as correct or incorrect! As with a coin flip, if we assume that each item response &lt;span class=&#34;math inline&#34;&gt;\(y_t\)&lt;/span&gt; is independent and equally informative with respect to the underlying objective probability of answering correctly (which directly corresponds to the “objective skill”), we can use a bernoulli model, defined as follows:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{Pr}(y_{t}=1) = p = 1 - \text{Pr}(y_{t}=0) = 1 - q\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Here, &lt;span class=&#34;math inline&#34;&gt;\(y_{t} = 1\)&lt;/span&gt; indicates that item &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt; was answered correctly (a “success” trial), and &lt;span class=&#34;math inline&#34;&gt;\(y_{i,t} = 0\)&lt;/span&gt; indicates that it was answered incorrectly (a “failure” trial). The likelihood of observing a correct response is simply &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt;, and the likelihood of observing an incorrect response is then &lt;span class=&#34;math inline&#34;&gt;\(1-p\)&lt;/span&gt;. &lt;a href=&#34;https://en.wikipedia.org/wiki/Bernoulli_distribution&#34;&gt;Per Wikipedia&lt;/a&gt;, the likelihood of a single response–termed a &lt;em&gt;bernoulli trial&lt;/em&gt;–can also be written more compactly as:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[p^{k}(1-p)^{1-{k}}\]&lt;/span&gt;
+where &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; is indicates a correct (&lt;span class=&#34;math inline&#34;&gt;\(k=1\)&lt;/span&gt;) or incorrect (&lt;span class=&#34;math inline&#34;&gt;\(k=0\)&lt;/span&gt;) response. The re-writing is useful when we want to define how likely we are to observe, say, &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; successes within &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; trials. In our case, for a given participant, &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; would be the number of of questions they answered correctly, and &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; the total number of questions on the test. In this case, we have &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; bernoulli trials, and the likelihood of observing their sum follows a &lt;a href=&#34;https://en.wikipedia.org/wiki/Binomial_distribution&#34;&gt;binomial distribution&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\frac{n!}{k!(n-k)!}p^{k}(1-p)^{n-k}\]&lt;/span&gt;
+This equation may appear a bit daunting at first glance, but it is actually quite straightforward! The first term is the binomial coefficient, and it probably looks familiar. Specifically, if you had to take the GRE for grad shcool applications, you have likely been exposed to this equation, also sometimes called an “n choose k formula”. Far from being arbitrary, the binomial coefficient is a useful, compact representation of how many different ways you could receive &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; successes within a given &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; trials. For intuition, imagine that we have a test with 3 items (&lt;span class=&#34;math inline&#34;&gt;\(n=3\)&lt;/span&gt;), and our participant answers 2 items correctly (&lt;span class=&#34;math inline&#34;&gt;\(k=2\)&lt;/span&gt;). If we somehow know that their objective underlying probability of responding correctly is .8 (&lt;span class=&#34;math inline&#34;&gt;\(p=.8\)&lt;/span&gt;), how likely are our observed data? To get the answer, we need to first consider how many different ways in which we could observe 2 correct responses in any 3 trials. For example, we could have observed any of the following sequences of correct/incorrect responses: &lt;span class=&#34;math inline&#34;&gt;\(\{1,1,0\}, \{1,0,1\}, \{0,1,1\}\)&lt;/span&gt;. Of course, it is a pain to write out all these different possibilities just to find out how many ways observed data could have arised–and herein lies the power of the binomial coefficient! Working through &lt;span class=&#34;math inline&#34;&gt;\(\frac{3!}{2!(3-2)!}\)&lt;/span&gt;, we get &lt;span class=&#34;math inline&#34;&gt;\(\frac{3 \times2 \times 1}{2 \times 1 \times 1} = 3\)&lt;/span&gt;–the same answer. Knowing that we could get 2 correct responses in 3 trials in 3 different ways, we then need to determine how likely the actual responses are. Since &lt;span class=&#34;math inline&#34;&gt;\(p=.8\)&lt;/span&gt; and trials are assumed indpendent, we can get the joint probability by taking the product as &lt;span class=&#34;math inline&#34;&gt;\(\text{Pr}(k=1) \times \text{Pr}(k=1) \times \text{Pr}(k=0) = .8 \times .8 \times .2 = .128\)&lt;/span&gt;. Given that these particular responses could have been generated in 3 different ways, we then multiply everything together to get &lt;span class=&#34;math inline&#34;&gt;\(3 \times .128= .384\)&lt;/span&gt;. What this means is that, if our participant has a objective &lt;span class=&#34;math inline&#34;&gt;\(p=.8\)&lt;/span&gt;, and they were to take the same 3 item test an infinite number of times (without remembering the questions from before–indeed a nightmarish situation, but let’s roll with it anyway), we would expect them to get 2 of the 3 question correct 38.4% of the time.&lt;/p&gt;
+&lt;p&gt;To confirm, we can do a very simple simulation in R:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Draw 3 samples from a binomial distribution where n=1 and p=.8 
+# (equivalent to bernoulli trials), and then take the sum 
+sum(rbinom(3,1,.8))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 3&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Replicate the example above 10000 times, and compute the proportion of
+# times that the sum is equal to 2
+mean(replicate(10000, sum(rbinom(3,1,.8)))==2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.3796&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The simulation is pretty close to the analytical solution! With the binomial likelihood covered, we are ready to move on to the next step–incorporating the theoretical constructs of perception noise and bias into a model that generates data as described by (1) and (2) above.&lt;/p&gt;
+&lt;p&gt;Now that we are assuming a binomial generative model, we need to think of our problem in terms of how to model the succuss probability, &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt; as opposed to the mean of a normal distribution, as in the normal noise + bias model in the previous section. The most intuitive way to do this is to take our underlying objective skill parameters &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; from before, and apply a transformation to them such that &lt;span class=&#34;math inline&#34;&gt;\(0 &amp;lt; \theta_i &amp;lt; 1\)&lt;/span&gt; as opposed to &lt;span class=&#34;math inline&#34;&gt;\(-\infty &amp;lt; \theta_i &amp;lt; +\infty\)&lt;/span&gt;. Retaining the assumption that &lt;span class=&#34;math inline&#34;&gt;\(\theta_i \sim \mathcal{N}(0,1)\)&lt;/span&gt;, a good option is the cumultative distribution function of the standard normal distribution, or the probit transformation:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[p_i = \Phi(\theta_i)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The probit transtormation has a useful interpretation—we can now think of the underlying &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; parameters as z-scores, and the resulting success probabilities &lt;span class=&#34;math inline&#34;&gt;\(p_i\)&lt;/span&gt; as the area under the curve of the standard normal distribution up to the z-score &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;. We can represent this graphically in R as follows:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Visualize cumulative distribution function of normal distribution
+
+# For the first plot, we look at the area under \theta = -1
+p1 &amp;lt;- data.frame(x = seq(-5, 5, length.out = 100)) %&amp;gt;% 
+  mutate(y = dnorm(x)) %&amp;gt;%
+  ggplot(aes(x, y)) + 
+  geom_area(fill = &amp;quot;#8F2727&amp;quot;) + 
+  gghighlight(x &amp;lt; -1) +
+  ggtitle(expression(theta~&amp;quot; = -1&amp;quot;)) +
+  xlab(expression(theta)) +
+  ylab(&amp;quot;density&amp;quot;) +
+  annotate(geom=&amp;quot;text&amp;quot;, x = -3, y = .05, label = &amp;quot;.16&amp;quot;, 
+           color = I(&amp;quot;#8F2727&amp;quot;), size = 8) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        axis.text.y = element_blank(),
+        plot.title = element_text(hjust=.5))
+
+# For the second plot, we look at the area under \theta = +1
+p2 &amp;lt;- data.frame(x = seq(-5, 5, length.out = 100)) %&amp;gt;% 
+  mutate(y = dnorm(x)) %&amp;gt;%
+  ggplot(aes(x, y)) + 
+  geom_area(fill = &amp;quot;#8F2727&amp;quot;) + 
+  gghighlight(x &amp;lt; 1) +
+  ggtitle(expression(theta~&amp;quot; = +1&amp;quot;)) +
+  xlab(expression(theta)) +
+  annotate(geom=&amp;quot;text&amp;quot;, x = -3, y = .05, label = &amp;quot;.84&amp;quot;, 
+           color = I(&amp;quot;#8F2727&amp;quot;), size = 8) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        plot.title = element_text(hjust=.5))
+
+# Plot together for comparison
+p1 | p2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-4-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Above, the area under the curve up to the given value of &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; is highlighted in red, and the ratio of red area to total area is shown next to the highlighted portion–these are the values for &lt;span class=&#34;math inline&#34;&gt;\(p_i\)&lt;/span&gt; that result from the probit transformation. If we make the simplifying assumption that observed responses on the objective skill test are directly related to &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; through the binomial generative model (i.e. no perception noise or bias), we can begin constructing our model as follows:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{align} 
+  \theta_i &amp;amp; \sim \mathcal{N}(0,1) \\
+  p_{i,\text{obj}} &amp;amp; = \Phi(\theta_i)\\
+  y_{i,\text{obj}} &amp;amp; \sim \text{Binomial}(n_{\text{obj}}, p_{i,\text{obj}})
+\end{align}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Despite the fact that we do not have a noise term in the model, the relationship between &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(y_{i,\text{obj}}\)&lt;/span&gt; is still probabilistic, as in the normal noise + bias model. This is because the binomial model is inherently probabilistic–with a set number of trials &lt;span class=&#34;math inline&#34;&gt;\(n_{\text{obj}}\)&lt;/span&gt; and a given underlying correct response probability &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{obj}}\)&lt;/span&gt;, the model will produce different observed responses if we generate data from it repeatedly. We can do this in R, looking at 50 different realizations from each of the example participants illustrated in the previous figure, where we demonstrated the probit transformation:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Number of trials to simulate
+n_trials &amp;lt;- 10
+
+# Binomial sums of trials
+# For participant where \theta = -1
+subj1_obj &amp;lt;- replicate(50, sum(rbinom(n_trials, 1, pnorm(-1))))
+# For participant where \theta = +1
+subj2_obj &amp;lt;- replicate(50, sum(rbinom(n_trials, 1, pnorm(1))))
+
+# Plotting binomial counts
+p1_obj &amp;lt;- ggplot() +
+  geom_bar(aes(x = as.factor(subj1_obj)), 
+           fill = &amp;quot;#8F2727&amp;quot;, stat = &amp;quot;count&amp;quot;) +
+  geom_vline(xintercept = 6, linetype = 2) +
+  ggtitle(expression(theta~&amp;quot; = -1&amp;quot;)) +
+  xlab(&amp;quot;Number of Correct Responses&amp;quot;) +
+  scale_x_discrete(limit = as.factor(seq(0,10,1))) +
+  coord_cartesian(ylim=c(0,22)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(), 
+        axis.text.x = element_text(angle = 45),
+        plot.title = element_text(hjust=.5))
+p2_obj &amp;lt;- ggplot() +
+  geom_bar(aes(x = as.factor(subj2_obj)), 
+           fill = &amp;quot;#8F2727&amp;quot;, stat = &amp;quot;count&amp;quot;) +
+  geom_vline(xintercept = 6, linetype = 2) +
+  ggtitle(expression(theta~&amp;quot; = +1&amp;quot;)) +
+  xlab(&amp;quot;Number of Correct Responses&amp;quot;) +
+  scale_x_discrete(limit = as.factor(seq(0,10,1))) +
+  coord_cartesian(ylim=c(0,22)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(), 
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(angle = 45),
+        plot.title = element_text(hjust=.5))
+
+# plot together, as before
+p1_obj | p2_obj&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-5-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Above, the black dotted line indicates a sum of 5, which I include simply as a reference point to compare the two “participants”. As anticipated, across the 50 different simulations of the model, each with &lt;span class=&#34;math inline&#34;&gt;\(n_{\text{obj}}=10\)&lt;/span&gt;, the observed sum of correct responses varies around the underlying generating probability for each participant, &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{obj}}\)&lt;/span&gt;. It is also worth recognizing that these distributions are quite skewed, such that they cannot be fully appreciated with a single summary statistic as is often done in studies (e.g., using the proportion of correct responses as an independent/dependent variable in a model).&lt;/p&gt;
+&lt;!-- We can start with a conceptual question. What is the function of noise? Per the normal noise + bias model, perception noise is a form of uncertainty or general lack of information that manifests as participants having imperfect knowledge of their objective underlying skill, $\theta_i$. Time for a thought experiment! Imagine you were in a scenario where you took a 10 item test. Upon finishing, for some reason, you were highly uncertain regarding your level of skill in the tested domain. If this were the case (really try to imagine it!), and you were subsequently asked to estimate how many items you answered correctly, what would be your best guess? You may be tempted to answer &#34;none&#34;, but wouldn&#39;t that imply that you thought the test was difficult, which can only be in reference to your skill level. So, what is your answer? Now, imagine the opposite case--that after having taken the test, you were completely certain regarding your skill level. If you were again asked to estimate how many items you answered correctly, what would you say? For even better intuition, imagine that I have a completed, 10 item test from an individual, but I will tell you nothing at all about them or the test--the test could be anything from an experiement administered to a rat to my 3rd grade history exam, and I will leave you with utter, complete uncertainty. Now, how many questions were correct on this test?  --&gt;
+&lt;p&gt;The next step is to extend our model so that it can also account for perceived judgements. In our case, the perceived judgements take the form of asking participants to estimate how many items that they got correct on the objective skill assessment. This is nice, because it means that we can still use the binomial distribution as a generative model, although we do need to somehow incorporate the perception noise and bias terms. To do so, we need to think more deeply about the underlying decision process. For perception bias, the simplest implementation is to add a term, &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt;, to &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; before the probit transformation, which will lead to decrease or increase the resulting perceived probability of responding correctly to each item correctly (&lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{per}}\)&lt;/span&gt;) depending on whether &lt;span class=&#34;math inline&#34;&gt;\(b&amp;lt;0\)&lt;/span&gt; or &lt;span class=&#34;math inline&#34;&gt;\(b&amp;gt;0\)&lt;/span&gt;, respectively.&lt;/p&gt;
+&lt;p&gt;Perception noise will be a bit more tricky to deal with. Per the normal noise + bias model, perception noise is a form of uncertainty or general lack of information that manifests as participants having imperfect knowledge of their objective underlying skill, &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;, and subsequently their objective probability of getting items correct, &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{obj}}\)&lt;/span&gt;. One way to capture this idea is to take inspiration from signal detection theory (which is a reasonable starting place, as SDT has been used to model exactly these types of subjective, uncertain judgements; see &lt;a href=&#34;https://doi.org/10.1016/0030-5073(80)90045-8&#34;&gt;here&lt;/a&gt; and &lt;a href=&#34;https://doi.org/10.1037/0033-295X.101.3.490&#34;&gt;here&lt;/a&gt;). In this framework, we can model noise as the standard deviation of a normal distribution, which scales the difference between &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt; such that &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{per}} = \Phi(\frac{\theta_i + b}{\sigma})\)&lt;/span&gt;, which gives us the following full model:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{align} 
+  \theta_i &amp;amp; \sim \mathcal{N}(0,1) \\
+  p_{i,\text{obj}} &amp;amp; = \Phi(\theta_i)\\
+  p_{i,\text{per}} &amp;amp; = \Phi(\frac{\theta_i + b}{\sigma}) \\
+  y_{i,\text{obj}} &amp;amp; \sim \text{Binomial}(n_{\text{obj}}, p_{i,\text{obj}}) \\
+  y_{i,\text{per}} &amp;amp; \sim \text{Binomial}(n_{\text{per}}, p_{i,\text{per}})
+\end{align}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;We can gain a better intuition of the noise and bias terms by visualizing how they work. First, a look at how the noise term influences resulting &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{per}}\)&lt;/span&gt; values when &lt;span class=&#34;math inline&#34;&gt;\(b=0\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Set parameters
+theta &amp;lt;- 1
+b     &amp;lt;- 0           # no bias
+sigma &amp;lt;- c(.5, 1, 2) # three values for sigma
+
+# Loop over different sigma values
+sdt_plots &amp;lt;- foreach(sig=sigma) %do% {
+  # Plot the &amp;quot;noise distribution&amp;quot;, centered at \theta+b
+  data.frame(x = seq(-5.5, 5.5, length.out = 100)) %&amp;gt;% 
+      mutate(y = dnorm(x, theta+b, sig)) %&amp;gt;%
+      ggplot(aes(x, y)) + 
+      geom_area(fill = &amp;quot;#8F2727&amp;quot;) + 
+      gghighlight(x &amp;gt; 0) +
+      geom_vline(xintercept = 0, linetype = 2) +
+      ggtitle(paste0(&amp;quot;sigma = &amp;quot;, sig)) +
+      xlab(expression(theta+b)) +
+      ylab(&amp;quot;density&amp;quot;) +
+      ylim(0,.8) +
+      annotate(geom=&amp;quot;text&amp;quot;, x = -3.2, y = .25, 
+               label = round(pnorm((theta+b)/sig), 2), 
+               color = I(&amp;quot;#8F2727&amp;quot;), size = 8) +
+      theme_minimal(base_size = 15) +
+      theme(panel.grid = element_blank(),
+            axis.text.y = element_blank(),
+            plot.title = element_text(hjust=.5))
+}
+
+# Plot examples
+sdt_plots[[1]] | sdt_plots[[2]] | sdt_plots[[3]]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-6-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;With this function, as &lt;span class=&#34;math inline&#34;&gt;\(\sigma \to +\infty\)&lt;/span&gt;, perception noise increases indefinitely, and &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{per}} \to .5\)&lt;/span&gt;. As &lt;span class=&#34;math inline&#34;&gt;\(\sigma \to 0\)&lt;/span&gt;, perception noise becomes non-existent, and we get:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[p_{i,\text{per}} \to
+\begin{cases} 
+  0, ~\text{ if } \theta+b &amp;lt; 0 \\ 
+  1, ~\text{ if } \theta+b &amp;gt; 0 \\ 
+  .5, ~\text{if } \theta+b = 0 
+\end{cases}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Intuitively, when perception noise is very low, people with above average objective skill (indicated by &lt;span class=&#34;math inline&#34;&gt;\(\theta_i = 0\)&lt;/span&gt;) will perceive their performance to be top-notch, whereas those below average will perceive their performance to be absolutely terrible. Conversely, if noise is very high, the opposite pattern emerges, where those with very low objective skill will perceive their performance to be better than it truly is, and those with high skill will perceive their performance to be worse than it truly is. Finally, when combined with a general bias, &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt;, the amount of over- or under-confidence can be shifted. Therefore, if &lt;span class=&#34;math inline&#34;&gt;\(b&amp;gt;0\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma&amp;gt;1\)&lt;/span&gt;, bias and noise work together to produce an effect where those with low skill overestimate their skill to a large extend, whereas those with high skill underestimate their skill, but to a lesser extent–the classic Dunning-Kruger effect! To see this, it is useful to plot out &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{per}}\)&lt;/span&gt; as a function of &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{obs}}\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Set parameters
+thetas &amp;lt;- seq(-5, 5, length.out = 100) # whole range of theta
+bs     &amp;lt;- c(0, 1)     # two levels of bias
+sigmas &amp;lt;- c(.5, 1, 2) # three levels of noise
+
+# Loop over different b and sigma values
+noise_bias_dat &amp;lt;- foreach(b=bs, .combine = &amp;quot;rbind&amp;quot;) %do% {
+  foreach(sig=sigma, .combine = &amp;quot;rbind&amp;quot;) %do% {
+    # Generate p_obj and p_per from theta, sigma, and b
+    data.frame(theta = thetas) %&amp;gt;% 
+        mutate(b     = b,
+               sigma = sig, 
+               p_obj = pnorm(theta),
+               p_per = pnorm((theta+b)/sig))
+  }
+}
+
+# Plot different combinations of noise and bias
+noise_bias_dat %&amp;gt;%
+  ggplot(aes(p_obj, p_per)) + 
+  geom_line(color = I(&amp;quot;#8F2727&amp;quot;), size = 1.5) +
+  geom_abline(intercept = 0, slope = 1, color = I(&amp;quot;black&amp;quot;), 
+              linetype = 2, size = 1) +
+  xlab(expression(p[&amp;quot;obj&amp;quot;])) +
+  ylab(expression(p[&amp;quot;per&amp;quot;])) +
+  xlim(0,1) +
+  ylim(0,1) +
+  facet_grid(b ~ sigma, labeller = labeller(.rows = label_both, 
+                                            .cols = label_both)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 45),
+        plot.title = element_text(hjust=.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-7-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;I don’t know about you, but I think this is really cool. What we see is that two simple mechanisms of perception noise and bias can generate a diverse range of patterns, of which the Dunning-Kruger effect is a special case (see the bottom right panel, where &lt;span class=&#34;math inline&#34;&gt;\(b&amp;gt;0\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma&amp;gt;1\)&lt;/span&gt;). Additionally, there is a special case where participants are expected to be perfectly callibrated to their underlying “objective” skill level, which occurs when &lt;span class=&#34;math inline&#34;&gt;\(b=0\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma=1\)&lt;/span&gt; (see the top middle panel). Not only can this model give us an explanation for the Dunning-Kruger effect, but it also facilitates making novel predictions. For example, if we design an experiment to manipulate uncertainty in people’s confidence judgements, we would expect this to influence perception noise, which then produces specific patterns of behavior depending on whether we increase or decrease uncertainty.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;a-perception-distortion-model&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;A Perception Distortion Model&lt;/h2&gt;
+&lt;p&gt;Before moving on to fit our model to real-world data, I thought it would be worth considering a different model inspired by the confidence judgement literature (in particular, see &lt;a href=&#34;https://doi.org/10.1016/j.jmp.2010.08.011&#34;&gt;here&lt;/a&gt;). This model does not include noise per se, but instead it relies on a function describing how people’s judgements become distorted when they are accessed. This distortion could arise from various different sources unrelated to uncertainty, but as we will see, it generates data analagous to the binomial noise + bias model in the previous section.&lt;/p&gt;
+&lt;p&gt;To begin, we will assume that the objective performance component for our new model is the same as in the binomial noise + bias model, giveing us:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{align} 
+  \theta_i &amp;amp; \sim \mathcal{N}(0,1) \\
+  p_{i,\text{obj}} &amp;amp; = \Phi(\theta_i)\\
+  y_{i,\text{obj}} &amp;amp; \sim \text{Binomial}(n_{\text{obj}}, p_{i,\text{obj}})
+\end{align}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;So far, so good–nothing different from before. Next, we will use a similar function as described by &lt;a href=&#34;https://doi.org/10.1016/j.jmp.2010.08.011&#34;&gt;Merkle et al. (2011)&lt;/a&gt;, which is grounded in the probability estimation literature:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[p_{i,\text{per}} = \frac{\delta p_{i,\text{obj}}^{\gamma}}{\delta p_{i,\text{obj}}^{\gamma} + (1-p_{i,\text{obj}})^{\gamma}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Here, &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt; is a bias parameters akin to &lt;span class=&#34;math inline&#34;&gt;\(b\)&lt;/span&gt; in the binomial noise + bias model, and &lt;span class=&#34;math inline&#34;&gt;\(\gamma\)&lt;/span&gt; is a &lt;strong&gt;&lt;em&gt;perception distortion&lt;/em&gt;&lt;/strong&gt; parameter, which controls how strongly participipants over- or under-weight below- and above-average levels of skill, as indexed by &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{obj}}\)&lt;/span&gt;. Per usual, it is best to visualize the function to better interpret the parameters:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Perception distortion function
+per_dist &amp;lt;- function(p_obj, gamma, delta) {
+  delta*(p_obj^gamma) / (delta*(p_obj^gamma) + (1-p_obj)^gamma)
+}
+
+# Set parameters
+thetas &amp;lt;- seq(-5, 5, length.out = 100) # whole range of theta
+deltas &amp;lt;- c(1, 2)     # two levels of bias
+gammas &amp;lt;- c(2, 1, .3) # three levels of noise
+
+# Loop over different delta and gamma values
+per_dist_dat &amp;lt;- foreach(delta=deltas, .combine = &amp;quot;rbind&amp;quot;) %do% {
+  foreach(gamma=gammas, .combine = &amp;quot;rbind&amp;quot;) %do% {
+    # Generate p_obj and p_per from theta, gamma, and delta
+    data.frame(theta = thetas) %&amp;gt;% 
+        mutate(delta = delta,
+               gamma = gamma, 
+               p_obj = pnorm(theta),
+               p_per = per_dist(pnorm(theta), gamma, delta))
+  }
+}
+
+# Plot different combinations of perception distortion and bias
+per_dist_dat %&amp;gt;%
+  mutate(gamma = factor(gamma, 
+                        levels = c(2, 1, .3),
+                        labels = c(2, 1, .3))) %&amp;gt;%
+  ggplot(aes(p_obj, p_per)) + 
+  geom_line(color = I(&amp;quot;#8F2727&amp;quot;), size = 1.5) +
+  geom_abline(intercept = 0, slope = 1, color = I(&amp;quot;black&amp;quot;), 
+              linetype = 2, size = 1) +
+  xlab(expression(p[&amp;quot;obj&amp;quot;])) +
+  ylab(expression(p[&amp;quot;per&amp;quot;])) +
+  xlim(0,1) +
+  ylim(0,1) +
+  facet_grid(delta ~ gamma, labeller = labeller(.rows = label_both, 
+                                               .cols = label_both)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 45),
+        plot.title = element_text(hjust=.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-8-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Looks familiar, doesn’t it? We get the same basic pattern using this perception distortion model as we do with the noise + bias model. In many ways, it appears that these models may be statistically indistinguishable without a very specific experimental design. Alternatively, one could make the arguement that the noise + bias model is more theoretically informative, as it provides a plausible psychological explanation for how perception distortion may arise, whereas the perception distortion model itself does not have an obvious psychological interpretation . Still, it is useful to show the correspondence between these models, because this perception distortion function is widely used in the decision-making literature. In fact, it makes up a key component of &lt;a href=&#34;https://doi.org/10.1007/BF00122574&#34;&gt;cumulative prospect theory&lt;/a&gt;, wherein it is used to model how people assign subjective weights to objective probabilities, thereby producing patterns of risk preferences that we observe in real data.&lt;/p&gt;
+&lt;p&gt;The full binomial perception distortion model can then be written as follows:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{align} 
+  \theta_i &amp;amp; \sim \mathcal{N}(0,1) \\
+  p_{i,\text{obj}} &amp;amp; = \Phi(\theta_i) \\
+  p_{i,\text{per}} &amp;amp; = \frac{\delta p_{i,\text{obj}}^{\gamma}}{\delta p_{i,\text{obj}}^{\gamma} + (1-p_{i,\text{obj}})^{\gamma}} \\
+  y_{i,\text{obj}} &amp;amp; \sim \text{Binomial}(n_{\text{obj}}, p_{i,\text{obj}}) \\
+  y_{i,\text{per}} &amp;amp; \sim \text{Binomial}(n_{\text{per}}, p_{i,\text{per}})
+\end{align}\]&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;fitting-our-models-to-data&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Fitting Our Models to Data&lt;/h1&gt;
+&lt;p&gt;We have almost made it! Thanks for sticking around for this long :D. We are now ready to try fitting our models to real-world data to determine whether our models can adequately account for people’s actual perception judgements. Further, the parameter estimates we obtain will allow us to determine if there is evidence for the traditional interpretation of the Dunning-Kruger effect in our data.&lt;/p&gt;
+&lt;p&gt;First, we need to find a dataset. Fortunately, with the recent increase in open science practices in psychology, I was able to locate a perfect dataset for us. The data we will use are from Study 1 of &lt;a href=&#34;https://doi.org/10.3758/s13423-017-1242-7&#34;&gt;Pennycook et al. (2017)&lt;/a&gt;, and can be found at the following &lt;a href=&#34;https://osf.io/3kndg/&#34;&gt;Open Science Foundation Repo&lt;/a&gt; (huge shout-out for making your data openly available!). In this study, participants engaged in a cognitive reflection task with 8 items, where questions were designed to ellicit an “intuitive” answer that was nevertheless incorrect. For example, one item was as follows:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“If you’re running a race and you pass the person in second place, what place are you in? (intuitive answer: first; correct answer: second).”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The other items were similar, and overall they were quite fun to think through! Participants answered each of the 8 items, were not given feedback on their answers, and were then asked to give an estimate of the numberof items that they think they got correct. Therefore, our data are formatted such that we have two “counts” for each participant, one reflecting the number of items they answered correctly, and the other reflecting the perceived number of items they answered correctly. In both cases, there are 8 items in total, meaning that &lt;span class=&#34;math inline&#34;&gt;\(n_{\text{obj}} = n_{\text{per}} = 8\)&lt;/span&gt;. This experiment is perfect for the binomial models that we developed!&lt;/p&gt;
+&lt;p&gt;The code below downloads the data from the OSF repo into R, and then makes a scatterplot of the objective number of correct items versus perceived number of correct itmes across participants:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Download data first
+osf_url &amp;lt;- &amp;quot;https://osf.io/3kndg/download&amp;quot; # url for Study 1 csv file
+filename &amp;lt;- &amp;#39;pennycook_2017.csv&amp;#39;
+GET(osf_url, write_disk(filename, overwrite = TRUE))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Response [https://files.osf.io/v1/resources/p8xjs/providers/osfstorage/589ddf839ad5a1020acb69c8?action=download&amp;amp;direct&amp;amp;version=1]
+##   Date: 2021-01-12 23:12
+##   Status: 200
+##   Content-Type: text/csv
+##   Size: 88.2 kB
+## &amp;lt;ON DISK&amp;gt;  /Users/haines.175/Dropbox/Building/my_website/haines-lab_dev/content/post/pennycook_2017.csv&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;osf_dat &amp;lt;- read.csv(filename, header=TRUE)
+
+# Actual versus perceived number correct
+obs_scatter &amp;lt;- qplot(osf_dat$CRT_sum, osf_dat$Estimate, 
+      color = I(&amp;quot;#8F2727&amp;quot;), size = 1, alpha = .01) +
+  ggtitle(paste0(&amp;quot;N = &amp;quot;, nrow(osf_dat), 
+                 &amp;quot;; r = &amp;quot;, round(cor(osf_dat$CRT_sum, 
+                                     osf_dat$Estimate), 2))) +
+  xlab(&amp;quot;Objective Number Correct&amp;quot;) +
+  ylab(&amp;quot;Perceived Number Correct&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;none&amp;quot;, 
+        plot.title = element_text(hjust=.5))
+obs_scatter&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-9-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;From the scatterplot alone, it looks like there is not much going on–there is a modest positive correlation between the objective and perceived number of correct items, but how should we interpret this? We know from our initial analyses that such a low correlation should produce the Dunning-Kruger effect when plotted using the traditional quantile visualization by way of regression to the mean, although regression to the mean alone should not produce any systematic biases (i.e. over- or under-confidence). Let’s see what the quantile plot looks like:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Make quantile plot with observed data
+data.frame(obs_obj = osf_dat$CRT_sum,
+           obs_per = osf_dat$Estimate) %&amp;gt;%
+  mutate(quantile = cut_number(obs_obj, n = 4, labels = F)) %&amp;gt;%
+  group_by(quantile) %&amp;gt;%
+  summarize(mu_obj = mean(obs_obj),
+            mu_per = mean(obs_per)) %&amp;gt;%
+  ggplot() +
+  geom_point(aes(x = 1:4, y = mu_obj), color = I(&amp;quot;black&amp;quot;), size = 2) +
+  geom_line(aes(x = 1:4, y = mu_obj), color = I(&amp;quot;black&amp;quot;), size = 1) +
+  geom_point(aes(x = 1:4, y = mu_per), color = I(&amp;quot;#8F2727&amp;quot;), size = 2) +
+  geom_line(aes(x = 1:4, y = mu_per), color = I(&amp;quot;#8F2727&amp;quot;), size = 1) +
+  annotate(&amp;quot;text&amp;quot;, label = &amp;quot;Objective&amp;quot;, x = 1.5, y = 1, 
+             color = I(&amp;quot;black&amp;quot;), size = 5) +
+  annotate(&amp;quot;text&amp;quot;, label = &amp;quot;Perceived&amp;quot;, x = 1.5, y = 4, 
+             color = I(&amp;quot;#8F2727&amp;quot;), size = 5) +
+  ylim(0,8) +
+  xlab(&amp;quot;Quantile&amp;quot;) +
+  ylab(&amp;quot;Average Sum Within Quantile&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-10-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As expected, we see the general Dunning-Kruger pattern, where participants with low objective scores over-estimate their scores, and those with high objective scores under-estimate their scores, but to a lesser extent. Knowing that the effect is there in the data, it is time to fit our models to see what insights they reveal!&lt;/p&gt;
+&lt;div id=&#34;fitting-the-binomial-noise-bias-model&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Fitting the Binomial Noise + Bias Model&lt;/h2&gt;
+&lt;p&gt;The &lt;a href=&#34;https://mc-stan.org/&#34;&gt;Stan&lt;/a&gt; code below implements the binomial noise + bias model:&lt;/p&gt;
+&lt;pre class=&#34;stan&#34;&gt;&lt;code&gt;data {
+  int&amp;lt;lower=1&amp;gt; N;     // Number of participants
+  int&amp;lt;lower=1&amp;gt; n_obj; // Number of items on objective measure
+  int&amp;lt;lower=1&amp;gt; n_per; // Number of items on perception measure
+  int y_obj[N];       // Objective number of items correct
+  int y_per[N];       // Perceived number of items correct
+}
+
+parameters {
+  vector[N] theta;     // Underlying skill
+  real&amp;lt;lower=0&amp;gt; sigma; // Perception noise 
+  real b;              // Bias
+}
+
+transformed parameters {
+  vector[N] p_obj;
+  vector[N] p_per;
+
+  // Probit transforming our parameters
+  for (i in 1:N) {
+    p_obj[i] = Phi_approx(theta[i]);
+    p_per[i] = Phi_approx((theta[i]+b)/sigma);
+  }
+}
+
+model {
+  // Prior distributions
+  theta ~ normal(0,1);
+  sigma ~ lognormal(0,1);
+  b     ~ normal(0,1);
+  
+  // Likelihood for both objective and perceived number of correct items
+  y_obj ~ binomial(n_obj, p_obj);
+  y_per ~ binomial(n_per, p_per);
+}
+
+generated quantities {
+  int y_obj_pred[N];
+  int y_per_pred[N];
+  
+  // Generate posterior predictions to compare against observed data
+  y_obj_pred = binomial_rng(n_obj, p_obj);
+  y_per_pred = binomial_rng(n_per, p_per);
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I have written the code above to be as close to the formal definitions described throughout this post as possible, in an effort tomake the Stan code easier to understand. Overall, the model is rather simple–the most complex part is the noise component, but hopefully the visualizations we made above make the meaning clear. Next, we just need to format our data and fit the model!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Note that you will need to compile the model first. Mine is
+# already compiled within the Rmarkdown file used to make the post:
+# binomial_noise_bias &amp;lt;- stan_model(&amp;quot;path_to_model/file_name.stan&amp;quot;)
+
+# Format data for stan
+stan_dat &amp;lt;- list(N = nrow(osf_dat),
+                 n_obj = 8,
+                 n_per = 8,
+                 y_obj = osf_dat$CRT_sum,
+                 y_per = osf_dat$Estimate)
+
+# Fit the model!
+fit_noise_bias &amp;lt;- sampling(binomial_noise_bias, 
+                           data   = stan_dat, 
+                           iter   = 1000, # 1000 MCMC samples
+                           warmup = 300,  # 300 used for warm-up
+                           chains = 3,    # 3 MCMC chains
+                           cores  = 3,    # parallel over 3 cores
+                           seed   = 43210)
+
+# Once finished, check convergence using traceplots 
+traceplot(fit_noise_bias)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-12-1.svg&#34; width=&#34;672&#34; /&gt;
+Simple as that! The model runs very quickly, and we can see from the traceplots above that the model seems to have converged well (the traceplots should look like “furry caterpillars”). We would normally check traceplots for more parameters than just the 10 participant &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt; parameters above, but for now, we will just check the distribution of &lt;span class=&#34;math inline&#34;&gt;\(\hat{R}\)&lt;/span&gt; statistics, which should be close to 1:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Plot R-hat statistics
+stan_rhat(fit_noise_bias)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-13-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;They look great! Given that these diagnostics look good, and that our model is relatively simple, I am confident that the model has converged, and we can now look at our parameter estimates.&lt;/p&gt;
+&lt;p&gt;Remember, the binomial noise + bias model produces the Dunning-Kruger effect when both &lt;span class=&#34;math inline&#34;&gt;\(\sigma &amp;gt;1\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(b&amp;gt;0\)&lt;/span&gt;, so we are looking for evidence that our parameters meet these criteria. For our purposes, we can just visually check the parameters:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Extract posterior samples from model fit object
+pars_noise_bias &amp;lt;- rstan::extract(fit_noise_bias)
+
+# Prior versus posterior distribution for sigma
+post_sigma &amp;lt;- ggplot() +
+  geom_vline(xintercept = 1, linetype = 2) + 
+  geom_density(aes(x = pars_noise_bias$sigma), fill = I(&amp;quot;#8F2727&amp;quot;)) + 
+  geom_line(aes(x = seq(-5,5, length.out = 300), 
+                y = dlnorm(seq(-5,5, length.out = 300))),
+            linetype = 2, color = I(&amp;quot;gray&amp;quot;)) +
+  xlab(expression(sigma)) +
+  xlim(0,5) +
+  ylim(0,1.7) +
+  theme_minimal(base_size = 15) + 
+  theme(panel.grid = element_blank(),
+        axis.title.x = element_text(size = 15))
+post_b &amp;lt;- ggplot() +
+  geom_vline(xintercept = 0, linetype = 2) + 
+  geom_density(aes(x = pars_noise_bias$b), fill = I(&amp;quot;#8F2727&amp;quot;)) + 
+  geom_line(aes(x = seq(-5,5, length.out = 300), 
+                y = dnorm(seq(-5,5, length.out = 300))),
+            linetype = 2, color = I(&amp;quot;gray&amp;quot;)) +
+  xlab(expression(b)) +
+  xlim(-3,3) +
+  ylim(0,1.7) +
+  theme_minimal(base_size = 15) + 
+  theme(panel.grid = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.title.x = element_text(size = 15))
+# Plot together
+post_sigma | post_b&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-14-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;What you are seeing above is the posterior distribution for both parameters (in dard red), compared to each parameter’s prior distribution (dotted gray line). Further, the black dotted lines indicate &lt;span class=&#34;math inline&#34;&gt;\(\sigma=1\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(b=0\)&lt;/span&gt; (note that I chose priors that placed 50% of the prior mass over and under the “critical” values of &lt;span class=&#34;math inline&#34;&gt;\(\sigma=1\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(b=0\)&lt;/span&gt;). Importantly, there is very strong evidence that both &lt;span class=&#34;math inline&#34;&gt;\(\sigma&amp;gt;1\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(b&amp;gt;0\)&lt;/span&gt;–indeed, the entire posterior distribution for each parameter is above the critical value, suggesting strong evidence of perception noise and bias, which together produce the classic Dunning-Kruger effect.&lt;/p&gt;
+&lt;p&gt;Of course, before we get too excited, we should confirm that the model can reproduce theoretically relevant patterns in the observed data. First, we can check how well the model can predict both the objective and perceived number of items correct for each participant:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Set the color scheme for maximum vibes
+color_scheme_set(&amp;quot;red&amp;quot;)
+
+# We will order the plots by the objective number correct
+ord &amp;lt;- order(stan_dat$y_obj)
+
+# Posterior predictions for objective number correct
+pp_obj &amp;lt;- ppc_intervals(y = stan_dat$y_obj[ord],
+                        yrep = pars_noise_bias$y_obj_pred[,ord],
+                        prob = .5, 
+                        prob_outer = .95) +
+  xlab(&amp;quot;Participant&amp;quot;) +
+  ylab(&amp;quot;Objective Number Correct&amp;quot;) +
+  ylim(0,8) +
+  theme_minimal(base_size = 15) + 
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;none&amp;quot;)
+
+# Posterior predictions for perceived number correct
+pp_per &amp;lt;- ppc_intervals(y = stan_dat$y_per[ord],
+                        yrep = pars_noise_bias$y_per_pred[,ord],
+                        prob = .5, 
+                        prob_outer = .95) +
+  xlab(&amp;quot;Participant&amp;quot;) +
+  ylab(&amp;quot;Perceived Number Correct&amp;quot;) +
+  ylim(0,8) +
+  theme_minimal(base_size = 15) + 
+  theme(panel.grid = element_blank())
+
+# Plot together
+pp_obj | pp_per&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-15-1.svg&#34; width=&#34;768&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Above, the dark red points indicate the observed sums, and the lighter red points and intervals indicate the posterior model predictions and 50% and 95% highest density intervals, respectively (i.e. the darker intervals are 50% HDIs, and lighter intervals 95% HDIs). We want to ensure that our uncertainty intervals are not biased in any systematic way, and that the observed data are reasonably well described by the model predictions. In our case, it is pretty clear that the objective number correct is captured quite well, although there is still some uncertainty due to the fact that we only have 8 items to work with. Conversely, there is much more uncertainty for the perceived number of correct, although the model does seem to have reasonably well callibrated uncertainty intervals. For example, across participants, it is pretty clear that at least 95% of the observed points are contained within the 95% HDIs. Although, 1 participant in particular is apparently VERY underconfident… :’(. Overall, the model performs as we should expect it to–with the additional perception noise component, the predictions should naturally be more uncertain relative to the objective number correct results.&lt;/p&gt;
+&lt;p&gt;We should also check to see if the model can re-produce the main effect of interest–the Dunning-Kruger effect using a traditional quantile plot! The code below draws 50 samples from the posterior distribution, each time summarizing the data and plotting according to a traditional Dunning-Kruger style plot:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Pick 50 random draws from our 2100 total posterior samples
+samps &amp;lt;- sample(1:2100, size = 50, replace = F)
+
+# Posterior predictions, summarized with quantile plot
+foreach(i=samps, .combine = &amp;quot;rbind&amp;quot;) %do% {
+  data.frame(obj = pars_noise_bias$y_obj_pred[i,],
+             per = pars_noise_bias$y_per_pred[i,]) %&amp;gt;%
+    mutate(quantile = cut_number(obj, n = 4, labels = F)) %&amp;gt;%
+    pivot_longer(cols = c(&amp;quot;obj&amp;quot;, &amp;quot;per&amp;quot;), names_to = &amp;quot;type&amp;quot;) %&amp;gt;%
+    group_by(type, quantile) %&amp;gt;%
+    summarize(mu = mean(value)) %&amp;gt;%
+    mutate(iter = i)
+} %&amp;gt;% 
+  ggplot(aes(x = quantile, y = mu, color = type, 
+             group = interaction(type, iter))) +
+  geom_line(alpha = .1, size = 1) +
+  geom_point(alpha = .1, size = 2) +
+  scale_color_manual(values = c(&amp;quot;black&amp;quot;, &amp;quot;#8F2727&amp;quot;)) +
+  annotate(&amp;quot;text&amp;quot;, label = &amp;quot;Objective&amp;quot;, x = 1.5, y = 1, 
+             color = I(&amp;quot;black&amp;quot;), size = 5) +
+  annotate(&amp;quot;text&amp;quot;, label = &amp;quot;Perceived&amp;quot;, x = 1.5, y = 4, 
+             color = I(&amp;quot;#8F2727&amp;quot;), size = 5) +
+  ylim(0,8) +
+  xlab(&amp;quot;Quantile&amp;quot;) +
+  ylab(&amp;quot;Average Sum Within Quantile&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-16-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We can see here that the model indeed captures the traditional Dunning-Kruger effect, although now we have the added insight of being able to interpret the effect through the lens of the model. It is also worth noting that, by plotting samples from the posterior, we get an idea of what the variability in the data look like, and by extention we know what to expect if we were to run the same experiment again.&lt;/p&gt;
+&lt;p&gt;Finally, we can reporoduce the scatterplot we made of the original data to see if the correlation looks as expected (this time, using only one sample from the posterior for clarity):&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Draw random sample from posterior
+samp &amp;lt;- sample(1:2100, size = 1, replace = F)
+
+# Plotting 
+pred_scatter &amp;lt;- qplot(pars_noise_bias$y_obj_pred[samp,], 
+                      pars_noise_bias$y_per_pred[samp,], 
+      color = I(&amp;quot;#8F2727&amp;quot;), size = 1, alpha = .01) +
+  ggtitle(paste0(&amp;quot;r = &amp;quot;, 
+                 round(cor(pars_noise_bias$y_obj_pred[samp,],
+                           pars_noise_bias$y_per_pred[samp,]), 2))) +
+  xlab(&amp;quot;Objective Number Correct&amp;quot;) +
+  ylab(&amp;quot;Perceived Number Correct&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;none&amp;quot;, 
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        plot.title = element_text(hjust=.5))
+
+# Plot along with observed data to compare
+obs_scatter | pred_scatter&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-17-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;It looks pretty good! You can get a better sense of the expected variability by taking different samples from the posterior and plotting those. You will find that the correlation will vary a decent amount, which is in part due to the uncertainty in the underlying parameters, but also partly due to the random nature of the binomial generative model.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;fitting-the-binomial-perception-distortion-model&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Fitting the Binomial Perception Distortion Model&lt;/h1&gt;
+&lt;p&gt;We can now turn our attention toward the binomial perception distortion model to see if the results come back similar. We will not go into as much detail in this section, but we will at least fit the model and take a look at the parameters to see if they come out in the expected directions. The Stan code for our next model is below:&lt;/p&gt;
+&lt;pre class=&#34;stan&#34;&gt;&lt;code&gt;functions {
+  // Perception distortion function
+  real per_dist(real p_obj, real gamma, real delta) {
+    real p_per;
+    if (p_obj == 0) {
+      p_per = 0;
+    } else {
+      p_per = delta*pow(p_obj, gamma) / (delta*pow(p_obj, gamma) + pow((1-p_obj), gamma));
+    }
+    return p_per;
+  }
+}
+
+data {
+  int&amp;lt;lower=1&amp;gt; N;     // Number of participants
+  int&amp;lt;lower=1&amp;gt; n_obj; // Number of items on objective measure
+  int&amp;lt;lower=1&amp;gt; n_per; // Number of items on perception measure
+  int y_obj[N];       // Objective number of items correct
+  int y_per[N];       // Perceived number of items correct
+}
+
+parameters {
+  vector[N] theta;     // Underlying skill
+  real&amp;lt;lower=0&amp;gt; gamma; // Perception distortion 
+  real&amp;lt;lower=0&amp;gt; delta; // Bias
+}
+
+transformed parameters {
+  vector[N] p_obj;
+  vector[N] p_per;
+
+  // Probit transforming our parameters
+  for (i in 1:N) {
+    p_obj[i] = Phi_approx(theta[i]);
+    p_per[i] = per_dist(p_obj[i], gamma, delta);
+  }
+}
+
+model {
+  // Prior distributions
+  theta ~ normal(0,1);
+  gamma ~ lognormal(0,1);
+  delta ~ lognormal(0,1);
+  
+  // Likelihood for both objective and perceived number of correct items
+  y_obj ~ binomial(n_obj, p_obj);
+  y_per ~ binomial(n_per, p_per);
+}
+
+generated quantities {
+  int y_obj_pred[N];
+  int y_per_pred[N];
+  
+  // Generate posterior predictions to compare against observed data
+  y_obj_pred = binomial_rng(n_obj, p_obj);
+  y_per_pred = binomial_rng(n_per, p_per);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The code is very similar to before, but we have added the perception distortion function, which we will use instead of the noise and bias terms from the previous model. Time fit the model!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Note that you will need to compile the model first. Mine is
+# already compiled within the Rmarkdown file used to make the post:
+# binomial_per_dist &amp;lt;- stan_model(&amp;quot;path_to_model/file_name.stan&amp;quot;)
+
+# Fit the model!
+fit_per_dist &amp;lt;- sampling(binomial_per_dist, 
+                         data   = stan_dat, 
+                         iter   = 1000, # 1000 MCMC samples
+                         warmup = 300,  # 300 used for warm-up
+                         chains = 3,    # 3 MCMC chains
+                         cores  = 3,    # parallel over 3 cores
+                         seed   = 43210)
+
+# Once finished, check convergence using traceplots 
+traceplot(fit_per_dist)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-19-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Convergence looks good! We will skip the &lt;span class=&#34;math inline&#34;&gt;\(\hat{R}\)&lt;/span&gt; plot for brevity, but it also came back looking good.&lt;/p&gt;
+&lt;p&gt;Next, let’s plot the parameters! Remember, for this model, a pattern where &lt;span class=&#34;math inline&#34;&gt;\(\gamma&amp;lt;1\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\delta&amp;gt;1\)&lt;/span&gt; produces a Dunning-Kruger effect, so we are looking to see of the posterior distributions meet these criteria:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Extract posterior samples from model fit object
+pars_per_dist &amp;lt;- rstan::extract(fit_per_dist)
+
+# Prior versus posterior distribution for gamma
+post_gamma &amp;lt;- ggplot() +
+  geom_vline(xintercept = 1, linetype = 2) + 
+  geom_density(aes(x = pars_per_dist$gamma), fill = I(&amp;quot;#8F2727&amp;quot;)) + 
+  geom_line(aes(x = seq(-5,5, length.out = 300), 
+                y = dlnorm(seq(-5,5, length.out = 300))),
+            linetype = 2, color = I(&amp;quot;gray&amp;quot;)) +
+  xlab(expression(gamma)) +
+  xlim(0,4) +
+  ylim(0,6.5) +
+  theme_minimal(base_size = 15) + 
+  theme(panel.grid = element_blank(),
+        axis.title.x = element_text(size = 15))
+# For delta
+post_delta &amp;lt;- ggplot() +
+  geom_vline(xintercept = 1, linetype = 2) + 
+  geom_density(aes(x = pars_per_dist$delta), fill = I(&amp;quot;#8F2727&amp;quot;)) + 
+  geom_line(aes(x = seq(-5,5, length.out = 300), 
+                y = dlnorm(seq(-5,5, length.out = 300))),
+            linetype = 2, color = I(&amp;quot;gray&amp;quot;)) +
+  xlab(expression(delta)) +
+  xlim(0,4) +
+  ylim(0,6.5) +
+  theme_minimal(base_size = 15) + 
+  theme(panel.grid = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.title.x = element_text(size = 15))
+# Plot together
+post_gamma | post_delta&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-20-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Once again, pretty clear evidence for the Dunning-Kruger effect! And once more, the parameters have a psychological interpretation that directly corresponds to the hypothesis underlying the Dunning-Kruger effect, which makes us more confident that the effect is indeed psychological, rather than an artefact of an arbitrary statistical modeling decision.&lt;/p&gt;
+&lt;div id=&#34;a-psychological-dunning-kruger-effect-is-present-in-both-models&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;A Psychological Dunning-Kruger Effect is Present in Both Models&lt;/h2&gt;
+&lt;p&gt;For one final plot, it is insightful to show what the estimated parameters for each model imply regarding the relationship beetween &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{obj}}\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{per}}\)&lt;/span&gt;, which directly correspond to participants’ objective skill and perceived skill, respectively. This will be similar to previous plots that we made, but conditional on the observed data. Here we go:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Plot different combinations of perception distortion and bias
+p_noise_bias &amp;lt;- qplot(x = colMeans(pars_noise_bias$p_obj),
+                      y = colMeans(pars_noise_bias$p_per),
+                      color = I(&amp;quot;#8F2727&amp;quot;), alpha = .1, size = 1) +
+  geom_abline(intercept = 0, slope = 1, color = I(&amp;quot;black&amp;quot;), 
+              linetype = 2, size = 1) +
+  ggtitle(&amp;quot;Noise + Bias&amp;quot;) +
+  xlab(expression(p[&amp;quot;obj&amp;quot;])) +
+  ylab(expression(p[&amp;quot;per&amp;quot;])) +
+  xlim(0,1) +
+  ylim(0,1) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        plot.title = element_text(hjust=.5),
+        legend.position = &amp;quot;none&amp;quot;)
+# Same, for other model
+p_per_dist &amp;lt;- qplot(x = colMeans(pars_per_dist$p_obj),
+                    y = colMeans(pars_per_dist$p_per),
+                    color = I(&amp;quot;#8F2727&amp;quot;), alpha = .1, size = 1) +
+  geom_abline(intercept = 0, slope = 1, color = I(&amp;quot;black&amp;quot;), 
+              linetype = 2, size = 1) +
+  ggtitle(&amp;quot;Perception Distortion&amp;quot;) +
+  xlab(expression(p[&amp;quot;obj&amp;quot;])) +
+  ylab(expression(p[&amp;quot;per&amp;quot;])) +
+  xlim(0,1) +
+  ylim(0,1) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        plot.title = element_text(hjust=.5),
+        legend.position = &amp;quot;none&amp;quot;)
+# Plot together
+p_noise_bias | p_per_dist&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger_files/figure-html/unnamed-chunk-21-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;What you are seeing above are the posterior expectations (i.e. averages across the posterior distribution) for the &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{obj}}\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{per}}\)&lt;/span&gt; terms for each of the participants in the dataset, and for both models separately. As noted before, the models are practically indistinguishable! More importantly, though, is that this is a “psychological space” of sorts, where we can interpret these patterns as psychological effects. That said, the Dunning-Kruger effect is clear as day here!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;wait-the-dunning-kruger-effect-is-real-after-all&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Wait, the Dunning-Kruger Effect is Real After All?&lt;/h1&gt;
+&lt;p&gt;Our results suggest that the Dunning-Kruger effect is indeed a real psychological phenomenon. Using two diferrent generative models with psychologically interpretable parameters, we found not only strong evidence for the effect, but revealed potential mechanisms through which the effect may arise. The first is through the concept of “perception noise”, as shown with our noise + bias model. The second is through a general “perception distortion” mechanism, captured in the perception distortion model (however, this distortion may itself be attributable to noise, so one could argue that we have identified a single mechanism). When either of these mechanisms is combined with a general over-estimation bias, the Dunning-Kruger effect appears in observed data.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;The Dunning-Kruger effect is saved! This was quite an interesting journey for me. It revealed to me, once again, just how much great work exists in the fields of mathematical psychology and cognitive science, which I took inspiration from when developing the models presented here. Moreover, it shows how powerful generative modeling can be, even for problems that may traditionally be viewed as outside the scope of mathematical modeling.&lt;/p&gt;
+&lt;p&gt;Regarding the models we developed, there are some clear limitations, which I think future work could readily address. The most obvious extention, to me, would be to collect enough data from each participant to estimate a noise (or perception distortion) and bias parameters for each participant. Right now, our model assumes that these parameters are constant across participants, but this is likely untrue. A study that sampled each participant across the whole range of &lt;span class=&#34;math inline&#34;&gt;\(p_{i,\text{obj}}\)&lt;/span&gt; would be perfectly suited for this. Another interesting extention would be to test the models for &lt;a href=&#34;https://doi.org/10.1037/a0018435&#34;&gt;selective parameter influence&lt;/a&gt;, to determine if manipulating uncertainty/noise really does influence behavior in ways predicted by the models.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## R version 3.6.0 (2019-04-26)
+## Platform: x86_64-apple-darwin15.6.0 (64-bit)
+## Running under: macOS High Sierra 10.13.6
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] httr_1.4.0         hBayesDM_1.0.2     Rcpp_1.0.1        
+##  [4] bayesplot_1.7.0    rstan_2.19.2       StanHeaders_2.19.0
+##  [7] foreach_1.4.4      patchwork_1.0.0    gghighlight_0.3.1 
+## [10] ggplot2_3.3.2      tidyr_1.0.0        dplyr_1.0.1       
+## [13] mvtnorm_1.0-10    
+## 
+## loaded via a namespace (and not attached):
+##  [1] tidyselect_1.1.0   xfun_0.7           reshape2_1.4.3    
+##  [4] purrr_0.3.3        colorspace_1.4-1   vctrs_0.3.2       
+##  [7] generics_0.0.2     htmltools_0.3.6    stats4_3.6.0      
+## [10] loo_2.1.0          yaml_2.2.0         rlang_0.4.7       
+## [13] pkgbuild_1.0.3     pillar_1.4.1       glue_1.4.1        
+## [16] withr_2.1.2        matrixStats_0.54.0 lifecycle_0.2.0   
+## [19] plyr_1.8.4         stringr_1.4.0      munsell_0.5.0     
+## [22] blogdown_0.13      gtable_0.3.0       codetools_0.2-16  
+## [25] evaluate_0.14      labeling_0.3       inline_0.3.15     
+## [28] knitr_1.23         callr_3.2.0        ps_1.3.0          
+## [31] curl_3.3           parallel_3.6.0     scales_1.0.0      
+## [34] formatR_1.7        gridExtra_2.3      digest_0.6.19     
+## [37] stringi_1.4.3      bookdown_0.11      processx_3.3.1    
+## [40] grid_3.6.0         cli_1.1.0          tools_3.6.0       
+## [43] magrittr_1.5       tibble_2.1.3       crayon_1.3.4      
+## [46] pkgconfig_2.0.2    ellipsis_0.3.0     data.table_1.12.2 
+## [49] prettyunits_1.0.2  ggridges_0.5.1     assertthat_0.2.1  
+## [52] rmarkdown_1.13     iterators_1.0.10   R6_2.4.0          
+## [55] compiler_3.6.0&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>On Curbing Your Measurement Error: From Classical Corrections to Generative Models</title>
       <link>http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/</link>
       <pubDate>Sat, 13 Jun 2020 00:00:00 +0000</pubDate>
@@ -2617,171 +3532,6 @@ Below, we will explore two methods that address the exploration-exploitation pro
 &lt;li&gt;Generating a probability of selecting each choice on the next trial.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;This model is simple, but it provides the basic building blocks for more complex models that are found in neuroscience, cognitive science, and decision making literature today. In the next post, we will explore various methods which can be used to estimate the &lt;em&gt;free parameters&lt;/em&gt; in the model (e.g. the learning rate) when all we have are the person’s choices.&lt;/p&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Human Choice and Reinforcement Learning (1)</title>
-      <link>http://haines-lab.com/post/2017-04-04-choice_rl_1/</link>
-      <pubDate>Tue, 04 Apr 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/post/2017-04-04-choice_rl_1/</guid>
-      <description>&lt;div id=&#34;short-history&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;1. Short history&lt;/h1&gt;
-&lt;p&gt;In 1972, Robert Rescorla and Allan Wagner developed a formal theory of associative learning, the process through which multiple stimuli are associated with one-another. The most widely used example (Fig. 1) of associative learning comes straight from Psychology 101–Pavlov’s dog.&lt;/p&gt;
-&lt;div id=&#34;figure-1&#34; class=&#34;section level4&#34;&gt;
-&lt;h4&gt;Figure 1&lt;/h4&gt;
-&lt;p&gt;&lt;img src=&#34;http://www.savingstudentsmoney.org/psychimg/stangor-fig07_003.jpg&#34; alt=&#34;Figure 1&#34; style=&#34;height: 100%; width: 100%; object-fit: contain&#34;/&gt;&lt;/p&gt;
-&lt;p&gt;The idea is simple, and it’s something that we experience quite often in everyday life. In the same way that Pavlov’s dog begins to drool after hearing a bell, certain cognitive and/or biological processes are triggered when we are exposed to stimuli that we have been exposed to in the past. But how can this learning process be modeled? That is to say, what sort of &lt;em&gt;equation&lt;/em&gt; can we use to describe how an agent learns to associate multiple stimuli? To answer these questions, Rescorla and Wagner developed what is now know as the Rescorla-Wagner updating rule:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\Delta V_{A} = \alpha_{A} \beta_{1} (\lambda_{1} - V_{AX})\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\Delta V_{X} = \alpha_{X} \beta_{1} (\lambda_{1} - V_{AX})\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;First off, note that the original Rescorla-Wagner rule was developed to explain &lt;em&gt;compound stimuli&lt;/em&gt; (e.g. presentation of a bell and light, followed by food). Here, &lt;span class=&#34;math inline&#34;&gt;\(\Delta V_{A}\)&lt;/span&gt; is the change in associative strength between stimulus &lt;span class=&#34;math inline&#34;&gt;\(A\)&lt;/span&gt; (e.g. the bell) and the response (e.g. food). &lt;span class=&#34;math inline&#34;&gt;\(\Delta V_{X}\)&lt;/span&gt; has the same interpretation, but refers to stimulus &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; (e.g. the light).&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;\(0 \leq \beta_{1} \leq 1\)&lt;/span&gt; is a free parameter (i.e. we estimate it from the data) referred to as the &lt;em&gt;learning rate&lt;/em&gt;. The learning rate controls how quickly updating takes place, where values near 0 and 1 reflect sluggish and rapid learning, respectively. Above, the learning rate is shared across stimuli.&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;\(0 \leq \alpha_{A} \leq 1\)&lt;/span&gt; is a free parameter which is determined by the salience of stimulus &lt;span class=&#34;math inline&#34;&gt;\(A\)&lt;/span&gt;, and &lt;span class=&#34;math inline&#34;&gt;\(0 \leq \alpha_{X} \leq 1\)&lt;/span&gt; for stimulus &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt;. Unlike the learning rate, which is shared across stimuli, the salience parameter is specific to each stimulus. Put simply, this just means that learning can occur at different rates depending on the type of stimulus (e.g. I may associate a light with food more quickly than a tone).&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;\(\lambda_{1}\)&lt;/span&gt; is described as “the asymptote of associative strength”. This is the upper-limit on how strong the association strength can be. In this way, &lt;span class=&#34;math inline&#34;&gt;\(\lambda_{1}\)&lt;/span&gt; reflects the value being updated toward by the learning rate (&lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;) and stimulus salience (&lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;).&lt;/p&gt;
-&lt;p&gt;Lastly, &lt;span class=&#34;math inline&#34;&gt;\(V_{AX}\)&lt;/span&gt; is the total associative strength of the compound stimulus &lt;span class=&#34;math inline&#34;&gt;\(AX\)&lt;/span&gt;. Rescorla and Wagner assume that this is a simple sum of both stimuli strengths:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[V_{AX} = V_{A} + V_{X}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Interpretation of this model is actually quite simple–we update associative strength (&lt;span class=&#34;math inline&#34;&gt;\(V_{*}\)&lt;/span&gt;) for each stimulus by taking steps (&lt;span class=&#34;math inline&#34;&gt;\(\alpha \beta\)&lt;/span&gt;) toward the difference between the asymptote of learning (&lt;span class=&#34;math inline&#34;&gt;\(\lambda_{1}\)&lt;/span&gt;) and the current associative strength of the compund stimulus (&lt;span class=&#34;math inline&#34;&gt;\(V_{AX}\)&lt;/span&gt;). By continually exposing an agent to a tone or bell paired with a reward (or punishment), the agent learns the associative strength of the conditioned and unconditioned stimuli.&lt;/p&gt;
-&lt;p&gt;While the original Rescorla-Wagner model was successful for explaining associative learning for classical conditioning paradigms, what of operant conditioning? What if we are interested in how people learn to make decisions? In most current research, we are not interested in knowing how people learn to associate lights or tones with some reward. Instead, we would like a model that can describe how people learn to select the &lt;em&gt;best choice&lt;/em&gt; among &lt;em&gt;multiple choices&lt;/em&gt;. This model would need to explain how people assign values to multiple options as well as how they decide which option to choose. In statistical terms, we want to know how people solve the &lt;a href=&#34;https://en.wikipedia.org/wiki/Multi-armed_bandit&#34;&gt;&lt;em&gt;multi-armed bandit&lt;/em&gt;&lt;/a&gt; problem. In the following section, we will begin to solve this problem.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;current-implementations&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;2. Current Implementations&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;http://777click.com/assets/templates/777/img/777banner.jpg&#34; alt=&#34;Figure 2&#34; style=&#34;height: 100%; width: 100%; object-fit: contain&#34;/&gt;&lt;/p&gt;
-&lt;p&gt;As a motivating example, we will explore the simple problem of learning the probability that a slot machine will payoff (i.e. that you will win any amount after pulling the lever). To do so, the above equations only need minor modifications. Additionally, we will change the terminology–instead of learning an associative strength, we will now be learning the &lt;em&gt;probability of a winning outcome&lt;/em&gt;. To start, we take the first equation above and write it for a single stimulus &lt;span class=&#34;math inline&#34;&gt;\(V\)&lt;/span&gt;, but exchange &lt;span class=&#34;math inline&#34;&gt;\(V\)&lt;/span&gt; with the probability of observing a win:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\Delta Pr(win) = \alpha \beta (\lambda - Pr(win))\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Because &lt;span class=&#34;math inline&#34;&gt;\(\Delta Pr(win) = Pr(win)_{t+1} - Pr(win)_{t}\)&lt;/span&gt; (where &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt; is the current trial), we can re-write the above equation into an iterative form:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Pr(win)_{t+1} = Pr(win)_{t} + \alpha \beta (\lambda_{t} - Pr(win)_{t})\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Since we are using this model to explain how people learn the probability of a binary outcome, &lt;span class=&#34;math inline&#34;&gt;\(\lambda_{t} \in [0, 1]\)&lt;/span&gt; now represents the outcome of slot machine roll on trial &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt;. Now, we drop the &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; parameter to simplify the model further. Because we have a single choice option, estimating both &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; would lead to an unidentifiable model. This is because as either one increases, the other can decrease and lead to the same exact predictions. Even with multiple choice options, this problem is still apparent. In current applications of the Rescorla-Wagner rule, we do not include a “salience” parameter. Now, we have:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Pr(win)_{t+1} = Pr(win)_{t} + \beta (\lambda_{t} - Pr(win)_{t})\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;The model is now much easier to interpret. The term &lt;span class=&#34;math inline&#34;&gt;\((\lambda_{t} - Pr(win)_{t})\)&lt;/span&gt; can be thought of as the &lt;em&gt;prediction error&lt;/em&gt;–the difference between the actual value &lt;span class=&#34;math inline&#34;&gt;\(\lambda_{t}\)&lt;/span&gt; revealed after the choice was made and the expected value of the choice &lt;span class=&#34;math inline&#34;&gt;\(Pr(win)_{t}\)&lt;/span&gt; for that trial. &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; (the learning rate) then updates the current expectation &lt;span class=&#34;math inline&#34;&gt;\(Pr(win)_{t}\)&lt;/span&gt; in the direction of the prediction error &lt;span class=&#34;math inline&#34;&gt;\((\lambda_{t} - Pr(win)_{t})\)&lt;/span&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;r-example&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;3. R Example&lt;/h1&gt;
-&lt;p&gt;To see the Rescorla-Wagner rule in action, let’s generate some fake data using the binomial distribution and try to estimate the rate parameter using various different values for the learning rate.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# For pretty images
-library(ggplot2)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Registered S3 methods overwritten by &amp;#39;ggplot2&amp;#39;:
-##   method         from 
-##   [.quosures     rlang
-##   c.quosures     rlang
-##   print.quosures rlang&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Number of &amp;#39;trials&amp;#39;
-num_trials &amp;lt;- 100
-
-# The win rate is 0.7
-payoff &amp;lt;- rbinom(n = num_trials, size = 1, prob = 0.7)
-
-# Function that iterates the Rescorla-Wagner rule 
-rw_update &amp;lt;- function(lambda, beta, init) {
-  # To store expected value for each trial
-  Pr_win &amp;lt;- vector(length=length(lambda))
-  # Set initial value
-  Pr_win[1] &amp;lt;- init
-  for (t in 1:(length(lambda)-1)) {
-    Pr_win[t+1] &amp;lt;- Pr_win[t] + beta * (lambda[t] - Pr_win[t])
-  }
-  return(Pr_win)
-}
-
-# With initial expectation = 0, try different learning rates
-beta_05 &amp;lt;- rw_update(lambda = payoff, beta = 0.05, init = 0)
-beta_25 &amp;lt;- rw_update(lambda = payoff, beta = 0.25, init = 0)
-beta_50 &amp;lt;- rw_update(lambda = payoff, beta = 0.50, init = 0)
-beta_75 &amp;lt;- rw_update(lambda = payoff, beta = 0.75, init = 0)
-beta_95 &amp;lt;- rw_update(lambda = payoff, beta = 0.95, init = 0)
-
-# Store in data.frame for plotting
-all_data &amp;lt;- stack(data.frame(beta_05 = beta_05,
-                             beta_25 = beta_25,
-                             beta_50 = beta_50,
-                             beta_75 = beta_75,
-                             beta_95 = beta_95))
-# Add trial 
-all_data[[&amp;quot;trial&amp;quot;]] &amp;lt;- rep(1:num_trials, 5)
-names(all_data)[2]  &amp;lt;- &amp;quot;Beta&amp;quot;
-
-# Plot results
-p &amp;lt;- ggplot(all_data, aes(x = trial, y = values, color = Beta)) + 
-  geom_line() + 
-  geom_hline(yintercept = 0.7, colour=&amp;quot;black&amp;quot;, linetype = &amp;quot;longdash&amp;quot;) + 
-  ggtitle(&amp;quot;Expected Probability of Winning Outcome&amp;quot;) + 
-  xlab(&amp;quot;Trial Number&amp;quot;) + 
-  ylab(&amp;quot;Expected Pr(win)&amp;quot;)  
-p&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig1-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
-&lt;p&gt;It is easy to see that the higher learning rates (i.e. &amp;gt; 0.05) are jumping around the true win rate (0.7, dashed line) quite a bit, whereas setting &lt;span class=&#34;math inline&#34;&gt;\(\beta = 0.05\)&lt;/span&gt; allows for a more stable estimate. Let’s try again with learning rates closer to 0.05.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Learning rates closer to 0.05
-beta_01 &amp;lt;- rw_update(lambda = payoff, beta = 0.01, init = 0)
-beta_03 &amp;lt;- rw_update(lambda = payoff, beta = 0.03, init = 0)
-beta_05 &amp;lt;- rw_update(lambda = payoff, beta = 0.05, init = 0)
-beta_07 &amp;lt;- rw_update(lambda = payoff, beta = 0.07, init = 0)
-beta_09 &amp;lt;- rw_update(lambda = payoff, beta = 0.09, init = 0)
-
-# Store in data.frame for plotting
-all_data &amp;lt;- stack(data.frame(beta_01 = beta_01,
-                             beta_03 = beta_03,
-                             beta_05 = beta_05,
-                             beta_07 = beta_07,
-                             beta_09 = beta_09))
-# Add trial 
-all_data[[&amp;quot;trial&amp;quot;]] &amp;lt;- rep(1:num_trials, 5)
-names(all_data)[2]  &amp;lt;- &amp;quot;Beta&amp;quot;
-
-# Plot results
-p2 &amp;lt;- ggplot(all_data, aes(x = trial, y = values, color = Beta)) +
-  geom_line() + 
-  geom_hline(yintercept = 0.7, colour=&amp;quot;black&amp;quot;, linetype = &amp;quot;longdash&amp;quot;) + 
-  ggtitle(&amp;quot;Expected Probability of Winning Outcome&amp;quot;) + 
-  xlab(&amp;quot;Trial Number&amp;quot;) + 
-  ylab(&amp;quot;Expected Pr(win)&amp;quot;)
-p2&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig2-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
-&lt;p&gt;These results look a bit better. However, it is apparent that setting &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; too low is making the updating very sluggish. If we run more trials, however, we should see the expectation converge.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Number of &amp;#39;trials&amp;#39;
-num_trials &amp;lt;- 500
-
-# The win rate is 0.7
-payoff &amp;lt;- rbinom(n = num_trials, size = 1, prob = 0.7)
-
-# Learning rates closer to 0.05
-beta_01 &amp;lt;- rw_update(lambda = payoff, beta = 0.01, init = 0)
-beta_03 &amp;lt;- rw_update(lambda = payoff, beta = 0.03, init = 0)
-beta_05 &amp;lt;- rw_update(lambda = payoff, beta = 0.05, init = 0)
-beta_07 &amp;lt;- rw_update(lambda = payoff, beta = 0.07, init = 0)
-beta_09 &amp;lt;- rw_update(lambda = payoff, beta = 0.09, init = 0)
-
-# Store in data.frame for plotting
-all_data &amp;lt;- stack(data.frame(beta_01 = beta_01,
-                             beta_03 = beta_03,
-                             beta_05 = beta_05,
-                             beta_07 = beta_07,
-                             beta_09 = beta_09))
-# Add trial 
-all_data[[&amp;quot;trial&amp;quot;]] &amp;lt;- rep(1:num_trials, 5)
-names(all_data)[2]  &amp;lt;- &amp;quot;Beta&amp;quot;
-
-# Plot results
-p2 &amp;lt;- ggplot(all_data, aes(x = trial, y = values, color = Beta)) +
-  geom_line() + 
-  geom_hline(yintercept = 0.7, colour=&amp;quot;black&amp;quot;, linetype = &amp;quot;longdash&amp;quot;) + 
-  ggtitle(&amp;quot;Expected Probability of Winning Outcome&amp;quot;) + 
-  xlab(&amp;quot;Trial Number&amp;quot;) + 
-  ylab(&amp;quot;Expected Pr(win)&amp;quot;)
-p2&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2017-04-04-choice_RL_1_files/figure-html/2017-04-02_fig3-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
-&lt;p&gt;Over 500 trials, the expected value for the win rate converges to the true win rate, 70%.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;summary&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;4. Summary&lt;/h1&gt;
-&lt;p&gt;In this post, we reviewed the original Rescorla-Wagner updating rule (a.k.a. the &lt;em&gt;Delta Rule&lt;/em&gt;) and explored its contemporary instantiation. I have shown that the Delta Rule can be used to estimate the win rate of a slot machine on a trial-by-trial basis. While this example may first appear trivial (e.g. why not just take the average of all past outcomes?), we will explore more practical usages in later posts. For now, try playing with the above code yourself! If you want a slightly more challenging problem, try finding the solution to the following question:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;How should you change the learning rate so that the expected win rate is always the average of all past outcomes?&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Hint –&amp;gt; With some simple algebra, the Delta Rule can be re-written as follows:&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Pr(win)_{t+1} = (1 - \beta) \cdot Pr(win)_{t} + \beta \cdot \lambda_{t}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Happy solving! See the answer in the next post.&lt;/p&gt;
 &lt;/div&gt;
 </description>
     </item>

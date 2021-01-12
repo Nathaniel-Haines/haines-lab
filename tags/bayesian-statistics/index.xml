@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2017 Nathaniel Haines</copyright>
-    <lastBuildDate>Sat, 13 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 10 Jan 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://haines-lab.com/tags/bayesian-statistics/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>A Series on Building Formal Models of Classic Psychological Effects: Part 1, the Dunning-Kruger Effect</title>
+      <link>http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/</guid>
+      <description>Introduction The Dunning-Kruger effect is perhaps one of the most well-known effects in all of social psychology, defined as the phenomenon wherein people with low “objective” skill tend to over-estimate their objective skill, whereas people with high objective skill tend to under-estimate their skill. In the popular media, the Dunning-Kruger effect is often summarized in a figure like the one below (source):
+Caption: The Dunning-Kruger Effect in Popular Media
+ Despite the widespread use of figures such as the one above, the specific form of the effect is misleading–it suggests that people with low objective skill perceive their skill to be higher than those with the highest skill, which is not what Dunning and Kruger actually found in their original 1999 study.</description>
+    </item>
     
     <item>
       <title>On Curbing Your Measurement Error: From Classical Corrections to Generative Models</title>

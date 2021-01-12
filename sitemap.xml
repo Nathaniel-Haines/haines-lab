@@ -5,6 +5,15 @@
     
     <url>
     
+      <loc>http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/</loc>
+      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/</loc>
       <lastmod>2020-06-13T00:00:00+00:00</lastmod>
     </url>
@@ -214,7 +223,7 @@
     <url>
     
       <loc>http://haines-lab.com/tags/bayesian-statistics/</loc>
-      <lastmod>2020-06-13T00:00:00+00:00</lastmod>
+      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -254,6 +263,16 @@
     
       <loc>http://haines-lab.com/tags/facial-expressions/</loc>
       <lastmod>2018-01-22T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>http://haines-lab.com/categories/formal-models/</loc>
+      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -303,7 +322,7 @@
     <url>
     
       <loc>http://haines-lab.com/categories/measurement-error/</loc>
-      <lastmod>2020-06-13T00:00:00+00:00</lastmod>
+      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -323,7 +342,7 @@
     <url>
     
       <loc>http://haines-lab.com/post/</loc>
-      <lastmod>2020-06-13T00:00:00+00:00</lastmod>
+      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -353,7 +372,7 @@
     <url>
     
       <loc>http://haines-lab.com/tags/r/</loc>
-      <lastmod>2020-06-13T00:00:00+00:00</lastmod>
+      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -383,7 +402,7 @@
     <url>
     
       <loc>http://haines-lab.com/categories/statistical-modeling/</loc>
-      <lastmod>2020-06-13T00:00:00+00:00</lastmod>
+      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
