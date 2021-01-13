@@ -651,7 +651,7 @@ noise_bias_dat %&gt;%
 \end{align}\]</span></p>
 <p>So far, so good–nothing different from before. Next, we will use a similar function as described by <a href="https://doi.org/10.1016/j.jmp.2010.08.011">Merkle et al. (2011)</a>, which is grounded in the probability estimation literature:</p>
 <p><span class="math display">\[p_{i,\text{per}} = \frac{\delta p_{i,\text{obj}}^{\gamma}}{\delta p_{i,\text{obj}}^{\gamma} + (1-p_{i,\text{obj}})^{\gamma}}\]</span></p>
-<p>Here, <span class="math inline">\(\delta\)</span> is a bias parameters akin to <span class="math inline">\(b\)</span> in the binomial noise + bias model, and <span class="math inline">\(\gamma\)</span> is a <strong><em>perception distortion</em></strong> parameter, which controls how strongly participipants over- or under-weight below- and above-average levels of skill, as indexed by <span class="math inline">\(p_{i,\text{obj}}\)</span>. Per usual, it is best to visualize the function to better interpret the parameters:</p>
+<p>Here, <span class="math inline">\(\delta\)</span> is a bias parameters akin to <span class="math inline">\(b\)</span> in the binomial noise + bias model, and <span class="math inline">\(\gamma\)</span> is a <strong><em>perception distortion</em></strong> parameter, which controls how strongly participants over- or under-weight below- and above-average levels of skill, as indexed by <span class="math inline">\(p_{i,\text{obj}}\)</span>. Per usual, it is best to visualize the function to better interpret the parameters:</p>
 <pre class="r"><code># Perception distortion function
 per_dist &lt;- function(p_obj, gamma, delta) {
   delta*(p_obj^gamma) / (delta*(p_obj^gamma) + (1-p_obj)^gamma)
@@ -719,7 +719,7 @@ osf_url &lt;- &quot;https://osf.io/3kndg/download&quot; # url for Study 1 csv fi
 filename &lt;- &#39;pennycook_2017.csv&#39;
 GET(osf_url, write_disk(filename, overwrite = TRUE))</code></pre>
 <pre><code>## Response [https://files.osf.io/v1/resources/p8xjs/providers/osfstorage/589ddf839ad5a1020acb69c8?action=download&amp;direct&amp;version=1]
-##   Date: 2021-01-12 23:12
+##   Date: 2021-01-13 00:07
 ##   Status: 200
 ##   Content-Type: text/csv
 ##   Size: 88.2 kB

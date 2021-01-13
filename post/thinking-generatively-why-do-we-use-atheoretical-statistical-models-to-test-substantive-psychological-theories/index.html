@@ -335,9 +335,9 @@ long_stroop &lt;- foreach(i=seq_along(files_t1), .combine = &quot;rbind&quot;) %
 # Compute Stroop effect for each person at each time (equation 1)
 sum_stroop &lt;- long_stroop %&gt;%
   group_by(subj_num, time) %&gt;%
-  summarize(stroop_eff = mean(RT[Condition==2]) - mean(RT[Condition==0]))
-
-# Peak at the data
+  summarize(stroop_eff = mean(RT[Condition==2]) - mean(RT[Condition==0]))</code></pre>
+<pre><code>## `summarise()` regrouping output by &#39;subj_num&#39; (override with `.groups` argument)</code></pre>
+<pre class="r"><code># Peak at the data
 kable(head(sum_stroop), digits = 3)</code></pre>
 <table>
 <thead>
@@ -389,6 +389,7 @@ sum_stroop %&gt;%
             Mean = round(mean(stroop_eff), 3),
             SD = round(sd(stroop_eff), 3)) %&gt;%
   kable(digits = 3)</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -946,6 +947,7 @@ foreach(i=seq_along(results), .combine = &quot;rbind&quot;) %do% {
     geom_hline(yintercept = .5, linetype = 2, color = I(&quot;black&quot;)) +
     theme_minimal(base_size = 20) +
     theme(panel.grid = element_blank())</code></pre>
+<pre><code>## Warning: `fun.y` is deprecated. Use `fun` instead.</code></pre>
 <p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-21-1.svg" width="672" /></p>
 <p>As expected, as we artificially replicated our dataset more and more, the model-estimated test-retest correlation (posterior means indicated by black points) converges toward the unpooled sample Pearson’s correlation (indicated by the dashed black line). Next, let’s take a look at this effect at the individual-level by plotting out the changes in posterior means with respect to the number of artificially replicated datasets:</p>
 <pre class="r"><code># Plot convergence of estimated individual-level posterior means with sample means (Sample Means = equation 1/unpooled estimates)

@@ -273,11 +273,7 @@
 <p>Here, we see that in the Delta rule the expected win probability for the next trial is equal to the <a href="https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average"><em>exponentially weighted moving average</em></a> of the past expectation and the current outcome. It is easy to show this through a visualization of the expectation over time. For example, imagine that we have a vector of outcomes <span class="math inline">\(\lambda = [1,0,0,1,1,1,0,1,1,1]\)</span>, where 0 and 1 represent losing and winning slot machine rolls, respectively. Note that in this example, the placement of these outcomes within the vector <span class="math inline">\(\lambda\)</span> indicates their temporal order (i.e. <span class="math inline">\(\lambda_{1}=1\)</span>, <span class="math inline">\(\lambda_{2}=0\)</span>, etc.). Now, if we set an arbitrary learning rate such as <span class="math inline">\(\beta = 0.05\)</span>, what is the expected win rate after iterating through outcomes <span class="math inline">\(\lambda\)</span>? The R code below demonstrates the use of the Delta rule and an alternative exponential weighting scheme–which takes the form of a <a href="https://en.wikipedia.org/wiki/Power_series#Examples"><em>power series</em></a>–to determine the expectation on each trial:</p>
 <pre class="r"><code># For pretty plots
 library(ggplot2)</code></pre>
-<pre><code>## Registered S3 methods overwritten by &#39;ggplot2&#39;:
-##   method         from 
-##   [.quosures     rlang
-##   c.quosures     rlang
-##   print.quosures rlang</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.6.2</code></pre>
 <pre class="r"><code># Assign lambda (lambda[1] == first trial)
 lambda &lt;- c(1,0,0,1,1,1,0,1,1,1)
 

@@ -272,11 +272,12 @@
 <p>For our simulation, we will simulate choice from a model using delta-rule learning and softmax choice. To keep things simple, the learning rate will be the only free paramter in the model. Additionally, we will simulate choices in a task where there are two choices, where choice 1 has a mean payoff of 1 and choice 2 has a mean payoff of -1. Therefore, a learning agent should be able to learn that choice 1 is optimal and make selections accordingly. However, we will add noise to each choice payoff (<em>sigma</em> below) to make things more realistic.</p>
 <p>The following R code simulates 200 trials using the model and task described above:</p>
 <pre class="r"><code># For pretty plots and data manipulation
-library(ggplot2)
-library(foreach)
-library(dplyr)
-
-# Simulation paramters
+library(ggplot2)</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.6.2</code></pre>
+<pre class="r"><code>library(foreach)
+library(dplyr)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 3.6.2</code></pre>
+<pre class="r"><code># Simulation paramters
 set.seed(1)        # Random seed for replication
 mu    &lt;- c(1, -1)  # Mean payoff for choices 1 and 2 
 sigma &lt;- 3         # SD of payoff distributions
