@@ -926,6 +926,15 @@ p_noise_bias | p_per_dist&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
+      <title>Moving beyond Ordinary Factor Analysis in Studies of Personality and Personality Disorder: A Computational Modeling Perspective</title>
+      <link>http://haines-lab.com/publication/haines_psychopathology_2020/</link>
+      <pubDate>Tue, 14 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://haines-lab.com/publication/haines_psychopathology_2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>On Curbing Your Measurement Error: From Classical Corrections to Generative Models</title>
       <link>http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/</link>
       <pubDate>Sat, 13 Jun 2020 00:00:00 +0000</pubDate>
@@ -3417,130 +3426,6 @@ qplot(x = 1:samples, y = posterior, geom = &amp;quot;line&amp;quot;) +
       
       <guid>http://haines-lab.com/talk/math_psych_2017/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Human Choice and Reinforcement Learning (2)</title>
-      <link>http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/</link>
-      <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/</guid>
-      <description>&lt;div id=&#34;answer-to-post-1&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;1. Answer to post 1&lt;/h1&gt;
-&lt;p&gt;In the previous &lt;a href=&#34;http://haines-lab.com/2017/04/04/human-choice-and-reinforcement-learning-1/&#34;&gt;post&lt;/a&gt;, I reviewed the Rescorla-Wagner updating (Delta) rule and its contemporary instantiation. At the end, I asked the following question:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;How should you change the learning rate so that the expected win rate is always the average of all past outcomes?&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;We will go over the answer to this question before progressing to the use of the Delta rule in modeling human choice. To begin, refer back to the Delta rule written in the following form:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Pr(win)_{t+1} = (1 - \beta) \cdot Pr(win)_{t} + \beta \cdot \lambda_{t}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Here, we see that in the Delta rule the expected win probability for the next trial is equal to the &lt;a href=&#34;https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average&#34;&gt;&lt;em&gt;exponentially weighted moving average&lt;/em&gt;&lt;/a&gt; of the past expectation and the current outcome. It is easy to show this through a visualization of the expectation over time. For example, imagine that we have a vector of outcomes &lt;span class=&#34;math inline&#34;&gt;\(\lambda = [1,0,0,1,1,1,0,1,1,1]\)&lt;/span&gt;, where 0 and 1 represent losing and winning slot machine rolls, respectively. Note that in this example, the placement of these outcomes within the vector &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; indicates their temporal order (i.e. &lt;span class=&#34;math inline&#34;&gt;\(\lambda_{1}=1\)&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;\(\lambda_{2}=0\)&lt;/span&gt;, etc.). Now, if we set an arbitrary learning rate such as &lt;span class=&#34;math inline&#34;&gt;\(\beta = 0.05\)&lt;/span&gt;, what is the expected win rate after iterating through outcomes &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt;? The R code below demonstrates the use of the Delta rule and an alternative exponential weighting scheme–which takes the form of a &lt;a href=&#34;https://en.wikipedia.org/wiki/Power_series#Examples&#34;&gt;&lt;em&gt;power series&lt;/em&gt;&lt;/a&gt;–to determine the expectation on each trial:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# For pretty plots
-library(ggplot2)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Warning: package &amp;#39;ggplot2&amp;#39; was built under R version 3.6.2&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Assign lambda (lambda[1] == first trial)
-lambda &amp;lt;- c(1,0,0,1,1,1,0,1,1,1)
-
-# Set learning rate
-beta &amp;lt;- 0.05
-
-### Iterative prediction error (Delta rule) approach ###
-
-# Function that iterates the Rescorla-Wagner rule 
-  # This function is slightly modified from the last post
-  # to ensure that that final expectation is stored
-rw_update &amp;lt;- function(lambda, beta, init) {
-  # To store expected value for each trial
-  Pr_win &amp;lt;- vector(length=length(lambda)+1)
-  # Set initial value
-  Pr_win[1] &amp;lt;- init
-  for (t in 1:(length(lambda))) {
-    Pr_win[t+1] &amp;lt;- Pr_win[t] + beta * (lambda[t] - Pr_win[t])
-  }
-  return(Pr_win)
-}
-
-# With initial expectation = 0, iterate Delta rule
-delta_results &amp;lt;- rw_update(lambda = lambda, 
-                           beta   = beta, 
-                           init   = 0)[-1]
-                          #             ^
-                          # Remove initial value (0)
-
-### Power series approach ###
-
-# Direct exponential weighting (saving all expectations)
-power_ser &amp;lt;- NULL
-for (i in 1:10) {
-  power_ser[i] &amp;lt;- beta * sum((1-beta)^(0:(i-1))*lambda[i:1])
-}
-
-### Comparison of both approaches ###
-all(round(delta_results, 8) == round(power_ser, 8))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] TRUE&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# data.frame for ggplot
-all_data &amp;lt;- stack(data.frame(delta = delta_results,
-                             pow_s = power_ser))
-# Add trial 
-all_data[[&amp;quot;trial&amp;quot;]] &amp;lt;- rep(1:10, 2)
-names(all_data)[2] &amp;lt;- &amp;quot;Approach&amp;quot;
-
-# Visually
-p &amp;lt;- ggplot(all_data, aes(x = trial, y = values, color = Approach)) + 
-  geom_line() +
-  facet_grid(facets = &amp;quot;Approach ~ .&amp;quot;) + 
-  ggtitle(&amp;quot;Comparison of approaches&amp;quot;) +
-  xlab(&amp;quot;Trial Number&amp;quot;) +
-  ylab(&amp;quot;Expected Win Probability&amp;quot;)
-p&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2_files/figure-html/2017-04-07_fig1-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
-&lt;p&gt;As you can see in the plots, both the Delta rule and the power series approach yield the same exact expectations when iterated for each trial. However, the power series form requires each past observation while the Delta rule only requires the last expectation–this feature makes the Delta rule form of the equation much more plausible as a processes that people may use to estimate the value of a choice. This is because the computational cost does not increase with the number of past observations.&lt;/p&gt;
-&lt;p&gt;Through this example, those familiar with &lt;a href=&#34;http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_averages&#34;&gt;economics&lt;/a&gt; or &lt;a href=&#34;https://en.wikipedia.org/wiki/Signal_processing&#34;&gt;signal processing&lt;/a&gt; may find the Delta rule familiar. Essentially, we can think of the Delta rule as a smoothing function or a &lt;a href=&#34;https://en.wikipedia.org/wiki/High-pass_filter#Algorithmic_implementation&#34;&gt;high- or low-pass filter&lt;/a&gt;–albeit in the time as opposed to frequency domain–which effectively attenuates the effect of past or current outcomes, respectively. What makes this specific form interesting is again the fact that it can be iterated (i.e. it is recursive), making it a realistic approximation to the computations performed by the brain when estimating some value.&lt;/p&gt;
-&lt;p&gt;With the above intuitions in mind, we will now get back to the question. How do we change the learning rate to ensure that the current expectation is always the simple average of all past outcomes? Since the above example showed that the Delta rule is really just a moving average where past outcomes are given exponentially decreasing weights, our goal is to make all outcomes equally represented. In other words, we want to weight past and current outcomes equally–this is a &lt;a href=&#34;https://en.wikipedia.org/wiki/Moving_average#Cumulative_moving_average&#34;&gt;&lt;em&gt;cumulative moving average&lt;/em&gt;&lt;/a&gt;. Using our slot machine example, the cumulative moving average formula (in its most common form) is written as follows:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Pr(win)_{t+1} = \frac{\lambda_{t} + (t-1) \cdot Pr(win)_{t}}{t}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;We can re-write the above equation into one that is more familiar to us:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Pr(win)_{t+1} = (1-\frac{1}{t}) \cdot Pr(win)_{t} + \frac{1}{t} \cdot \lambda_{t} \]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;In the above form, you can see that the cumulative moving average can be computed using the Delta rule by setting the learning rate to &lt;span class=&#34;math inline&#34;&gt;\(\frac{1}{t}\)&lt;/span&gt;, where &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt; is the trial number. Looking at the equation, you will notice that as &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt; increases, the weight &lt;span class=&#34;math inline&#34;&gt;\((1-\frac{1}{t})\)&lt;/span&gt; placed on the past probability estimate &lt;span class=&#34;math inline&#34;&gt;\(Pr(win)_{t}\)&lt;/span&gt; becomes larger while the weight &lt;span class=&#34;math inline&#34;&gt;\(\frac{1}{t}\)&lt;/span&gt; on the current outcome &lt;span class=&#34;math inline&#34;&gt;\(\lambda_{t}\)&lt;/span&gt; shrinks. This behavior ensures that past outcomes are not discounted at a higher rate than current ones.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;choice-mechanisms&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;2. Choice mechanisms&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;http://az616578.vo.msecnd.net/files/2016/08/19/636072180885324217301014601_shoes.jpg&#34; alt=&#34;Figure 1&#34; style=&#34;height: 100%; width: 100%; object-fit: contain&#34;/&gt;&lt;/p&gt;
-&lt;p&gt;With the Delta rule, we can approximate how people with a certain learning rate may update their expectations about an outcome on a trial-by-trial basis, but how does this translate to choice? In the slot machine example, we only had a single choice (i.e. pull the lever and see if you win), so this question never applied to us. &lt;strong&gt;But what if we have 2 slot machines and we want to select the one that will win most frequently?&lt;/strong&gt; In this case, we can use the Delta rule to update win probability expectations for each slot machine separately, but what do we do with these values after they are computed? Below, I will describe three different methods that can be used to translate expected values to choice.&lt;/p&gt;
-&lt;div id=&#34;greedy-choice&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;2.1 Greedy choice&lt;/h2&gt;
-&lt;p&gt;Greedy choice is simple–choose the option with the highest expected value on each trial (i.e. pick the &lt;em&gt;greedy&lt;/em&gt; option):&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[c_{t} = \underset{s \in S}{argmax}(V(s_{t}))\]&lt;/span&gt;
-where &lt;span class=&#34;math inline&#34;&gt;\(c_{t}\)&lt;/span&gt; indicates the choice made on trial &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(V(s_{t})\)&lt;/span&gt; represents the value associated with Slot machine &lt;span class=&#34;math inline&#34;&gt;\(s\)&lt;/span&gt; on trial &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt;. Applying this logic to our example, this would equate to choosing the slot machine with the highest expected win probability. While this may sound like a good idea, it is important to remember that we do not know what the true win rate is for either slot machine. Instead, we estimate it after each outcome. With this in mind, a simple example (below) shows why the greedy choice method fails in practical applications.&lt;/p&gt;
-&lt;p&gt;Imagine you are choosing between 2 slot machines, where machine A (&lt;span class=&#34;math inline&#34;&gt;\(Slot_{A}\)&lt;/span&gt;) has a true win rate of 0.9, and machine B (&lt;span class=&#34;math inline&#34;&gt;\(Slot_{B}\)&lt;/span&gt;) has a true win rate of 0.5. Obviously, &lt;span class=&#34;math inline&#34;&gt;\(Slot_{A}\)&lt;/span&gt; is a better option, but this is something you need to learn by making a choice and updating your expectations. Assuming that you start off thinking that each slot machine has a win rate of 0 (which is typical in human decision making models), your first choice will be a random selection between the equivalent options. In our example, imagine that you randomly choose &lt;span class=&#34;math inline&#34;&gt;\(Slot_{B}\)&lt;/span&gt;, the slot machine spins, and then you win! Great, so now (regardless of your learning rate), you will update your expectation of the win rate for &lt;span class=&#34;math inline&#34;&gt;\(Slot_{B}\)&lt;/span&gt; to a positive, non-zero value. On the next trial, you are greedy, so you again choose &lt;span class=&#34;math inline&#34;&gt;\(Slot_{B}\)&lt;/span&gt;–it has a higher expected win rate than &lt;span class=&#34;math inline&#34;&gt;\(Slot_{A}\)&lt;/span&gt;. In fact, you will continue to choose &lt;span class=&#34;math inline&#34;&gt;\(Slot_{B}\)&lt;/span&gt; on each trial without ever considering &lt;span class=&#34;math inline&#34;&gt;\(Slot_{A}\)&lt;/span&gt;! In this case, even though &lt;span class=&#34;math inline&#34;&gt;\(Slot_{A}\)&lt;/span&gt; it the optimal choice, you never allow yourself to &lt;em&gt;explore&lt;/em&gt; alternative choices. Here, we come across a classical problem in reward-learning paradigms–&lt;a href=&#34;http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0095693&#34;&gt;&lt;strong&gt;&lt;em&gt;the exploration-exploitation tradeoff&lt;/em&gt;&lt;/strong&gt;&lt;/a&gt;. The crux of this problem is this: how do you know that a “good” choice is better than other choices that you have yet to explore? Think of it like choosing a job. I chose to study psychology, and I continue to exploit this choice (i.e. I am not exploring other education). How do I know that psychology is for me, though? It is possible that I would have gained more from a computer science degree, but I did not explore that option. In the same way, this compromise exists in simple reinforcement learning paradigms such as choosing the best slot machine.
-Below, we will explore two methods that address the exploration-exploitation problem.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;epsilon-greedy-choice&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;2.2 &lt;span class=&#34;math inline&#34;&gt;\(\epsilon\)&lt;/span&gt;-Greedy choice&lt;/h2&gt;
-&lt;p&gt;The &lt;span class=&#34;math inline&#34;&gt;\(\epsilon\)&lt;/span&gt;-greedy method is a simple extention of the greedy method above. Instead of always choosing the option with the highest expected value, we sometimes (with probability &lt;span class=&#34;math inline&#34;&gt;\(\epsilon\)&lt;/span&gt;) randomly choose another option:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[c_{t} = \cases{
-          \underset{s \in S}{argmax}(V(s_{t}))  &amp;amp; \text{with } Pr(1 - \epsilon) \cr
-          \text{random choice} &amp;amp; \text{with } Pr(\epsilon)
-                }
-\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;By choosing a random option with &lt;span class=&#34;math inline&#34;&gt;\(Pr(\epsilon)\)&lt;/span&gt;, we can avoid getting stuck choosing the non-optimal slot machine. While this method solves our dilemma, it suffers another problem–when randomly selecting options, it gives equal probabilities to each option. Intuitively, a better method would be to choose options &lt;em&gt;probabilistically with respect to their expected values&lt;/em&gt; (i.e. give high probability to relatively good options and &lt;em&gt;vice-versa&lt;/em&gt;).&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;softmax-choice&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;2.3 Softmax choice&lt;/h2&gt;
-&lt;p&gt;Also known as the &lt;a href=&#34;https://en.wikipedia.org/wiki/Luce%27s_choice_axiom&#34;&gt;Luce choice rule&lt;/a&gt;, the softmax allows choices to be probabilistic with weights respective to expected value:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[Pr(c_{t} = s \in S) = \frac{e^{V_{s}(t)}}{\sum_{s = 1}^S e^{V_{s}(t)}}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(e^{V_{s}(t)}\)&lt;/span&gt; is the exponentiated expected value of slot machine &lt;span class=&#34;math inline&#34;&gt;\(s\)&lt;/span&gt; on trial &lt;span class=&#34;math inline&#34;&gt;\(t\)&lt;/span&gt;, and &lt;span class=&#34;math inline&#34;&gt;\(\sum_{s = 1}^S e^{V_{s}(t)}\)&lt;/span&gt; is the summation of the exponentiated expected value of both slot machines (there are 2 in our example). When the expected values are entered, the softmax equation returns a probability of selecting each slot machine which we can then use to make an actual choice. In practice, the softmax function is used most often in decision making research–moving forward, we will use the softmax choice mechanism to model human decision making.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;implementation&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;3. Implementation&lt;/h1&gt;
-&lt;p&gt;We now have a full model describing each of the following steps:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Evaluating an outcome,&lt;/li&gt;
-&lt;li&gt;Updating previous representations of choice options, and&lt;/li&gt;
-&lt;li&gt;Generating a probability of selecting each choice on the next trial.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;This model is simple, but it provides the basic building blocks for more complex models that are found in neuroscience, cognitive science, and decision making literature today. In the next post, we will explore various methods which can be used to estimate the &lt;em&gt;free parameters&lt;/em&gt; in the model (e.g. the learning rate) when all we have are the person’s choices.&lt;/p&gt;
-&lt;/div&gt;
-</description>
     </item>
     
   </channel>
