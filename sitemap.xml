@@ -4,29 +4,7 @@
   
   
   <url>
-    <loc>http://haines-lab.com/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/categories/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/category/computational-reproducibility/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/tag/docker/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/category/docker/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/category/github/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/post/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/tag/programming/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/tag/r/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/category/r/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/tags/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+    <loc>http://haines-lab.com/</loc><lastmod>2021-06-17T00:00:00+00:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/authors/</loc><lastmod>2021-06-17T00:00:00+00:00</lastmod></url>
   <url>
@@ -46,15 +24,23 @@
   <url>
     <loc>http://haines-lab.com/tag/source-themes/</loc><lastmod>2021-06-15T00:00:00+00:00</lastmod></url>
   <url>
+    <loc>http://haines-lab.com/tags/</loc><lastmod>2021-06-15T00:00:00+00:00</lastmod></url>
+  <url>
     <loc>http://haines-lab.com/talk/an-introduction-to-bayesian-data-analysis/</loc><lastmod>2021-04-05T00:00:00+00:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/tag/bayesian-statistics/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
   <url>
+    <loc>http://haines-lab.com/categories/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
+  <url>
     <loc>http://haines-lab.com/category/formal-models/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/category/measurement-error/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/r/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/category/statistical-modeling/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
   <url>
