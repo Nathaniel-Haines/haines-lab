@@ -1,0 +1,1630 @@
+<!DOCTYPE html><html lang="en-us" >
+
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.4.0 for Hugo" />
+  
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Nathaniel Haines" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="1. Goals of Paramter Estimation When estimating paramters for a given model, we typically aim to make an inference on an individual’s underlying decision process. We may be inferring a variety of different factors, such as the rate at which someone updates their expectations, the way that someone subjectively values an outcome, or the amount of exploration versus exploitation that someone engages in." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/" />
+
+  
+  
+  
+    <meta name="theme-color" content="hsl(339, 90%, 68%)" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.f1ecf783c14edc00c9320c205831ad8e.css" media="print" onload="this.media='all'">
+
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha512-W0xM4mr6dEP9nREo7Z9z+9X70wytKvMGeDsj7ps2+xg5QPrEBXC8tAW1IFnzjR6eoJ90JmCnFzerQJTLzIEHjA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+    
+    
+    
+      
+      
+    
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'" disabled>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'">
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.css" integrity="" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.483823b49802e3bfc12a727dbc71499e.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106994238-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-106994238-1', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+
+  
+  
+    
+    
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Computational Psychology" />
+  <meta property="og:url" content="http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/" />
+  <meta property="og:title" content="Human Choice and Reinforcement Learning (3) | Computational Psychology" />
+  <meta property="og:description" content="1. Goals of Paramter Estimation When estimating paramters for a given model, we typically aim to make an inference on an individual’s underlying decision process. We may be inferring a variety of different factors, such as the rate at which someone updates their expectations, the way that someone subjectively values an outcome, or the amount of exploration versus exploitation that someone engages in." /><meta property="og:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2018-09-08T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2018-09-08T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/"
+  },
+  "headline": "Human Choice and Reinforcement Learning (3)",
+  
+  "datePublished": "2018-09-08T00:00:00Z",
+  "dateModified": "2018-09-08T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Nathaniel Haines"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Computational Psychology",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "1. Goals of Paramter Estimation When estimating paramters for a given model, we typically aim to make an inference on an individual’s underlying decision process. We may be inferring a variety of different factors, such as the rate at which someone updates their expectations, the way that someone subjectively values an outcome, or the amount of exploration versus exploitation that someone engages in."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Human Choice and Reinforcement Learning (3) | Computational Psychology</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  dark " data-wc-page-id="c8e05639896d413a88cb46e44e365b28" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.b6ac29faab89ee14db88f0bed7aa6622.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="header--fixed">
+  <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+    <div class="container-xl">
+
+      
+      <div class="d-none d-lg-inline-flex">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+      
+      <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      
+      <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+        
+        <ul class="navbar-nav d-md-inline-flex">
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#posts"><span>Posts</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#talks"><span>Talks</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#featured"><span>Publications</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#contact"><span>Contact</span></a>
+          </li>
+
+          
+          
+
+        
+
+          
+        </ul>
+      </div>
+
+      <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+        
+        
+          
+            
+            <li class="nav-item d-none d-lg-inline-flex">
+              <a class="nav-link" href="https://twitter.com/nate__haines" data-toggle="tooltip" data-placement="bottom" title="Follow me on Twitter" target="_blank" rel="noopener" aria-label="Follow me on Twitter">
+                <i class="fab fa-twitter" aria-hidden="true"></i>
+              </a>
+            </li>
+          
+        
+
+        
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+        
+        <li class="nav-item dropdown theme-dropdown">
+          <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item js-set-theme-light">
+              <span>Light</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-dark">
+              <span>Dark</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-auto">
+              <span>Automatic</span>
+            </a>
+          </div>
+        </li>
+        
+
+        
+        
+
+      </ul>
+
+    </div>
+  </nav>
+</header>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Human Choice and Reinforcement Learning (3)</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Sep 8, 2018
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    16 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/reinforcement-learning/">Reinforcement Learning</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="goals-of-paramter-estimation" class="section level1">
+<h1>1. Goals of Paramter Estimation</h1>
+<p>When estimating paramters for a given model, we typically aim to make an inference on an individual’s underlying decision process. We may be inferring a variety of different factors, such as the rate at which someone updates their expectations, the way that someone subjectively values an outcome, or the amount of exploration versus exploitation that someone engages in. Once we estimate an individual’s parameters, we can compare then to other people or even other groups of people. Further, we can compare parameters within subjects after an experimental manipulation (e.g., <em>does drug X affect a person’s learning rate?</em>).</p>
+<p>Below, we will explore multiple paremter estimation methods. Specifically, we will use: (1) maximum likelihood estimation, (2) maximum a posteriori estimation, (3) and fully Bayesian estimation. First, we will simulate data from models described in the previous post on a simple 2-armed bandit task. Importantly, we will simulate data using <em>known parameter values</em>, which we will then try to recover from the simulated data. We will refer to the known paramters as the <em>true parameters</em>.</p>
+</div>
+<div id="simulation" class="section level1">
+<h1>2. Simulation</h1>
+<p>For our simulation, we will simulate choice from a model using delta-rule learning and softmax choice. To keep things simple, the learning rate will be the only free paramter in the model. Additionally, we will simulate choices in a task where there are two choices, where choice 1 has a mean payoff of 1 and choice 2 has a mean payoff of -1. Therefore, a learning agent should be able to learn that choice 1 is optimal and make selections accordingly. However, we will add noise to each choice payoff (<em>sigma</em> below) to make things more realistic.</p>
+<p>The following R code simulates 200 trials using the model and task described above:</p>
+<pre class="r"><code># For pretty plots and data manipulation
+library(ggplot2)
+library(foreach)
+library(dplyr)
+
+# Simulation paramters
+set.seed(1)        # Random seed for replication
+mu    &lt;- c(1, -1)  # Mean payoff for choices 1 and 2 
+sigma &lt;- 3         # SD of payoff distributions
+n_tr  &lt;- 200       # Number of trials 
+beta  &lt;- 0.1       # True learning rate
+
+# Initial expected value
+ev &lt;- c(0, 0) 
+
+# Softmax choice function
+logsumexp &lt;- function (x) {
+  y &lt;- max(x)
+  y + log(sum(exp(x - y)))
+}
+softmax &lt;- function (x) {
+  exp(x - logsumexp(x))
+}
+
+# Simulate data
+sim_dat &lt;- foreach(t=1:n_tr, .combine = &quot;rbind&quot;) %do% {
+  # Generate choice probability with softmax
+  pr &lt;- softmax(ev)
+  
+  # Use choice probability to sample choice
+  choice &lt;- sample(c(1,2), size = 1, prob = pr)
+  
+  # Generate outcome based on choice
+  outcome &lt;- rnorm(1, mean = mu[choice], sd = sigma)
+  
+  # Delta-rule learning
+  ev[choice] &lt;- ev[choice] + beta * (outcome - ev[choice])
+  
+  # Save data
+  data.frame(Trial   = rep(t, 2),
+             EV      = ev,
+             Pr      = pr,
+             Option  = paste(1:2),
+             Choice  = rep(choice, 2),
+             Outcome = rep(outcome, 2))
+}
+
+# Change in expected values across tirals
+ggplot(sim_dat, aes(x = Trial, y = EV, geom = &quot;line&quot;, color = Option)) +
+  geom_line() +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;)) +
+  ylab(&quot;Expected Value&quot;) +
+  theme_minimal(base_size = 20)</code></pre>
+<p><img src="/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig1-1.svg" width="672" style='height: 100%; width: 100%; object-fit: contain' /></p>
+<p>The above graph shows the simulated agent’s expected value (<em>EV</em>) for options 1 and 2 across the 200 trials. We can also view the probability of selecting each option across trials:</p>
+<pre class="r"><code># Change in probability of selecting each option across tirals
+ggplot(sim_dat, aes(x = Trial, y = Pr, geom = &quot;line&quot;, color = Option)) +
+  geom_line() +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;blue&quot;)) +
+  ylab(&quot;Pr(Choice)&quot;) +
+  theme_minimal(base_size = 20)</code></pre>
+<p><img src="/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig2-1.svg" width="672" style='height: 100%; width: 100%; object-fit: contain' /></p>
+<p>Clearly, the agent learns to prefer option 1 over option 2 across trials. Although we know the true learning rate (i.e. <span class="math inline">\(\beta_{true} = 0.1\)</span>), we will explore the various parameter estimation techniques below to try and recover <span class="math inline">\(\beta_{true}\)</span> from the simulated data.</p>
+</div>
+<div id="parameter-estimation-methods" class="section level1">
+<h1>3. Parameter Estimation Methods</h1>
+<div id="maximum-likelihood" class="section level2">
+<h2>3.1 Maximum Likelihood</h2>
+<p>The goal of maximum likelihood estimation (MLE) is to identify the single, most likely parameter value(s) that could have produced the observed data. For our purposes, MLE will allow us to estimate the learning rate that maximizes the probability of observing the simulated data. We refer to his estimate as <span class="math inline">\(\hat{\beta}\)</span> (pronounced beta-hat).</p>
+<p>Before moving on, it is worth introducing some new notation. If we refer to the observed data as <span class="math inline">\(X\)</span> and the parameters we aim to estimate as <span class="math inline">\(\theta\)</span>, we can refer to the likelihood function as:</p>
+<p><span class="math display">\[Pr(X|\theta)\]</span></p>
+<p>In our case, <span class="math inline">\(\theta = \hat{\beta}\)</span>, and <span class="math inline">\(X\)</span> is the vector of simulated choices from above. So then, how do we actually compute the probability of choices <span class="math inline">\(X\)</span> given learning rate <span class="math inline">\(\hat{\beta}\)</span>? Simple! We use the model that we simulated the data from. Specifically, we:</p>
+<ol style="list-style-type: decimal">
+<li>Make a guess for <span class="math inline">\(\hat{\beta}\)</span></li>
+<li>Look into <span class="math inline">\(X\)</span> and find out what choice and outcome the agent made/experienced on trial <span class="math inline">\(t\)</span></li>
+<li>Use our guess for <span class="math inline">\(\hat{\beta}\)</span> to update the EV for the chosen option accoring to the model</li>
+<li>Enter the updated EVs into the softmax function to generate the probability of selecting each option for the next trial</li>
+<li>Store the model-estimated probability of selecting the choice that the agent actually made on trial <span class="math inline">\(t\)</span></li>
+</ol>
+<p>We iterate through these steps for each trial <span class="math inline">\(t\)</span> in <span class="math inline">\(X\)</span>, and then multiply the probabilities across all trials. In practice, we take the natural log of the probability on each trial and then sum across trials, which is equivalent to multiplying out the probabilities but is more numerically stable (computers don’t like really small numbers!). We can write out this <em>log-likelihood</em> as:</p>
+<p><span class="math display">\[\sum_{t=1}^{T}{\text{ln } Pr(Choice_{t}|\hat{\beta})}\]</span></p>
+<p>We are not finished yet! Once we compute the above sum for a given guess for <span class="math inline">\(\hat{\beta}\)</span>, we will run through all the steps again with a new guess for <span class="math inline">\(\hat{\beta}\)</span>. We continue to make guesses and calculate the above sum until we find a value <span class="math inline">\(\hat{\beta}\)</span> that gives us the maximum probability—this final value is the <em>maximum likelihood estimate (MLE)</em>, written as:</p>
+<p><span class="math display">\[\hat{\beta}_{MLE} = \underset{\hat{\beta}}{\text{arg max}}\sum_{t=1}^{T}{\text{ln } Pr(Choice_{t}|\hat{\beta})}\]</span></p>
+<p>Our goal is to find the value for <span class="math inline">\(\hat{\beta}\)</span> that maximizes the above sum. Now, we could accomplish this by sampling random learning rates between 0 and 1, computing the sum for each value, and then determining which value produces the highest log-likelihood. Alternatively, we could create a grid of values from 0 to 1 (i.e. <span class="math inline">\(\hat{\beta} \in \text{{0.01, 0.02, ..., 0.99}}\)</span>) and select the MLE as the value with the highest log-likelihood. In the real world, however, we usually use some sort of optimization algorithm that makes our job much easier. Below, we will use the <strong>optim</strong> function in R:</p>
+<pre class="r"><code># Define the log-likelihood function used for MLE
+mle_bandit &lt;- function(X, beta, outcomes)  {
+  # Initialize expected value
+  ev &lt;- c(0, 0)
+  # loop through each trial and compute log-likelihood
+  ll &lt;- foreach(t=seq_along(X), .combine = &quot;c&quot;) %do% {
+    # Generate choice probability with softmax
+    pr &lt;- softmax(ev)
+    
+    # Delta-rule learning
+    ev[X[t]] &lt;- ev[X[t]] + beta * (outcomes[t] - ev[X[t]])
+    
+    # log probability of &quot;true&quot; simulated choice
+    log(pr[X[t]])
+  }
+  
+  # return the summed (minus) log-likelihood, because optim minimizes by default
+  sum(-1*ll)
+}
+
+# Because data were simulated and output into long format, we need to
+# remove every other observation so that we do not double-count
+fit_dat &lt;- sim_dat %&gt;%
+  filter(Option == 1)
+
+# Use optim to minimize the (minus) log-likelihood function
+mle_results &lt;- optim(par      = 0.5,             # Initial guess for beta
+                     fn       = mle_bandit,      # Function we are minimizing
+                     method   = &quot;L-BFGS-B&quot;,      # Specific algorithm used
+                     lower    = 0,               # Lower bound for beta 
+                     upper    = 1,               # Upper bound for beta
+                     X        = fit_dat$Choice,  # Simulated choices
+                     outcomes = fit_dat$Outcome) # Simulated choice outcomes
+
+# Print results
+cat(&quot;The MLE for beta is: &quot; , round(mle_results$par, 3))</code></pre>
+<pre><code>## The MLE for beta is:  0.09</code></pre>
+<p>Not bad! <strong>optim</strong> returns a MLE of <span class="math inline">\(\hat{\beta} =\)</span> <span class="math inline">\(0.09\)</span>. Given that <span class="math inline">\(\beta_{true} = 0.1\)</span> (since we determined the value for the simulations), our estimate <span class="math inline">\(\hat{\beta}\)</span> is not that far off. One potential downside of the MLE approach we used above is that we only receive a single value for the MLE, which makes it difficult to know how certain the estimate is. For example, our simulation was for 200 trials, but surely we would be more confident in the estimate if the simulation was for 1,000’s of trials? MLE alone does not offer an explicit measure of uncertainty in the parameter estimates without additional analyses (and additional assumptions), which is one reason that Bayesian methods are easier to interpret.</p>
+</div>
+<div id="maximum-a-poseriori-map-estimation" class="section level2">
+<h2>3.2 Maximum A Poseriori (MAP) Estimation</h2>
+<p>MAP estimation is a straightforward extention of MLE, which allows us to incorporate prior information about the parameter that we are trying to estimate into the estimation procedure. In our example, we may know from prior studies that learning rates for a given task typically fall in the range of 0.01-0.4. MAP estimation allows us to formalize this prior research in a very simple way! We simply parameterize a prior distribution (<span class="math inline">\(Pr(\beta)\)</span>) that is consistent with estimates from prior studies. For example, a normal distribution with a <span class="math inline">\(\mu = .15\)</span> and <span class="math inline">\(\sigma = 0.25\)</span> captures the above range nicely but does not constrain the values too much:</p>
+<pre class="r"><code>x &lt;- seq(0, 1, length=1000)
+y &lt;- dnorm(x, mean = .15, sd = .25)
+qplot(x = x, y = y, geom = &quot;line&quot;, xlab = expression(beta[prior]), ylab = &quot;Density&quot;) +
+  theme_minimal(base_size = 20)</code></pre>
+<p><img src="/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig4-1.svg" width="672" style='height: 100%; width: 100%; object-fit: contain' /></p>
+<p>So, how do we include this prior information? Easy! When we make a guess for <span class="math inline">\(\hat{\beta}\)</span>, we will compute the likelihood just like we did for MLE, and we will multiple this value by the “likelihood” of the prior. Intuitively, this allows us to <em>weight</em> the likelihood of each possible value for <span class="math inline">\(\hat{\beta}\)</span> by the prior for that same value of <span class="math inline">\(\hat{\beta}\)</span>. This behavior results in a sort of trade off between the likelihood and prior distribution, which ends up <strong>regularizing</strong> our MLE estimate by pulling it toward the center mass of the prior distribution. Formally, we represent this by adding the prior distribution (bolded) to the MLE function from above:</p>
+<p><span class="math display">\[\hat{\beta}_{MAP} = \underset{\hat{\beta}}{\text{arg max}}\sum_{t=1}^{T}{\text{ln } Pr(Choice_{t}|\hat{\beta})\bf{Pr(\beta)}}\]</span></p>
+<p>Let’s see what this looks like in R, and note how it affects estimation of <span class="math inline">\(\hat{\beta}\)</span>:</p>
+<pre class="r"><code># Define the log-likelihood function used for MAP
+map_bandit &lt;- function(X, beta, outcomes)  {
+  # Initialize expected value
+  ev &lt;- c(0, 0)
+  # loop through each trial and compute log-likelihood
+  ll &lt;- foreach(t=seq_along(X), .combine = &quot;c&quot;) %do% {
+    # Generate choice probability with softmax
+    pr &lt;- softmax(ev)
+    
+    # Delta-rule learning
+    ev[X[t]] &lt;- ev[X[t]] + beta * (outcomes[t] - ev[X[t]])
+    
+    # Probability/likelihood of &quot;true&quot; simulated choice
+    like &lt;- pr[X[t]]
+    
+    # Likelihood of current beta according to prior distribution
+    prior &lt;- dnorm(x = beta, mean = .15, sd = 0.25)
+    
+    # Log of like*prior
+    log(like*prior)
+  }
+  
+  # return the summed (minus) log-likelihood with prior information included
+  sum(-1*ll)
+}
+
+# Use optim to minimize the (minus) log-likelihood function
+map_results &lt;- optim(par      = 0.5,             # Initial guess for beta
+                     fn       = map_bandit,      # Function we are minimizing
+                     method   = &quot;L-BFGS-B&quot;,      # Specific algorithm used
+                     lower    = 0,               # Lower bound for beta 
+                     upper    = 1,               # Upper bound for beta
+                     X        = fit_dat$Choice,  # Simulated choices
+                     outcomes = fit_dat$Outcome) # Simulated choice outcomes
+
+# Print results
+cat(&quot;The MAP for beta is: &quot; , round(map_results$par, 3))</code></pre>
+<pre><code>## The MAP for beta is:  0.136</code></pre>
+<p>Woah! The simple addition of prior information pushed our estimate of <span class="math inline">\(\hat{\beta} =\)</span> <span class="math inline">\(0.09\)</span> to <span class="math inline">\(\hat{\beta} =\)</span> <span class="math inline">\(0.136\)</span>. Notice that the MAP estimator was pulled toward the mean of the prior distribution. However, is this a good thing? When is this behavior beneficial? After all, our MAP estimate is actually further than our MLE estimate from <span class="math inline">\(\beta_{true}\)</span>.</p>
+<p>To demonstrate the benefit of prior information, let’s take the simulated data from our learner (i.e. <span class="math inline">\(\beta = 0.1\)</span>), but only fit the model using the first 15 trials worth of data:</p>
+<pre class="r"><code># Use MLE to fit the first 15 trials
+mle_results_15tr &lt;- optim(par      = 0.5,             
+                          fn       = mle_bandit,      
+                          method   = &quot;L-BFGS-B&quot;,      
+                          lower    = 0,               
+                          upper    = 1,               
+                          X        = fit_dat$Choice[1:15],  # Only using first 15 trials
+                          outcomes = fit_dat$Outcome[1:15]) 
+
+# Use MAP to fit the first 15 trials
+map_results_15tr &lt;- optim(par      = 0.5,             
+                          fn       = map_bandit,      
+                          method   = &quot;L-BFGS-B&quot;,      
+                          lower    = 0,               
+                          upper    = 1,               
+                          X        = fit_dat$Choice[1:15],  # Only using first 15 trials
+                          outcomes = fit_dat$Outcome[1:15]) 
+
+cat(&quot;The MLE for beta with 15 trials is: &quot; , round(mle_results_15tr$par, 3), &quot;\n&quot;, 
+    &quot;The MAP for beta with 15 trials is: &quot; , round(map_results_15tr$par, 3))</code></pre>
+<pre><code>## The MLE for beta with 15 trials is:  0.234 
+##  The MAP for beta with 15 trials is:  0.169</code></pre>
+<p>Look at that! MLE overestimates the learning rate, and MAP gives us a much better estimate. There are two main take-aways from this toy example:</p>
+<ol style="list-style-type: decimal">
+<li>MLE is prone to degenerate behavior in low data settings, which can push parameters to the edge of the parameter space or lead to otherwise unreliable estimates, and</li>
+<li>Introduction of our own, theory-based form of bias (i.e. regularization from the prior distribution) can help us avoid estimation problems—espectially in low data settings! (this will become clearer in future posts)</li>
+</ol>
+<p>In fact, you may have realized through the above example (or math) that MLE is just a sepcial case of MAP estimation! If it is not already intuitive, think of this—what would happen to our MAP estimate if we assumed that the prior distribution was uniform (i.e. all values between 0 and 1 are equally likely for learning rate <span class="math inline">\(\beta\)</span>)? Well, we would have to multiply <span class="math inline">\(Pr(Choice_{t}|\hat{\beta})\)</span> by 1 for each guess of <span class="math inline">\(\hat{\beta}\)</span>! See this yourself by observing the likelihood of different values for <code>x</code> drawn from a uniform distribution (code: <code>dunif(x = .15, min = 0, max = 1)</code>). Therefore, MAP is analytically equivalent to MLE when we assume a uniform prior distibution. Of course, in many settings, we know that certain paremter values are very unlikely (e.g., a learning rate of .2 is more reasonable than of .99 in most settings). It follows that assuming a uniform distribution for the prior can be quite (mis)informative!</p>
+<p>Note that MAP, like MLE, only offers a point estimate. Again, we would ideally like a proper representation of uncertainty for our estimate.</p>
+</div>
+<div id="markov-chain-monte-carlo-mcmc-estimation" class="section level2">
+<h2>3.3 Markov Chain Monte Carlo (MCMC) Estimation</h2>
+<p>We have finally arrived… MCMC builds on all of the above estimation methods, resulting in a powerful estimation procedure that gives as an entire distribution—rather than just a point estimate—to represent a parameter.</p>
+<p>To begin, we will first introduce Bayes’ Theorem; you have likely seen is before:</p>
+<p><span class="math display">\[Pr(\theta | X) = \frac{Pr(X | \theta)Pr(\theta)}{Pr(X)}\]</span></p>
+<p>In English, this translates to:</p>
+<p><span class="math display">\[\text{Posterior Distribution} = \frac{\text{Likelihood} \cdot \text{Prior Distribution}}{\text{Marginal Distribution}}\]</span></p>
+<p>You may notice that the numerator (i.e. <span class="math inline">\(Pr(X | \theta)Pr(\theta)\)</span>) looks suspiciously like the term we were trying to maximize for MAP estimation (<span class="math inline">\(Pr(Choice_{t}|\hat{\beta})Pr(\beta)\)</span>)…which is because MAP estimation is indeed derived from Bayes’ Theorem! In fact, the MAP estimate is the <em>mode of the posterior distribution</em>, which explains why it is called <strong>maximum a posteriori</strong> estimation.</p>
+<p>So then, we already know what the numerator corresponds to, but what of the denominator? Referring back to our simulation, the marginal distribution <span class="math inline">\(Pr(X)\)</span> is <span class="math inline">\(Pr(Choices)\)</span>, which is interpreted as the probability of the observed data—what exactly does this mean? Well, it turns out that for our purposes, it is not too important! <span class="math inline">\(Pr(Choices)\)</span> is a constant term, and it does not depend on the model we are trying to estimate parameters for. Therefore, we often write:</p>
+<p><span class="math display">\[Pr(\theta | X) \propto Pr(X | \theta)Pr(\theta)\]</span></p>
+<p>Which translates to “<em>the posterior distribution is <strong>proportional to</strong> the likelihood times the prior distribution</em>”. Intuitively, this means that it is the relative differences in <span class="math inline">\(Pr(X | \theta)Pr(\theta)\)</span> across different values of <span class="math inline">\(\theta\)</span> that give us information about the posterior distribution. Importantly, we already know how to work with this numerator term (from doing MAP estimation)! Therefore, fully Bayesian estimation using MCMC only requires a small extention. Specifically, instead of using optimization (i.e. R’s <code>optim</code> function) to
+find a single value of <span class="math inline">\(\theta\)</span> that maximizes <span class="math inline">\(Pr(X | \theta)Pr(\theta)\)</span>, we want to use a method that tells us how likely all possible values of <span class="math inline">\(\theta\)</span> are relative to each other (i.e. a distribution!). While there are many different algorithms that can be used to accomplish this, we will start with the <a href="https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm">Metropolis</a> algorithm. Referring back to our learning data, estimating <span class="math inline">\(\hat{\beta}\)</span> using the Metropolis algorithm proceeds with the steps outlined below.</p>
+<p>For <span class="math inline">\(n = 1, 2, ..., N:\)</span></p>
+<ol style="list-style-type: decimal">
+<li>Propose a value <span class="math inline">\(\hat{\beta}&#39;\)</span> that is near your current guess <span class="math inline">\(\hat{\beta}_{n}\)</span></li>
+<li>Calculate the <em>acceptance ratio</em>, defined by <span class="math inline">\(accept = \frac{Pr(Choices | \hat{\beta}&#39;)Pr(\hat{\beta}&#39;)}{Pr(Choices | \hat{\beta}_{n})Pr(\hat{\beta}_{n})}\)</span></li>
+<li>Generate a uniform random number <span class="math inline">\(u\)</span> on <span class="math inline">\([0,1]\)</span></li>
+<li>If <span class="math inline">\(u \le accept\)</span>, set <span class="math inline">\(\hat{\beta}_{n+1} = \hat{\beta}&#39;\)</span>, otherwise set <span class="math inline">\(\hat{\beta}_{n+1} = \hat{\beta}_{n}\)</span></li>
+</ol>
+<p>Importantly, while iterating through all samples <span class="math inline">\(N\)</span>, we store each value <span class="math inline">\(\hat{\beta}_{n}\)</span>. This sequence of values <em>is the posterior distribution</em> <span class="math inline">\(Pr(\hat{\beta}|Choices)\)</span>. The R code below shows the Metropolis algorithm in action, and the resulting histogram of posterior samples:</p>
+<p><strong>Note that this takes a few minutes to run because it is not optimized in the least bit!</strong></p>
+<pre class="r"><code># Set number of samples N for the Metropolis algorithm
+samples &lt;- 5000
+
+# Set initial guess for beta
+beta_n &lt;- 0.5
+
+# Take what we did above for MAP estimation and make into a function
+calc_like &lt;- function(beta, X, outcomes) {
+  # Initialize expected value
+  ev &lt;- c(0, 0)
+  # loop through each trial and compute log-likelihood
+  ll &lt;- foreach(t=seq_along(X), .combine = &quot;c&quot;) %do% {
+    # Generate choice probability with softmax
+    pr &lt;- softmax(ev)
+    
+    # Delta-rule learning
+    ev[X[t]] &lt;- ev[X[t]] + beta * (outcomes[t] - ev[X[t]])
+    
+    # Probability/likelihood of &quot;true&quot; simulated choice
+    like &lt;- pr[X[t]]
+    
+    # Likelihood of current beta according to prior distribution
+    prior &lt;- dnorm(x = beta, mean = .15, sd = 0.25)
+    
+    # log of like*prior
+    log(like*prior)
+  }
+  
+  # return the summed log-likelihood with prior information included
+  sum(ll)
+}
+
+# Iterate through N samples and store each result
+posterior &lt;- foreach(n=1:samples, .combine = &quot;c&quot;) %do% {
+  # Step 1: Generate random proposal value with normal distribution
+  beta_proposal &lt;- rnorm(1, mean = beta_n, sd = .01)
+  
+  # If proposal is outside of parameter bounds, keep current sample, else continue
+  if (0 &lt; beta_proposal &amp; beta_proposal &lt; 1) {
+    # Step 2: Calculate acceptance ratio
+    like_proposal &lt;- exp(calc_like(beta_proposal, fit_dat$Choice, fit_dat$Outcome))
+    like_current  &lt;- exp(calc_like(beta_n, fit_dat$Choice, fit_dat$Outcome))
+    accept &lt;- like_proposal/like_current
+    
+    # Step 3: Generate uniform random number on [0,1]
+    u &lt;- runif(1, min = 0, max = 1)
+    
+    # Step 4: Accept or reject proposal
+    if (u &lt;= accept) {
+      beta_n &lt;- beta_proposal
+    }
+  }
+  
+  # Retern beta_n (either updated with proposal or remains the same)
+  beta_n
+}
+
+# Plot time-series of posterior samples
+qplot(x = 1:samples, y = posterior, geom = &quot;line&quot;) + 
+  geom_hline(aes(yintercept= beta, linetype = &quot;True Beta&quot;), color= &#39;red&#39;) +
+  scale_linetype_manual(name = &quot;&quot;, values = 2) +
+  xlab(&quot;Posterior Sample&quot;) +
+  ylab(expression(hat(beta))) +
+  theme_minimal(base_size = 20)</code></pre>
+<p><img src="/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig7-1.svg" width="672" style='height: 100%; width: 100%; object-fit: contain' /></p>
+<p>This <em>traceplot</em> shows each accepted proposal across all 5,000 samples that we drew from the posterior distribution. As you can see, the samples are all distributed near the true value once they converge to a stable estimate. The samples at the beginning (before reaching convergence) will be discarded (termed <em>burn-in</em> samples) for further analyses because they do not represent the posterior distribution. Unlike for MLE or MAP estimation, all the posterior samples after burn-in can be used to represent the uncertainty in the learning rate parameter! We simply plot the density of the samples (with the prior density shown in the black, dotted line for an idea of what we have learned):</p>
+<pre class="r"><code>qplot(posterior[200:5000], geom = &quot;density&quot;, fill = I(&quot;gray&quot;)) +
+  geom_line(aes(x = x, y = y), linetype = 2) +
+  geom_vline(aes(xintercept= beta, linetype = &quot;True Beta&quot;), color= &#39;red&#39;) +
+  scale_linetype_manual(name = &quot;&quot;, values = 2) +
+  coord_cartesian(xlim = c(0, 1)) +
+  xlab(expression(hat(beta))) +
+  ylab(&quot;Density&quot;) +
+  theme_minimal(base_size = 20)</code></pre>
+<p><img src="/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig8-1.svg" width="672" style='height: 100%; width: 100%; object-fit: contain' /></p>
+<p>Clearly, the results are not perfect. Yet, our posterior distribution does contain the true value, and it is rather precise (i.e. it is narrow) relative to the prior distribution (black line) and parameter space.</p>
+</div>
+</div>
+<div id="wrapping-up" class="section level1">
+<h1>4. Wrapping up</h1>
+<p>In this post, we covered three methods of parameter estimation including: (1) maximum likelihood estimation, (2) maximum a posteriori estimation, and (3) markov chain monte carlo estimation. In the future, we will use software packages (particularly <a href="https://mc-stan.org/">Stan</a>) to do MCMC for us, which will allow us to more rapidly estimate parameters compared to our simplistic MCMC implementation above. In the next post, we will use Stan to estimate the same learning rate from the model above. Soon after, we will work towards fitting hierarchical models!</p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/r/">R</a>
+  
+  <a class="badge badge-light" href="/tag/modeling/">Modeling</a>
+  
+  <a class="badge badge-light" href="/tag/learning/">Learning</a>
+  
+</div>
+
+
+
+<div class="share-box">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/&amp;text=Human%20Choice%20and%20Reinforcement%20Learning%20%283%29" target="_blank" rel="noopener" class="share-btn-twitter" aria-label="twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/&amp;t=Human%20Choice%20and%20Reinforcement%20Learning%20%283%29" target="_blank" rel="noopener" class="share-btn-facebook" aria-label="facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Human%20Choice%20and%20Reinforcement%20Learning%20%283%29&amp;body=http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/" target="_blank" rel="noopener" class="share-btn-email" aria-label="envelope">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/&amp;title=Human%20Choice%20and%20Reinforcement%20Learning%20%283%29" target="_blank" rel="noopener" class="share-btn-linkedin" aria-label="linkedin-in">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Human%20Choice%20and%20Reinforcement%20Learning%20%283%29%20http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/" target="_blank" rel="noopener" class="share-btn-whatsapp" aria-label="whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/&amp;title=Human%20Choice%20and%20Reinforcement%20Learning%20%283%29" target="_blank" rel="noopener" class="share-btn-weibo" aria-label="weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="http://haines-lab.com/"><img class="avatar mr-3 avatar-circle" src="/author/nathaniel-haines/avatar_hud6e4cbd359920a21ae5755d0b163666c_1382354_270x270_fill_q75_lanczos_center.jpg" alt="Nathaniel Haines"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="http://haines-lab.com/">Nathaniel Haines</a></h5>
+      <h6 class="card-subtitle">Computational Psychologist &amp; Data Scientist, PhD</h6>
+      <p class="card-text">An academic Bayesian who is currently exploring the high dimensional posterior distribution of life</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/nate__haines" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=lg741SgAAAAJ" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/Nathaniel-Haines" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/nathaniel-haines-216049101/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  <section id="comments">
+    
+<div id="disqus_thread"></div>
+<script>
+  var disqus_config = function () {
+    
+    
+    
+  };
+  (function() {
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+      return;
+    }
+    var d = document, s = d.createElement('script'); s.async = true;
+    s.src = 'https://' + "haines-lab-com" + '.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </section>
+  
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="/post/2017-04-07-human-choice-and-reinforcement-learning-2/">Human Choice and Reinforcement Learning (2)</a></li>
+      
+      <li><a href="/post/2017-04-04-choice_rl_1/">Human Choice and Reinforcement Learning (1)</a></li>
+      
+      <li><a href="/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/">Automating Computational Reproducibility in R using renv, Docker, and GitHub Actions</a></li>
+      
+      <li><a href="/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/">A Series on Building Formal Models of Classic Psychological Effects: Part 1, the Dunning-Kruger Effect</a></li>
+      
+      <li><a href="/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/">On Curbing Your Measurement Error: From Classical Corrections to Generative Models</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Nathaniel Haines, PhD
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-themes" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    <script src="/js/vendor-bundle.min.b73dfaac3b6499dc997741748a7c3fe2.js"></script>
+
+    
+    
+    
+      
+      
+        <script src="https://cdn.jsdelivr.net/gh/desandro/imagesloaded@v4.1.4/imagesloaded.pkgd.min.js" integrity="sha512-S5PZ9GxJZO16tT9r3WJp/Safn31eu8uWrzglMahDT4dsmgqWonRY9grk3j+3tfuPr9WJNsfooOR7Gi7HL5W2jw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/metafizzy/isotope@v3.0.6/dist/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js" integrity="sha512-Ypjm0o7jOxAd4hpdoppSEN0TQOC19UtPAqD+4s5AlXmUvbmmS/YMxYqAqarQYyxTnB6/rqip9qcxlNB/3U9Wdg==" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/r.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/python.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/latex.min.js" crossorigin="anonymous"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.js" integrity="" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdn.jsdelivr.net/gh/krisk/Fuse@v3.2.1/dist/fuse.min.js" integrity="sha512-o38bmzBGX+hD3JHWUFCDA09btWaqrNmoJ3RXLlrysA7PP01Kgs4UlE4MhelE1v5dJR3+cxlR4qQlotsW7jKsnw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/julmot/mark.js@8.11.1/dist/jquery.mark.min.js" integrity="sha512-mhbv5DqBMgrWL+32MmsDOt/OAvqr/cHimk6B8y/bx/xS88MVkYGPiVv2ixKVrkywF2qHplNRUvFsAHUdxZ3Krg==" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+      <script id="dsq-count-scr" src="https://haines-lab-com.disqus.com/count.js" async></script>
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+
+    
+    
+    
+    <script id="page-data" type="application/json">{"use_headroom":true}</script>
+
+    
+    
+      <script src="/js/wowchemy-headroom.1cb9e2fc8399acee94eab837265b73bf.js" type="module"></script>
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.247fd8f54253895301106e3006f53f38.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

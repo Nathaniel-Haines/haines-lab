@@ -1,280 +1,822 @@
-<!DOCTYPE html>
-<html lang="en-us">
+<!DOCTYPE html><html lang="en-us" >
+
+
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.4.0 for Hugo" />
+  
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme" content="hugo-academic">
-  <meta name="generator" content="Hugo 0.48" />
-  <meta name="author" content="Nathaniel Haines, PhD">
-  <meta name="description" content="Computational Psychologist &amp; Data Scientist">
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Nathaniel Haines" />
 
   
   
   
     
   
+  <meta name="description" content="1. Answer to post 1 In the previous post, I reviewed the Rescorla-Wagner updating (Delta) rule and its contemporary instantiation. At the end, I asked the following question:" />
+
+  
+  <link rel="alternate" hreflang="en-us" href="http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/" />
+
+  
+  
+  
+    <meta name="theme-color" content="hsl(339, 90%, 68%)" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.f1ecf783c14edc00c9320c205831ad8e.css" media="print" onload="this.media='all'">
+
+  
+  
   
     
     
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/rstudio.min.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha512-W0xM4mr6dEP9nREo7Z9z+9X70wytKvMGeDsj7ps2+xg5QPrEBXC8tAW1IFnzjR6eoJ90JmCnFzerQJTLzIEHjA==" crossorigin="anonymous" media="print" onload="this.media='all'">
     
-  
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.1/css/academicons.min.css" integrity="sha512-NThgw3XKQ1absAahW6to7Ey42uycrVvfNfyjqcFNgCmOCQ5AR4AO0SiXrN+8ZtYeappp56lk1WtvjVmEa+VR6A==" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
-  
-  
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
-  <link rel="stylesheet" href="/css/hugo-academic.css">
-  
-  <link rel="stylesheet" href="/css/rstudio.css">
-  
-
-  
-    <script>
-      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-      ga('create', 'UA-106994238-1', 'auto');
-      ga('require', 'eventTracker');
-      ga('require', 'outboundLinkTracker');
-      ga('require', 'urlChangeTracker');
-      ga('send', 'pageview');
-    </script>
-    <script async src="//www.google-analytics.com/analytics.js"></script>
-    
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
-    
-  
-
-  <link rel="alternate" href="http://haines-lab.com/index.xml" type="application/rss+xml" title="Computational Psychology">
-  <link rel="feed" href="http://haines-lab.com/index.xml" type="application/rss+xml" title="Computational Psychology">
-
-  <link rel="icon" type="image/png" href="/img/icon.png">
-  <link rel="apple-touch-icon" type="image/png" href="/img/apple-touch-icon.png">
-
-  <link rel="canonical" href="http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/">
-
-  
-
-  <title>Human Choice and Reinforcement Learning (2) | Computational Psychology</title>
-
-</head>
-<body id="top" data-spy="scroll" data-target="#navbar-main" data-offset="71">
-
-<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
-  <div class="container">
 
     
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-              data-target=".navbar-collapse" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">Computational Psychology</a>
-    </div>
+    
+    
+    
+      
+      
+    
+    
+    
 
     
-    <div class="collapse navbar-collapse">
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'" disabled>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'">
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.css" integrity="" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
 
       
-      <ul class="nav navbar-nav navbar-right">
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.483823b49802e3bfc12a727dbc71499e.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106994238-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-106994238-1', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+
+  
+  
+    
+    
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Computational Psychology" />
+  <meta property="og:url" content="http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/" />
+  <meta property="og:title" content="Human Choice and Reinforcement Learning (2) | Computational Psychology" />
+  <meta property="og:description" content="1. Answer to post 1 In the previous post, I reviewed the Rescorla-Wagner updating (Delta) rule and its contemporary instantiation. At the end, I asked the following question:" /><meta property="og:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2017-04-07T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2017-04-07T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/"
+  },
+  "headline": "Human Choice and Reinforcement Learning (2)",
+  
+  "datePublished": "2017-04-07T00:00:00Z",
+  "dateModified": "2017-04-07T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Nathaniel Haines"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Computational Psychology",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "1. Answer to post 1 In the previous post, I reviewed the Rescorla-Wagner updating (Delta) rule and its contemporary instantiation. At the end, I asked the following question:"
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Human Choice and Reinforcement Learning (2) | Computational Psychology</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  dark " data-wc-page-id="3719b8159bedc37663192cc2de4807fe" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.b6ac29faab89ee14db88f0bed7aa6622.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
         
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="header--fixed">
+  <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+    <div class="container-xl">
+
+      
+      <div class="d-none d-lg-inline-flex">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+      
+      <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      
+      <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
 
         
+        <ul class="navbar-nav d-md-inline-flex">
+          
 
-        <li class="nav-item">
-          <a href="/#about">
+          
+
+          
+          
+          
             
-            <span>Home</span>
-          </a>
-        </li>
+          
 
-        
-        
+          
 
-        
+          
+          
+          
+          
 
-        <li class="nav-item">
-          <a href="/pdf/CV_Nathaniel_Haines.pdf">
+          
             
-            <span>CV</span>
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        <li class="nav-item">
-          <a href="/#publications_selected">
+              
+              
             
-            <span>Publications</span>
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        <li class="nav-item">
-          <a href="/#posts">
             
-            <span>Posts</span>
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        <li class="nav-item">
-          <a href="/#projects">
+              
+              
+              
+                
+              
+              
             
-            <span>Projects</span>
-          </a>
-        </li>
+          
 
-        
-        
+          <li class="nav-item">
+            <a class="nav-link " href="/#posts"><span>Posts</span></a>
+          </li>
 
-        
+          
+          
 
-        <li class="nav-item">
-          <a href="/#teaching">
+          
+
+          
+          
+          
             
-            <span>Teaching</span>
-          </a>
-        </li>
+          
 
-        
-        
+          
 
-        
+          
+          
+          
+          
 
-        <li class="nav-item">
-          <a href="/#contact">
+          
             
-            <span>Contact</span>
-          </a>
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#talks"><span>Talks</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#featured"><span>Publications</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#contact"><span>Contact</span></a>
+          </li>
+
+          
+          
+
+        
+
+          
+        </ul>
+      </div>
+
+      <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+        
+        
+          
+            
+            <li class="nav-item d-none d-lg-inline-flex">
+              <a class="nav-link" href="https://twitter.com/nate__haines" data-toggle="tooltip" data-placement="bottom" title="Follow me on Twitter" target="_blank" rel="noopener" aria-label="Follow me on Twitter">
+                <i class="fab fa-twitter" aria-hidden="true"></i>
+              </a>
+            </li>
+          
+        
+
+        
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
         </li>
+        
+
+        
+        
+        <li class="nav-item dropdown theme-dropdown">
+          <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item js-set-theme-light">
+              <span>Light</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-dark">
+              <span>Dark</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-auto">
+              <span>Automatic</span>
+            </a>
+          </div>
+        </li>
+        
 
         
         
 
-        
       </ul>
 
     </div>
+  </nav>
+</header>
+
+
   </div>
-</nav>
 
-
-<article class="article" itemscope itemtype="http://schema.org/Article">
+  <div class="page-body">
+    <article class="article">
 
   
 
 
-  <div class="article-container">
-    <h1 itemprop="name">Human Choice and Reinforcement Learning (2)</h1>
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Human Choice and Reinforcement Learning (2)</h1>
+
+  
+
+  
     
+
 
 <div class="article-metadata">
 
+  
+  
+
+  
   <span class="article-date">
     
-    <time datetime="2017-04-07 00:00:00 &#43;0000 UTC" itemprop="datePublished">
-      Apr 7, 2017
-    </time>
+    
+      
+    
+    Apr 7, 2017
   </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    9 min read
+  </span>
+  
 
   
   
   
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/2017-04-07-human-choice-and-reinforcement-learning-2/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
   <span class="article-categories">
-    <i class="fa fa-folder"></i>
-    
-    <a href="/categories/reinforcement-learning">Reinforcement Learning</a
-    >
-    
-  </span>
-  
-  
-
-  
-  
-  
-  <span class="article-tags">
-    <i class="fa fa-tags"></i>
-    
-    <a href="/tags/r">R</a
-    >, 
-    
-    <a href="/tags/modeling">Modeling</a
-    >, 
-    
-    <a href="/tags/learning">Learning</a
-    >
-    
-  </span>
-  
-  
-
-  
-  
-<div class="share-box" aria-hidden="true">
-  <ul class="share">
-    <li>
-      <a class="facebook"
-         href="https://www.facebook.com/sharer.php?u=http%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f"
-         target="_blank">
-        <i class="fa fa-facebook"></i>
-      </a>
-    </li>
-    <li>
-      <a class="twitter"
-         href="https://twitter.com/intent/tweet?text=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29&amp;url=http%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f"
-         target="_blank">
-        <i class="fa fa-twitter"></i>
-      </a>
-    </li>
-    <li>
-      <a class="linkedin"
-         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f&amp;title=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29"
-         target="_blank">
-        <i class="fa fa-linkedin"></i>
-      </a>
-    </li>
-    <li>
-      <a class="weibo"
-         href="http://service.weibo.com/share/share.php?url=http%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f&amp;title=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29"
-         target="_blank">
-        <i class="fa fa-weibo"></i>
-      </a>
-    </li>
-    <li>
-      <a class="email"
-         href="mailto:?subject=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29&amp;body=http%3a%2f%2fhaines-lab.com%2fpost%2f2017-04-07-human-choice-and-reinforcement-learning-2%2f">
-        <i class="fa fa-envelope"></i>
-      </a>
-    </li>
-  </ul>
-</div>
-
-
+    <i class="fas fa-folder mr-1"></i><a href="/category/reinforcement-learning/">Reinforcement Learning</a></span>
   
 
 </div>
 
-    <div class="article-style" itemprop="articleBody">
-      <div id="answer-to-post-1" class="section level1">
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/index.en_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="answer-to-post-1" class="section level1">
 <h1>1. Answer to post 1</h1>
 <p>In the previous <a href="http://haines-lab.com/2017/04/04/human-choice-and-reinforcement-learning-1/">post</a>, I reviewed the Rescorla-Wagner updating (Delta) rule and its contemporary instantiation. At the end, I asked the following question:</p>
 <ul>
@@ -282,11 +824,11 @@
 </ul>
 <p>We will go over the answer to this question before progressing to the use of the Delta rule in modeling human choice. To begin, refer back to the Delta rule written in the following form:</p>
 <p><span class="math display">\[Pr(win)_{t+1} = (1 - \beta) \cdot Pr(win)_{t} + \beta \cdot \lambda_{t}\]</span></p>
-<p>Here, we see that in the Delta rule the expected win probability for the next trial is equal to the <a href="https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average"><em>exponentially weighted moving average</em></a> of the past expectation and the current outcome. It is easy to show this through a visualization of the expectation over time. For example, imagine that we have a vector of outcomes <span class="math inline">\(\lambda = [1,0,0,1,1,1,0,1,1,1]\)</span>, where 0 and 1 represent losing and winning slot machine rolls, respectively. Note that in this example, the placement of these outcomes within the vector <span class="math inline">\(\lambda\)</span> indicates their temporal order (i.e. <span class="math inline">\(\lambda_{1}=1\)</span>, <span class="math inline">\(\lambda_{2}=0\)</span>, etc.). Now, if we set an arbitrary learning rate such as <span class="math inline">\(\beta = 0.05\)</span>, what is the expected win rate after iterating through outcomes <span class="math inline">\(\lambda\)</span>? The R code below demonstrates the use of the Delta rule and an alternative exponential weighting scheme–which takes the form of a <a href="https://en.wikipedia.org/wiki/Power_series#Examples"><em>power series</em></a>–to determine the expectation on each trial:</p>
+<p>Here, we see that in the Delta rule the expected win probability for the next trial is equal to the <a href="https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average"><em>exponentially weighted moving average</em></a> of the past expectation and the current outcome. It is easy to show this through a visualization of the expectation over time. For example, imagine that we have a vector of outcomes <span class="math inline">\(\lambda = [1,0,0,1,1,1,0,1,1,1]\)</span>, where 0 and 1 represent losing and winning slot machine rolls, respectively. Note that in this example, the placement of these outcomes within the vector <span class="math inline">\(\lambda\)</span> indicates their temporal order (i.e. <span class="math inline">\(\lambda_{1}=1\)</span>, <span class="math inline">\(\lambda_{2}=0\)</span>, etc.). Now, if we set an arbitrary learning rate such as <span class="math inline">\(\beta = 0.05\)</span>, what is the expected win rate after iterating through outcomes <span class="math inline">\(\lambda\)</span>? The R code below demonstrates the use of the Delta rule and an alternative exponential weighting scheme–which takes the form of a <a href="https://en.wikipedia.org/wiki/Power_series#Examples"><em>power series</em></a>–to determine the expectation on each trial:</p>
 <pre class="r"><code># For pretty plots
-library(ggplot2)</code></pre>
-<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.6.2</code></pre>
-<pre class="r"><code># Assign lambda (lambda[1] == first trial)
+library(ggplot2)
+
+# Assign lambda (lambda[1] == first trial)
 lambda &lt;- c(1,0,0,1,1,1,0,1,1,1)
 
 # Set learning rate
@@ -341,7 +883,7 @@ p &lt;- ggplot(all_data, aes(x = trial, y = values, color = Approach)) +
   xlab(&quot;Trial Number&quot;) +
   ylab(&quot;Expected Win Probability&quot;)
 p</code></pre>
-<p><img src="/post/2017-04-07-human-choice-and-reinforcement-learning-2_files/figure-html/2017-04-07_fig1-1.svg" width="672" style='height: 100%; width: 100%; object-fit: contain' /></p>
+<p><img src="http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/index.en_files/figure-html/2017-04-07_fig1-1.svg" width="672" style='height: 100%; width: 100%; object-fit: contain' /></p>
 <p>As you can see in the plots, both the Delta rule and the power series approach yield the same exact expectations when iterated for each trial. However, the power series form requires each past observation while the Delta rule only requires the last expectation–this feature makes the Delta rule form of the equation much more plausible as a processes that people may use to estimate the value of a choice. This is because the computational cost does not increase with the number of past observations.</p>
 <p>Through this example, those familiar with <a href="http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_averages">economics</a> or <a href="https://en.wikipedia.org/wiki/Signal_processing">signal processing</a> may find the Delta rule familiar. Essentially, we can think of the Delta rule as a smoothing function or a <a href="https://en.wikipedia.org/wiki/High-pass_filter#Algorithmic_implementation">high- or low-pass filter</a>–albeit in the time as opposed to frequency domain–which effectively attenuates the effect of past or current outcomes, respectively. What makes this specific form interesting is again the fact that it can be iterated (i.e. it is recursive), making it a realistic approximation to the computations performed by the brain when estimating some value.</p>
 <p>With the above intuitions in mind, we will now get back to the question. How do we change the learning rate to ensure that the current expectation is always the simple average of all past outcomes? Since the above example showed that the Delta rule is really just a moving average where past outcomes are given exponentially decreasing weights, our goal is to make all outcomes equally represented. In other words, we want to weight past and current outcomes equally–this is a <a href="https://en.wikipedia.org/wiki/Moving_average#Cumulative_moving_average"><em>cumulative moving average</em></a>. Using our slot machine example, the cumulative moving average formula (in its most common form) is written as follows:</p>
@@ -352,7 +894,10 @@ p</code></pre>
 </div>
 <div id="choice-mechanisms" class="section level1">
 <h1>2. Choice mechanisms</h1>
-<p><img src="http://az616578.vo.msecnd.net/files/2016/08/19/636072180885324217301014601_shoes.jpg" alt="Figure 1" style="height: 100%; width: 100%; object-fit: contain"/></p>
+<div class="figure">
+<img src="/media/shoes_choice.jpeg" alt="" />
+<p class="caption">Figure 1</p>
+</div>
 <p>With the Delta rule, we can approximate how people with a certain learning rate may update their expectations about an outcome on a trial-by-trial basis, but how does this translate to choice? In the slot machine example, we only had a single choice (i.e. pull the lever and see if you win), so this question never applied to us. <strong>But what if we have 2 slot machines and we want to select the one that will win most frequently?</strong> In this case, we can use the Delta rule to update win probability expectations for each slot machine separately, but what do we do with these values after they are computed? Below, I will describe three different methods that can be used to translate expected values to choice.</p>
 <div id="greedy-choice" class="section level2">
 <h2>2.1 Greedy choice</h2>
@@ -391,144 +936,497 @@ Below, we will explore two methods that address the exploration-exploitation pro
 </div>
 
     </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/r/">R</a>
+  
+  <a class="badge badge-light" href="/tag/modeling/">Modeling</a>
+  
+  <a class="badge badge-light" href="/tag/learning/">Learning</a>
+  
+</div>
+
+
+
+<div class="share-box">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/&amp;text=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29" target="_blank" rel="noopener" class="share-btn-twitter" aria-label="twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/&amp;t=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29" target="_blank" rel="noopener" class="share-btn-facebook" aria-label="facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29&amp;body=http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/" target="_blank" rel="noopener" class="share-btn-email" aria-label="envelope">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/&amp;title=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29" target="_blank" rel="noopener" class="share-btn-linkedin" aria-label="linkedin-in">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29%20http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/" target="_blank" rel="noopener" class="share-btn-whatsapp" aria-label="whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/&amp;title=Human%20Choice%20and%20Reinforcement%20Learning%20%282%29" target="_blank" rel="noopener" class="share-btn-weibo" aria-label="weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="http://haines-lab.com/"><img class="avatar mr-3 avatar-circle" src="/author/nathaniel-haines/avatar_hud6e4cbd359920a21ae5755d0b163666c_1382354_270x270_fill_q75_lanczos_center.jpg" alt="Nathaniel Haines"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="http://haines-lab.com/">Nathaniel Haines</a></h5>
+      <h6 class="card-subtitle">Computational Psychologist &amp; Data Scientist, PhD</h6>
+      <p class="card-text">An academic Bayesian who is currently exploring the high dimensional posterior distribution of life</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/nate__haines" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=lg741SgAAAAJ" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/Nathaniel-Haines" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/nathaniel-haines-216049101/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
   </div>
 
-</article>
 
 
 
-<div class="article-container">
-  <h3>Related</h3>
-  <ul>
-    
-    <li><a href="/post/2017-04-04-choice_rl_1/">Human Choice and Reinforcement Learning (1)</a></li>
-    
-  </ul>
-</div>
 
 
-<div class="container">
-  <nav>
-  <ul class="pager">
-    
-    <li class="previous"><a href="http://haines-lab.com/post/2017-04-04-choice_rl_1/"><span
-      aria-hidden="true">&larr;</span> Human Choice and Reinforcement Learning (1)</a></li>
-    
 
-    
-    <li class="next"><a href="http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/">Human Choice and Reinforcement Learning (3) <span
-      aria-hidden="true">&rarr;</span></a></li>
-    
-  </ul>
-</nav>
 
-</div>
 
-<div class="article-container">
   
-<section id="comments">
-  <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
+  
+  
+
+  
+  
+  
+
+  
+  <section id="comments">
+    
+<div id="disqus_thread"></div>
+<script>
+  var disqus_config = function () {
     
     
     
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "haines-lab-com" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
+  };
+  (function() {
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+      return;
+    }
+    var d = document, s = d.createElement('script'); s.async = true;
+    s.src = 'https://' + "haines-lab-com" + '.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</section>
 
 
-</div>
+  </section>
+  
 
-<footer class="site-footer">
-  <div class="container">
-    <p class="powered-by">
 
-      &copy; 2017 Nathaniel Haines, PhD &middot; 
 
-      Powered by the <a href="https://github.com/gcushen/hugo-academic" target="_blank">Academic
-      theme</a> for <a href="http://gohugo.io" target="_blank">Hugo</a>.
 
-      <span class="pull-right" aria-hidden="true">
-        <a href="#" id="back_to_top">
-          <span class="button_icon">
-            <i class="fa fa-chevron-up fa-2x"></i>
-          </span>
-        </a>
-      </span>
 
-    </p>
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/">Human Choice and Reinforcement Learning (3)</a></li>
+      
+      <li><a href="/post/2017-04-04-choice_rl_1/">Human Choice and Reinforcement Learning (1)</a></li>
+      
+      <li><a href="/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/">Automating Computational Reproducibility in R using renv, Docker, and GitHub Actions</a></li>
+      
+      <li><a href="/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/">A Series on Building Formal Models of Classic Psychological Effects: Part 1, the Dunning-Kruger Effect</a></li>
+      
+      <li><a href="/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/">On Curbing Your Measurement Error: From Classical Corrections to Generative Models</a></li>
+      
+    </ul>
   </div>
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Nathaniel Haines, PhD
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-themes" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
 </footer>
 
+    </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.2/imagesloaded.pkgd.min.js" integrity="sha512-iHzEu7GbSc705hE2skyH6/AlTpOfBmkx7nUqTLGzPYR+C1tRaItbRlJ7hT/D3YQ9SV0fqLKzp4XY9wKulTBGTw==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js" integrity="sha512-Z5heTz36xTemt1TbtbfXtTq5lMfYnOkXM2/eWcTTiLU01+Sw4ku1i7vScDc8fWhrP2abz9GQzgKH5NGBLoYlAw==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/plugins/ScrollToPlugin.min.js" integrity="sha512-CDeU7pRtkPX6XJtF/gcFWlEwyaX7mcAp5sO3VIu/ylsdR74wEw4wmBpD5yYTrmMAiAboi9thyBUr1vXRPA7t0Q==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
     
-    <script src="/js/hugo-academic.js"></script>
+    <script src="/js/vendor-bundle.min.b73dfaac3b6499dc997741748a7c3fe2.js"></script>
+
+    
+    
+    
+      
+      
+        <script src="https://cdn.jsdelivr.net/gh/desandro/imagesloaded@v4.1.4/imagesloaded.pkgd.min.js" integrity="sha512-S5PZ9GxJZO16tT9r3WJp/Safn31eu8uWrzglMahDT4dsmgqWonRY9grk3j+3tfuPr9WJNsfooOR7Gi7HL5W2jw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/metafizzy/isotope@v3.0.6/dist/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js" integrity="sha512-Ypjm0o7jOxAd4hpdoppSEN0TQOC19UtPAqD+4s5AlXmUvbmmS/YMxYqAqarQYyxTnB6/rqip9qcxlNB/3U9Wdg==" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/r.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/python.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/latex.min.js" crossorigin="anonymous"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.js" integrity="" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdn.jsdelivr.net/gh/krisk/Fuse@v3.2.1/dist/fuse.min.js" integrity="sha512-o38bmzBGX+hD3JHWUFCDA09btWaqrNmoJ3RXLlrysA7PP01Kgs4UlE4MhelE1v5dJR3+cxlR4qQlotsW7jKsnw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/julmot/mark.js@8.11.1/dist/jquery.mark.min.js" integrity="sha512-mhbv5DqBMgrWL+32MmsDOt/OAvqr/cHimk6B8y/bx/xS88MVkYGPiVv2ixKVrkywF2qHplNRUvFsAHUdxZ3Krg==" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+      <script id="dsq-count-scr" src="https://haines-lab-com.disqus.com/count.js" async></script>
     
 
     
     
       
-      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
-
       
-      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/r.min.js"></script>
       
-
       
-
-      <script>hljs.initHighlightingOnLoad();</script>
+      
+      
+      
     
 
     
-    
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
-    </script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
-    
-    
 
-  </body>
+    
+    
+    
+    <script id="page-data" type="application/json">{"use_headroom":true}</script>
+
+    
+    
+      <script src="/js/wowchemy-headroom.1cb9e2fc8399acee94eab837265b73bf.js" type="module"></script>
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.247fd8f54253895301106e3006f53f38.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
 </html>
-
-
-
-<div id="disqus_thread"></div>
-<script>
-
-
-
-
-
-};
-(function() { 
-var d = document, s = d.createElement('script');
-s.src = 'https://haines-lab-com.disqus.com/embed.js';
-s.setAttribute('data-timestamp', +new Date());
-(d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-
-

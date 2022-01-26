@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Publication_types on Computational Psychology</title>
+    <title>Publication_types | Computational Psychology</title>
     <link>http://haines-lab.com/publication_types/</link>
-    <description>Recent content in Publication_types on Computational Psychology</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>&amp;copy; 2017 Nathaniel Haines, PhD</copyright>
-    <lastBuildDate>Tue, 14 Jul 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://haines-lab.com/publication_types/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>2</title>
-      <link>http://haines-lab.com/publication_types/2/</link>
-      <pubDate>Tue, 14 Jul 2020 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/publication_types/2/</guid>
-      <description></description>
-    </item>
+      <atom:link href="http://haines-lab.com/publication_types/index.xml" rel="self" type="application/rss+xml" />
+    <description>Publication_types</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Tue, 15 Jun 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png</url>
+      <title>Publication_types</title>
+      <link>http://haines-lab.com/publication_types/</link>
+    </image>
     
   </channel>
 </rss>

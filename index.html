@@ -1,245 +1,929 @@
-<!DOCTYPE html>
-<html lang="en-us">
+<!DOCTYPE html><html lang="en-us" >
+
+
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.4.0 for Hugo" />
+  
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme" content="hugo-academic">
-  <meta name="generator" content="Hugo 0.48" />
-  <meta name="author" content="Nathaniel Haines, PhD">
-  <meta name="description" content="Computational Psychologist &amp; Data Scientist">
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Nathaniel Haines" />
 
   
   
   
     
   
+  <meta name="description" content="Computational Psychologist &amp; Data Scientist, PhD" />
+
+  
+  <link rel="alternate" hreflang="en-us" href="http://haines-lab.com/" />
+
+  
+  
+  
+    <meta name="theme-color" content="hsl(339, 90%, 68%)" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.f1ecf783c14edc00c9320c205831ad8e.css" media="print" onload="this.media='all'">
+
+  
+  
   
     
     
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/rstudio.min.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha512-W0xM4mr6dEP9nREo7Z9z+9X70wytKvMGeDsj7ps2+xg5QPrEBXC8tAW1IFnzjR6eoJ90JmCnFzerQJTLzIEHjA==" crossorigin="anonymous" media="print" onload="this.media='all'">
     
-  
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.1/css/academicons.min.css" integrity="sha512-NThgw3XKQ1absAahW6to7Ey42uycrVvfNfyjqcFNgCmOCQ5AR4AO0SiXrN+8ZtYeappp56lk1WtvjVmEa+VR6A==" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
-  
-  
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
-  <link rel="stylesheet" href="/css/hugo-academic.css">
-  
-  <link rel="stylesheet" href="/css/rstudio.css">
-  
-
-  
-    <script>
-      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-      ga('create', 'UA-106994238-1', 'auto');
-      ga('require', 'eventTracker');
-      ga('require', 'outboundLinkTracker');
-      ga('require', 'urlChangeTracker');
-      ga('send', 'pageview');
-    </script>
-    <script async src="//www.google-analytics.com/analytics.js"></script>
-    
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
-    
-  
-
-  <link rel="alternate" href="http://haines-lab.com/index.xml" type="application/rss+xml" title="Computational Psychology">
-  <link rel="feed" href="http://haines-lab.com/index.xml" type="application/rss+xml" title="Computational Psychology">
-
-  <link rel="icon" type="image/png" href="/img/icon.png">
-  <link rel="apple-touch-icon" type="image/png" href="/img/apple-touch-icon.png">
-
-  <link rel="canonical" href="http://haines-lab.com/">
-
-  
-
-  <title>Computational Psychology</title>
-
-</head>
-<body id="top" data-spy="scroll" data-target="#navbar-main" data-offset="71">
-
-<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
-  <div class="container">
 
     
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-              data-target=".navbar-collapse" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">Computational Psychology</a>
-    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
 
     
-    <div class="collapse navbar-collapse">
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'" disabled>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'">
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.css" integrity="" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
 
       
-      <ul class="nav navbar-nav navbar-right">
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.483823b49802e3bfc12a727dbc71499e.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106994238-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-106994238-1', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  
+
+  
+    <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Computational Psychology" />
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="http://haines-lab.com/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+
+  
+  
+    
+    
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Computational Psychology" />
+  <meta property="og:url" content="http://haines-lab.com/" />
+  <meta property="og:title" content="Computational Psychology" />
+  <meta property="og:description" content="Computational Psychologist &amp; Data Scientist, PhD" /><meta property="og:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta property="og:updated_time" content="2022-01-24T00:00:00&#43;00:00" />
+    
+  
+
+  
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "http://haines-lab.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
+  "url": "http://haines-lab.com/"
+}
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Computational Psychology</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#navbar-main" class="page-wrapper  dark " data-wc-page-id="3976528693a0108357f4928017600865" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.b6ac29faab89ee14db88f0bed7aa6622.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
         
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="header--fixed">
+  <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+    <div class="container-xl">
+
+      
+      <div class="d-none d-lg-inline-flex">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+      
+      <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      
+      <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
 
         
+        <ul class="navbar-nav d-md-inline-flex">
+          
 
-        <li class="nav-item">
-          <a href="/#about" data-target="#about">
+          
+
+          
+          
+          
             
-            <span>Home</span>
-          </a>
-        </li>
+          
 
-        
-        
+          
 
-        
+          
+          
+          
+          
 
-        <li class="nav-item">
-          <a href="/pdf/CV_Nathaniel_Haines.pdf" data-target="pdf/CV_Nathaniel_Haines.pdf">
+          
             
-            <span>CV</span>
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        <li class="nav-item">
-          <a href="/#publications_selected" data-target="#publications_selected">
+              
+              
             
-            <span>Publications</span>
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        <li class="nav-item">
-          <a href="/#posts" data-target="#posts">
             
-            <span>Posts</span>
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        <li class="nav-item">
-          <a href="/#projects" data-target="#projects">
+              
+              
+              
+                
+              
+              
             
-            <span>Projects</span>
-          </a>
-        </li>
+          
 
-        
-        
+          <li class="nav-item">
+            <a class="nav-link " href="/#posts" data-target="#posts"><span>Posts</span></a>
+          </li>
 
-        
+          
+          
 
-        <li class="nav-item">
-          <a href="/#teaching" data-target="#teaching">
+          
+
+          
+          
+          
             
-            <span>Teaching</span>
-          </a>
-        </li>
+          
 
-        
-        
+          
 
-        
+          
+          
+          
+          
 
-        <li class="nav-item">
-          <a href="/#contact" data-target="#contact">
+          
             
-            <span>Contact</span>
-          </a>
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#talks" data-target="#talks"><span>Talks</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#featured" data-target="#featured"><span>Publications</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#contact" data-target="#contact"><span>Contact</span></a>
+          </li>
+
+          
+          
+
+        
+
+          
+        </ul>
+      </div>
+
+      <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+        
+        
+          
+            
+            <li class="nav-item d-none d-lg-inline-flex">
+              <a class="nav-link" href="https://twitter.com/nate__haines" data-toggle="tooltip" data-placement="bottom" title="Follow me on Twitter" target="_blank" rel="noopener" aria-label="Follow me on Twitter">
+                <i class="fab fa-twitter" aria-hidden="true"></i>
+              </a>
+            </li>
+          
+        
+
+        
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
         </li>
+        
+
+        
+        
+        <li class="nav-item dropdown theme-dropdown">
+          <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item js-set-theme-light">
+              <span>Light</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-dark">
+              <span>Dark</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-auto">
+              <span>Automatic</span>
+            </a>
+          </div>
+        </li>
+        
 
         
         
 
-        
       </ul>
 
     </div>
+  </nav>
+</header>
+
+
   </div>
-</nav>
+
+  <div class="page-body">
+    
 
 
 
-<span id="homepage" style="display: none"></span>
+
+
+
+
+
+
+
+
+  
+<span class="js-widget-page d-none"></span>
+
+
 
 
 
   
   
-  <section id="about" class="home-section">
+  
+  
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+  <section id="about" class="home-section wg-about  "  >
+   <div class="home-section-bg " >
+     
+   </div>
     <div class="container">
+
+    
+
       
 
 
 
-<div class="row" itemprop="author" itemscope itemtype="http://schema.org/Person" itemref="person-email person-address">
-  <div class="col-xs-12 col-md-4">
+
+  
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+  <div class="col-12 col-lg-4">
     <div id="profile">
 
       
-      <div class="portrait" style="background-image: url('http://haines-lab.com/img/coffee_me.jpg');"></div>
-      <meta itemprop="image" content="http://haines-lab.com/img/coffee_me.jpg">
+      
+      <img class="avatar avatar-circle"
+           width="270" height="270"
+           src="/author/nathaniel-haines/avatar_hud6e4cbd359920a21ae5755d0b163666c_1382354_270x270_fill_q75_lanczos_center.jpg" alt="Nathaniel Haines">
       
 
       <div class="portrait-title">
-        <h2 itemprop="name">Nathaniel Haines, PhD</h2>
-        <h3 itemprop="jobTitle">Computational Psychologist &amp; Data Scientist</h3>
         
-        <h3 itemprop="worksFor" itemscope itemtype="http://schema.org/Organization">
-          <a href="https://aivohealth.com/" target="_blank" itemprop="url">
-            <span itemprop="name">Aivo Health</span>
+        <h2>Nathaniel Haines</h2>
+        
+        <h3>Computational Psychologist &amp; Data Scientist, PhD</h3>
+
+        
+        <h3>
+          <a href="https://aivohealth.com/" target="_blank" rel="noopener">
+          <span>Aivo Health</span>
           </a>
         </h3>
         
       </div>
 
-      <link itemprop="url" href="http://haines-lab.com/">
-
-      <ul class="social-icon" aria-hidden="true">
+      <ul class="network-icon" aria-hidden="true">
         
+        
+        
+        
+          
+        
+        
+        
+        
+        
+          
         
         <li>
-          <a itemprop="sameAs" href="mailto:haines.175@osu.edu" target="_blank">
-            <i class="fa fa-envelope big-icon"></i>
+          <a href="/#contact"  aria-label="envelope">
+            <i class="fas fa-envelope big-icon"></i>
           </a>
         </li>
         
         
+        
+        
+          
+        
+        
+        
+        
+        
+          
+        
         <li>
-          <a itemprop="sameAs" href="//twitter.com/nate__haines" target="_blank">
-            <i class="fa fa-twitter big-icon"></i>
+          <a href="https://twitter.com/nate__haines" target="_blank" rel="noopener" aria-label="twitter">
+            <i class="fab fa-twitter big-icon"></i>
           </a>
         </li>
         
         
+        
+        
+        
+        
+        
+        
+          
+        
         <li>
-          <a itemprop="sameAs" href="https://scholar.google.com/citations?user=lg741SgAAAAJ" target="_blank">
+          <a href="https://scholar.google.com/citations?user=lg741SgAAAAJ" target="_blank" rel="noopener" aria-label="google-scholar">
             <i class="ai ai-google-scholar big-icon"></i>
           </a>
         </li>
         
         
+        
+        
+          
+        
+        
+        
+        
+        
+          
+        
         <li>
-          <a itemprop="sameAs" href="//github.com/Nathaniel-Haines" target="_blank">
-            <i class="fa fa-github big-icon"></i>
+          <a href="https://github.com/Nathaniel-Haines" target="_blank" rel="noopener" aria-label="github">
+            <i class="fab fa-github big-icon"></i>
+          </a>
+        </li>
+        
+        
+        
+        
+          
+        
+        
+        
+        
+        
+          
+        
+        <li>
+          <a href="https://www.linkedin.com/in/nathaniel-haines-216049101/" target="_blank" rel="noopener" aria-label="linkedin">
+            <i class="fab fa-linkedin big-icon"></i>
           </a>
         </li>
         
@@ -247,63 +931,55 @@
 
     </div>
   </div>
-  <div class="col-xs-12 col-md-8" itemprop="description">
+  <div class="col-12 col-lg-8">
 
     
+    <h1>Biography</h1>
 
-<h1 id="biography">Biography</h1>
+    <div class="article-style">
+      <p>I am a computational psychologist and data scientist with expertise in clinical and mathematical psychology. Generally, my work seeks to understand how people learn to think, feel, and act as they experience the world. To do so, I use a combination of techniques including cognitive/computational modeling, Bayesian analysis, machine learning, reinforcement learning, and decision theory. My goal is to use this understanding to help develop scalable mental health treatments for cases when people&rsquo;s thoughts, emotions, and behaviors become difficult to cope with, harmful, or otherwise unwanted. Examples include impulsivity- (e.g., substance use), anxiety- (e.g., intolerance of uncertainty), and chronic pain-related (e.g., negative beliefs about pain) concerns.</p>
+<p>I am currently working as a data scientist at Aivo Health, a healthcare start-up where we are developing a virtual clinic to personalize treatments for chronic pain. Aivo integrates theories of reinforcement learning found in psychology and neuroscience with computational modeling techniques developed in computer science, with the goal of optimizing person-level treatment decisions and quickly alleviating chronic pain.</p>
+<p>
+  <i class="fas fa-download  pr-1 fa-fw"></i> Download my <a href="/uploads/CV_Nathaniel_Haines.pdf" target="_blank">CV</a>.</p>
 
-<p>I am a computational psychologist with a focus in clinical and mathematical psychology. I am interested in the role that emotions play in how people process, learn from, and make decisions based on rewards and punishments within their local environments. My research seeks to formalize how impulsive approach and anxious avoidance behaviors (and associated thoughts and emotions) develop across the lifespan, with attention to individual differences in: (1) long-term functional outcomes (e.g., clinical diagnoses of attention-deficit/hyperactivity disorder, conduct disorder, substance use disorders, anxiety disorders, chronic pain, etc.), (2) moment-to-moment reward/punishment processing processing (e.g., neural processes that regulate learning and decision-making), and (3) exposure to environmental factors that can potentiate or inhibit processes described in 1 and 2.</p>
-
-<p>To study the above topics, I use a generative modeling framework, which involves defining probabilistic models of how behavior arises across levels and timescales of analysis. Generative modeling is a broad framework, bringing together insights and techniques from research areas including cognitive modeling, Bayesian statistics, hierarchical modeling, and machine learning. I believe that to understand the development of impulsive and anxious patterns of thinking, feeling, and behaving across time, it is crucial that we use all the information that we have available. The generative modeling framework helps accomplish this in a formalized way.</p>
-
-<p>I am currently working as a data scientist at Aivo Health, a healthcare start-up where we are developing an app-based personalized treatment program for chronic pain. Aivo integrates theories of reinforcement learning found in psychology and neuroscience with computational modeling techniques developed in computer science, with the goal of optimizing person-level treatment decisions for people experiencing chronic pain.</p>
-
-<p>To learn more about me and my work, feel free to check out my publications and blog posts below!</p>
-
+    </div>
 
     <div class="row">
 
       
-      <div class="col-sm-5">
-        <h3>Interests</h3>
-        <ul class="ul-interests">
+      <div class="col-md-5">
+        <div class="section-subheading">Interests</div>
+        <ul class="ul-interests mb-0">
           
-          <li>Reward, Learning, and Emotion</li>
+          <li>Scalable Mental Health Treatments</li>
           
-          <li>Impulsive and Anxious Behaviors</li>
+          <li>Clinical and Mathematical Psychology</li>
           
-          <li>Chronic Pain Assessment and Treatment</li>
+          <li>Bayes &lt;3</li>
           
-          <li>Model-based Treatment Personalization</li>
+          <li>Computational Modeling</li>
           
-          <li>Generative Modeling</li>
-          
-          <li>Bayesian Statistics</li>
-          
-          <li>Machine Learning</li>
-          
-          <li>Facial Expression Analysis</li>
+          <li>Reinforcement Learning</li>
           
         </ul>
       </div>
       
 
       
-      <div class="col-sm-7">
-        <h3>Education</h3>
-        <ul class="ul-edu fa-ul">
+      <div class="col-md-7">
+        <div class="section-subheading">Education</div>
+        <ul class="ul-edu fa-ul mb-0">
           
           <li>
-            <i class="fa-li fa fa-graduation-cap"></i>
+            <i class="fa-li fas fa-graduation-cap"></i>
             <div class="description">
-              <p class="course">B.A. in Psychology, 2015</p>
+              <p class="course">Ph.D. in Psychology, 2021</p>
               <p class="institution">The Ohio State University</p>
             </div>
           </li>
           
           <li>
-            <i class="fa-li fa fa-graduation-cap"></i>
+            <i class="fa-li fas fa-graduation-cap"></i>
             <div class="description">
               <p class="course">M.A. in Psychology, 2017</p>
               <p class="institution">The Ohio State University</p>
@@ -311,9 +987,9 @@
           </li>
           
           <li>
-            <i class="fa-li fa fa-graduation-cap"></i>
+            <i class="fa-li fas fa-graduation-cap"></i>
             <div class="description">
-              <p class="course">Ph.D. in Psychology, 2021</p>
+              <p class="course">B.A. in Psychology, 2015</p>
               <p class="institution">The Ohio State University</p>
             </div>
           </li>
@@ -326,1455 +1002,3252 @@
   </div>
 </div>
 
-    </div>
-  </section>
-
-  
-  
-  <section id="publications_selected" class="home-section">
-    <div class="container">
-      
-
-
-
-<div class="row">
-  <div class="col-xs-12 col-md-4 section-heading">
-    <h1>Selected Publications</h1>
-    
-  </div>
-  <div class="col-xs-12 col-md-8">
-    
 
     
-      
-        <div class="pub-list-item" itemscope itemtype="http://schema.org/CreativeWork">
-  <div class="row">
-
-    
-
-    <div class="col-md-12">
-      <a href="http://haines-lab.com/publication/haines_psychopathology_2020/">
-        <img src="/img/Haines_Psychopathology_2020.png" class="pub-banner"
-             itemprop="image">
-      </a>
-    </div>
-    <div class="col-md-12">
-
-    
-
-      <h3 class="article-title" itemprop="name">
-        <a href="http://haines-lab.com/publication/haines_psychopathology_2020/" itemprop="url">Moving beyond Ordinary Factor Analysis in Studies of Personality and Personality Disorder: A Computational Modeling Perspective</a>
-      </h3>
-
-      <div class="pub-abstract" itemprop="text">
-        
-        Almost all forms of psychopathology are arrived at through complex interactions among neurobiological and environmental factors across development. Yet, psychopathology research is still dominated by searches for large main effects causes. Here, we use our developmental model of antisocial and borderline traits to illustrate challenges faced when modeling complex etiological mechanisms of psychopathology. We then consider how computational models, which are rarely used in the personality disorders literature, remedy some of these challenges when combined with hierarchical Bayesian analysis.
-        
-      </div>
-
-      <div class="pub-authors" itemprop="author">
-        
-        N. Haines, T. Beauchaine
-        
-      </div>
-
-      <div class="pub-publication">
-        In Psychopathology.,&nbsp;2020.
-      </div>
-
-      <div class="pub-links">
-        
-
-
-
-
-<a class="btn btn-primary btn-outline" href="http://haines-lab.com/pdf/Haines_Psychopathology_2020.pdf">
-  PDF
-</a>
-
-
-
-
-
-
-
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" itemscope itemtype="http://schema.org/CreativeWork">
-  <div class="row">
-
-    
-
-    <div class="col-md-12">
-      <a href="http://haines-lab.com/publication/haines_cps_2020/">
-        <img src="/img/Haines_CPS_2020.png" class="pub-banner"
-             itemprop="image">
-      </a>
-    </div>
-    <div class="col-md-12">
-
-    
-
-      <h3 class="article-title" itemprop="name">
-        <a href="http://haines-lab.com/publication/haines_cps_2020/" itemprop="url">Anxiety Modulates Preference for Immediate Rewards among Trait-Impulsive Individuals: A Hierarchical Bayesian Analysis</a>
-      </h3>
-
-      <div class="pub-abstract" itemprop="text">
-        
-        Trait impulsivity—defined by strong preference for immediate over delayed rewards and difficulties inhibiting prepotent behaviors—is observed in all externalizing disorders, including substance use disorders. Longstanding theories of personality and decision-making predict that neurally mediated individual differences in sensitivity to reward cues versus punishment cues (frustrative non-reward) interact to affect behavioral tendencies. We use hierarchical Bayesian analysis in three samples with differing levels of substance use (N=967) to identify interactive dependencies between trait impulsivity and state anxiety on impulsive decision-making. Our findings reveal how anxiety moderates impulsive decision-making and demonstrate benefits of hierarchical Bayesian analysis over traditional approaches for testing theories of psychopathology spanning levels of analysis.
-        
-      </div>
-
-      <div class="pub-authors" itemprop="author">
-        
-        N. Haines, T.P. Beauchaine, M. Galdo, A.H. Rogers, H. Hahn, M.A. Pitt, J.I. Myung, B.M. Turner, W.-Y. Ahn
-        
-      </div>
-
-      <div class="pub-publication">
-        In CPS.,&nbsp;2020.
-      </div>
-
-      <div class="pub-links">
-        
-
-
-
-
-<a class="btn btn-primary btn-outline" href="http://haines-lab.com/pdf/Haines_CPS_2020.pdf">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline" href="https://github.com/CCS-Lab/Haines_2020_CPS">
-  Code
-</a>
-
-
-
-
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" itemscope itemtype="http://schema.org/CreativeWork">
-  <div class="row">
-
-    
-
-    <div class="col-md-12">
-      <a href="http://haines-lab.com/publication/romeu_haines_dad_2019/">
-        <img src="/img/Romeu_Haines_DAD_2019.png" class="pub-banner"
-             itemprop="image">
-      </a>
-    </div>
-    <div class="col-md-12">
-
-    
-
-      <h3 class="article-title" itemprop="name">
-        <a href="http://haines-lab.com/publication/romeu_haines_dad_2019/" itemprop="url">A computational model of the Cambridge gambling task with applications to substance use disorders</a>
-      </h3>
-
-      <div class="pub-abstract" itemprop="text">
-        
-        Background: Impulsivity is central to all forms of externalizing psychopathology, including problematic substance use. The Cambridge Gambling task (CGT) is a popular neurocognitive task used to assess impulsivity in both clinical and healthy populations. However, the traditional methods of analysis in the CGT do not fully capture the multiple cognitive mechanisms that give rise to impulsive behavior, which can lead to underpowered and difficult-to-interpret behavioral measures. Objectives: The current study presents the cognitive modeling approach as an alternative to traditional methods and assesses predictive and convergent validity across and between approaches. Conclusion: The cognitive modeling approach is a viable method of measuring the latent mechanisms that give rise to choice behavior in the CGT, which allows for stronger statistical inferences and a better understanding of impulsive and risk-seeking behavior.
-        
-      </div>
-
-      <div class="pub-authors" itemprop="author">
-        
-        R. Romeu, N. Haines, W.-Y. Ahn, J. Busemeyer, J. Vassileva
-        
-      </div>
-
-      <div class="pub-publication">
-        In DAD.,&nbsp;2019.
-      </div>
-
-      <div class="pub-links">
-        
-
-
-
-
-<a class="btn btn-primary btn-outline" href="http://haines-lab.com/pdf/Romeu_Haines_DAD_2019.pdf">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline" href="https://github.com/CCS-Lab/hBayesDM/blob/master/commons/stan_files/cgt_cm.stan">
-  Code
-</a>
-
-
-
-
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" itemscope itemtype="http://schema.org/CreativeWork">
-  <div class="row">
-
-    
-
-    <div class="col-md-12">
-      <a href="http://haines-lab.com/publication/haines_dev_psych_2019/">
-        <img src="/img/Haines_DEV_PSYCH_2019.png" class="pub-banner"
-             itemprop="image">
-      </a>
-    </div>
-    <div class="col-md-12">
-
-    
-
-      <h3 class="article-title" itemprop="name">
-        <a href="http://haines-lab.com/publication/haines_dev_psych_2019/" itemprop="url">Using automated computer vision and machine learning to code facial expressions of affect and arousal: Implications for emotion dysregulation research</a>
-      </h3>
-
-      <div class="pub-abstract" itemprop="text">
-        
-        To date, studying facial expressions has been hampered by the labor-intensive, time-consuming nature of human coding. We describe a partial solution: automated facial expression coding (AFEC), which combines computer vision and machine learning to code facial expressions in real time. We provide an example in which we use AFEC to evaluate emotion dynamics in mother–daughter dyads engaged in conflict. Among other findings, AFEC (1) shows convergent validity with a validated human coding scheme, (2) distinguishes among risk groups, and (3) detects developmental increases in positive dyadic affect correspondence as teen daughters age.
-        
-      </div>
-
-      <div class="pub-authors" itemprop="author">
-        
-        N. Haines, Z. Bell, S. Crowell, H. Hahn, D. Kamara, H. McDonough-Caplan, T. Shader, T. Beauchaine
-        
-      </div>
-
-      <div class="pub-publication">
-        In Dev. and Psych.,&nbsp;2019.
-      </div>
-
-      <div class="pub-links">
-        
-
-
-
-
-<a class="btn btn-primary btn-outline" href="http://haines-lab.com/pdf/Haines_DEV_PSYCH_2019.pdf">
-  PDF
-</a>
-
-
-
-
-
-
-
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" itemscope itemtype="http://schema.org/CreativeWork">
-  <div class="row">
-
-    
-
-    <div class="col-md-12">
-      <a href="http://haines-lab.com/publication/haines_plos_one_2019/">
-        <img src="/img/Haines_PLOS_ONE_2019.png" class="pub-banner"
-             itemprop="image">
-      </a>
-    </div>
-    <div class="col-md-12">
-
-    
-
-      <h3 class="article-title" itemprop="name">
-        <a href="http://haines-lab.com/publication/haines_plos_one_2019/" itemprop="url">Using computer-vision and machine learning to automate facial coding of positive and negative affect intensity</a>
-      </h3>
-
-      <div class="pub-abstract" itemprop="text">
-        
-        Historically, facial expression research has followed from discrete emotion theories, which posit a limited number of distinct affective states that are represented with specific patterns of facial action. Much less work has focused on dimensional features of emotion (e.g., positive and negative affect intensity). We use computer-vision and machine learning (CVML) to identify patterns of facial actions in 4,648 video recordings of 125 human participants. Our results show that CVML can both (1) determine the importance of different facial actions that human coders use to derive positive and negative affective ratings when combined with interpretable machine learning methods, and (2) efficiently automate positive and negative affect intensity coding on large facial expression databases.
-        
-      </div>
-
-      <div class="pub-authors" itemprop="author">
-        
-        N. Haines, M. Southward, J. Cheavens, T. Beauchaine, W.-Y. Ahn
-        
-      </div>
-
-      <div class="pub-publication">
-        In PLOS ONE.,&nbsp;2019.
-      </div>
-
-      <div class="pub-links">
-        
-
-
-
-
-<a class="btn btn-primary btn-outline" href="http://haines-lab.com/pdf/Haines_PLOS_ONE_2019.pdf">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline" href="https://github.com/CCS-Lab/Haines_CVML_2018">
-  Code
-</a>
-
-
-
-
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" itemscope itemtype="http://schema.org/CreativeWork">
-  <div class="row">
-
-    
-
-    <div class="col-md-12">
-      <a href="http://haines-lab.com/publication/haines_cog_sci_2018/">
-        <img src="/img/Haines_Cog_Sci_2018.png" class="pub-banner"
-             itemprop="image">
-      </a>
-    </div>
-    <div class="col-md-12">
-
-    
-
-      <h3 class="article-title" itemprop="name">
-        <a href="http://haines-lab.com/publication/haines_cog_sci_2018/" itemprop="url">The Outcome‐Representation Learning Model: A Novel Reinforcement Learning Model of the Iowa Gambling Task</a>
-      </h3>
-
-      <div class="pub-abstract" itemprop="text">
-        
-        The Iowa Gambling Task (IGT) is widely used to study decision‐making within healthy and psychiatric populations. Here, we propose the Outcome‐Representation Learning (ORL) model, a novel model that provides the best compromise between competing models. We test the performance of the ORL model on 393 subjects&rsquo; data collected across multiple research sites, and we show that the ORL reveals distinct patterns of decision‐making in substance‐using populations.
-        
-      </div>
-
-      <div class="pub-authors" itemprop="author">
-        
-        N. Haines, J. Vassileva, W.-Y. Ahn
-        
-      </div>
-
-      <div class="pub-publication">
-        In Cog. Sci.,&nbsp;2018.
-      </div>
-
-      <div class="pub-links">
-        
-
-
-
-
-<a class="btn btn-primary btn-outline" href="http://haines-lab.com/pdf/Haines_Cog_Sci_2018.pdf">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline" href="https://github.com/CCS-Lab/IGT">
-  Code
-</a>
-
-
-
-
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" itemscope itemtype="http://schema.org/CreativeWork">
-  <div class="row">
-
-    
-
-    <div class="col-md-12">
-      <a href="http://haines-lab.com/publication/hbayesdm/">
-        <img src="/img/hBayesDM.png" class="pub-banner"
-             itemprop="image">
-      </a>
-    </div>
-    <div class="col-md-12">
-
-    
-
-      <h3 class="article-title" itemprop="name">
-        <a href="http://haines-lab.com/publication/hbayesdm/" itemprop="url">Revealing Neurocomputational Mechanisms of Reinforcement Learning and Decision-Making With the hBayesDM Package</a>
-      </h3>
-
-      <div class="pub-abstract" itemprop="text">
-        
-        There is a growing interest in psychology to apply advanced computational models to decision making data collected from psychiatric populations to better understand maladaptive choice patterns. However, there are currently no easy-to-use tools for those who may not have the sophisticated mathematical/programming background to use such methods. Here, we present an R package which can fit an array of decision making models to a variety of different tasks with a single line of code.
-        
-      </div>
-
-      <div class="pub-authors" itemprop="author">
-        
-        W.-Y. Ahn, N. Haines, L. Zhang
-        
-      </div>
-
-      <div class="pub-publication">
-        In CPSY,&nbsp;2017.
-      </div>
-
-      <div class="pub-links">
-        
-
-
-
-
-<a class="btn btn-primary btn-outline" href="https://www.mitpressjournals.org/doi/abs/10.1162/CPSY_a_00002">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline" href="https://github.com/CCS-Lab/hBayesDM">
-  Code
-</a>
-
-
-
-
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-      
-    
-
-  </div>
-</div>
 
     </div>
   </section>
 
   
   
-  <section id="publications" class="home-section">
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+  <section id="skills" class="home-section wg-featurette  "  >
+   <div class="home-section-bg " >
+     
+   </div>
     <div class="container">
+
+    
+
       
 
 
-
-
-<div class="row">
-  <div class="col-xs-12 col-md-4 section-heading">
-    <h1>Recent Publications</h1>
-    
+<div class="row featurette">
+  
+  <div class="col-md-12 section-heading">
+    <h1>Skills</h1>
     
   </div>
-  <div class="col-xs-12 col-md-8">
+  
+
+  
+
+  
+  
+  
+  
     
-
+  
+  <div class="col-12 col-sm-4">
     
-      
-        <div class="pub-list-item" style="margin-bottom: 1rem" itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa fa-file-text-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name">Moving beyond Ordinary Factor Analysis in Studies of Personality and Personality Disorder: A Computational Modeling Perspective</span>
-  <p>
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/publication/haines_psychopathology_2020/">
-  Details
-</a>
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/pdf/Haines_Psychopathology_2020.pdf">
-  PDF
-</a>
-
-
-
-
-
-
-
-</p>
-</div>
-
-      
+    <div class="featurette-icon"><i class="fab fa-r-project"></i></div>
     
-      
-        <div class="pub-list-item" style="margin-bottom: 1rem" itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa fa-file-text-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name">Anxiety Modulates Preference for Immediate Rewards among Trait-Impulsive Individuals: A Hierarchical Bayesian Analysis</span>
-  <p>
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/publication/haines_cps_2020/">
-  Details
-</a>
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/pdf/Haines_CPS_2020.pdf">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="https://github.com/CCS-Lab/Haines_2020_CPS">
-  Code
-</a>
-
-
-
-
-</p>
-</div>
-
-      
+    <div class="section-subheading">R</div>
     
-      
-        <div class="pub-list-item" style="margin-bottom: 1rem" itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa fa-file-text-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name">A computational model of the Cambridge gambling task with applications to substance use disorders</span>
-  <p>
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/publication/romeu_haines_dad_2019/">
-  Details
-</a>
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/pdf/Romeu_Haines_DAD_2019.pdf">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="https://github.com/CCS-Lab/hBayesDM/blob/master/commons/stan_files/cgt_cm.stan">
-  Code
-</a>
-
-
-
-
-</p>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" style="margin-bottom: 1rem" itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa fa-file-text-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name">Using automated computer vision and machine learning to code facial expressions of affect and arousal: Implications for emotion dysregulation research</span>
-  <p>
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/publication/haines_dev_psych_2019/">
-  Details
-</a>
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/pdf/Haines_DEV_PSYCH_2019.pdf">
-  PDF
-</a>
-
-
-
-
-
-
-
-</p>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" style="margin-bottom: 1rem" itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa fa-file-text-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name">Using computer-vision and machine learning to automate facial coding of positive and negative affect intensity</span>
-  <p>
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/publication/haines_plos_one_2019/">
-  Details
-</a>
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/pdf/Haines_PLOS_ONE_2019.pdf">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="https://github.com/CCS-Lab/Haines_CVML_2018">
-  Code
-</a>
-
-
-
-
-</p>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" style="margin-bottom: 1rem" itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa fa-file-text-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name">The Outcome‐Representation Learning Model: A Novel Reinforcement Learning Model of the Iowa Gambling Task</span>
-  <p>
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/publication/haines_cog_sci_2018/">
-  Details
-</a>
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/pdf/Haines_Cog_Sci_2018.pdf">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="https://github.com/CCS-Lab/IGT">
-  Code
-</a>
-
-
-
-
-</p>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" style="margin-bottom: 1rem" itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa fa-file-text-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name">Easyml: Easily Build And Evaluate Machine Learning Models</span>
-  <p>
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/publication/easyml/">
-  Details
-</a>
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="https://www.biorxiv.org/content/early/2017/10/31/137240">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="https://github.com/CCS-Lab/easyml">
-  Code
-</a>
-
-
-
-
-</p>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" style="margin-bottom: 1rem" itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa fa-file-text-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name">The Indirect Effect of Emotion Regulation on Minority Stress and Problematic Substance Use in Lesbian, Gay, and Bisexual Individuals</span>
-  <p>
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/publication/minority_stress/">
-  Details
-</a>
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="https://www.frontiersin.org/articles/10.3389/fpsyg.2017.01881/full">
-  PDF
-</a>
-
-
-
-
-
-
-
-</p>
-</div>
-
-      
-    
-      
-        <div class="pub-list-item" style="margin-bottom: 1rem" itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa fa-file-text-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name">Revealing Neurocomputational Mechanisms of Reinforcement Learning and Decision-Making With the hBayesDM Package</span>
-  <p>
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="http://haines-lab.com/publication/hbayesdm/">
-  Details
-</a>
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="https://www.mitpressjournals.org/doi/abs/10.1162/CPSY_a_00002">
-  PDF
-</a>
-
-
-
-
-<a class="btn btn-primary btn-outline btn-xs" href="https://github.com/CCS-Lab/hBayesDM">
-  Code
-</a>
-
-
-
-
-</p>
-</div>
-
-      
-    
-
   </div>
+  
+  
+  
+  
+    
+  
+  <div class="col-12 col-sm-4">
+    
+    <div class="featurette-icon"><i class="fab fa-python"></i></div>
+    
+    <div class="section-subheading">Python</div>
+    
+  </div>
+  
+  
+  
+  
+    
+  
+  <div class="col-12 col-sm-4">
+    
+    <div class="featurette-icon"><i class="fas fa-chart-line"></i></div>
+    
+    <div class="section-subheading">Bayesian Statistics</div>
+    
+  </div>
+  
+  
+  
+  
+    
+  
+  <div class="col-12 col-sm-4">
+    
+    <div class="featurette-icon"><i class="fas fa-network-wired"></i></div>
+    
+    <div class="section-subheading">Computational Modeling</div>
+    
+  </div>
+  
+  
+  
+  
+    
+  
+  <div class="col-12 col-sm-4">
+    
+    <div class="featurette-icon"><i class="fas fa-infinity"></i></div>
+    
+    <div class="section-subheading">ML-Ops</div>
+    
+  </div>
+  
+  
+  
+  
+    
+  
+  <div class="col-12 col-sm-4">
+    
+    <div class="featurette-icon"><i class="fas fa-brain"></i></div>
+    
+    <div class="section-subheading">Psychology</div>
+    
+  </div>
+  
 </div>
+
+
+    
 
     </div>
   </section>
 
   
   
-  <section id="talks" class="home-section">
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+  <section id="experience" class="home-section wg-experience  "  >
+   <div class="home-section-bg " >
+     
+   </div>
     <div class="container">
-      
-
-
-
-
-<div class="row">
-  <div class="col-xs-12 col-md-4 section-heading">
-    <h1>Recent &amp; Upcoming Talks</h1>
-    
-    
-  </div>
-  <div class="col-xs-12 col-md-8">
-    
 
     
-    <ul class="fa-ul">
-      
-      <li itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa-li fa fa-comment-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name"><a href="http://haines-lab.com/talk/math_psych_2017/">Linking emotion to decision making through model-based facial expression analysis</a></span>
-  <p>
-    Jul 23, 2017,
-    
-            50th Annual Meeting of the Society for Mathematical Psychology
-    
-  </p>
-</li>
-
-      
-      <li itemscope itemtype="http://schema.org/CreativeWork">
-  <i class="fa-li fa fa-comment-o pub-icon" aria-hidden="true"></i>
-  <span itemprop="name"><a href="http://haines-lab.com/talk/cog_brown_1/">A new reinforcement learning model of the Iowa Gambling Task</a></span>
-  <p>
-    Nov 30, 2016,
-    
-            Cognitive Proseminar
-    
-  </p>
-</li>
-
-      
-    </ul>
-    
-
-  </div>
-</div>
-
-    </div>
-  </section>
-
-  
-  
-  <section id="posts" class="home-section">
-    <div class="container">
-      
-
-
-
-
-<div class="row">
-  <div class="col-xs-12 col-md-4 section-heading">
-
-    <h1>Recent Posts</h1>
-    
-    
-    <p class="view-all">
-      <a href="/post/">
-        More Posts
-        <i class="fa fa-angle-double-right"></i>
-      </a>
-    </p>
-    
-
-  </div>
-  <div class="col-xs-12 col-md-8">
-
-    
-
-    
+      <div class="row  ">
       
         
-        
-
-
-<div class="article-list-item" itemscope itemprop="blogPost">
-  
-  
-  <h3 class="article-title" itemprop="name">
-    <a href="http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/" itemprop="url">A Series on Building Formal Models of Classic Psychological Effects: Part 1, the Dunning-Kruger Effect</a>
-  </h3>
-  
-
-<div class="article-metadata">
-
-  <span class="article-date">
-    
-    <time datetime="2021-01-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">
-      Jan 10, 2021
-    </time>
-  </span>
-
-  
-  
-  
-  <span class="article-categories">
-    <i class="fa fa-folder"></i>
-    
-    <a href="/categories/statistical-modeling">Statistical Modeling</a
-    >, 
-    
-    <a href="/categories/measurement-error">Measurement Error</a
-    >, 
-    
-    <a href="/categories/formal-models">Formal Models</a
-    >
-    
-  </span>
-  
-  
-
-  
-  
-  
-  <span class="article-tags">
-    <i class="fa fa-tags"></i>
-    
-    <a href="/tags/r">R</a
-    >, 
-    
-    <a href="/tags/bayesian-statistics">Bayesian Statistics</a
-    >
-    
-  </span>
-  
-  
-
-  
-
-</div>
-
-  <div class="article-style" itemprop="articleBody">
-    
-    Introduction The Dunning-Kruger effect is perhaps one of the most well-known effects in all of social psychology, defined as the phenomenon wherein people with low “objective” skill tend to over-estimate their objective skill, whereas people with high objective skill tend to under-estimate their skill. In the popular media, the Dunning-Kruger effect is often summarized in a figure like the one below (source):
-Caption: The Dunning-Kruger Effect in Popular Media
- Despite the widespread use of figures such as the one above, the specific form of the effect is misleading–it suggests that people with low objective skill perceive their skill to be higher than those with the highest skill, which is not what Dunning and Kruger actually found in their original 1999 study.
-    
-  </div>
-  <p class="read-more">
-    <a href="http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/" class="btn btn-primary btn-outline">
-      CONTINUE READING
-    </a>
-  </p>
-</div>
-
-      
-        
-        
-
-
-<div class="article-list-item" itemscope itemprop="blogPost">
-  
-  
-  <h3 class="article-title" itemprop="name">
-    <a href="http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/" itemprop="url">On Curbing Your Measurement Error: From Classical Corrections to Generative Models</a>
-  </h3>
-  
-
-<div class="article-metadata">
-
-  <span class="article-date">
-    
-    <time datetime="2020-06-13 00:00:00 &#43;0000 UTC" itemprop="datePublished">
-      Jun 13, 2020
-    </time>
-  </span>
-
-  
-  
-  
-  <span class="article-categories">
-    <i class="fa fa-folder"></i>
-    
-    <a href="/categories/statistical-modeling">Statistical Modeling</a
-    >, 
-    
-    <a href="/categories/measurement-error">Measurement Error</a
-    >
-    
-  </span>
-  
-  
-
-  
-  
-  
-  <span class="article-tags">
-    <i class="fa fa-tags"></i>
-    
-    <a href="/tags/r">R</a
-    >, 
-    
-    <a href="/tags/bayesian-statistics">Bayesian Statistics</a
-    >
-    
-  </span>
-  
-  
-
-  
-
-</div>
-
-  <div class="article-style" itemprop="articleBody">
-    
-    Introduction In this post, we will explore how measurement error arising from imprecise parameter estimation can be corrected for. Specifically, we will explore the case where our goal is to estimate the correlation between a self-report and behavioral measure–a common situation throughout the social and behavioral sciences.
-For example, as someone who studies impulsivity and externalizing psychopathology, I am often interested in whether self-reports of trait impulsivity (e.g., the Barratt Impulsiveness Scale) correlate with performance on tasks designed to measure impulsive behavior (e.
-    
-  </div>
-  <p class="read-more">
-    <a href="http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/" class="btn btn-primary btn-outline">
-      CONTINUE READING
-    </a>
-  </p>
-</div>
-
-      
-        
-        
-
-
-<div class="article-list-item" itemscope itemprop="blogPost">
-  
-  
-  <h3 class="article-title" itemprop="name">
-    <a href="http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/" itemprop="url">Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</a>
-  </h3>
-  
-
-<div class="article-metadata">
-
-  <span class="article-date">
-    
-    <time datetime="2019-09-05 00:00:00 &#43;0000 UTC" itemprop="datePublished">
-      Sep 5, 2019
-    </time>
-  </span>
-
-  
-  
-  
-  <span class="article-categories">
-    <i class="fa fa-folder"></i>
-    
-    <a href="/categories/statistical-modeling">Statistical Modeling</a
-    >, 
-    
-    <a href="/categories/measurement">Measurement</a
-    >
-    
-  </span>
-  
-  
-
-  
-  
-  
-  <span class="article-tags">
-    <i class="fa fa-tags"></i>
-    
-    <a href="/tags/r">R</a
-    >, 
-    
-    <a href="/tags/bayesian-statistics">Bayesian Statistics</a
-    >
-    
-  </span>
-  
-  
-
-  
-
-</div>
-
-  <div class="article-style" itemprop="articleBody">
-    
-    The Reliability Paradox Defining Reliability In 2017, Hedge, Powell, and Sumner (2017) conducted a study to determine the reliability of a variety of of behavioral tasks. Reliability has many different meanings throughout the psychological literature, but what Hedge et al. were interested in was how well a behavioral measure consistently ranks individuals. In other words, when I have people perform a task and then measure their performance, does the measure that I use to summarize their behavior show high test-retest reliability?
-    
-  </div>
-  <p class="read-more">
-    <a href="http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/" class="btn btn-primary btn-outline">
-      CONTINUE READING
-    </a>
-  </p>
-</div>
-
-      
-    
-
-  </div>
-</div>
-
-    </div>
-  </section>
-
-  
-  
-  <section id="projects" class="home-section">
-    <div class="container">
-      
-
-
-
-<div class="row">
-  <div class="col-xs-12 col-md-4 section-heading">
-    <h1>Projects</h1>
-    
-  </div>
-  <div class="col-xs-12 col-md-8">
-    
-
-    
-    
-    <span id="default-project-filter" class="hidden">*</span>
-    
-
-    <div class="project-toolbar">
-      <div id="filters">
-        <div class="btn-toolbar">
-          <div class="btn-group">
-            
-              <a href="#" data-filter="*" class="btn btn-primary btn-large active">All</a>
-            
-              <a href="#" data-filter=".cogmod" class="btn btn-primary btn-large">Cognitive Modeling</a>
-            
-              <a href="#" data-filter=".machinelearn" class="btn btn-primary btn-large">Machine Learning</a>
-            
-              <a href="#" data-filter=".facialexpressions" class="btn btn-primary btn-large">Facial Expressions</a>
+          <div class="section-heading col-12 col-lg-4 mb-3 mb-lg-0 d-flex flex-column align-items-center align-items-lg-start">
+            <h1 class="mb-0">Experience</h1>
             
           </div>
-        </div>
-      </div>
-    </div>
-
+        
+      
     
 
-    <div id="container-projects" class="row isotope">
+      
 
-      
-      
-      
-      
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6 project-item isotope-item facial-expressions">
-        <div class="card">
+
+
+
+<div class="col-12 col-lg-8">
+  
+
+  
+  
+
+  
+  
+  <div class="row experience">
+    
+    <div class="col-auto text-center flex-column d-none d-sm-flex">
+      <div class="row h-50">
+        <div class="col ">&nbsp;</div>
+        <div class="col">&nbsp;</div>
+      </div>
+      <div class="m-2">
+        <span class="badge badge-pill border exp-fill">&nbsp;</span>
+      </div>
+      <div class="row h-50">
+        <div class="col border-right">&nbsp;</div>
+        <div class="col">&nbsp;</div>
+      </div>
+    </div>
+    
+    <div class="col py-2">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex align-content-start">
+            <div class="mr-2 mb-2"><a href="https://aivohealth.com/" target="_blank" rel="noopener"><img src="/media/icons/brands/aivo-logo.svg" width="56px" height="56px" alt="Aivo Health" loading="lazy"></a></div>
+            <div>
           
-          <a href="http://haines-lab.com/project/feat/" title="" class="card-image hover-overlay"
-             >
-            <img src="/img/gear_brain_1.png" alt="" class="img-responsive">
-          </a>
-          
-          <div class="card-text">
-            <h4><a href="http://haines-lab.com/project/feat/" >FEAT</a></h4>
-            <div class="card-desription">
-              <p>A cross-platform Python toolbox for analyzing facial expression data.</p>
+
+              <div class="section-subheading card-title exp-title text-muted my-0">Data Scientist</div>
+              <div class="section-subheading card-title exp-company text-muted my-0"><a href="https://aivohealth.com/" target="_blank" rel="noopener">Aivo Health</a></div>
+              <div class="text-muted exp-meta">
+                Sep 2021 –
+                
+                  Present
+                
+                
+                  <span class="middot-divider"></span>
+                  <span>Remote / Ohio</span>
+                
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      
-      
-      
-      
-      
-      
-      
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6 project-item isotope-item machinelearn">
-        <div class="card">
           
-          <a href="https://github.com/CCS-Lab/easyml" title="" class="card-image hover-overlay"
-             target="_blank">
-            <img src="/img/easyml.png" alt="" class="img-responsive">
-          </a>
-          
-          <div class="card-text">
-            <h4><a href="https://github.com/CCS-Lab/easyml" target="_blank">easyml</a></h4>
-            <div class="card-desription">
-              <p>An R/Python toolbox for easily fitting a variety of machine learning models.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      
-      
-      
-      
-      
-      
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-6 project-item isotope-item cogmod">
-        <div class="card">
-          
-          <a href="https://github.com/CCS-Lab/hBayesDM" title="" class="card-image hover-overlay"
-             target="_blank">
-            <img src="/img/hBayesDM.png" alt="" class="img-responsive">
-          </a>
-          
-          <div class="card-text">
-            <h4><a href="https://github.com/CCS-Lab/hBayesDM" target="_blank">hBayesDM</a></h4>
-            <div class="card-desription">
-              <p>An R toolbox for fitting an array of decision making models with hierarchical Bayesian analysis.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      
 
-    </div>
-
-    
-
-  </div>
-</div>
-
-    </div>
-  </section>
-
-  
-  
-  <section id="teaching" class="home-section">
-    <div class="container">
-      
-
-
-<div class="row">
-  <div class="col-xs-12 col-md-4 section-heading">
-    <h1>Teaching</h1>
-    
-  </div>
-  <div class="col-xs-12 col-md-8">
-    
-
-<h1 id="abnormal-psychology">Abnormal Psychology</h1>
-
-<p>I am currently teaching PSYCH 3331 at The Ohio State University. My course takes a dimensional and developmental perspective, and is divided mainly into sections for internalizing, externalizing, and psychotic forms of psychopathology. Further, I use principles of active learning to engage students during class. My course design was inspired largely by <a href="https://www.linkedin.com/in/ziv-bell-4b027345/" target="_blank">Ziv Bell</a>, who developed a &ldquo;<a href="https://drive.google.com/file/d/1wuTavqCK4NM5Mvnst_t1yc_CCl53w_v9/view" target="_blank">flipped class</a>&rdquo; curriculum for his students to better understand and apply principles of abnormal psychology to everyday life.</p>
-
-<h1 id="workshops">Workshops</h1>
-
+          <div class="card-text"><p>Responsibilities include:</p>
 <ul>
-<li><a href="https://github.com/CCS-Lab/APS2017-workshop" target="_blank">A tutorial on hBayesDM at the Association for Psychological Science (2017)</a></li>
+<li>Developing theoretical models of chronic pain</li>
+<li>Analyzing data collected in-app</li>
+<li>Deploying models for real-time inference</li>
+<li>Designing research studies and writing papers</li>
 </ul>
-
+</div>
+        </div>
+      </div>
+    </div>
   </div>
+  
+  <div class="row experience">
+    
+    <div class="col-auto text-center flex-column d-none d-sm-flex">
+      <div class="row h-50">
+        <div class="col border-right">&nbsp;</div>
+        <div class="col">&nbsp;</div>
+      </div>
+      <div class="m-2">
+        <span class="badge badge-pill border ">&nbsp;</span>
+      </div>
+      <div class="row h-50">
+        <div class="col ">&nbsp;</div>
+        <div class="col">&nbsp;</div>
+      </div>
+    </div>
+    
+    <div class="col py-2">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex align-content-start">
+            <div class="mr-2 mb-2"><a href="https://psychology.osu.edu/graduate" target="_blank" rel="noopener"><img src="/media/icons/brands/osu-logo.svg" width="56px" height="56px" alt="The Ohio State University" loading="lazy"></a></div>
+            <div>
+          
+
+              <div class="section-subheading card-title exp-title text-muted my-0">Graduate Student Researcher</div>
+              <div class="section-subheading card-title exp-company text-muted my-0"><a href="https://psychology.osu.edu/graduate" target="_blank" rel="noopener">The Ohio State University</a></div>
+              <div class="text-muted exp-meta">
+                Aug 2016 –
+                
+                  Jul 2021
+                
+                
+                  <span class="middot-divider"></span>
+                  <span>Ohio</span>
+                
+              </div>
+            </div>
+          </div>
+          
+
+          <div class="card-text"><p>During my PhD., I:</p>
+<ul>
+<li>Received the Presidential Fellowship for my dissertation research</li>
+<li>Was instructor of record for 4 semesters of Abnormal Psychology</li>
+<li>Trained in and conducted 400+ hours of cognitive behavioral therapy, motivational interviewing, acceptance and commitment therapy, and mindfulness based relapse prevention</li>
+<li>Published my research in journals including Computational Psychiatry, Cognitive Science, Clinical Psychological Science, and Drug and Alcohol Dependence</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
 </div>
 
-    </div>
-  </section>
-
-  
-  
-  <section id="tags" class="home-section">
-    <div class="container">
-      
-
-
-<div class="row">
-  <div class="col-xs-12 col-md-4 section-heading">
-    <h1>Tags</h1>
-    
-  </div>
-  <div class="col-xs-12 col-md-8">
-    
 
     
-      
-      
-
-      
-      
-      
-      
-      
-
-      <div id="tag-cloud">
-        
-          
-          
-          
-          
-          
-          <a href="/tags/bayesian-statistics" style="font-size:1.9333333333333336rem">bayesian-statistics</a>
-        
-          
-          
-          
-          
-          
-          <a href="/tags/cogmod" style="font-size:1.6981454170753219rem">cogmod</a>
-        
-          
-          
-          
-          
-          
-          <a href="/tags/facial-expressions" style="font-size:0.8rem">facial-expressions</a>
-        
-          
-          
-          
-          
-          
-          <a href="/tags/learning" style="font-size:1.6981454170753219rem">learning</a>
-        
-          
-          
-          
-          
-          
-          <a href="/tags/machine-learning" style="font-size:0.8rem">machine-learning</a>
-        
-          
-          
-          
-          
-          
-          <a href="/tags/machinelearn" style="font-size:1.3666666666666667rem">machinelearn</a>
-        
-          
-          
-          
-          
-          
-          <a href="/tags/modeling" style="font-size:1.6981454170753219rem">modeling</a>
-        
-          
-          
-          
-          
-          
-          <a href="/tags/r" style="font-size:2.3908344558326426rem">r</a>
-        
-          
-          
-          
-          
-          
-          <a href="/tags/regularization" style="font-size:0.8rem">regularization</a>
-        
       </div>
     
 
-  </div>
-</div>
-
     </div>
   </section>
 
   
   
-  <section id="contact" class="home-section">
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+  <section id="posts" class="home-section wg-pages  "  >
+   <div class="home-section-bg " >
+     
+   </div>
     <div class="container">
+
+    
+      <div class="row  ">
+      
+        
+          <div class="section-heading col-12 col-lg-4 mb-3 mb-lg-0 d-flex flex-column align-items-center align-items-lg-start">
+            <h1 class="mb-0">Recent Posts</h1>
+            
+          </div>
+        
+      
+    
+
       
 
 
 
 
-<div class="row">
-  <div class="col-xs-12 col-md-4 section-heading">
-    <h1>Contact</h1>
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<div class="col-12 col-lg-8">
+
+  
+
+  
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item view-compact">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/" >Automating Computational Reproducibility in R using renv, Docker, and GitHub Actions</a>
+    </div>
+
+    
+    <a href="/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/"  class="summary-link">
+      <div class="article-style">
+        The Problem Have you ever wanted to run someone else’s R code (or your own—from a distant past), but upon downloading it, you realized that it relied on versions of either R or R libraries that are dramatically different from those on your own computer?
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+
+      
+        
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jan 24, 2022
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    2 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/computational-reproducibility/">Computational Reproducibility</a>, <a href="/category/r/">R</a>, <a href="/category/github/">GitHub</a>, <a href="/category/docker/">Docker</a></span>
+  
+
+</div>
+
+      
+    </div>
+
+    
+
   </div>
-  <div class="col-xs-12 col-md-8">
+  <div class="ml-3">
     
-
-    <ul class="fa-ul" itemscope>
-
-      
-      <li>
-        <i class="fa-li fa fa-envelope fa-2x" aria-hidden="true"></i>
-        <span id="person-email" itemprop="email"><a href="mailto:nathaniel.b.haines@gmail.com">nathaniel.b.haines@gmail.com</a></span>
-      </li>
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-      <li>
-        <i class="fa-li fa fa-map-marker fa-2x" aria-hidden="true"></i>
-        <span id="person-address" itemprop="address">1581 N High St, Columbus, OH 43201</span>
-      </li>
-      
-
-      
-      <li>
-        <i class="fa-li fa fa-clock-o fa-2x" aria-hidden="true"></i>
-        <span>By appointment</span>
-      </li>
-      
-
-    </ul>
-
+    
   </div>
 </div>
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item view-compact">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/" >A Series on Building Formal Models of Classic Psychological Effects: Part 1, the Dunning-Kruger Effect</a>
+    </div>
+
+    
+    <a href="/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/"  class="summary-link">
+      <div class="article-style">
+        Introduction The Dunning-Kruger effect is perhaps one of the most well-known effects in all of social psychology, defined as the phenomenon wherein people with low “objective” skill tend to over-estimate their objective skill, whereas people with high objective skill tend to under-estimate their skill.
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+
+      
+        
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jan 10, 2021
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    44 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/statistical-modeling/">Statistical Modeling</a>, <a href="/category/measurement-error/">Measurement Error</a>, <a href="/category/formal-models/">Formal Models</a></span>
+  
+
+</div>
+
+      
+    </div>
+
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+  </div>
+</div>
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item view-compact">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/" >On Curbing Your Measurement Error: From Classical Corrections to Generative Models</a>
+    </div>
+
+    
+    <a href="/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/"  class="summary-link">
+      <div class="article-style">
+        Introduction In this post, we will explore how measurement error arising from imprecise parameter estimation can be corrected for. Specifically, we will explore the case where our goal is to estimate the correlation between a self-report and behavioral measure–a common situation throughout the social and behavioral sciences.
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+
+      
+        
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jun 13, 2020
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    40 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/statistical-modeling/">Statistical Modeling</a>, <a href="/category/measurement-error/">Measurement Error</a></span>
+  
+
+</div>
+
+      
+    </div>
+
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+  </div>
+</div>
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item view-compact">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/" >Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</a>
+    </div>
+
+    
+    <a href="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/"  class="summary-link">
+      <div class="article-style">
+        The Reliability Paradox Defining Reliability In 2017, Hedge, Powell, and Sumner (2017) conducted a study to determine the reliability of a variety of of behavioral tasks. Reliability has many different meanings throughout the psychological literature, but what Hedge et al.
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+
+      
+        
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Sep 5, 2019
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    32 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/statistical-modeling/">Statistical Modeling</a>, <a href="/category/measurement/">Measurement</a></span>
+  
+
+</div>
+
+      
+    </div>
+
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+  </div>
+</div>
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item view-compact">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/" >On the equivalency between frequentist Ridge (and LASSO) regression and hierarchial Bayesian regression</a>
+    </div>
+
+    
+    <a href="/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/"  class="summary-link">
+      <div class="article-style">
+        Introduction In this post, we will explore frequentist and Bayesian analogues of regularized/penalized linear regression models (e.g., LASSO [L1 penalty], Ridge regression [L2 penalty]), which are an extention of traditional linear regression models of the form:
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+
+      
+        
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    May 6, 2019
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    28 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/statistical-modeling/">Statistical Modeling</a></span>
+  
+
+</div>
+
+      
+    </div>
+
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+  </div>
+</div>
+
+  
+
+  
+  
+  
+
+    
+    
+      
+    
+
+    
+    
+    
+    
+      
+    
+
+    
+
+    <div class="see-all">
+      <a href="/post/">
+        See all posts
+        <i class="fas fa-angle-right"></i>
+      </a>
+    </div>
+  
+
+</div>
+
+
+    
+      </div>
+    
+
+    </div>
+  </section>
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+  <section id="talks" class="home-section wg-pages  "  >
+   <div class="home-section-bg " >
+     
+   </div>
+    <div class="container">
+
+    
+      <div class="row  ">
+      
+        
+          <div class="section-heading col-12 col-lg-4 mb-3 mb-lg-0 d-flex flex-column align-items-center align-items-lg-start">
+            <h1 class="mb-0">Recent &amp; Upcoming Talks</h1>
+            
+          </div>
+        
+      
+    
+
+      
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<div class="col-12 col-lg-8">
+
+  
+
+  
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item view-compact">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/talk/the-role-of-reward-and-punishment-learning-in-externalizing-adolescents-a-joint-generative-model-of-traits-and-behavior/" >The Role of Reward and Punishment Learning in Externalizing Adolescents: A Joint Generative Model of Traits and Behavior</a>
+    </div>
+
+    
+    <a href="/talk/the-role-of-reward-and-punishment-learning-in-externalizing-adolescents-a-joint-generative-model-of-traits-and-behavior/"  class="summary-link">
+      <div class="article-style">
+        This presentation is part of MathPsych/ICCM 2021. See more via <a href="http://mathpsych.org/conferences/2021/">http://mathpsych.org/conferences/2021/</a>
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+      <div>
+        <span>
+          Jun 17, 2021 12:00 AM
+        </span>
+        
+        <span class="middot-divider"></span>
+        <span>Virtual</span>
+        
+      </div>
+      
+
+      
+      <div>
+        
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>
+      </div>
+      
+    </div>
+
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+    
+    <a href="/talk/the-role-of-reward-and-punishment-learning-in-externalizing-adolescents-a-joint-generative-model-of-traits-and-behavior/" >
+      <img src="/talk/the-role-of-reward-and-punishment-learning-in-externalizing-adolescents-a-joint-generative-model-of-traits-and-behavior/featured_hu54438a4bdccabd2b5b6a7b9df20f0147_147097_150x0_resize_q75_h2_lanczos_3.webp" height="86" width="150"
+           alt="The Role of Reward and Punishment Learning in Externalizing Adolescents: A Joint Generative Model of Traits and Behavior" loading="lazy">
+    </a>
+    
+  </div>
+</div>
+
+  
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item view-compact">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/talk/an-introduction-to-bayesian-data-analysis/" >An Introduction to Bayesian Data Analysis</a>
+    </div>
+
+    
+    <a href="/talk/an-introduction-to-bayesian-data-analysis/"  class="summary-link">
+      <div class="article-style">
+        This is just a fun tutorial talk I presented for the Cognitive Proseminar at The Ohio State University. Hope you enjoy!
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+      <div>
+        <span>
+          Apr 5, 2021 12:00 AM
+        </span>
+        
+        <span class="middot-divider"></span>
+        <span>Virtual</span>
+        
+      </div>
+      
+
+      
+      <div>
+        
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>
+      </div>
+      
+    </div>
+
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+    
+    <a href="/talk/an-introduction-to-bayesian-data-analysis/" >
+      <img src="/talk/an-introduction-to-bayesian-data-analysis/featured_hu0ef12a95ec5f788f4c793fdb78e81774_477490_150x0_resize_q75_h2_lanczos_3.webp" height="113" width="150"
+           alt="An Introduction to Bayesian Data Analysis" loading="lazy">
+    </a>
+    
+  </div>
+</div>
+
+  
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item view-compact">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/talk/generative-models-can-advance-the-social-behavioral-and-brain-sciences/" >Generative Models Can Advance the Social, Behavioral, and Brain Sciences</a>
+    </div>
+
+    
+    <a href="/talk/generative-models-can-advance-the-social-behavioral-and-brain-sciences/"  class="summary-link">
+      <div class="article-style">
+        This talk was presented to the Neuroscience and Mental Health Group at the Institute of Cognitive Neuroscience, University College London, on October 14th, 2020. The talk is based on my recent paper on the role of generative models for social, behavioral, and brain sciences, linked in the video.
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+      <div>
+        <span>
+          Oct 14, 2020 12:00 AM
+        </span>
+        
+        <span class="middot-divider"></span>
+        <span>Virtual</span>
+        
+      </div>
+      
+
+      
+      <div>
+        
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>
+      </div>
+      
+    </div>
+
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+    
+    <a href="/talk/generative-models-can-advance-the-social-behavioral-and-brain-sciences/" >
+      <img src="/talk/generative-models-can-advance-the-social-behavioral-and-brain-sciences/featured_hud12a5345fd727023be5a4801de970fe6_180049_150x0_resize_q75_h2_lanczos_3.webp" height="100" width="150"
+           alt="Generative Models Can Advance the Social, Behavioral, and Brain Sciences" loading="lazy">
+    </a>
+    
+  </div>
+</div>
+
+  
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+<div class="media stream-item view-compact">
+  <div class="media-body">
+
+    <div class="section-subheading article-title mb-0 mt-0">
+      <a href="/talk/using-decision-theory-to-model-anxiety-impulsivity-interactions-and-impulsive-behavior/" >Using Decision Theory to Model Anxiety-Impulsivity Interactions and Impulsive Behavior</a>
+    </div>
+
+    
+    <a href="/talk/using-decision-theory-to-model-anxiety-impulsivity-interactions-and-impulsive-behavior/"  class="summary-link">
+      <div class="article-style">
+        This presentation is part of MathPsych/ICCM 2020. See more via <a href="http://mathpsych.org/conferences/2020/">http://mathpsych.org/conferences/2020/</a>
+      </div>
+    </a>
+    
+
+    <div class="stream-meta article-metadata">
+
+      
+      <div>
+        <span>
+          Jul 20, 2020 12:00 AM
+        </span>
+        
+        <span class="middot-divider"></span>
+        <span>Virtual</span>
+        
+      </div>
+      
+
+      
+      <div>
+        
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>
+      </div>
+      
+    </div>
+
+    
+
+  </div>
+  <div class="ml-3">
+    
+    
+    
+    <a href="/talk/using-decision-theory-to-model-anxiety-impulsivity-interactions-and-impulsive-behavior/" >
+      <img src="/talk/using-decision-theory-to-model-anxiety-impulsivity-interactions-and-impulsive-behavior/featured_hu6f422a09cf6fcfdf6572131fdae3bffa_451368_150x0_resize_q75_h2_lanczos_3.webp" height="102" width="150"
+           alt="Using Decision Theory to Model Anxiety-Impulsivity Interactions and Impulsive Behavior" loading="lazy">
+    </a>
+    
+  </div>
+</div>
+
+  
+
+  
+  
+  
+
+</div>
+
+
+    
+      </div>
+    
+
+    </div>
+  </section>
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+  <section id="featured" class="home-section wg-featured  "  >
+   <div class="home-section-bg " >
+     
+   </div>
+    <div class="container">
+
+    
+      <div class="row  ">
+      
+        
+          <div class="section-heading col-12 col-lg-4 mb-3 mb-lg-0 d-flex flex-column align-items-center align-items-lg-start">
+            <h1 class="mb-0">Featured Publications</h1>
+            
+          </div>
+        
+      
+    
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<div class="col-12 col-lg-8">
+
+  
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="card-simple view-card">
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>, <span >
+      <a href="/author/theodore-beauchaine/">Theodore Beauchaine</a></span>, <span >
+      <a href="/author/matthew-galdo/">Matthew Galdo</a></span>, <span >
+      <a href="/author/andrew-rogers/">Andrew Rogers</a></span>, <span >
+      <a href="/author/hunter-hahn/">Hunter Hahn</a></span>, <span >
+      <a href="/author/mark-pitt/">Mark Pitt</a></span>, <span >
+      <a href="/author/jay-myung/">Jay Myung</a></span>, <span >
+      <a href="/author/brandon-turner/">Brandon Turner</a></span>, <span >
+      <a href="/author/woo-young-ahn/">Woo-Young Ahn</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    April 2020
+  </span>
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="pub-publication">
+    
+      Clin Psych Sci
+    
+  </span>
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/publication/haines_cps_2020/#disqus_thread"></a>
+  
+
+  
+  
+
+</div>
+
+  
+
+  
+  
+  
+
+  <div class="section-subheading article-title mb-1 mt-3">
+    <a href="/publication/haines_cps_2020/" >Anxiety Modulates Preference for Immediate Rewards among Trait-Impulsive Individuals: A Hierarchical Bayesian Analysis</a>
+  </div>
+
+  
+  <a href="/publication/haines_cps_2020/"  class="summary-link">
+    <div class="article-style">
+      <p>We used hierarchical Bayesian analysis to identify determine how impulsivity and anxiety jointly determine impulsive behavior in the context of a delay discounting task.</p>
+    </div>
+  </a>
+  
+
+  
+
+</div>
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="card-simple view-card">
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>, <span >
+      <a href="/author/jasmin-vassileva/">Jasmin Vassileva</a></span>, <span >
+      <a href="/author/woo-young-ahn/">Woo-Young Ahn</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    October 2018
+  </span>
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="pub-publication">
+    
+      Cog Sci
+    
+  </span>
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/publication/haines_cog_sci_2018/#disqus_thread"></a>
+  
+
+  
+  
+
+</div>
+
+  
+
+  
+  
+  
+
+  <div class="section-subheading article-title mb-1 mt-3">
+    <a href="/publication/haines_cog_sci_2018/" >The Outcome‐Representation Learning Model: A Novel Reinforcement Learning Model of the Iowa Gambling Task</a>
+  </div>
+
+  
+  <a href="/publication/haines_cog_sci_2018/"  class="summary-link">
+    <div class="article-style">
+      <p>We developed a novel computational model for the IGT and used it to investigate differences in learning mechanisms between groups with versus without substance use disorders.</p>
+    </div>
+  </a>
+  
+
+  
+
+</div>
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<div class="card-simple view-card">
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span >
+      <a href="/author/woo-young-ahn/">Woo-Young Ahn</a></span>, <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>, <span >
+      <a href="/author/lei-zhang/">Lei Zhang</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    March 2017
+  </span>
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="pub-publication">
+    
+      CPSY
+    
+  </span>
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/publication/ahn_haines_cpsy_2017/#disqus_thread"></a>
+  
+
+  
+  
+
+</div>
+
+  
+
+  
+  
+  
+
+  <div class="section-subheading article-title mb-1 mt-3">
+    <a href="/publication/ahn_haines_cpsy_2017/" >Revealing Neurocomputational Mechanisms of Reinforcement Learning and Decision-Making With the hBayesDM Package</a>
+  </div>
+
+  
+  <a href="/publication/ahn_haines_cpsy_2017/"  class="summary-link">
+    <div class="article-style">
+      <p>We developed an open-source R/Python package for fitting reinforcement learning and decision-making models using hierarchical Bayesian analysis.</p>
+    </div>
+  </a>
+  
+
+  
+
+</div>
+
+  
+
+  
+  
+  
+
+</div>
+
+
+    
+      </div>
+    
+
+    </div>
+  </section>
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+  <section id="publications" class="home-section wg-pages  "  >
+   <div class="home-section-bg " >
+     
+   </div>
+    <div class="container">
+
+    
+      <div class="row  ">
+      
+        
+          <div class="section-heading col-12 col-lg-4 mb-3 mb-lg-0 d-flex flex-column align-items-center align-items-lg-start">
+            <h1 class="mb-0">Recent Publications</h1>
+            
+          </div>
+        
+      
+    
+
+      
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<div class="col-12 col-lg-8">
+
+  <div class="alert alert-note">
+  <div>
+    Quickly discover relevant content by <a href="./publication/">filtering publications</a>.
+  </div>
+</div>
+
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>
+  </span>
+  (2021).
+  <a href="/publication/haines_2021_diss/">Integrating Trait and Neurocognitive Mechanisms of Externalizing Psychopathology: A Joint Modeling Framework for Measuring Impulsive Behavior</a>.
+  Dissertation.
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+    
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/Haines_Diss_2021.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://www.youtube.com/watch?v=rgFYgya1noE" target="_blank" rel="noopener">
+  Video
+</a>
+
+
+
+
+</p>
+
+  
+  
+</div>
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span >
+      <a href="/author/woo-young-ahn/">Woo-Young Ahn</a></span>, <span >
+      <a href="/author/hairong-gu/">Hairong Gu</a></span>, <span >
+      <a href="/author/yitong-shen/">Yitong Shen</a></span>, <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>, <span >
+      <a href="/author/hunter-hahn/">Hunter Hahn</a></span>, <span >
+      <a href="/author/julie-teater/">Julie Teater</a></span>, <span >
+      <a href="/author/jay-myung/">Jay Myung</a></span>, <span >
+      <a href="/author/mark-pitt/">Mark Pitt</a></span>
+  </span>
+  (2020).
+  <a href="/publication/ahn_2020/">Rapid, precise, and reliable measurement of delay discounting using a Bayesian learning algorithm</a>.
+  Sci Rep.
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/ahn_2020/Ahn_2020.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+  
+  
+    
+  
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://github.com/adopy/adopy" target="_blank" rel="noopener">
+  Code
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://doi.org/10.1038/s41598-020-68587-x" target="_blank" rel="noopener">
+  DOI
+</a>
+
+
+</p>
+
+  
+  
+</div>
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>, <span >
+      <a href="/author/theodore-beauchaine/">Theodore Beauchaine</a></span>
+  </span>
+  (2020).
+  <a href="/publication/haines_psychopathology_2020/">Moving beyond Ordinary Factor Analysis in Studies of Personality and Personality Disorder: A Computational Modeling Perspective</a>.
+  Psychopathology.
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/haines_psychopathology_2020/Haines_Psychopathology_2020.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://doi.org/10.1159/000508539" target="_blank" rel="noopener">
+  DOI
+</a>
+
+
+</p>
+
+  
+  
+</div>
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span >
+      <a href="/author/ricardo-romeu/">Ricardo Romeu</a></span><i class="author-notes fas fa-info-circle" data-toggle="tooltip" title="Equal contribution"></i>, <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span><i class="author-notes fas fa-info-circle" data-toggle="tooltip" title="Equal contribution"></i>, <span >
+      <a href="/author/w.-y.-ahn/">W.-Y. Ahn</a></span>, <span >
+      <a href="/author/j.-busemeyer/">J. Busemeyer</a></span>, <span >
+      <a href="/author/j.-vassileva/">J. Vassileva</a></span>
+  </span>
+  (2019).
+  <a href="/publication/romeu_haines_dad_2019/">A computational model of the Cambridge gambling task with applications to substance use disorders</a>.
+  DAD.
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/romeu_haines_dad_2019/Romeu_Haines_DAD_2019.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+  
+  
+    
+  
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://github.com/CCS-Lab/hBayesDM/blob/master/commons/stan_files/cgt_cm.stan" target="_blank" rel="noopener">
+  Code
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://doi.org/10.1016/j.drugalcdep.2019.107711" target="_blank" rel="noopener">
+  DOI
+</a>
+
+
+</p>
+
+  
+  
+</div>
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span >
+      <a href="/author/hunter-hahn/">Hunter Hahn</a></span>, <span >
+      <a href="/author/samuel-kalnitsky/">Samuel Kalnitsky</a></span>, <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>, <span >
+      <a href="/author/sneha-thamotharan/">Sneha Thamotharan</a></span>, <span >
+      <a href="/author/theodore-beauchaine/">Theodore Beauchaine</a></span>
+  </span>
+  (2019).
+  <a href="/publication/hahn_2019/">Delay Discounting of Protected Sex: Relationship Type and Sexual Orientation Influence Sexual Risk Behavior</a>.
+  Arch Sex Behav.
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/hahn_2019/Hahn_2019.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://doi.org/10.1007/s10508-019-1450-5" target="_blank" rel="noopener">
+  DOI
+</a>
+
+
+</p>
+
+  
+  
+</div>
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span >
+      <a href="/author/theodore-beauchaine/">Theodore Beauchaine</a></span>, <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>
+  </span>
+  (2019).
+  <a href="/publication/beauchaine_haines_2019/">Functionalist and Constructionist Perspectives on Emo­ tion Dysregulation</a>.
+  The Oxford Handbook of Emotion Dysregulation.
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/beauchaine_haines_2019/Beauchaine_Haines_2019.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://doi.org/10.1093/oxfordhb/9780190689285.013.1" target="_blank" rel="noopener">
+  DOI
+</a>
+
+
+</p>
+
+  
+  
+</div>
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>, <span >
+      <a href="/author/ziv-bell/">Ziv Bell</a></span>, <span >
+      <a href="/author/sheila-crowell/">Sheila Crowell</a></span>, <span >
+      <a href="/author/hunter-hahn/">Hunter Hahn</a></span>, <span >
+      <a href="/author/dana-kamara/">Dana Kamara</a></span>, <span >
+      <a href="/author/heather-mcdonough-caplan/">Heather McDonough-Caplan</a></span>, <span >
+      <a href="/author/tiffany-shader/">Tiffany Shader</a></span>, <span >
+      <a href="/author/theodore-beauchaine/">Theodore Beauchaine</a></span>
+  </span>
+  (2019).
+  <a href="/publication/haines_dev_psych_2019/">Using automated computer vision and machine learning to code facial expressions of affect and arousal: Implications for emotion dysregulation research</a>.
+  Dev. Psychopathology..
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/haines_dev_psych_2019/Haines_DEV_PSYCH_2019.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://doi.org/10.1017/S0954579419000312" target="_blank" rel="noopener">
+  DOI
+</a>
+
+
+</p>
+
+  
+  
+</div>
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>, <span >
+      <a href="/author/matthew-southward/">Matthew Southward</a></span>, <span >
+      <a href="/author/jennifer-cheavens/">Jennifer Cheavens</a></span>, <span >
+      <a href="/author/theodore-beauchaine/">Theodore Beauchaine</a></span>, <span >
+      <a href="/author/woo-young-ahn/">Woo-Young Ahn</a></span>
+  </span>
+  (2019).
+  <a href="/publication/haines_plos_one_2019/">Using computer-vision and machine learning to automate facial coding of positive and negative affect intensity</a>.
+  PLOS ONE.
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/haines_plos_one_2019/Haines_PLOS_ONE_2019.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+  
+  
+    
+  
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://github.com/CCS-Lab/Haines_CVML_2018" target="_blank" rel="noopener">
+  Code
+</a>
+
+
+  
+  
+    
+  
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://github.com/CCS-Lab/Haines_CVML_2018" target="_blank" rel="noopener">
+  Dataset
+</a>
+
+
+
+
+
+  
+  
+    
+  
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/haines_plos_one_2019/interview_day_2019.pdf" target="_blank" rel="noopener">
+  Poster
+</a>
+
+
+
+
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://doi.org/10.1371/journal.pone.0211735" target="_blank" rel="noopener">
+  DOI
+</a>
+
+
+</p>
+
+  
+  
+</div>
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span >
+      <a href="/author/woo-young-ahn/">Woo-Young Ahn</a></span>, <span >
+      <a href="/author/paul-hendricks/">Paul Hendricks</a></span>, <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>
+  </span>
+  (2017).
+  <a href="/publication/ahn_2017/">Easyml: Easily Build And Evaluate Machine Learning Models</a>.
+  BioRxiv.
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/ahn_2017/Ahn_2017.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+  
+  
+    
+  
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://github.com/CCS-Lab/easyml" target="_blank" rel="noopener">
+  Code
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://doi.org/10.1101/137240" target="_blank" rel="noopener">
+  DOI
+</a>
+
+
+</p>
+
+  
+  
+</div>
+
+  
+    
+
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  
+  
+
+  <span class="article-metadata li-cite-author">
+    
+
+  <span >
+      <a href="/author/andrew-rogers/">Andrew Rogers</a></span>, <span >
+      <a href="/author/ilana-seager/">Ilana Seager</a></span>, <span class="author-highlighted">
+      <a href="/author/nathaniel-haines/">Nathaniel Haines</a></span>, <span >
+      <a href="/author/hunter-hahn/">Hunter Hahn</a></span>, <span >
+      <a href="/author/amelia-aldeo/">Amelia Aldeo</a></span>, <span >
+      <a href="/author/woo-young-ahn/">Woo-Young Ahn</a></span>
+  </span>
+  (2017).
+  <a href="/publication/rogers_2017/">The Indirect Effect of Emotion Regulation on Minority Stress and Problematic Substance Use in Lesbian, Gay, and Bisexual Individuals</a>.
+  Frontiers Psych.
+  
+  <p>
+
+
+
+
+
+
+
+
+  
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="/publication/rogers_2017/Rogers_2017.pdf" target="_blank" rel="noopener">
+  PDF
+</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="btn btn-outline-primary btn-page-header btn-sm" href="https://doi.org/10.3389/fpsyg.2017.01881" target="_blank" rel="noopener">
+  DOI
+</a>
+
+
+</p>
+
+  
+  
+</div>
+
+  
+
+  
+  
+  
+
+</div>
+
+
+    
+      </div>
+    
+
+    </div>
+  </section>
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+  <section id="tags" class="home-section wg-tag-cloud  "  >
+   <div class="home-section-bg " >
+     
+   </div>
+    <div class="container">
+
+    
+      <div class="row  ">
+      
+        
+          <div class="section-heading col-12 col-lg-4 mb-3 mb-lg-0 d-flex flex-column align-items-center align-items-lg-start">
+            <h1 class="mb-0">Popular Topics</h1>
+            
+          </div>
+        
+      
+    
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+<div class="col-12 col-lg-8">
+  
+
+  
+
+    
+    
+    
+    
+    
+    
+
+    <div class="tag-cloud">
+      
+        
+        
+        
+        <a href="/tag/bayesian-statistics/" style="font-size:1.3828887910967032rem">Bayesian Statistics</a>
+      
+        
+        
+        
+        <a href="/tag/docker/" style="font-size:0.7rem">Docker</a>
+      
+        
+        
+        
+        <a href="/tag/learning/" style="font-size:1.241176563025539rem">Learning</a>
+      
+        
+        
+        
+        <a href="/tag/machine-learning/" style="font-size:0.7rem">Machine Learning</a>
+      
+        
+        
+        
+        <a href="/tag/modeling/" style="font-size:1.241176563025539rem">Modeling</a>
+      
+        
+        
+        
+        <a href="/tag/programming/" style="font-size:0.7rem">Programming</a>
+      
+        
+        
+        
+        <a href="/tag/r/" style="font-size:1.7243331866450546rem">R</a>
+      
+        
+        
+        
+        <a href="/tag/regularization/" style="font-size:0.7rem">Regularization</a>
+      
+        
+        
+        
+        <a href="/tag/source-themes/" style="font-size:1.9634944028237977rem">Source Themes</a>
+      
+    </div>
+  
+
+</div>
+
+
+    
+      </div>
+    
+
+    </div>
+  </section>
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+  <section id="contact" class="home-section wg-contact  "  >
+   <div class="home-section-bg " >
+     
+   </div>
+    <div class="container">
+
+    
+      <div class="row  ">
+      
+        
+          <div class="section-heading col-12 col-lg-4 mb-3 mb-lg-0 d-flex flex-column align-items-center align-items-lg-start">
+            <h1 class="mb-0">Contact</h1>
+            
+          </div>
+        
+      
+    
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="col-12 col-lg-8">
+  
+
+  
+
+    
+    
+      
+      
+      
+    
+
+    <div class="mb-3">
+      <form name="contact" method="POST" action="https://formspree.io/f/test"   >
+        <div class="form-group form-inline">
+          <label class="sr-only" for="inputName">Name</label>
+          <input type="text" name="name" class="form-control w-100" id="inputName" placeholder="Name" required>
+        </div>
+        <div class="form-group form-inline">
+          <label class="sr-only" for="inputEmail">Email</label>
+          <input type="email" name="email" class="form-control w-100" id="inputEmail" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <label class="sr-only" for="inputMessage">Message</label>
+          <textarea name="message" class="form-control" id="inputMessage" rows="5" placeholder="Message" required></textarea>
+        </div>
+        
+        <div class="d-none">
+          <label>Do not fill this field unless you are a bot: <input name="_gotcha"></label>
+        </div>
+        
+        <button type="submit" class="btn btn-primary px-3 py-2 w-100">Send</button>
+      </form>
+    </div>
+  
+
+  <ul class="fa-ul">
+
+    
+    <li>
+      <i class="fa-li fas fa-envelope fa-2x" aria-hidden="true"></i>
+      <span id="person-email"><a href="mailto:nathaniel.b.haines@gmail.com">nathaniel.b.haines@gmail.com</a></span>
+    </li>
+    
+
+    
+
+    
+    
+      
+      <li>
+        <i class="fa-li fas fa-map-marker fa-2x" aria-hidden="true"></i>
+        <span id="person-address">1581 N High St, Columbus, OH 43201</span>
+      </li>
+    
+
+    
+
+    
+    <li>
+      <i class="fa-li fas fa-clock fa-2x" aria-hidden="true"></i>
+      <span>I am generally pretty available to meet—just email me!</span>
+    </li>
+    
+
+    
+
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <i class="fa-li fab fa-twitter fa-2x" aria-hidden="true"></i>
+      <a href="https://twitter.com/Nate__Haines" target="_blank" rel="noopener">DM Me</a>
+    </li>
+    
+
+  </ul>
+
+  
+  <div class="d-none">
+    <input id="map-provider" value="mapnik">
+    <input id="map-lat" value="39.9944645">
+    <input id="map-lng" value="-83.0094102">
+    <input id="map-dir" value="1581 N High St, Columbus, OH 43201">
+    <input id="map-zoom" value="15">
+    <input id="map-api-key" value="">
+  </div>
+  <div id="map"></div>
+  
+
+</div>
+
+
+    
+      </div>
+    
 
     </div>
   </section>
 
 
 
-<footer class="site-footer">
-  <div class="container">
-    <p class="powered-by">
-
-      &copy; 2017 Nathaniel Haines, PhD &middot; 
-
-      Powered by the <a href="https://github.com/gcushen/hugo-academic" target="_blank">Academic
-      theme</a> for <a href="http://gohugo.io" target="_blank">Hugo</a>.
-
-      <span class="pull-right" aria-hidden="true">
-        <a href="#" id="back_to_top">
-          <span class="button_icon">
-            <i class="fa fa-chevron-up fa-2x"></i>
-          </span>
-        </a>
-      </span>
-
-    </p>
   </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Nathaniel Haines, PhD
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-themes" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
 </footer>
 
+    </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.2/imagesloaded.pkgd.min.js" integrity="sha512-iHzEu7GbSc705hE2skyH6/AlTpOfBmkx7nUqTLGzPYR+C1tRaItbRlJ7hT/D3YQ9SV0fqLKzp4XY9wKulTBGTw==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js" integrity="sha512-Z5heTz36xTemt1TbtbfXtTq5lMfYnOkXM2/eWcTTiLU01+Sw4ku1i7vScDc8fWhrP2abz9GQzgKH5NGBLoYlAw==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/plugins/ScrollToPlugin.min.js" integrity="sha512-CDeU7pRtkPX6XJtF/gcFWlEwyaX7mcAp5sO3VIu/ylsdR74wEw4wmBpD5yYTrmMAiAboi9thyBUr1vXRPA7t0Q==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
     
-    <script src="/js/hugo-academic.js"></script>
+    <script src="/js/vendor-bundle.min.b73dfaac3b6499dc997741748a7c3fe2.js"></script>
+
+    
+    
+    
+      
+      
+        <script src="https://cdn.jsdelivr.net/gh/desandro/imagesloaded@v4.1.4/imagesloaded.pkgd.min.js" integrity="sha512-S5PZ9GxJZO16tT9r3WJp/Safn31eu8uWrzglMahDT4dsmgqWonRY9grk3j+3tfuPr9WJNsfooOR7Gi7HL5W2jw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/metafizzy/isotope@v3.0.6/dist/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js" integrity="sha512-Ypjm0o7jOxAd4hpdoppSEN0TQOC19UtPAqD+4s5AlXmUvbmmS/YMxYqAqarQYyxTnB6/rqip9qcxlNB/3U9Wdg==" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/r.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/python.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/latex.min.js" crossorigin="anonymous"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.js" integrity="" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdn.jsdelivr.net/gh/krisk/Fuse@v3.2.1/dist/fuse.min.js" integrity="sha512-o38bmzBGX+hD3JHWUFCDA09btWaqrNmoJ3RXLlrysA7PP01Kgs4UlE4MhelE1v5dJR3+cxlR4qQlotsW7jKsnw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/julmot/mark.js@8.11.1/dist/jquery.mark.min.js" integrity="sha512-mhbv5DqBMgrWL+32MmsDOt/OAvqr/cHimk6B8y/bx/xS88MVkYGPiVv2ixKVrkywF2qHplNRUvFsAHUdxZ3Krg==" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+      <script id="dsq-count-scr" src="https://haines-lab-com.disqus.com/count.js" async></script>
     
 
     
     
       
-      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
-
       
-      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/r.min.js"></script>
       
-
       
-
-      <script>hljs.initHighlightingOnLoad();</script>
+      
+      
+      
     
 
     
-    
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
-    </script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML" integrity="sha512-tOav5w1OjvsSJzePRtt2uQPFwBoHt1VZcUq8l8nm5284LEKE9FSJBQryzMBzHxY5P0zRdNqEcpLIRVYFNgu1jw==" crossorigin="anonymous"></script>
-    
-    
 
-  </body>
+    
+    
+    
+    <script id="page-data" type="application/json">{"use_headroom":false}</script>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.247fd8f54253895301106e3006f53f38.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
 </html>
-

@@ -1,0 +1,386 @@
+---
+title: Human Choice and Reinforcement Learning (3)
+author: Nathaniel Haines
+date: '2018-09-08'
+slug: ''
+categories:
+  - Reinforcement Learning
+tags:
+  - R
+  - Modeling
+  - Learning
+description: The third post in a series on modeling human choice using reinforcement learning. Here, we explore the multiple ways to estimate parameters for individual decision-makers. 
+draft: no
+keywords:
+  - Reinforcement Learning
+  - Value-based decision making
+  - Modeling
+topics: topic 1
+type: post
+---
+
+```{r setup, include=FALSE, tidy=TRUE}
+knitr::opts_chunk$set(echo = TRUE, dev = "svg")
+```
+
+# 1. Goals of Paramter Estimation
+
+When estimating paramters for a given model, we typically aim to make an inference on an individual's underlying decision process. We may be inferring a variety of different factors, such as the rate at which someone updates their expectations, the way that someone subjectively values an outcome, or the amount of exploration versus exploitation that someone engages in. Once we estimate an individual's parameters, we can compare then to other people or even other groups of people. Further, we can compare parameters within subjects after an experimental manipulation (e.g., *does drug X affect a person's learning rate?*). 
+
+Below, we will explore multiple paremter estimation methods. Specifically, we will use: (1) maximum likelihood estimation, (2) maximum a posteriori estimation, (3) and fully Bayesian estimation. First, we will simulate data from models described in the previous post on a simple 2-armed bandit task. Importantly, we will simulate data using *known parameter values*, which we will then try to recover  from the simulated data. We will refer to the known paramters as the *true parameters*.
+
+# 2. Simulation
+
+For our simulation, we will simulate choice from a model using delta-rule learning and softmax choice. To keep things simple, the learning rate will be the only free paramter in the model. Additionally, we will simulate choices in a task where there are two choices, where choice 1 has a mean payoff of 1 and choice 2 has a mean payoff of -1. Therefore, a learning agent should be able to learn that choice 1 is optimal and make selections accordingly. However, we will add noise to each choice payoff (*sigma* below) to make things more realistic. 
+
+The following R code simulates 200 trials using the model and task described above:
+
+```{r, 2018-09-08_fig1, message=FALSE, out.extra="style='height: 100%; width: 100%; object-fit: contain'"}
+# For pretty plots and data manipulation
+library(ggplot2)
+library(foreach)
+library(dplyr)
+
+# Simulation paramters
+set.seed(1)        # Random seed for replication
+mu    <- c(1, -1)  # Mean payoff for choices 1 and 2 
+sigma <- 3         # SD of payoff distributions
+n_tr  <- 200       # Number of trials 
+beta  <- 0.1       # True learning rate
+
+# Initial expected value
+ev <- c(0, 0) 
+
+# Softmax choice function
+logsumexp <- function (x) {
+  y <- max(x)
+  y + log(sum(exp(x - y)))
+}
+softmax <- function (x) {
+  exp(x - logsumexp(x))
+}
+
+# Simulate data
+sim_dat <- foreach(t=1:n_tr, .combine = "rbind") %do% {
+  # Generate choice probability with softmax
+  pr <- softmax(ev)
+  
+  # Use choice probability to sample choice
+  choice <- sample(c(1,2), size = 1, prob = pr)
+  
+  # Generate outcome based on choice
+  outcome <- rnorm(1, mean = mu[choice], sd = sigma)
+  
+  # Delta-rule learning
+  ev[choice] <- ev[choice] + beta * (outcome - ev[choice])
+  
+  # Save data
+  data.frame(Trial   = rep(t, 2),
+             EV      = ev,
+             Pr      = pr,
+             Option  = paste(1:2),
+             Choice  = rep(choice, 2),
+             Outcome = rep(outcome, 2))
+}
+
+# Change in expected values across tirals
+ggplot(sim_dat, aes(x = Trial, y = EV, geom = "line", color = Option)) +
+  geom_line() +
+  scale_color_manual(values = c("red", "blue")) +
+  ylab("Expected Value") +
+  theme_minimal(base_size = 20)
+
+```
+
+The above graph shows the simulated agent's expected value (*EV*) for options 1 and 2 across the 200 trials. We can also view the probability of selecting each option across trials:
+
+```{r, 2018-09-08_fig2, out.extra="style='height: 100%; width: 100%; object-fit: contain'"}
+# Change in probability of selecting each option across tirals
+ggplot(sim_dat, aes(x = Trial, y = Pr, geom = "line", color = Option)) +
+  geom_line() +
+  scale_color_manual(values = c("red", "blue")) +
+  ylab("Pr(Choice)") +
+  theme_minimal(base_size = 20)
+
+```
+
+Clearly, the agent learns to prefer option 1 over option 2 across trials. Although we know the true learning rate (i.e. $\beta_{true} = 0.1$), we will explore the various parameter estimation techniques below to try and recover $\beta_{true}$ from the simulated data.
+
+# 3. Parameter Estimation Methods
+
+## 3.1 Maximum Likelihood
+
+The goal of maximum likelihood estimation (MLE) is to identify the single, most likely parameter value(s) that could have produced the observed data. For our purposes, MLE will allow us to estimate the learning rate that maximizes the probability of observing the simulated data. We refer to his estimate as $\hat{\beta}$ (pronounced beta-hat). 
+
+Before moving on, it is worth introducing some new notation. If we refer to the observed data as $X$ and the parameters we aim to estimate as $\theta$, we can refer to the likelihood function as:
+
+$$Pr(X|\theta)$$
+
+In our case, $\theta = \hat{\beta}$, and $X$ is the vector of simulated choices from above. So then, how do we actually compute the probability of choices $X$ given learning rate $\hat{\beta}$? Simple! We use the model that we simulated the data from. Specifically, we: 
+
+1. Make a guess for $\hat{\beta}$
+2. Look into $X$ and find out what choice and outcome the agent made/experienced on trial $t$
+3. Use our guess for $\hat{\beta}$ to update the EV for the chosen option accoring to the model
+4. Enter the updated EVs into the softmax function to generate the probability of selecting each option for the next trial
+5. Store the model-estimated probability of selecting the choice that the agent actually made on trial $t$ 
+  
+We iterate through these steps for each trial $t$ in $X$, and then multiply the probabilities across all trials. In practice, we take the natural log of the probability on each trial and then sum across trials, which is equivalent to multiplying out the probabilities but is more numerically stable (computers don't like really small numbers!). We can write out this *log-likelihood* as:
+
+$$\sum_{t=1}^{T}{\text{ln } Pr(Choice_{t}|\hat{\beta})}$$
+
+We are not finished yet! Once we compute the above sum for a given guess for $\hat{\beta}$, we will run through all the steps again with a new guess for $\hat{\beta}$. We continue to make guesses and calculate the above sum until we find a value $\hat{\beta}$ that gives us the maximum probability—this final value is the *maximum likelihood estimate (MLE)*, written as:
+
+$$\hat{\beta}_{MLE} = \underset{\hat{\beta}}{\text{arg max}}\sum_{t=1}^{T}{\text{ln } Pr(Choice_{t}|\hat{\beta})}$$
+
+Our goal is to find the value for $\hat{\beta}$ that maximizes the above sum. Now, we could accomplish this by sampling random learning rates between 0 and 1, computing the sum for each value, and then determining which value produces the highest log-likelihood. Alternatively, we could create a grid of values from 0 to 1 (i.e. $\hat{\beta} \in \text{{0.01, 0.02, ..., 0.99}}$) and select the MLE as the value with the highest log-likelihood. In the real world, however, we usually use some sort of optimization algorithm that makes our job much easier. Below, we will use the **optim** function in R:
+
+```{r, 2018-09-08_fig3, out.extra="style='height: 100%; width: 100%; object-fit: contain'"}
+# Define the log-likelihood function used for MLE
+mle_bandit <- function(X, beta, outcomes)  {
+  # Initialize expected value
+  ev <- c(0, 0)
+  # loop through each trial and compute log-likelihood
+  ll <- foreach(t=seq_along(X), .combine = "c") %do% {
+    # Generate choice probability with softmax
+    pr <- softmax(ev)
+    
+    # Delta-rule learning
+    ev[X[t]] <- ev[X[t]] + beta * (outcomes[t] - ev[X[t]])
+    
+    # log probability of "true" simulated choice
+    log(pr[X[t]])
+  }
+  
+  # return the summed (minus) log-likelihood, because optim minimizes by default
+  sum(-1*ll)
+}
+
+# Because data were simulated and output into long format, we need to
+# remove every other observation so that we do not double-count
+fit_dat <- sim_dat %>%
+  filter(Option == 1)
+
+# Use optim to minimize the (minus) log-likelihood function
+mle_results <- optim(par      = 0.5,             # Initial guess for beta
+                     fn       = mle_bandit,      # Function we are minimizing
+                     method   = "L-BFGS-B",      # Specific algorithm used
+                     lower    = 0,               # Lower bound for beta 
+                     upper    = 1,               # Upper bound for beta
+                     X        = fit_dat$Choice,  # Simulated choices
+                     outcomes = fit_dat$Outcome) # Simulated choice outcomes
+
+# Print results
+cat("The MLE for beta is: " , round(mle_results$par, 3))
+```
+
+Not bad! **optim** returns a MLE of $\hat{\beta} =$ $`r round(mle_results$par, 3)`$. Given that $\beta_{true} = 0.1$ (since we determined the value for the simulations), our estimate $\hat{\beta}$ is not that far off. One potential downside of the MLE approach we used above is that we only receive a single value for the MLE, which makes it difficult to know how certain the estimate is. For example, our simulation was for 200 trials, but surely we would be more confident in the estimate if the simulation was for 1,000's of trials? MLE alone does not offer an explicit measure of uncertainty in the parameter estimates without additional analyses (and additional assumptions), which is one reason that Bayesian methods are easier to interpret. 
+
+## 3.2 Maximum A Poseriori (MAP) Estimation
+
+MAP estimation is a straightforward extention of MLE, which allows us to incorporate prior information about the parameter that we are trying to estimate into the estimation procedure. In our example, we may know from prior studies that learning rates for a given task typically fall in the range of 0.01-0.4. MAP estimation allows us to formalize this prior research in a very simple way! We simply parameterize a prior distribution ($Pr(\beta)$) that is consistent with estimates from prior studies. For example, a normal distribution with a $\mu = .15$ and $\sigma = 0.25$ captures the above range nicely but does not constrain the values too much:
+
+```{r, 2018-09-08_fig4, out.extra="style='height: 100%; width: 100%; object-fit: contain'"}
+x <- seq(0, 1, length=1000)
+y <- dnorm(x, mean = .15, sd = .25)
+qplot(x = x, y = y, geom = "line", xlab = expression(beta[prior]), ylab = "Density") +
+  theme_minimal(base_size = 20)
+```
+
+So, how do we include this prior information? Easy! When we make a guess for $\hat{\beta}$, we will compute the likelihood just like we did for MLE, and we will multiple this value by the "likelihood" of the prior. Intuitively, this allows us to *weight* the likelihood of each possible value for $\hat{\beta}$ by the prior for that same value of $\hat{\beta}$. This behavior results in a sort of trade off between the likelihood and prior distribution, which ends up **regularizing** our MLE estimate by pulling it toward the center mass of the prior distribution. Formally, we represent this by adding the prior distribution (bolded) to the MLE function from above:
+
+$$\hat{\beta}_{MAP} = \underset{\hat{\beta}}{\text{arg max}}\sum_{t=1}^{T}{\text{ln } Pr(Choice_{t}|\hat{\beta})\bf{Pr(\beta)}}$$
+
+Let's see what this looks like in R, and note how it affects estimation of $\hat{\beta}$:
+
+```{r, 2018-09-08_fig5, out.extra="style='height: 100%; width: 100%; object-fit: contain'"}
+# Define the log-likelihood function used for MAP
+map_bandit <- function(X, beta, outcomes)  {
+  # Initialize expected value
+  ev <- c(0, 0)
+  # loop through each trial and compute log-likelihood
+  ll <- foreach(t=seq_along(X), .combine = "c") %do% {
+    # Generate choice probability with softmax
+    pr <- softmax(ev)
+    
+    # Delta-rule learning
+    ev[X[t]] <- ev[X[t]] + beta * (outcomes[t] - ev[X[t]])
+    
+    # Probability/likelihood of "true" simulated choice
+    like <- pr[X[t]]
+    
+    # Likelihood of current beta according to prior distribution
+    prior <- dnorm(x = beta, mean = .15, sd = 0.25)
+    
+    # Log of like*prior
+    log(like*prior)
+  }
+  
+  # return the summed (minus) log-likelihood with prior information included
+  sum(-1*ll)
+}
+
+# Use optim to minimize the (minus) log-likelihood function
+map_results <- optim(par      = 0.5,             # Initial guess for beta
+                     fn       = map_bandit,      # Function we are minimizing
+                     method   = "L-BFGS-B",      # Specific algorithm used
+                     lower    = 0,               # Lower bound for beta 
+                     upper    = 1,               # Upper bound for beta
+                     X        = fit_dat$Choice,  # Simulated choices
+                     outcomes = fit_dat$Outcome) # Simulated choice outcomes
+
+# Print results
+cat("The MAP for beta is: " , round(map_results$par, 3))
+```
+Woah! The simple addition of prior information pushed our estimate of $\hat{\beta} =$ $`r round(mle_results$par, 3)`$ to $\hat{\beta} =$ $`r round(map_results$par, 3)`$. Notice that the MAP estimator was pulled toward the mean of the prior distribution. However, is this a good thing? When is this behavior beneficial? After all, our MAP estimate is actually further than our MLE estimate from $\beta_{true}$. 
+
+To demonstrate the benefit of prior information, let's take the simulated data from our learner (i.e. $\beta = 0.1$), but only fit the model using the first 15 trials worth of data:
+
+```{r, 2018-09-08_fig6, out.extra="style='height: 100%; width: 100%; object-fit: contain'"}
+# Use MLE to fit the first 15 trials
+mle_results_15tr <- optim(par      = 0.5,             
+                          fn       = mle_bandit,      
+                          method   = "L-BFGS-B",      
+                          lower    = 0,               
+                          upper    = 1,               
+                          X        = fit_dat$Choice[1:15],  # Only using first 15 trials
+                          outcomes = fit_dat$Outcome[1:15]) 
+
+# Use MAP to fit the first 15 trials
+map_results_15tr <- optim(par      = 0.5,             
+                          fn       = map_bandit,      
+                          method   = "L-BFGS-B",      
+                          lower    = 0,               
+                          upper    = 1,               
+                          X        = fit_dat$Choice[1:15],  # Only using first 15 trials
+                          outcomes = fit_dat$Outcome[1:15]) 
+
+cat("The MLE for beta with 15 trials is: " , round(mle_results_15tr$par, 3), "\n", 
+    "The MAP for beta with 15 trials is: " , round(map_results_15tr$par, 3))
+```
+
+Look at that! MLE overestimates the learning rate, and MAP gives us a much better estimate. There are two main take-aways from this toy example: 
+
+1. MLE is prone to degenerate behavior in low data settings, which can push parameters to the edge of the parameter space or lead to otherwise unreliable estimates, and
+2. Introduction of our own, theory-based form of bias (i.e. regularization from the prior distribution) can help us avoid estimation problems—espectially in low data settings! (this will become clearer in future posts)
+
+In fact, you may have realized through the above example (or math) that MLE is just a sepcial case of MAP estimation! If it is not already intuitive, think of this—what would happen to our MAP estimate if we assumed that the prior distribution was uniform (i.e. all values between 0 and 1 are equally likely for learning rate $\beta$)? Well, we would have to multiply $Pr(Choice_{t}|\hat{\beta})$ by 1 for each guess of $\hat{\beta}$! See this yourself by observing the likelihood of different values for `x` drawn from a uniform distribution (code: `dunif(x = .15, min = 0, max = 1)`). Therefore, MAP is analytically equivalent to MLE when we assume a uniform prior distibution. Of course, in many settings, we know that certain paremter values are very unlikely (e.g., a learning rate of .2 is more reasonable than of .99 in most settings). It follows that assuming a uniform distribution for the prior can be quite (mis)informative! 
+
+Note that MAP, like MLE, only offers a point estimate. Again, we would ideally like a proper representation of uncertainty for our estimate. 
+
+## 3.3 Markov Chain Monte Carlo (MCMC) Estimation
+
+We have finally arrived... MCMC builds on all of the above estimation methods, resulting in a powerful estimation procedure that gives as an entire distribution—rather than just a point estimate—to represent a parameter. 
+
+To begin, we will first introduce Bayes' Theorem; you have likely seen is before:
+
+$$Pr(\theta | X) = \frac{Pr(X | \theta)Pr(\theta)}{Pr(X)}$$
+
+In English, this translates to:
+
+$$\text{Posterior Distribution} = \frac{\text{Likelihood} \cdot \text{Prior Distribution}}{\text{Marginal Distribution}}$$
+
+You may notice that the numerator (i.e. $Pr(X | \theta)Pr(\theta)$) looks suspiciously like the term we were trying to maximize for MAP estimation ($Pr(Choice_{t}|\hat{\beta})Pr(\beta)$)...which is because MAP estimation is indeed derived from Bayes' Theorem! In fact, the MAP estimate is the *mode of the posterior distribution*, which explains why it is called **maximum a posteriori** estimation.
+
+So then, we already know what the numerator corresponds to, but what of the denominator? Referring back to our simulation, the marginal distribution $Pr(X)$ is $Pr(Choices)$, which is interpreted as the probability of the observed data—what exactly does this mean? Well, it turns out that for our purposes, it is not too important! $Pr(Choices)$ is a constant term, and it does not depend on the model we are trying to estimate parameters for. Therefore, we often write:
+
+$$Pr(\theta | X) \propto Pr(X | \theta)Pr(\theta)$$
+
+Which translates to "*the posterior distribution is **proportional to** the likelihood times the prior distribution*". Intuitively, this means that it is the relative differences in $Pr(X | \theta)Pr(\theta)$ across different values of $\theta$ that give us information about the posterior distribution. Importantly, we already know how to work with this numerator term (from doing MAP estimation)! Therefore, fully Bayesian estimation using MCMC only requires a small extention. Specifically, instead of using optimization (i.e. R's `optim` function) to
+find a single value of $\theta$ that maximizes $Pr(X | \theta)Pr(\theta)$, we want to use a method that tells us how likely all possible values of $\theta$ are relative to each other (i.e. a distribution!). While there are many different algorithms that can be used to accomplish this, we will start with the [Metropolis](https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm) algorithm. Referring back to our learning data, estimating $\hat{\beta}$ using the Metropolis algorithm proceeds with the steps outlined below.
+
+For $n = 1, 2, ..., N:$
+
+1. Propose a value $\hat{\beta}'$ that is near your current guess $\hat{\beta}_{n}$
+2. Calculate the *acceptance ratio*, defined by $accept = \frac{Pr(Choices |  \hat{\beta}')Pr(\hat{\beta}')}{Pr(Choices |  \hat{\beta}_{n})Pr(\hat{\beta}_{n})}$
+3. Generate a uniform random number $u$ on $[0,1]$
+4. If $u \le accept$, set $\hat{\beta}_{n+1} = \hat{\beta}'$, otherwise set $\hat{\beta}_{n+1} = \hat{\beta}_{n}$
+
+Importantly, while iterating through all samples $N$, we store each value $\hat{\beta}_{n}$. This sequence of values *is the posterior distribution* $Pr(\hat{\beta}|Choices)$. The R code below shows the Metropolis algorithm in action, and the resulting histogram of posterior samples:
+
+**Note that this takes a few minutes to run because it is not optimized in the least bit!**
+
+```{r, 2018-09-08_fig7, out.extra="style='height: 100%; width: 100%; object-fit: contain'"}
+# Set number of samples N for the Metropolis algorithm
+samples <- 5000
+
+# Set initial guess for beta
+beta_n <- 0.5
+
+# Take what we did above for MAP estimation and make into a function
+calc_like <- function(beta, X, outcomes) {
+  # Initialize expected value
+  ev <- c(0, 0)
+  # loop through each trial and compute log-likelihood
+  ll <- foreach(t=seq_along(X), .combine = "c") %do% {
+    # Generate choice probability with softmax
+    pr <- softmax(ev)
+    
+    # Delta-rule learning
+    ev[X[t]] <- ev[X[t]] + beta * (outcomes[t] - ev[X[t]])
+    
+    # Probability/likelihood of "true" simulated choice
+    like <- pr[X[t]]
+    
+    # Likelihood of current beta according to prior distribution
+    prior <- dnorm(x = beta, mean = .15, sd = 0.25)
+    
+    # log of like*prior
+    log(like*prior)
+  }
+  
+  # return the summed log-likelihood with prior information included
+  sum(ll)
+}
+
+# Iterate through N samples and store each result
+posterior <- foreach(n=1:samples, .combine = "c") %do% {
+  # Step 1: Generate random proposal value with normal distribution
+  beta_proposal <- rnorm(1, mean = beta_n, sd = .01)
+  
+  # If proposal is outside of parameter bounds, keep current sample, else continue
+  if (0 < beta_proposal & beta_proposal < 1) {
+    # Step 2: Calculate acceptance ratio
+    like_proposal <- exp(calc_like(beta_proposal, fit_dat$Choice, fit_dat$Outcome))
+    like_current  <- exp(calc_like(beta_n, fit_dat$Choice, fit_dat$Outcome))
+    accept <- like_proposal/like_current
+    
+    # Step 3: Generate uniform random number on [0,1]
+    u <- runif(1, min = 0, max = 1)
+    
+    # Step 4: Accept or reject proposal
+    if (u <= accept) {
+      beta_n <- beta_proposal
+    }
+  }
+  
+  # Retern beta_n (either updated with proposal or remains the same)
+  beta_n
+}
+
+# Plot time-series of posterior samples
+qplot(x = 1:samples, y = posterior, geom = "line") + 
+  geom_hline(aes(yintercept= beta, linetype = "True Beta"), color= 'red') +
+  scale_linetype_manual(name = "", values = 2) +
+  xlab("Posterior Sample") +
+  ylab(expression(hat(beta))) +
+  theme_minimal(base_size = 20)
+```
+
+This *traceplot* shows each accepted proposal across all 5,000 samples that we drew from the posterior distribution. As you can see, the samples are all distributed near the true value once they converge to a stable estimate. The samples at the beginning (before reaching convergence) will be discarded (termed *burn-in* samples) for further analyses because they do not represent the posterior distribution. Unlike for MLE or MAP estimation, all the posterior samples after burn-in can be used to represent the uncertainty in the learning rate parameter! We simply plot the density of the samples (with the prior density shown in the black, dotted line for an idea of what we have learned):
+
+```{r, 2018-09-08_fig8, out.extra="style='height: 100%; width: 100%; object-fit: contain'"}
+qplot(posterior[200:5000], geom = "density", fill = I("gray")) +
+  geom_line(aes(x = x, y = y), linetype = 2) +
+  geom_vline(aes(xintercept= beta, linetype = "True Beta"), color= 'red') +
+  scale_linetype_manual(name = "", values = 2) +
+  coord_cartesian(xlim = c(0, 1)) +
+  xlab(expression(hat(beta))) +
+  ylab("Density") +
+  theme_minimal(base_size = 20)
+```
+
+Clearly, the results are not perfect. Yet, our posterior distribution does contain the true value, and it is rather precise (i.e. it is narrow) relative to the prior distribution (black line) and parameter space.
+
+# 4. Wrapping up
+
+In this post, we covered three methods of parameter estimation including: (1) maximum likelihood estimation, (2) maximum a posteriori estimation, and (3) markov chain monte carlo estimation. In the future, we will use software packages (particularly [Stan](https://mc-stan.org/)) to do MCMC for us, which will allow us to more rapidly estimate parameters compared to our simplistic MCMC implementation above. In the next post, we will use Stan to estimate the same learning rate from the model above. Soon after, we will work towards fitting hierarchical models!

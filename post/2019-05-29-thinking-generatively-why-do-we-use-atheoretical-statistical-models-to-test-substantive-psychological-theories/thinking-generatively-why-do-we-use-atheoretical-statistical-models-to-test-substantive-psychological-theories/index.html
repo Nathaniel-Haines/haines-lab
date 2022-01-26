@@ -1,0 +1,2081 @@
+<!DOCTYPE html><html lang="en-us" >
+
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.4.0 for Hugo" />
+  
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Nathaniel Haines" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="The Reliability Paradox Defining Reliability In 2017, Hedge, Powell, and Sumner (2017) conducted a study to determine the reliability of a variety of of behavioral tasks. Reliability has many different meanings throughout the psychological literature, but what Hedge et al." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/" />
+
+  
+  
+  
+    <meta name="theme-color" content="hsl(339, 90%, 68%)" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.f1ecf783c14edc00c9320c205831ad8e.css" media="print" onload="this.media='all'">
+
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha512-W0xM4mr6dEP9nREo7Z9z+9X70wytKvMGeDsj7ps2+xg5QPrEBXC8tAW1IFnzjR6eoJ90JmCnFzerQJTLzIEHjA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+    
+    
+    
+      
+      
+    
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'" disabled>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'">
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.css" integrity="" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.483823b49802e3bfc12a727dbc71499e.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106994238-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-106994238-1', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+
+  
+  
+    
+    
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Computational Psychology" />
+  <meta property="og:url" content="http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/" />
+  <meta property="og:title" content="Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories? | Computational Psychology" />
+  <meta property="og:description" content="The Reliability Paradox Defining Reliability In 2017, Hedge, Powell, and Sumner (2017) conducted a study to determine the reliability of a variety of of behavioral tasks. Reliability has many different meanings throughout the psychological literature, but what Hedge et al." /><meta property="og:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2019-09-05T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2019-09-05T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/"
+  },
+  "headline": "Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?",
+  
+  "datePublished": "2019-09-05T00:00:00Z",
+  "dateModified": "2019-09-05T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Nathaniel Haines"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Computational Psychology",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "The Reliability Paradox Defining Reliability In 2017, Hedge, Powell, and Sumner (2017) conducted a study to determine the reliability of a variety of of behavioral tasks. Reliability has many different meanings throughout the psychological literature, but what Hedge et al."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories? | Computational Psychology</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  dark " data-wc-page-id="d67976203ff03d456282999ac47087e5" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.b6ac29faab89ee14db88f0bed7aa6622.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="header--fixed">
+  <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+    <div class="container-xl">
+
+      
+      <div class="d-none d-lg-inline-flex">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+      
+      <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      
+      <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+        
+        <ul class="navbar-nav d-md-inline-flex">
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#posts"><span>Posts</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#talks"><span>Talks</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#featured"><span>Publications</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#contact"><span>Contact</span></a>
+          </li>
+
+          
+          
+
+        
+
+          
+        </ul>
+      </div>
+
+      <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+        
+        
+          
+            
+            <li class="nav-item d-none d-lg-inline-flex">
+              <a class="nav-link" href="https://twitter.com/nate__haines" data-toggle="tooltip" data-placement="bottom" title="Follow me on Twitter" target="_blank" rel="noopener" aria-label="Follow me on Twitter">
+                <i class="fab fa-twitter" aria-hidden="true"></i>
+              </a>
+            </li>
+          
+        
+
+        
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+        
+        <li class="nav-item dropdown theme-dropdown">
+          <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item js-set-theme-light">
+              <span>Light</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-dark">
+              <span>Dark</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-auto">
+              <span>Automatic</span>
+            </a>
+          </div>
+        </li>
+        
+
+        
+        
+
+      </ul>
+
+    </div>
+  </nav>
+</header>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Sep 5, 2019
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    32 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/statistical-modeling/">Statistical Modeling</a>, <a href="/category/measurement/">Measurement</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="the-reliability-paradox" class="section level1">
+<h1>The Reliability Paradox</h1>
+<div id="defining-reliability" class="section level2">
+<h2>Defining <em>Reliability</em></h2>
+<p>In 2017, <a href="https://link.springer.com/article/10.3758/s13428-017-0935-1">Hedge, Powell, and Sumner (2017)</a> conducted a study to determine the <strong><em>reliability</em></strong> of a variety of of behavioral tasks. Reliability has many different meanings throughout the psychological literature, but what Hedge et al. were interested in was how well a behavioral measure <em>consistently ranks individuals</em>. In other words, when I have people perform a task and then measure their performance, does the measure that I use to summarize their behavior show high <em>test-retest reliability</em>? Those studying individual differences—including but not limited to personality psychologists, clinical psychologists, and many developmental psychologists—are likley to be familiar with test-retest reliability, as we often desire measures that help us understand differences between people.</p>
+<p>Despite what many of us may first think when we hear the word <em>reliable</em>, as Hedge et al. note, test-retest reliability is only one of many different definitions of reliable used throughout the psychological literature. For example, when someone states that an effect is reliable, they often mean that the effect is <em>easily replicable</em>.</p>
+<div id="replicable-behavioral-effects-arent-reliabile" class="section level3">
+<h3>Replicable Behavioral Effects Aren’t Reliabile?</h3>
+<p>A commonly cited example of a <em>replicable effect</em> is the <a href="https://en.wikipedia.org/wiki/Stroop_effect">Stroop effect</a>, which is often measured as the mean difference in response time between incongruent and congruent word-color pairs. For example, when tasked with responding to the color of a word, people tend to respond much more quickly when the word is consistent with its color (“Red” colored red) compared to when it is not (“Red” colored blue). Since the <a href="http://psychclassics.yorku.ca/Stroop/">original study in 1935</a>, this basic effect of an average difference in response times between congruent and incongruent trials has been replicated countless times (see <a href="https://psycnet.apa.org/fulltext/1991-14380-001.html">MacLeod, 1991</a>), thereby becoming one of the most well-known effects in all of psychology. In fact, at the time of writing this post, the original 1935 paper has <em>almost 20,000 citations</em> on Google Scholar alone.</p>
+<p>Despite how replicable it is, Hedge et al. show that the Stroop effect is <em>unreliable</em>, in that it shows low test-retest reliability. While Hedge et al. assess many examples of such effects, we will focus on the Stroop effect throughout this post for brevity. Using their first experiment as an example, they had a a group of 50 college students complete a Stroop task two separate times separated by a period of three weeks. The Stroop task consisted of three conditions containing 240 trials each: (1) incongruent, (2) neutral, and (3) congruent conditions (for 720 trials total). On each trial, participants responded to the color of a word presented on a computer monitor which could be colored either red, blue, green, and yellow. Responses were collected from key presses. The word could be the same as the font color (congruent condition; e.g., “Red” colored red), unrelated to the font color (neutral; e.g., “lot” colored red), or conflicting with the font color (incongruent; e.g., “Blue” colored red).</p>
+<p>After subjects completed the above Stroop task at both timepoints, Hedge et al. used the following <em>behavioral model</em> to estimate each individual’s Stroop effect at both timepoints:</p>
+<p><span class="math display">\[
+\begin{aligned}
+  Stroop_{i,\text{time}} &amp; = \overline{RT}_{i,\text{time},\text{incongruent}} - \overline{RT}_{i,\text{time}, \text{congruent}}
+\end{aligned}\tag{1}
+\]</span>
+In plain English, for each person <span class="math inline">\(i\)</span> at timepoint <span class="math inline">\(\text{time}\)</span>, the Stroop effect is equal to the average response time across incongruent trials (<span class="math inline">\(\overline{RT}_{i,\text{time},\text{incongruent}}\)</span>) minus the average response time across congruent trials (<span class="math inline">\(\overline{RT}_{i,\text{time},\text{congruent}}\)</span>). Then, to estimate test-retest reliability, Hedge et al. use an Intraclass Correlation Coefficient (ICC) using a two-way random effects model for absolute agreement (<span class="math inline">\(ICC(2,1)\)</span>). The <span class="math inline">\(ICC(2,1)\)</span> is similar to a traditional Pearson’s <span class="math inline">\(r\)</span>, except that it is also sensitive to differences in the mean rather than just the variance of our observations. For example, if <span class="math inline">\(A = \{1,2,3\}\)</span> and <span class="math inline">\(B = \{4,5,6\}\)</span>, the Pearson’s <span class="math inline">\(r\)</span> between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> is <span class="math inline">\(1\)</span>. However, the ICC(2,1) between these vectors is attenuated to <span class="math inline">\(.18\)</span> because the corresponding elements of each vector differ on average by some value (3 in this example). This is important when our aim is to ensure that, for example, two different coders give the same ratings to a set of stimuli.</p>
+<p>Importantly, Hedge et al. found that the test-retest reliability of the Stroop effect as measured using equation 1 was <span class="math inline">\(ICC(2,1) = .6\)</span>, which is a surprisingly low number given how robust the Stroop effect is at the group level! As Hedge et al. discuss, with such low reliability, any research that correlates individual-level Stroop estimates with other measures (e.g., BOLD fMRI signals, personality measures, etc.) should be correcting the estimated correlations for the high measurement error of the Stroop effect, which substantially increases the sample size required to make reasonably-powered statistical inferences. Because Hedge et al. replicated this result of low test-retest reliability across both multiple groups of participants and multiple different tasks (e.g., Flanker, Navon, Go/No-go, Stop-signal), their general conclusion naturally follows that <strong>behavioral tasks such as the Stroop task are severely limited in their ability to distinguish between individuals, thereby calling into question their utility for individual-differences research.</strong></p>
+</div>
+</div>
+</div>
+<div id="revisiting-the-reliability-paradox" class="section level1">
+<h1>Revisiting the Reliability Paradox</h1>
+<div id="thinking-generatively-improves-reliability" class="section level2">
+<h2>Thinking Generatively Improves Reliability</h2>
+<p>This post will show that the conclusions drawn by Hedge et al. are highly dependent on the implict assumptions of their methodology. Specifically, we will develop a statistical model that is more consistent with the <strong><em>data-generating mechanism</em></strong> underlying the group-level Stroop effect, which will allow us to estimate more precise individual-level effects. In turn, we achieve higher test-retest reliability estimates. This work is similar in kind to that of <a href="https://link.springer.com/article/10.3758/s13423-018-1558-y">Rouder &amp; Haaf (2019)</a>, although we will have a more specific focus on estimating test-retest reliability and go into a bit more depth when discussing the implications of our results in reference to the current standard practices in psychology (<em>I was also unfortunately not aware of this fantastic work until shortly after completing this project!</em>). Additionally, we will use a model parameterization that is more familiar to those who regularly work with R with packages such as <code>brms</code> (e.g., compare the model we develop below to this <code>brms</code> <a href="https://bookdown.org/ajkurz/Statistical_Rethinking_recoded/adventures-in-covariance.html">write-up</a>), which I hope will help readers more readily generalize this material to their own work.</p>
+<p>In the following sections, we will download the Stroop data used by Hedge et al., walk through a new behavioral model of the Stroop effect, fit the new model to the data from Hedge et al., extract test-retest reliability estimates from our new model, and compare them to those that are estimated using the traditional model (equation 1). We will end by discussing the implications of our findings for individual-differences research, including suggestions for future research.</p>
+</div>
+<div id="preprocessing-and-summarizing-the-stroop-data" class="section level2">
+<h2>Preprocessing and Summarizing the Stroop Data</h2>
+<p>To start, we can download the Stroop data from experiment 1 of Hedge et al., which is hosted on the Open Science Foundation webpage <a href="https://osf.io/cwzds/">linked here</a>.</p>
+<p>Then, we use the following R code to read in and preprocess the Stroop data:</p>
+<pre class="r"><code># For easy data manipulation
+library(foreach)
+library(dplyr)
+library(tidyr)
+library(broom)
+# For pretty plots
+library(ggplot2)
+# For nice tables
+library(knitr)
+# For intra-class correlations
+library(irr)
+# For Bayesian modeling
+library(rstan)
+# For some useful utility functions
+library(hBayesDM)</code></pre>
+<pre class="r"><code># Data path and individual subject file names
+data_path &lt;- &quot;~/Downloads/Study1-Stroop/&quot;
+files_t1 &lt;- list.files(data_path, pattern = &quot;*1.csv&quot;)
+files_t2 &lt;- list.files(data_path, pattern = &quot;*2.csv&quot;)
+
+# Create long-format stroop task data including all subjects
+long_stroop &lt;- foreach(i=seq_along(files_t1), .combine = &quot;rbind&quot;) %do% {
+  # For time 1
+  tmp_t1 &lt;- read.csv(file.path(data_path, files_t1[i]), header = F) %&gt;%
+    mutate(subj_num = i,
+           time = 1)
+  # For time 2 (about 3 weeks apart)
+  tmp_t2 &lt;- read.csv(file.path(data_path, files_t2[i]), header = F) %&gt;%
+    mutate(subj_num = i,
+           time = 2)
+  # Condition (0 = congruent, 1=neutral, 2=incongruent), 
+  # Correct (1) or incorrect (0), 
+  # Reaction time is in seconds
+  names(tmp_t1)[1:6] &lt;- names(tmp_t2)[1:6] &lt;- c(&quot;Block&quot;, &quot;Trial&quot;, &quot;Unused&quot;, 
+                                                &quot;Condition&quot;, &quot;Correct&quot;, &quot;RT&quot;)
+  rbind(tmp_t1, tmp_t2)
+}
+
+# Compute Stroop effect for each person at each time (equation 1)
+sum_stroop &lt;- long_stroop %&gt;%
+  group_by(subj_num, time) %&gt;%
+  summarize(stroop_eff = mean(RT[Condition==2]) - mean(RT[Condition==0]))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;subj_num&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code># Peak at the data
+kable(head(sum_stroop), digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">subj_num</th>
+<th align="right">time</th>
+<th align="right">stroop_eff</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.068</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0.025</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">0.053</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">0.012</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">0.066</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">0.073</td>
+</tr>
+</tbody>
+</table>
+<p>Now, we have a Stroop effect estimate for each subject at each timepoint, which we can use for further analyses. One thing to note is that unlike Hedge et al., we are not using any heiristic data cleaning rules. Specifically, Hedge et al. did not include response times (RTs) that were below 100 ms or above 3 times an indivual’s absolute median deviation of RTs in their computation of the Stroop effect. One other note is that the RTs in the raw data are in seconds (not ms). Here are the basic descriptives of our data:</p>
+<pre class="r"><code># Means and SDs of Stroop effect at each timepoint
+sum_stroop %&gt;%
+  ungroup() %&gt;%
+  group_by(time) %&gt;%
+  summarize(N = n(),
+            Mean = round(mean(stroop_eff), 3),
+            SD = round(sd(stroop_eff), 3)) %&gt;%
+  kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">time</th>
+<th align="right">N</th>
+<th align="right">Mean</th>
+<th align="right">SD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">47</td>
+<td align="right">0.081</td>
+<td align="right">0.036</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">47</td>
+<td align="right">0.059</td>
+<td align="right">0.030</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="traditional-analyses" class="section level2">
+<h2>Traditional Analyses</h2>
+<div id="testing-for-a-group-level-stroop-effect" class="section level3">
+<h3>Testing for a Group-level Stroop Effect</h3>
+<p>It is pretty clear from the descriptives above that there is a group-level Stroop effect, but we can conduct a <em>t</em>-test at each timepoint regardless:</p>
+<pre class="r"><code># Test for group-level Stroop effect at time 1
+sum_stroop %&gt;%
+  filter(time==1) %&gt;%
+  {t.test(.$stroop_eff)} %&gt;%
+  tidy() %&gt;%
+  kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">estimate</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">parameter</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+<th align="left">method</th>
+<th align="left">alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.081</td>
+<td align="right">15.418</td>
+<td align="right">0</td>
+<td align="right">46</td>
+<td align="right">0.071</td>
+<td align="right">0.092</td>
+<td align="left">One Sample t-test</td>
+<td align="left">two.sided</td>
+</tr>
+</tbody>
+</table>
+<p>Here, you can see that the Stroop effect is apparent at time 1, with a mean increase in RT during the incongruent trials of about .08 seconds (80 ms). We can also check time 2:</p>
+<pre class="r"><code># Test for group-level Stroop effect at time 2
+sum_stroop %&gt;%
+  filter(time==2) %&gt;%
+  {t.test(.$stroop_eff)} %&gt;%
+  tidy() %&gt;%
+  kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">estimate</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">parameter</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+<th align="left">method</th>
+<th align="left">alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.059</td>
+<td align="right">13.633</td>
+<td align="right">0</td>
+<td align="right">46</td>
+<td align="right">0.05</td>
+<td align="right">0.068</td>
+<td align="left">One Sample t-test</td>
+<td align="left">two.sided</td>
+</tr>
+</tbody>
+</table>
+<p>Looks good! The Stroop effect is slightly lower at time 2, but still comes out significant at the group level. From these analyses, it is clear that the Stroop effect is indeed replicable using equation 1.</p>
+</div>
+<div id="test-retest-reliability" class="section level3">
+<h3>Test-retest Reliability</h3>
+<p>To compute test-retest reliability as in Hedge et al., we will first reformat the data so that it can be used with the <code>irr</code> package, which allows us to estimate the <span class="math inline">\(ICC(2,1)\)</span>:</p>
+<pre class="r"><code># Format for test-retest analysis
+stroop_unpooled &lt;- sum_stroop %&gt;%
+  ungroup() %&gt;%
+  mutate(time = ifelse(time==1, &quot;Stroop_T1&quot;, &quot;Stroop_T2&quot;),
+         pooled = &quot;No&quot;, 
+         Replication = &quot;Sample Mean&quot;) %&gt;% # these &quot;pooled&quot; and Replication variables will come in later
+  spread(key = time, value = stroop_eff)
+
+# Intraclass correlation of stroop effect at time 1 and 2
+stroop_unpooled %&gt;%
+  select(Stroop_T1, Stroop_T2) %&gt;%
+  {icc(., model = &quot;twoway&quot;, type = &quot;agreement&quot;, unit = &quot;average&quot;)[c(1, 7:15)]} %&gt;%
+  as.data.frame() %&gt;%
+  kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">subjects</th>
+<th align="right">value</th>
+<th align="right">r0</th>
+<th align="right">Fvalue</th>
+<th align="right">df1</th>
+<th align="right">df2</th>
+<th align="right">p.value</th>
+<th align="right">conf.level</th>
+<th align="right">lbound</th>
+<th align="right">ubound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">47</td>
+<td align="right">0.578</td>
+<td align="right">0</td>
+<td align="right">2.951</td>
+<td align="right">46</td>
+<td align="right">13.419</td>
+<td align="right">0.017</td>
+<td align="right">0.95</td>
+<td align="right">0.059</td>
+<td align="right">0.793</td>
+</tr>
+</tbody>
+</table>
+<p>Here, we see that the <span class="math inline">\(ICC(2,1) = .58\)</span>, which is slightly lower compared to the results reported in Hedge et al. (<span class="math inline">\(ICC(2,1) = .6\)</span>). Remember, we did not use the same pre-processing steps as Hedge et al. (i.e. we used all trials to compute RTs, rather than removing those beyond certain thresholds), which is why we have slightly different results. We can additionally compute a traditional Pearson’s <span class="math inline">\(r\)</span> to assess test-retest reliability, which offers similar conclusions:</p>
+<pre class="r"><code># Pearson&#39;s correlation
+stroop_unpooled %&gt;%
+  select(Stroop_T1, Stroop_T2) %&gt;%
+  {cor.test(.$Stroop_T1, .$Stroop_T2)} %&gt;%
+  tidy() %&gt;%
+  kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">estimate</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">parameter</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+<th align="left">method</th>
+<th align="left">alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.503</td>
+<td align="right">3.908</td>
+<td align="right">0</td>
+<td align="right">45</td>
+<td align="right">0.253</td>
+<td align="right">0.691</td>
+<td align="left">Pearson’s product-moment correlation</td>
+<td align="left">two.sided</td>
+</tr>
+</tbody>
+</table>
+<p>In fact, Pearson’s <span class="math inline">\(r = .5\)</span>—even lower than the <span class="math inline">\(ICC(2,1)\)</span> estimate! This happens because the model we are using for the <span class="math inline">\(ICC(2,1)\)</span> estimate treats the individual-level Stroop effect estimates as average units (since they are averages across all trials), which affects how variance is estimated. Still, the main conclusion holds—with a test-retest reliability estimate of only <span class="math inline">\(.5\)</span> to <span class="math inline">\(.58\)</span>, the utility of the Stroop effect for individual-differences research is limited relative to more reliable measures.</p>
+</div>
+</div>
+<div id="building-a-generative-model" class="section level2">
+<h2>Building a Generative Model</h2>
+<p>While the above results paint a clear picture, there are a few problems with the methodology that could be improved upon to make better inference on individual-level Stroop estimates.</p>
+<p>First, when we average across the RT data before including the averages in a model (i.e. to compute the <span class="math inline">\(ICC(2,1)\)</span>), we are throwing away useful information by making the assumption that individual-level Stroop effects can be estimated without measurement error. We should be able to do much better by including <em>all trials</em> (not just averages) in the statistical model that we use to estimate test-retest reliability, which will allow us to build a hierarchical model that can pool information across individuals. By building our model to respect the structure of our data (e.g., trials within timepoints within subjects), we are able to gain a better understanding of the data-generating process that gives rise to the Stroop effect.</p>
+<p>Second, the Stroop task exhibits practice effects, which could attenuate <span class="math inline">\(ICC(2,1)\)</span> estimates. For example, if everyone becomes faster by timepoint 2, then the <span class="math inline">\(ICC(2,1)\)</span> will go down even if their are consistent individual differences across timepoints. In fact, plotting out the Stroop effects at each timepoint reveals evidence for practice effects:</p>
+<pre class="r"><code># Test-retest plot
+stroop_unpooled %&gt;%
+  ggplot(aes(x = Stroop_T1, y = Stroop_T2)) +
+  geom_abline(intercept = 0, slope = 1, linetype = 2, color = &quot;black&quot;, size = 1) +
+  geom_point(color = I(&quot;#b5000c&quot;)) +
+  theme_minimal(base_size = 20) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-9-1.svg" width="672" /></p>
+<p>Above, the black dotted line indicates the identity line, which is where all the red points (unpooled individual-level Stroop estimates) would fall if all subjects had the same Stroop effect estimates at each timepoint. Overall, we see that Stroop effects at time 2 are generally lower than at time 1, which is indicative of some form of practice effect.</p>
+<div id="the-hierarchical-bayesian-approach" class="section level3">
+<h3>The Hierarchical Bayesian Approach</h3>
+<p>Hierarchical Bayesian Analysis (HBA) offers a statistical framework that allows us to develop a model that better captures the data-generating distribution of the group-level Stroop effect. Specifically, HBA simultaneously: (1) uses information from each individual subject to inform a group-level estimate, and (2) uses group-level information to inform all individual-level estimates. Also known as partial pooling, the structure imposed by a hierarchical model therefore allows us to more precisely estimate individual-level effects compared to methods that do not use pooling, which can lead to better estimates of data-generating parameters (e.g., <a href="https://ccs-lab.github.io/papers/ahn2011jnpe/">Ahn et al., 2011</a>).</p>
+<p>Before walking through the equations, let’s first determine how we would like to structure our hierarchical model in a way that captures our assumptions. When most psychologists think of hierarchical modeling, they think of estimating “random slopes” or “random intercepts”, or some combination of the two. This style of thinking can sometimes obscure our actual intentions. Instead, we will think of hierarchical models as a way to encode our assumptions regarding different behavioral effects in the Stroop task. Specifically, we want a model that does the following:</p>
+<ol style="list-style-type: decimal">
+<li>Captures uncertainty in individual-level Stroop estimates from within-subject variability,</li>
+<li>Estimates the difference in RT between incongruent and congruent trials,</li>
+<li>Estimates the correlation between the difference score from (2) between timepoint 1 and 2 across subjects (i.e. <em>test-retest reliability</em>), and</li>
+<li>Does 1-3 within a single hierarchical model</li>
+</ol>
+<p>It is worth emphasizing that there are multiple ways we could construct a model to encode these assumptions (see Rouder &amp; Haaf’s word mentioned previously), and the model we will develop is only one example. Now, here is the model we will use:</p>
+<p><span class="math display">\[
+\begin{align*}
+\text{RT}_{i,t} &amp; \sim \text{Normal} (\mu_{i,t}, \sigma_{\text{condition}}) \\
+\mu_{i,t} &amp; = (\beta_{\text{congruent}_{1,i}} + \beta_{\Delta_{1,i}} \cdot I_{\text{condition}}) \cdot I_\text{time} + \\
+      &amp; ~~~~~ (\beta_{\text{congruent}_{2,i}} + \beta_{\Delta_{2,i}}  \cdot I_{\text{condition}}) \cdot (1-I_\text{time}) \\
+\begin{bmatrix} \beta_{\Delta_{1,i}} \\ \beta_{\Delta_{2,i}} \end{bmatrix} &amp; \sim \text{MVNormal} \bigg (\begin{bmatrix} \mu_{\beta_{\Delta_{1}}} \\ \mu_{\beta_{\Delta_{2}}} \end{bmatrix}, \mathbf{S}  \bigg ) \\
+\mathbf S     &amp; = \begin{pmatrix} \sigma_{\beta_{\Delta_{1}}} &amp; 0 \\ 0 &amp; \sigma_{\beta_{\Delta_{2}}} \end{pmatrix} \mathbf R \begin{pmatrix} \sigma_{\beta_{\Delta_{1}}} &amp; 0 \\ 0 &amp; \sigma_{\beta_{\Delta_{2}}} \end{pmatrix} \\
+\beta_{\text{congruent}_{1,i}} &amp; \sim \text{Normal} (\mu_{\beta_{\text{congruent}_1}}, \sigma_{\beta_{\text{congruent}_1}}) \\
+\beta_{\text{congruent}_{2,i}} &amp; \sim \text{Normal} (\mu_{\beta_{\text{congruent}_2}}, \sigma_{\beta_{\text{congruent}_2}}) \\
+\mu_{\beta_{\text{congruent}}}    &amp; \sim \text{Normal} (0, 1) \\
+\mu_{\beta_{\Delta}}            &amp; \sim \text{Normal} (0, 1) \\
+\sigma_{\beta_{\text{congruent}}} &amp; \sim \text{HalfCauchy} (0, 1) \\
+\sigma_{\beta_{\Delta}}         &amp; \sim \text{HalfCauchy} (0, 1) \\
+\sigma_{\text{condition}}           &amp; \sim \text{HalfCauchy} (0, 1) \\
+\mathbf R                           &amp; \sim \text{LKJcorr} (1)
+\end{align*}\tag{2}
+\]</span>
+Obviously, there is a lot going on here—yet, at its core, the model is not much different from a traditional linear regression model. Above, <span class="math inline">\(\text{RT}_{i,t}\)</span> indicates the response time for subject <span class="math inline">\(i\)</span> on trial <span class="math inline">\(t\)</span>. We assume that each <span class="math inline">\(\text{RT}_{i,t}\)</span> is distributed normally, with a mean <span class="math inline">\(\mu_{i,t}\)</span> and standard deviation <span class="math inline">\(\sigma_{\text{condition}}\)</span>. Note that a different standard deviation is assumed for the incongruent versus congruent conditions (indicated by <span class="math inline">\(\text{condition}\)</span>).</p>
+<p>The <span class="math inline">\(\mu_{i,t}\)</span> term is determined as a linear combination of some <span class="math inline">\(\beta\)</span> weights that we are estimating across conditions and timepoints. Specifically, <span class="math inline">\(\beta_{\text{congruent}_{1, i}}\)</span> can be thought of as an “intercept”, which captures the average <span class="math inline">\(\text{RT}\)</span> at timepoint 1 for subject <span class="math inline">\(i\)</span> (i.e. the first time they took the Stroop task). Then, <span class="math inline">\(\beta_{\Delta_{1, i}}\)</span> is a “slope” (or different score) that is added to the intercept term when the condition identifier (<span class="math inline">\(I_\text{condition}\)</span>) returns 1. Note that <span class="math inline">\(I_\text{condition}\)</span> returns 1 only for the incongruent trials, and returns 0 otherwise. In this way, <span class="math inline">\(\beta_{\Delta_{1, i}}\)</span> <em>is our estimate for the Stroop effect</em> for subject <span class="math inline">\(i\)</span> at the first timepoint. Importantly, the entire term representing the first timpeoint is then multiplied by <span class="math inline">\(I_\text{time}\)</span>, which indicates whether the current trial is from the first (1) or second (0) timepoint. Then, <span class="math inline">\(\beta_{\text{congruent}_{2, i}}\)</span> and <span class="math inline">\(\beta_{\Delta_{2, i}}\)</span> are interpreted in the same way, except they represent corresponding estimates for the second timepoint.</p>
+<p>To estimate test-retest reliability, we then make the assumption that our individual-level estimates for <span class="math inline">\(\beta_{\Delta_{1, i}}\)</span> and <span class="math inline">\(\beta_{\Delta_{2, i}}\)</span> (i.e. the Stroop effect estimates for each subject at timepoints 1 and 2) are drawn from a multivariate normal distribution, which allows us to estimate the Pearson’s correlation between Stroop effect timepoints across subjects <strong>in the same model that we use to estimate individual-level Stroop effects</strong>. The multivariate normal distribution assumes that the individual-level effects are drawn from group-level Stroop effects for timepoint 1 (<span class="math inline">\(\mu_{\beta_{\Delta_{1}}}\)</span>) and timepoint 2 (<span class="math inline">\(\mu_{\beta_{\Delta_{2}}}\)</span>), and with covariance matrix <span class="math inline">\(\bf{S}\)</span>. Covariance matrix <span class="math inline">\(\bf{S}\)</span> is itself constructed with the estimated SDs of each of the Stroop effects and correlation matrix <span class="math inline">\(\bf{R}\)</span>. <span class="math inline">\(\bf{R}\)</span> is where we get our test-retest reliability estimate.</p>
+<p>Then, we assume that the individual-level <span class="math inline">\(\beta_{\text{congruent}}\)</span> weights for each timepoint are drawn from separate group-level normal distributions, with means indicated by <span class="math inline">\(\mu_{\beta_{\text{congruent}_1}}\)</span> and <span class="math inline">\(\mu_{\beta_{\text{congruent}_2}}\)</span> and SDs indicated by <span class="math inline">\(\sigma_{\beta_{\text{congruent}_1}}\)</span> and <span class="math inline">\(\sigma_{\beta_{\text{congruent}_2}}\)</span>.</p>
+<p>Lastly, we have the prior distributions on the group-level parameters. These priors in particular are not really very informative, given that the RTs are in seconds (see the descriptives above). The one prior worth mentioning is the the <span class="math inline">\(\text{LKJcorr}\)</span> distribution, which specifies a prior on a correlation matrix. Since we specified 1 as the shape parameter and we are only estimating the correlation between two values, this particular prior is uniform from -1 to 1, which assumes that all possible correlations for test-retest reliability of the Stroop effect are equally likely. We could certainly do better, but this will be fine for a first pass at the data. For a more detailed description of this particular distribution and some informative visualizations, check out <a href="https://www.psychstatistics.com/2014/12/27/d-lkj-priors/">this great blog post</a>.</p>
+<p>Now that we have walked through the model, here is the <a href="https://mc-stan.org/">Stan</a> code that we will use to fit it:</p>
+<pre class="stan"><code>data {
+    int N;      // # of subjects
+    int N_cond; // # of conditions
+    int N_time; // # of timepoints
+    int T_max;  // max # of trials across subjects
+    real RT[N, N_cond, N_time, T_max]; // Reaction times for each subject, condition, timepoint, and trial
+}
+parameters {
+  // Correlation matrix for Stroop effect test-retest reliability
+  corr_matrix[N_time] R;
+  
+  // SDs for group-level parameters  
+  vector&lt;lower=0&gt;[N_time] sigma_con;
+  vector&lt;lower=0&gt;[N_time] sigma_delta;
+  
+  // SDs for normal model on RTs
+  vector&lt;lower=0&gt;[N_cond] sigma_RT;  
+  
+  // Means for group-level parameters
+  vector[N_time] mu_beta_con;  
+  vector[N_time] mu_beta_delta;
+  
+  // Individual-level parameters
+  vector[N_time] beta_con[N];
+  vector[N_time] beta_delta[N];
+}
+transformed parameters {
+  // Construct covariance matrix from SDs and correlation matrix
+  cov_matrix[N_time] S; 
+  S = quad_form_diag(R, sigma_delta);
+}
+model {
+  // Priors on group-level SDs and correlation matrix
+  R ~ lkj_corr(1); 
+  sigma_delta ~ normal(0, 1);
+  sigma_con   ~ normal(0, 1);
+  sigma_RT    ~ normal(0, 1); 
+  
+  // Priors on group-level means
+  mu_beta_con   ~ normal(0,1);
+  mu_beta_delta ~ normal(0,1);
+  
+  // Priors on individual parameters
+  beta_con[1] ~ normal(mu_beta_con[1], sigma_con[1]);
+  beta_con[2] ~ normal(mu_beta_con[2], sigma_con[2]);
+  beta_delta  ~ multi_normal(mu_beta_delta, S);
+    
+  // For each subject
+  for (i in 1:N) {
+    // Congruent at time 1
+    RT[i,1,1,:] ~ normal(beta_con[i,1], sigma_RT[1]);
+    // Incongruent at time 1
+    RT[i,2,1,:] ~ normal(beta_con[i,1] + beta_delta[i,1], sigma_RT[2]);
+    // Congruent at time 2
+    RT[i,1,2,:] ~ normal(beta_con[i,2], sigma_RT[1]);
+    // Incongruent at time 2
+    RT[i,2,2,:] ~ normal(beta_con[i,2] + beta_delta[i,2], sigma_RT[2]);
+  }
+}</code></pre>
+<p>The comments describe much of what is going on in the code, and I wrote it to match equation 2 as best as possible. The only major change worth noting is that as opposed to using identifiers as in equation 2 (e.g., <span class="math inline">\(I_\text{condition}\)</span> and <span class="math inline">\(I_\text{time}\)</span>), the Stan model has the different conditions and timepoints stored in different dimensions of a single array, which is more efficient. The underlying model is equivalent to equaiton 2.</p>
+</div>
+<div id="fitting-and-refining-our-model" class="section level3">
+<h3>Fitting and Refining Our Model</h3>
+<p>Now, we can prepare the data and fit the Stan model:</p>
+<pre class="r"><code># Number of subjects
+n_subj &lt;- length(unique(long_stroop$subj_num))
+# Number of conditions 
+n_cond &lt;- 2
+# Number of timepoints
+n_time &lt;- 2
+# All subjects have 240 trials within each condition within timepoints
+T_max &lt;- 240
+
+# Create RT data array for stan; dims = (subject, condition, time, trial)
+RT &lt;- array(NA, dim = c(n_subj, n_cond, n_time, T_max))
+for (i in 1:n_subj) {
+  # RTs for congruent condition at time 1
+  RT[i, 1, 1,] = with(long_stroop, RT[subj_num==i &amp; Condition==0 &amp; time==1])
+  # RTs for incongruent condition at time 1
+  RT[i, 2, 1,] = with(long_stroop, RT[subj_num==i &amp; Condition==2 &amp; time==1])
+  # RTs for congruent condition at time 2
+  RT[i, 1, 2,] = with(long_stroop, RT[subj_num==i &amp; Condition==0 &amp; time==2])
+  # RTs for incongruent condition at time 2
+  RT[i, 2, 2,] = with(long_stroop, RT[subj_num==i &amp; Condition==2 &amp; time==2])
+}
+
+# Stan-ready data list
+stan_dat &lt;- list(N      = n_subj,
+                 N_cond = n_cond,
+                 N_time = n_time,
+                 T_max  = T_max,
+                 RT     = RT)
+
+# Fit the hierarchical model
+fit_m1 &lt;- sampling(stroop_m1,
+                   data    = stan_dat,
+                   iter    = 2000, 
+                   warmup  = 500,
+                   chains  = 3,
+                   cores   = 3, 
+                   seed    = 2)</code></pre>
+<pre><code>## Warning: There were 451 divergent transitions after warmup. See
+## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+## to find out why this is a problem and how to eliminate them.</code></pre>
+<pre><code>## Warning: There were 1 chains where the estimated Bayesian Fraction of Missing Information was low. See
+## http://mc-stan.org/misc/warnings.html#bfmi-low</code></pre>
+<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<pre><code>## Warning: The largest R-hat is NA, indicating chains have not mixed.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#r-hat</code></pre>
+<pre><code>## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<p>Great! The model runs fine, although we get warning messages about divergent transitions. This happens in Stan because the sampler used (i.e. the No-U-Turn Hamiltonian Monte Carlo sampler) returns <em>divergences</em> when the sampler explores difficult parts of the parameter space. Such a large number of divergences is problematic, suggesting that we may not have explored important parts of the parameter space. This often happens when the means and SDs of hierarchical parameters are correlated in strange ways, which we can confirm by checking the bivariate distributions:</p>
+<pre class="r"><code># Pairs plot of the group-level congruent cond. means and SDs
+pairs(fit_m1, pars = c(&quot;mu_beta_con&quot;, &quot;sigma_con&quot;))</code></pre>
+<p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-12-1.svg" width="672" /></p>
+<p>The red dots above indicate the divergent transitions. It is clear that the divergences are occuring most frequently in parts of the parameter space that are funnel-shaped. Now known as <a href="https://mc-stan.org/docs/2_18/stan-users-guide/reparameterization-section.html">Neal’s funnel</a>, we can take care of this problem by re-parameterizing the model such that the hierarchical means and SDs are less dependent on each other (i.e. a non-centered parameterization). Additionally, we will re-parameterize the correlation matrix using a <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decomposition</a>, which will also help with estimation a bit. I will not go into more detail about why Cholesky decomposition is useful, and instead refer interested readers to the wiki page referred to above.</p>
+<p>The updated Stan code below uses a <a href="https://mc-stan.org/docs/2_18/stan-users-guide/reparameterization-section.html">non-centered parameterization</a> to estimate all hierarchical parameters, which is mathematically identical to the model above but allows for better parameter estimation due to changes in the shape of the parameter space that Stan’s NUTS-HMC sampler needs to explore.</p>
+<pre class="stan"><code>data {
+    int N;      // # of subjects
+    int N_cond; // # of conditions
+    int N_time; // # of timepoints
+    int T_max;  // max # of trials across subjects
+    real RT[N, N_cond, N_time, T_max]; // Reaction times for each subject, condition, timepoint, and trial
+}
+parameters {
+  // Group-level correlation matrix (cholesky factor for faster computation)
+  cholesky_factor_corr[2] R_cholesky; 
+  
+  // Group-level parameter SDs
+  vector&lt;lower=0&gt;[2] sigma_con;
+  vector&lt;lower=0&gt;[2] sigma_delta; 
+  
+  // Group-level SDs for normal model
+  vector&lt;lower=0&gt;[2] sigma_RT;
+  
+  // Group-level parameter means
+  vector[2] mu_beta_con;        
+  vector[2] mu_beta_delta;      
+  
+  // Individual-level parameters (before being transformed)
+    matrix[N,2] beta_con_pr;  
+    matrix[2,N] beta_delta_pr; // order flipped here for operation below
+}
+transformed parameters {
+  // Individual-level parameter off-sets (for non-centered parameterization)
+  matrix[2,N] beta_delta_tilde;
+  
+  // Individual-level parameters 
+  matrix[N,2] beta_con;
+  matrix[N,2] beta_delta;
+  
+  // Construct inidividual offsets (for non-centered parameterization)
+  beta_delta_tilde = diag_pre_multiply(sigma_delta, R_cholesky) * beta_delta_pr; 
+  
+  // Compute individual-level parameters from non-centered parameterization
+  for (i in 1:N) {
+    // Congruent at time 1
+    beta_con[i,1] = mu_beta_con[1] + sigma_con[1] * beta_con_pr[i,1];
+    // Congruent at time 2
+    beta_con[i,2] = mu_beta_con[2] + sigma_con[2] * beta_con_pr[i,2];
+    // Stroop effect at time 1
+    beta_delta[i,1] = mu_beta_delta[1] + beta_delta_tilde[1, i];
+    // Stroop effect at time 2
+    beta_delta[i,2] = mu_beta_delta[2] + beta_delta_tilde[2, i];
+  }
+}
+model {
+  // Prior on cholesky factor of correlation matrix
+  R_cholesky ~ lkj_corr_cholesky(1); 
+  
+  // Priors on group-level SDs
+  sigma_delta ~ cauchy(0, 1);
+  sigma_con   ~ cauchy(0, 1);
+  sigma_RT    ~ cauchy(0, 1); 
+  
+  // Priors on individual-level parameters
+  to_vector(beta_delta_pr) ~ normal(0, 1); 
+  to_vector(beta_con_pr)   ~ normal(0, 1);
+    
+  // For each subject
+  for (i in 1:N) {
+    // Congruent at time 1
+    RT[i,1,1,:] ~ normal(beta_con[i,1], sigma_RT[1]);
+    // Incongruent at time 1
+    RT[i,2,1,:] ~ normal(beta_con[i,1] + beta_delta[i,1], sigma_RT[2]);
+    // Congruent at time 2
+    RT[i,1,2,:] ~ normal(beta_con[i,2], sigma_RT[1]);
+    // Incongruent at time 2
+    RT[i,2,2,:] ~ normal(beta_con[i,2] + beta_delta[i,2], sigma_RT[2]);
+  }
+}
+generated quantities { 
+  corr_matrix[2] R;
+    // Reconstruct correlation matrix from cholesky factor
+  R = R_cholesky * R_cholesky&#39;;
+} </code></pre>
+<p>Now, let’s fit the non-centered model:</p>
+<pre class="r"><code># Fit the non-centered hierarchical model
+fit_m2 &lt;- sampling(stroop_m2, 
+                   data    = stan_dat,
+                   iter    = 2000, 
+                   warmup  = 500,
+                   chains  = 3,
+                   cores   = 3, 
+                   seed    = 2)</code></pre>
+<p>And just like that, no divergent transitions! Also, we get the added bonus of slightly faster computation. We can again look at the pairs plot to see what happened to Neal’s funnel:</p>
+<pre class="r"><code># Pairs plot of the group-level congruent cond. means and SDs
+pairs(fit_m2, pars = c(&quot;mu_beta_con&quot;, &quot;sigma_con&quot;))</code></pre>
+<p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-15-1.svg" width="672" /></p>
+<p>Above, you can see that the funnel has disappeared completely. Instead, we have well-behaved, more-or-less elliptical bivariate distributions (which MCMC samplers love).</p>
+<p>We also need to check convergence more generally, using both visual and quantitative diagnostics. First, we can graph the traceplots, which should look like “furry caterpillars”:</p>
+<pre class="r"><code># Check all group-level parameters (and test-retest correlation estimate)
+traceplot(fit_m2, pars = c(&quot;mu_beta_con&quot;, &quot;mu_beta_delta&quot;, &quot;sigma_con&quot;, &quot;sigma_delta&quot;, &quot;sigma_RT&quot;, &quot;R[1,2]&quot;))</code></pre>
+<p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-16-1.svg" width="672" /></p>
+<p>These look good. We would usually also check individual-level parameters, but for the sake of brevity we can look at some quantitative diagnostics. In particular, <span class="math inline">\(\hat{R}\)</span> (a.k.a. the Gelman-Rubin statistic) is a measure of within- relative to between-chain variance, which should be close to 1 for all parameters if chains mix well. We can easily plot a distribution of <span class="math inline">\(\hat{R}\)</span> for all parameters in the model as follows:</p>
+<pre class="r"><code># rstan&#39;s default plotting method
+stan_rhat(fit_m2, bins = 30)</code></pre>
+<pre><code>## Warning: Removed 3 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-17-1.svg" width="672" /></p>
+<p>Here, all the <span class="math inline">\(\hat{R}\)</span> statistics are very close to 1. In combination with the traceplots above and lack of divergences, we can be pretty sure that the three chains we used have converged.</p>
+</div>
+<div id="making-inference-with-our-model" class="section level3">
+<h3>Making Inference with Our Model</h3>
+<p>Now, the next step is to extract the parameter estimates and check the estimated correlation (i.e. test-retest estimate) across the individual-level Stroop effect parameters at each timepoint! First, we can plot the posterior distribution of the test-retest correlation:</p>
+<pre class="r"><code># Extract parameters from model
+pars &lt;- extract(fit_m2)
+
+# Plot density of test-retest correlation estimate
+qplot(pars$R[,1,2], geom = &quot;density&quot;, fill = I(&quot;#b5000c&quot;)) +
+  ggtitle(paste0(&quot;Posterior Mode = &quot;, round(estimate_mode(pars$R[,1,2]), 2))) +
+  xlab(&quot;Test-Retest Correlation&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &quot;none&quot;)</code></pre>
+<p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-18-1.svg" width="672" /></p>
+<p>The results are quite stunning—the mass of the posterior is up against 1, with a mode of <span class="math inline">\(0.96\)</span>. Such a high test-retest reliability estimate is clearly at odds with the findings of Hedge et al., who reported an estimate of <span class="math inline">\(ICC(2,1) = .6\)</span>.</p>
+<p>As discussed before, it is the pooling of information both across individual subjects and across timepoints within subjects that gives us these results. Now that our model is fit, we can readily visualize this pooling. The plot below shows the unpooled estimates from equation 1 (shown in our first figure at the start of the post), and the pooled estimates from our non-centered hierarchical model:</p>
+<pre class="r"><code># Extracting posterior modes of individual-level Stroop effect estimates
+stroop_pooled &lt;- apply(pars$beta_delta, c(2,3), mean) %&gt;%
+  as.data.frame() %&gt;%
+  rename(Stroop_T1 = V1,
+         Stroop_T2 = V2) %&gt;%
+  mutate(subj_num = row_number(),
+         pooled = &quot;Yes&quot;)
+# Pooled correlation
+pooled_cor &lt;- with(stroop_pooled, round(cor(Stroop_T1[pooled==&quot;Yes&quot;], Stroop_T2[pooled==&quot;Yes&quot;]), 2))
+
+# My favorite visualization of all time
+bind_rows(stroop_unpooled, stroop_pooled) %&gt;%
+  mutate(subj_num = as.factor(subj_num)) %&gt;%
+  ggplot(aes(x = Stroop_T1, y = Stroop_T2)) +
+  ggtitle(paste0(&quot;Posterior Means r = &quot;, pooled_cor)) +
+  geom_abline(intercept = 0, slope = 1, linetype = 2, color = &quot;black&quot;, size = 1) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=1/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=2/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=3/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=4/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=5/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=6/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=7/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=8/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=9/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=.99, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  geom_line(aes(group = subj_num), size = 1/4) +
+  geom_point(aes(group = subj_num, color = pooled)) +
+  scale_color_manual(&quot;Pooled?&quot;,
+                     values = c(&quot;#990000&quot;, &quot;#fee8c8&quot;)) +
+  theme_minimal(base_size = 20) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-19-1.svg" width="672" /></p>
+<p>Here, we can see that the pooled estimates (individual-level posterior means pictured here) are actually highly consistent across timepoints within individuals. In fact, the correlation between the posterior means of the individual-level Stroop effects at time 1 versus time 2 is <span class="math inline">\(r = 0.98\)</span>. We cannot really get much better than that! Of course, there is more uncertainty in the correlation matrix we estimated (pictured above), but this plot shows just how powerful the pooling from a well-constructed hierarchical model can be. Moreover, the hierarchical pooling removes the need to get rid of outliers at the individual-subject level—as you can see, data-points that fall far from the group average (which usually show large variance) shrink more strongly toward the group-level average.</p>
+</div>
+</div>
+<div id="on-averaging-before-modeling" class="section level2">
+<h2>On Averaging Before Modeling</h2>
+<p>If you are not yet convinced that the traditional practice of averaging across trials before modeling a correlation is sub-optimal, we can actually view such practices as a special case within the context of the generative model that we developed above (equation 2). Specifically, equation 1 assumes that individual-level Stroop effects can be estimated with no measurement error—but how much does this actually affect our inference? We will explore this question below before summarizing our findings and discussing implications for future research on behavioral tasks.</p>
+<p>Let’s begin with a thought experiment. If we were to encode the assumption of 0 measurement error into the generative model that we developed, how would we do so? At first, we may think to change the prior distributions, the likelihood of the model, or some other aspect of the model that can encode certainty/uncertainty. However, an idea that leads to better intuition of the implications is that we could:</p>
+<ol style="list-style-type: decimal">
+<li>Take our dataset containing all trials from all subjects in each condition/timepoint,</li>
+<li><strong><em>Append our dataset to itself an infinite number of times</em></strong> (yes, literally copy pasting your dataset repeatedly to create infinite data for each subject), and</li>
+<li>Fit the data using the generative model from equation 2.</li>
+</ol>
+<p>If we follow these three steps, the test-retest correlation we estimate in equation 2 will converge to the correlation we get by using the traditional analysis described by equation 1 and surrounding text. This follows because as we continue to artificially replicate our dataset ad infinitum, the estimates for each individual-level estimate will approach the sample mean, and the uncertainty estimates will reduce to single points—this is identical to what we are doing in equation 1. Therefore, <strong>the traditional practice of averaging before modeling is as functionally problematic as artificially replicating our datasets an infinite number of times before fitting our model</strong>. In fact, we can demonstrate this by observing what happens as we artificially replicate our dataset an increasing number of times. Of course, we cannot do this anywhere near an infinite number of times, but we can at least get a sense of the problem using this method. The R code below does exactly this, varying the number of artificially replicated datasets <span class="math inline">\(\in \{1, 2, 4, 8, 16, 32\}\)</span>.</p>
+<pre class="r"><code># Number of artificially replicated datasets
+reps &lt;- c(1, 2, 4, 8, 16, 32)
+
+# Looping through each replication and saving model fits
+results &lt;- foreach(r=reps) %do% {
+  # Same as above
+  n_subj &lt;- length(unique(long_stroop$subj_num))
+  n_cond &lt;- 2
+  n_time &lt;- 2
+  # If we multiply T_max by the reps variable, the number of trials alloted in 
+  # the `RT` array for each condition/timepoint will increase accordingly
+  T_max &lt;- 240 * r
+  
+  # Create RT data array for stan; dims = (subject, condition, time, trial)
+  RT &lt;- array(NA, dim = c(n_subj, n_cond, n_time, T_max))
+  for (i in 1:n_subj) {
+    # Because we created an array that is larger than the vector of data that
+    # we assigned to it, R will (by default) replicate the observations we are
+    # assigning to each condition/timepoint to fill the corresponding RT array
+    RT[i, 1, 1,] = with(long_stroop, RT[subj_num==i &amp; Condition==0 &amp; time==1])
+    RT[i, 2, 1,] = with(long_stroop, RT[subj_num==i &amp; Condition==2 &amp; time==1])
+    RT[i, 1, 2,] = with(long_stroop, RT[subj_num==i &amp; Condition==0 &amp; time==2])
+    RT[i, 2, 2,] = with(long_stroop, RT[subj_num==i &amp; Condition==2 &amp; time==2])
+  }
+  
+  # Stan-ready data list
+  rep_dat &lt;- list(N      = n_subj,
+                  N_cond = n_cond,
+                  N_time = n_time,
+                  T_max  = T_max,
+                  RT     = RT)
+
+  # Fit the model with artificially replicated data
+  tmp_fit &lt;- sampling(stroop_m2,
+                      data    = rep_dat,
+                      iter    = 2000, 
+                      warmup  = 500,
+                      chains  = 3,
+                      cores   = 3, 
+                      seed    = 2)
+  
+  # Save model fit in list (`results`) 
+  tmp_fit
+}</code></pre>
+<pre><code>## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess
+
+## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess
+
+## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<pre><code>## Warning: There were 4 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+## http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
+<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<pre><code>## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<p>After fitting everything, we can visualize how the estimated test-retest correlation changes with respect the the number of times we artificially replicated our data (remember that the correlation should converge to the unpooled sample correlation):</p>
+<pre class="r"><code># Plot posterior distribution of test-retest correlation across replications
+foreach(i=seq_along(results), .combine = &quot;rbind&quot;) %do% {
+    data.frame(R = rstan::extract(results[[i]])$R[,1,2]) %&gt;%
+        mutate(Replication = as.factor(reps[i]))
+} %&gt;%
+    ggplot(aes(x = Replication, y = R)) +
+    geom_violin(fill = I(&quot;#b5000c&quot;)) +
+    stat_summary(aes(x = Replication, y = R), fun.y = mean, geom = &quot;point&quot;, size = 2) +
+    geom_hline(yintercept = .5, linetype = 2, color = I(&quot;black&quot;)) +
+    theme_minimal(base_size = 20) +
+    theme(panel.grid = element_blank())</code></pre>
+<pre><code>## Warning: `fun.y` is deprecated. Use `fun` instead.</code></pre>
+<p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-21-1.svg" width="672" /></p>
+<p>As expected, as we artificially replicated our dataset more and more, the model-estimated test-retest correlation (posterior means indicated by black points) converges toward the unpooled sample Pearson’s correlation (indicated by the dashed black line). Next, let’s take a look at this effect at the individual-level by plotting out the changes in posterior means with respect to the number of artificially replicated datasets:</p>
+<pre class="r"><code># Plot convergence of estimated individual-level posterior means with sample means (Sample Means = equation 1/unpooled estimates)
+foreach(i=seq_along(results), .combine = &quot;rbind&quot;) %do% {
+  apply(rstan::extract(results[[i]])$beta_delta, c(2,3), mean) %&gt;%
+  as.data.frame() %&gt;%
+  rename(Stroop_T1 = V1,
+         Stroop_T2 = V2) %&gt;%
+  mutate(subj_num = row_number(),
+         Replication = as.character(reps[i]))
+} %&gt;%
+  bind_rows(stroop_unpooled) %&gt;%
+  mutate(subj_num = as.factor(subj_num),
+         Replication = factor(Replication, 
+                              levels = c(&quot;1&quot;, &quot;2&quot;, &quot;4&quot;, &quot;8&quot;, &quot;16&quot;, &quot;32&quot;, &quot;Sample Mean&quot;),
+                              labels = c(&quot;1&quot;, &quot;2&quot;, &quot;4&quot;, &quot;8&quot;, &quot;16&quot;, &quot;32&quot;, &quot;Sample Mean&quot;))) %&gt;%
+  ggplot(aes(x = Stroop_T1, y = Stroop_T2)) +
+  geom_abline(intercept = 0, slope = 1, linetype = 2, color = &quot;black&quot;, size = 1) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=1/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=2/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=3/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=4/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=5/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=6/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=7/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=8/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=9/10, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  stat_ellipse(geom=&quot;polygon&quot;, type=&quot;norm&quot;, level=.99, size=0, alpha=1/10, fill=&quot;gray&quot;) +
+  geom_line(aes(group = subj_num), size = 1/4) +
+  geom_point(aes(group = subj_num, color = Replication)) +
+  scale_color_brewer(&quot;Number of\nReplications&quot;,
+                     type = &quot;seq&quot;,
+                     palette = &quot;Reds&quot;) +
+  theme_minimal(base_size = 20) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories_files/figure-html/unnamed-chunk-22-1.svg" width="672" /></p>
+<p>Similar to the group-level test-retest correlation estimate, we see that the individual posterior means converge to the unpooled sample means as we increase the number of times we artificially replicate our data before fitting the model.</p>
+</div>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<p>In this post, we showed that hierarchical models can: (1) pool information across individual subjects to more precisely estimate individual-level behavioral effects, and subsequently (2) increase test-retest reliability esimtates to the extent that we can infer strong, reliable individual differences between subjects in behavioral tasks. Therefore, our findings show that despite the conclusions drawn by Hedge et al., robust effects can in fact be reliable, with the caveat that we need to use more computationally expensive models that are more difficult to work with. Our findings are consistent with <a href="https://link.springer.com/article/10.3758/s13423-018-1558-y">Rouder &amp; Haaf (2019)</a>, who similarly showed that hierarchical models (even using a different functional form) are necessary to properly account for the high measurement error of behavioral effects when the goal is to make inference on individual-differences. I would highly recommend taking a look at Rouder &amp; Haaf’s work if you are interested in reading more about the benefits of hierarchical modeling in the context of behavioral tasks.</p>
+<p>More broadly, our results show the benefits of thinking about the data-generating process when analyzing behavioral data. For example, traditional analyses (e.g., equation 1) fail to consider variability within subjects, which is detrimental when we aim to make inference at the individual-subject level. Specifically, by failing to consider within-subject variability, we implicitly assume that behavioral summary statistics are infinitely precise—when made explicit, it is apparent just how inconsistent such assumptions are with our existing knowledge regarding behavioral data.</p>
+<p>Equally important to the statistical issues that our results reveal are the ethical concerns brought forth by our last analysis. Specifically, we showed that averaging across trials before analyzing behavioral summary statistics is equivalent to artificially replicating each subject’s data an infinite number of times before fitting an inferential statistical model. Put in these terms, we can see just how problematic measurement error is when not properly accounted for. For example, if a researcher were caught artificially replicating their data before analyzing it, they would immediately be ridiculed—and likely formally investigated—for committing research misconduct and/or fraud. However, as it currently stands, researchers regularly commit to the practice of averaging before modeling, and we would never think to suggest that such behavior is outright fraud. This raises the question—should we?</p>
+<p><em>Thanks for reading! I learned quite a lot writing this post, and I hope you gained some insight reading it</em> :D</p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/r/">R</a>
+  
+  <a class="badge badge-light" href="/tag/bayesian-statistics/">Bayesian Statistics</a>
+  
+</div>
+
+
+
+<div class="share-box">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/&amp;text=Thinking%20generatively:%20Why%20do%20we%20use%20atheoretical%20statistical%20models%20to%20test%20substantive%20psychological%20theories?" target="_blank" rel="noopener" class="share-btn-twitter" aria-label="twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/&amp;t=Thinking%20generatively:%20Why%20do%20we%20use%20atheoretical%20statistical%20models%20to%20test%20substantive%20psychological%20theories?" target="_blank" rel="noopener" class="share-btn-facebook" aria-label="facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Thinking%20generatively:%20Why%20do%20we%20use%20atheoretical%20statistical%20models%20to%20test%20substantive%20psychological%20theories?&amp;body=http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/" target="_blank" rel="noopener" class="share-btn-email" aria-label="envelope">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/&amp;title=Thinking%20generatively:%20Why%20do%20we%20use%20atheoretical%20statistical%20models%20to%20test%20substantive%20psychological%20theories?" target="_blank" rel="noopener" class="share-btn-linkedin" aria-label="linkedin-in">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Thinking%20generatively:%20Why%20do%20we%20use%20atheoretical%20statistical%20models%20to%20test%20substantive%20psychological%20theories?%20http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/" target="_blank" rel="noopener" class="share-btn-whatsapp" aria-label="whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/&amp;title=Thinking%20generatively:%20Why%20do%20we%20use%20atheoretical%20statistical%20models%20to%20test%20substantive%20psychological%20theories?" target="_blank" rel="noopener" class="share-btn-weibo" aria-label="weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="http://haines-lab.com/"><img class="avatar mr-3 avatar-circle" src="/author/nathaniel-haines/avatar_hud6e4cbd359920a21ae5755d0b163666c_1382354_270x270_fill_q75_lanczos_center.jpg" alt="Nathaniel Haines"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="http://haines-lab.com/">Nathaniel Haines</a></h5>
+      <h6 class="card-subtitle">Computational Psychologist &amp; Data Scientist, PhD</h6>
+      <p class="card-text">An academic Bayesian who is currently exploring the high dimensional posterior distribution of life</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/nate__haines" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=lg741SgAAAAJ" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/Nathaniel-Haines" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/nathaniel-haines-216049101/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  <section id="comments">
+    
+<div id="disqus_thread"></div>
+<script>
+  var disqus_config = function () {
+    
+    
+    
+  };
+  (function() {
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+      return;
+    }
+    var d = document, s = d.createElement('script'); s.async = true;
+    s.src = 'https://' + "haines-lab-com" + '.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </section>
+  
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/">A Series on Building Formal Models of Classic Psychological Effects: Part 1, the Dunning-Kruger Effect</a></li>
+      
+      <li><a href="/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/">On Curbing Your Measurement Error: From Classical Corrections to Generative Models</a></li>
+      
+      <li><a href="/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/">On the equivalency between frequentist Ridge (and LASSO) regression and hierarchial Bayesian regression</a></li>
+      
+      <li><a href="/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/">Automating Computational Reproducibility in R using renv, Docker, and GitHub Actions</a></li>
+      
+      <li><a href="/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/">Human Choice and Reinforcement Learning (3)</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Nathaniel Haines, PhD
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-themes" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    <script src="/js/vendor-bundle.min.b73dfaac3b6499dc997741748a7c3fe2.js"></script>
+
+    
+    
+    
+      
+      
+        <script src="https://cdn.jsdelivr.net/gh/desandro/imagesloaded@v4.1.4/imagesloaded.pkgd.min.js" integrity="sha512-S5PZ9GxJZO16tT9r3WJp/Safn31eu8uWrzglMahDT4dsmgqWonRY9grk3j+3tfuPr9WJNsfooOR7Gi7HL5W2jw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/metafizzy/isotope@v3.0.6/dist/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js" integrity="sha512-Ypjm0o7jOxAd4hpdoppSEN0TQOC19UtPAqD+4s5AlXmUvbmmS/YMxYqAqarQYyxTnB6/rqip9qcxlNB/3U9Wdg==" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/r.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/python.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/latex.min.js" crossorigin="anonymous"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.js" integrity="" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdn.jsdelivr.net/gh/krisk/Fuse@v3.2.1/dist/fuse.min.js" integrity="sha512-o38bmzBGX+hD3JHWUFCDA09btWaqrNmoJ3RXLlrysA7PP01Kgs4UlE4MhelE1v5dJR3+cxlR4qQlotsW7jKsnw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/julmot/mark.js@8.11.1/dist/jquery.mark.min.js" integrity="sha512-mhbv5DqBMgrWL+32MmsDOt/OAvqr/cHimk6B8y/bx/xS88MVkYGPiVv2ixKVrkywF2qHplNRUvFsAHUdxZ3Krg==" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+      <script id="dsq-count-scr" src="https://haines-lab-com.disqus.com/count.js" async></script>
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+
+    
+    
+    
+    <script id="page-data" type="application/json">{"use_headroom":true}</script>
+
+    
+    
+      <script src="/js/wowchemy-headroom.1cb9e2fc8399acee94eab837265b73bf.js" type="module"></script>
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.247fd8f54253895301106e3006f53f38.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

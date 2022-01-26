@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jasmin Vassileva | Computational Psychology</title>
+    <link>http://haines-lab.com/author/jasmin-vassileva/</link>
+      <atom:link href="http://haines-lab.com/author/jasmin-vassileva/index.xml" rel="self" type="application/rss+xml" />
+    <description>Jasmin Vassileva</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Fri, 05 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png</url>
+      <title>Jasmin Vassileva</title>
+      <link>http://haines-lab.com/author/jasmin-vassileva/</link>
+    </image>
+    
+    <item>
+      <title>The Outcome‐Representation Learning Model: A Novel Reinforcement Learning Model of the Iowa Gambling Task</title>
+      <link>http://haines-lab.com/publication/haines_cog_sci_2018/</link>
+      <pubDate>Fri, 05 Oct 2018 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/publication/haines_cog_sci_2018/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

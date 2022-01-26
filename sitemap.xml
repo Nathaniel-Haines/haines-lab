@@ -1,429 +1,181 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/</loc>
-      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
-    </url>
-    
   
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/haines_psychopathology_2020/</loc>
-      <lastmod>2020-07-14T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/</loc>
-      <lastmod>2020-06-13T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/haines_cps_2020/</loc>
-      <lastmod>2020-04-24T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/romeu_haines_dad_2019/</loc>
-      <lastmod>2019-11-03T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/post/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/</loc>
-      <lastmod>2019-09-05T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/post/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/</loc>
-      <lastmod>2019-05-06T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/haines_dev_psych_2019/</loc>
-      <lastmod>2019-04-01T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/haines_plos_one_2019/</loc>
-      <lastmod>2019-02-05T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/haines_cog_sci_2018/</loc>
-      <lastmod>2018-10-05T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/</loc>
-      <lastmod>2018-09-08T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/project/feat/</loc>
-      <lastmod>2018-01-22T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/easyml/</loc>
-      <lastmod>2017-10-31T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/minority_stress/</loc>
-      <lastmod>2017-10-25T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/talk/math_psych_2017/</loc>
-      <lastmod>2017-07-23T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/</loc>
-      <lastmod>2017-04-07T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/post/2017-04-04-choice_rl_1/</loc>
-      <lastmod>2017-04-04T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/hbayesdm/</loc>
-      <lastmod>2017-03-06T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/academic/</loc>
-      <lastmod>2017-01-01T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication/</loc>
-      <lastmod>2017-01-01T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/talk/</loc>
-      <lastmod>2017-01-01T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/talk/cog_brown_1/</loc>
-      <lastmod>2016-11-30T12:10:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/project/easyml/</loc>
-      <lastmod>2016-04-27T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/project/hbayesdm/</loc>
-      <lastmod>2016-04-27T00:00:00+00:00</lastmod>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication_types/2/</loc>
-      <lastmod>2020-07-14T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/bayesian-statistics/</loc>
-      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/categories/</loc>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/cogmod/</loc>
-      <lastmod>2017-07-23T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/</loc>
-      <lastmod>2016-04-20T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/facial-expressions/</loc>
-      <lastmod>2018-01-22T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/categories/formal-models/</loc>
-      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/learning/</loc>
-      <lastmod>2018-09-08T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/machine-learning/</loc>
-      <lastmod>2019-05-06T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/machinelearn/</loc>
-      <lastmod>2017-07-23T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/categories/measurement/</loc>
-      <lastmod>2019-09-05T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/categories/measurement-error/</loc>
-      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/modeling/</loc>
-      <lastmod>2018-09-08T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/post/</loc>
-      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/project/</loc>
-      <lastmod>2018-01-22T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/publication_types/</loc>
-      <lastmod>2020-07-14T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/r/</loc>
-      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/regularization/</loc>
-      <lastmod>2019-05-06T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/categories/reinforcement-learning/</loc>
-      <lastmod>2018-09-08T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/categories/statistical-modeling/</loc>
-      <lastmod>2021-01-10T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
-      <loc>http://haines-lab.com/tags/</loc>
-      <lastmod>2017-01-01T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-</urlset>
+  <url>
+    <loc>http://haines-lab.com/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/categories/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/computational-reproducibility/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/docker/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/docker/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/github/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/programming/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/r/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/r/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tags/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/authors/</loc><lastmod>2021-06-17T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/nathaniel-haines/</loc><lastmod>2021-06-17T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/event/</loc><lastmod>2021-06-17T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/talk/the-role-of-reward-and-punishment-learning-in-externalizing-adolescents-a-joint-generative-model-of-traits-and-behavior/</loc><lastmod>2021-06-17T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication-type/7/</loc><lastmod>2021-06-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/haines_2021_diss/</loc><lastmod>2021-06-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication_types/</loc><lastmod>2021-06-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/</loc><lastmod>2021-06-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/source-themes/</loc><lastmod>2021-06-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/talk/an-introduction-to-bayesian-data-analysis/</loc><lastmod>2021-04-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/bayesian-statistics/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/formal-models/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/measurement-error/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/statistical-modeling/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/talk/generative-models-can-advance-the-social-behavioral-and-brain-sciences/</loc><lastmod>2020-10-14T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication-type/2/</loc><lastmod>2020-07-21T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/hairong-gu/</loc><lastmod>2020-07-21T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/hunter-hahn/</loc><lastmod>2020-07-21T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/jay-myung/</loc><lastmod>2020-07-21T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/julie-teater/</loc><lastmod>2020-07-21T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/mark-pitt/</loc><lastmod>2020-07-21T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/ahn_2020/</loc><lastmod>2020-07-21T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/woo-young-ahn/</loc><lastmod>2020-07-21T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/yitong-shen/</loc><lastmod>2020-07-21T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/talk/using-decision-theory-to-model-anxiety-impulsivity-interactions-and-impulsive-behavior/</loc><lastmod>2020-07-20T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/haines_psychopathology_2020/</loc><lastmod>2020-07-14T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/theodore-beauchaine/</loc><lastmod>2020-07-14T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/</loc><lastmod>2020-06-13T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/andrew-rogers/</loc><lastmod>2020-04-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/haines_cps_2020/</loc><lastmod>2020-04-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/brandon-turner/</loc><lastmod>2020-04-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/matthew-galdo/</loc><lastmod>2020-04-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/romeu_haines_dad_2019/</loc><lastmod>2019-11-03T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/j.-busemeyer/</loc><lastmod>2019-11-03T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/j.-vassileva/</loc><lastmod>2019-11-03T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/ricardo-romeu/</loc><lastmod>2019-11-03T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/w.-y.-ahn/</loc><lastmod>2019-11-03T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/measurement/</loc><lastmod>2019-09-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/</loc><lastmod>2019-09-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/machine-learning/</loc><lastmod>2019-05-06T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/</loc><lastmod>2019-05-06T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/regularization/</loc><lastmod>2019-05-06T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/hahn_2019/</loc><lastmod>2019-04-02T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/samuel-kalnitsky/</loc><lastmod>2019-04-02T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/sneha-thamotharan/</loc><lastmod>2019-04-02T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication-type/6/</loc><lastmod>2019-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/dana-kamara/</loc><lastmod>2019-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/beauchaine_haines_2019/</loc><lastmod>2019-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/heather-mcdonough-caplan/</loc><lastmod>2019-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/sheila-crowell/</loc><lastmod>2019-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/tiffany-shader/</loc><lastmod>2019-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/haines_dev_psych_2019/</loc><lastmod>2019-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/ziv-bell/</loc><lastmod>2019-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/jennifer-cheavens/</loc><lastmod>2019-02-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/matthew-southward/</loc><lastmod>2019-02-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/slides/</loc><lastmod>2019-02-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/slides/example/</loc><lastmod>2019-02-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/haines_plos_one_2019/</loc><lastmod>2019-02-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/jasmin-vassileva/</loc><lastmod>2018-10-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/haines_cog_sci_2018/</loc><lastmod>2018-10-05T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3/</loc><lastmod>2018-09-08T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/learning/</loc><lastmod>2018-09-08T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/modeling/</loc><lastmod>2018-09-08T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/reinforcement-learning/</loc><lastmod>2018-09-08T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication-type/3/</loc><lastmod>2017-10-31T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/ahn_2017/</loc><lastmod>2017-10-31T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/paul-hendricks/</loc><lastmod>2017-10-31T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/amelia-aldeo/</loc><lastmod>2017-10-25T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/ilana-seager/</loc><lastmod>2017-10-25T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/rogers_2017/</loc><lastmod>2017-10-25T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/2017-04-07-human-choice-and-reinforcement-learning-2/</loc><lastmod>2017-04-07T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/2017-04-04-choice_rl_1/</loc><lastmod>2017-04-04T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/author/lei-zhang/</loc><lastmod>2017-03-06T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/publication/ahn_haines_cpsy_2017/</loc><lastmod>2017-03-06T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/admin/</loc></url></urlset>

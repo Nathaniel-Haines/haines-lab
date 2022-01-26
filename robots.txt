@@ -1,0 +1,3 @@
+User-agent: *
+
+Sitemap: http://haines-lab.com/sitemap.xml

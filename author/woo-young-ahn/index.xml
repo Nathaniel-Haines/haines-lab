@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Woo-Young Ahn | Computational Psychology</title>
+    <link>http://haines-lab.com/author/woo-young-ahn/</link>
+      <atom:link href="http://haines-lab.com/author/woo-young-ahn/index.xml" rel="self" type="application/rss+xml" />
+    <description>Woo-Young Ahn</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Tue, 21 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png</url>
+      <title>Woo-Young Ahn</title>
+      <link>http://haines-lab.com/author/woo-young-ahn/</link>
+    </image>
+    
+    <item>
+      <title>Rapid, precise, and reliable measurement of delay discounting using a Bayesian learning algorithm</title>
+      <link>http://haines-lab.com/publication/ahn_2020/</link>
+      <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/publication/ahn_2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Anxiety Modulates Preference for Immediate Rewards among Trait-Impulsive Individuals: A Hierarchical Bayesian Analysis</title>
+      <link>http://haines-lab.com/publication/haines_cps_2020/</link>
+      <pubDate>Fri, 24 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/publication/haines_cps_2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Using computer-vision and machine learning to automate facial coding of positive and negative affect intensity</title>
+      <link>http://haines-lab.com/publication/haines_plos_one_2019/</link>
+      <pubDate>Tue, 05 Feb 2019 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/publication/haines_plos_one_2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>The Outcome‐Representation Learning Model: A Novel Reinforcement Learning Model of the Iowa Gambling Task</title>
+      <link>http://haines-lab.com/publication/haines_cog_sci_2018/</link>
+      <pubDate>Fri, 05 Oct 2018 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/publication/haines_cog_sci_2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Easyml: Easily Build And Evaluate Machine Learning Models</title>
+      <link>http://haines-lab.com/publication/ahn_2017/</link>
+      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/publication/ahn_2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>The Indirect Effect of Emotion Regulation on Minority Stress and Problematic Substance Use in Lesbian, Gay, and Bisexual Individuals</title>
+      <link>http://haines-lab.com/publication/rogers_2017/</link>
+      <pubDate>Wed, 25 Oct 2017 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/publication/rogers_2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Revealing Neurocomputational Mechanisms of Reinforcement Learning and Decision-Making With the hBayesDM Package</title>
+      <link>http://haines-lab.com/publication/ahn_haines_cpsy_2017/</link>
+      <pubDate>Mon, 06 Mar 2017 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/publication/ahn_haines_cpsy_2017/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

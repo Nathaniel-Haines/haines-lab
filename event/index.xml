@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Recent &amp; Upcoming Talks | Computational Psychology</title>
+    <link>http://haines-lab.com/event/</link>
+      <atom:link href="http://haines-lab.com/event/index.xml" rel="self" type="application/rss+xml" />
+    <description>Recent &amp; Upcoming Talks</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png</url>
+      <title>Recent &amp; Upcoming Talks</title>
+      <link>http://haines-lab.com/event/</link>
+    </image>
+    
+    <item>
+      <title>The Role of Reward and Punishment Learning in Externalizing Adolescents: A Joint Generative Model of Traits and Behavior</title>
+      <link>http://haines-lab.com/talk/the-role-of-reward-and-punishment-learning-in-externalizing-adolescents-a-joint-generative-model-of-traits-and-behavior/</link>
+      <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/talk/the-role-of-reward-and-punishment-learning-in-externalizing-adolescents-a-joint-generative-model-of-traits-and-behavior/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>An Introduction to Bayesian Data Analysis</title>
+      <link>http://haines-lab.com/talk/an-introduction-to-bayesian-data-analysis/</link>
+      <pubDate>Mon, 05 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/talk/an-introduction-to-bayesian-data-analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Generative Models Can Advance the Social, Behavioral, and Brain Sciences</title>
+      <link>http://haines-lab.com/talk/generative-models-can-advance-the-social-behavioral-and-brain-sciences/</link>
+      <pubDate>Wed, 14 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/talk/generative-models-can-advance-the-social-behavioral-and-brain-sciences/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Using Decision Theory to Model Anxiety-Impulsivity Interactions and Impulsive Behavior</title>
+      <link>http://haines-lab.com/talk/using-decision-theory-to-model-anxiety-impulsivity-interactions-and-impulsive-behavior/</link>
+      <pubDate>Mon, 20 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/talk/using-decision-theory-to-model-anxiety-impulsivity-interactions-and-impulsive-behavior/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,60 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on Computational Psychology</title>
+    <title>Categories | Computational Psychology</title>
     <link>http://haines-lab.com/categories/</link>
-    <description>Recent content in Categories on Computational Psychology</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>&amp;copy; 2017 Nathaniel Haines, PhD</copyright>
-    
-	<atom:link href="http://haines-lab.com/categories/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Formal Models</title>
-      <link>http://haines-lab.com/categories/formal-models/</link>
-      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/categories/formal-models/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Measurement</title>
-      <link>http://haines-lab.com/categories/measurement/</link>
-      <pubDate>Thu, 05 Sep 2019 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/categories/measurement/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Measurement Error</title>
-      <link>http://haines-lab.com/categories/measurement-error/</link>
-      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/categories/measurement-error/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reinforcement Learning</title>
-      <link>http://haines-lab.com/categories/reinforcement-learning/</link>
-      <pubDate>Sat, 08 Sep 2018 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/categories/reinforcement-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Statistical Modeling</title>
-      <link>http://haines-lab.com/categories/statistical-modeling/</link>
-      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/categories/statistical-modeling/</guid>
-      <description></description>
-    </item>
+      <atom:link href="http://haines-lab.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <description>Categories</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Mon, 24 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png</url>
+      <title>Categories</title>
+      <link>http://haines-lab.com/categories/</link>
+    </image>
     
   </channel>
 </rss>

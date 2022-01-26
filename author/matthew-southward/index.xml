@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Matthew Southward | Computational Psychology</title>
+    <link>http://haines-lab.com/author/matthew-southward/</link>
+      <atom:link href="http://haines-lab.com/author/matthew-southward/index.xml" rel="self" type="application/rss+xml" />
+    <description>Matthew Southward</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Tue, 05 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png</url>
+      <title>Matthew Southward</title>
+      <link>http://haines-lab.com/author/matthew-southward/</link>
+    </image>
+    
+    <item>
+      <title>Using computer-vision and machine learning to automate facial coding of positive and negative affect intensity</title>
+      <link>http://haines-lab.com/publication/haines_plos_one_2019/</link>
+      <pubDate>Tue, 05 Feb 2019 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/publication/haines_plos_one_2019/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

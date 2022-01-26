@@ -1,106 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Computational Psychology</title>
+    <title>Tags | Computational Psychology</title>
     <link>http://haines-lab.com/tags/</link>
-    <description>Recent content in Tags on Computational Psychology</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>&amp;copy; 2017 Nathaniel Haines, PhD</copyright>
-    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://haines-lab.com/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Content tagged as &#39;Academic&#39;</title>
-      <link>http://haines-lab.com/tags/academic/</link>
-      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/academic/</guid>
-      <description>Here is a list of all the content that has been tagged as academic.</description>
-    </item>
-    
-    <item>
-      <title>Bayesian Statistics</title>
-      <link>http://haines-lab.com/tags/bayesian-statistics/</link>
-      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/bayesian-statistics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Cogmod</title>
-      <link>http://haines-lab.com/tags/cogmod/</link>
-      <pubDate>Sun, 23 Jul 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/cogmod/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Facial Expressions</title>
-      <link>http://haines-lab.com/tags/facial-expressions/</link>
-      <pubDate>Mon, 22 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/facial-expressions/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Learning</title>
-      <link>http://haines-lab.com/tags/learning/</link>
-      <pubDate>Sat, 08 Sep 2018 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Machine Learning</title>
-      <link>http://haines-lab.com/tags/machine-learning/</link>
-      <pubDate>Mon, 06 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/machine-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Machinelearn</title>
-      <link>http://haines-lab.com/tags/machinelearn/</link>
-      <pubDate>Sun, 23 Jul 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/machinelearn/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Modeling</title>
-      <link>http://haines-lab.com/tags/modeling/</link>
-      <pubDate>Sat, 08 Sep 2018 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/modeling/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>http://haines-lab.com/tags/r/</link>
-      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Regularization</title>
-      <link>http://haines-lab.com/tags/regularization/</link>
-      <pubDate>Mon, 06 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>http://haines-lab.com/tags/regularization/</guid>
-      <description></description>
-    </item>
+      <atom:link href="http://haines-lab.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <description>Tags</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Mon, 24 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png</url>
+      <title>Tags</title>
+      <link>http://haines-lab.com/tags/</link>
+    </image>
     
   </channel>
 </rss>
