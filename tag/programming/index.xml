@@ -428,7 +428,7 @@ jobs:
 # - yaml            [* -&amp;gt; 2.2.1]
 # 
 # Do you want to proceed? [y/N]: y
-# * Lockfile written to &amp;#39;~/Dropbox/Box/GitHub/computational-reproducibility-in-r/renv.lock&amp;#39;.&lt;/code&gt;&lt;/pre&gt;
+# * Lockfile written to &amp;#39;~/computational-reproducibility-in-r/renv.lock&amp;#39;.&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now, our &lt;code&gt;renv.lock&lt;/code&gt; file is updated! Finally, we can go back to a regular terminal in our project directory and add, commit, and push our changes to GitHub:&lt;/p&gt;
 &lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;git add .
 git commit -m &amp;quot;adding new dependencies&amp;quot;
