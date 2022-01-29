@@ -33,9 +33,421 @@
 &lt;h1&gt;The Naive Attempt to Resolve The Problem&lt;/h1&gt;
 &lt;p&gt;If you are like me, the first thing you might do when finding yourself in dependency hell is to try installing different versions of the R libraries that R is complaining about. If that doesn’t work, you may even get desperate enough to try installing a different version of R in hopes that The Problem will magically disappear.&lt;/p&gt;
 &lt;p&gt;In some cases, the naive attempt &lt;em&gt;can&lt;/em&gt; succeed. But alas, it will often fail, and even when it does succeed—that different version of R (or R libraries) you installed could lead to problems in other ongoing projects. You know, the projects that you briefly forgot about while trying to resolve The Problem for the current project on the to-do list. In this case, dependency hell has evolved into &lt;a href=&#34;https://en.wikipedia.org/wiki/Whac-A-Mole#Colloquial_usage&#34;&gt;&lt;strong&gt;&lt;em&gt;computational whac-a-mole&lt;/em&gt;&lt;/strong&gt;&lt;/a&gt;—a rage-inducing game that your therapist told you to stop playing many sessions ago.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;http://haines-lab.com/media/whac-a-mole.jpeg&#34; alt=&#34;&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Caption: You, disregarding your therapist&lt;/p&gt;
+&lt;/div&gt;
 &lt;/div&gt;
 &lt;div id=&#34;a-slightly-better-attempt-but-it-requires-foresight&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;A Slightly Better Attempt, But It Requires Foresight&lt;/h1&gt;
+&lt;p&gt;If you truly want to resolve dependency issues, you will need to think ahead and build some form of dependency management into your workflow (I know, very unfortunate…). That said, it is getting easier with each passing year to automate a good deal of it. In the remainder of this post, we will walk through how to create a GitHub repository that takes advantage of &lt;a href=&#34;https://rstudio.github.io/renv/articles/renv.html&#34;&gt;&lt;code&gt;renv&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;https://www.docker.com/&#34;&gt;&lt;code&gt;Docker&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://github.com/features/actions&#34;&gt;&lt;code&gt;GitHub Actions&lt;/code&gt;&lt;/a&gt; to make your R workflow reproducible into the future.&lt;/p&gt;
+&lt;p&gt;(&lt;strong&gt;NOTE&lt;/strong&gt;: Throughout this post, you can refer to &lt;a href=&#34;https://github.com/Nathaniel-Haines/computational-reproducibility-in-r&#34;&gt;my accompanying GitHub repo&lt;/a&gt; to see all the code in one place. I would recommend forking it, cloning to a local directory, and testing things out that way. Then, you can try out some of your own R scripts to see how things work!)&lt;/p&gt;
+&lt;div id=&#34;an-overview-of-renv&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;An Overview of &lt;code&gt;renv&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;renv&lt;/code&gt; is an R package that allows for us to install &lt;strong&gt;&lt;em&gt;project-specific packages&lt;/em&gt;&lt;/strong&gt; as opposed to relying on the same set of packages (and their associated versions) across all R projects. Further, we can take a &lt;strong&gt;snapshot&lt;/strong&gt; of the packages we are using in a given project, save the snapshot for later, and then &lt;strong&gt;restore&lt;/strong&gt; (i.e. reinstall) the packages later—even on different computers.&lt;/p&gt;
+&lt;div id=&#34;starting-a-new-project-with-renv&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Starting a New Project with &lt;code&gt;renv&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Using &lt;code&gt;renv&lt;/code&gt; is very easy. First, while in R, set your working directory to the folder that we want to create our project in:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# This is the GitHub repo associated with this project
+setwd(&amp;quot;~/computational-reproducibility-in-r&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, install &lt;code&gt;renv&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;renv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, we simply load the package and then initialize the project:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;renv::init()
+
+# * Initializing project ...
+# * Discovering package dependencies ... Done!
+# * Copying packages into the cache ... Done!
+# * Lockfile written to # &amp;#39;~/computational-reproducibility-in-r/renv.lock&amp;#39;.
+
+# Restarting R session...&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;installing-packages-with-renv&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Installing Packages with &lt;code&gt;renv&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;With the project initialized, we essentially proceed as normal, except that we will install all the packages we need along the way. For example, if our project uses &lt;code&gt;dplyr&lt;/code&gt; and &lt;code&gt;ggplot2&lt;/code&gt;, we install them as follows:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(c(&amp;quot;dplyr&amp;quot;, &amp;quot;ggplot2&amp;quot;))
+
+# Installing dplyr [1.0.7] ...
+#   OK [linked cache]
+# Installing ggplot2 [3.3.5] ...
+#   OK [linked cache]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, both packages are available to use in our project. Let’s make a plot for proof!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
+library(ggplot2)
+
+set.seed(43210)
+
+# Yes, your love grows exponentially
+love_for_renv &amp;lt;- rnorm(100, exp(.022*(1:100)), .8)
+
+data.frame(Time = 1:100,
+           love_for_renv = love_for_renv) %&amp;gt;%
+  ggplot(aes(x = Time, y = love_for_renv)) +
+  geom_point() +
+  geom_line() +
+  ylab(&amp;quot;Love for renv&amp;quot;) +
+  scale_y_continuous(breaks = 1:10, limits = c(0,11)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/index.en_files/figure-html/unnamed-chunk-5-1.svg&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Now, let’s say that we are wrapping up for the day and would like to push our changes to GitHub. After saving our &lt;code&gt;R&lt;/code&gt; file that produces the beautiful graph above, we need to take a snapshot so that &lt;code&gt;renv&lt;/code&gt; remembers which libraries we have installed for the current project:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;renv::snapshot()
+
+# The following package(s) will be updated in the lockfile:
+# 
+# # CRAN ===============================
+# - MASS           [* -&amp;gt; 7.3-54]
+# - Matrix         [* -&amp;gt; 1.3-3]
+# - R6             [* -&amp;gt; 2.5.1]
+# - RColorBrewer   [* -&amp;gt; 1.1-2]
+# - cli            [* -&amp;gt; 3.0.1]
+# - colorspace     [* -&amp;gt; 2.0-2]
+# - crayon         [* -&amp;gt; 1.4.1]
+# - digest         [* -&amp;gt; 0.6.29]
+# - dplyr          [* -&amp;gt; 1.0.7]
+# - ellipsis       [* -&amp;gt; 0.3.2]
+# - fansi          [* -&amp;gt; 0.5.0]
+# - farver         [* -&amp;gt; 2.1.0]
+# - generics       [* -&amp;gt; 0.1.0]
+# - ggplot2        [* -&amp;gt; 3.3.5]
+# - glue           [* -&amp;gt; 1.6.0]
+# - gtable         [* -&amp;gt; 0.3.0]
+# - isoband        [* -&amp;gt; 0.2.5]
+# - labeling       [* -&amp;gt; 0.4.2]
+# - lattice        [* -&amp;gt; 0.20-44]
+# - lifecycle      [* -&amp;gt; 1.0.0]
+# - magrittr       [* -&amp;gt; 2.0.1]
+# - mgcv           [* -&amp;gt; 1.8-35]
+# - munsell        [* -&amp;gt; 0.5.0]
+# - nlme           [* -&amp;gt; 3.1-152]
+# - pillar         [* -&amp;gt; 1.6.2]
+# - pkgconfig      [* -&amp;gt; 2.0.3]
+# - purrr          [* -&amp;gt; 0.3.4]
+# - rlang          [* -&amp;gt; 0.4.12]
+# - scales         [* -&amp;gt; 1.1.1]
+# - tibble         [* -&amp;gt; 3.1.4]
+# - tidyselect     [* -&amp;gt; 1.1.1]
+# - utf8           [* -&amp;gt; 1.2.2]
+# - vctrs          [* -&amp;gt; 0.3.8]
+# - viridisLite    [* -&amp;gt; 0.4.0]
+# - withr          [* -&amp;gt; 2.4.2]
+# 
+# Do you want to proceed? [y/N]: y
+# * Lockfile written to 
+# &amp;#39;~/computational-reproducibility-in-r/renv.lock&amp;#39;.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That’s a lot of dependencies for just two &lt;code&gt;R&lt;/code&gt; packages… which is exactly why we want to use something like &lt;code&gt;renv&lt;/code&gt; to automate version tracking for us! Note that &lt;code&gt;renv&lt;/code&gt; searches through the files in our project directory to determine which packages we are using, so make sure that you have a file with your &lt;code&gt;R&lt;/code&gt; code saved somewhere in your project directory before taking the snapshot.&lt;/p&gt;
+&lt;p&gt;If you look through your project directory, you will notice that &lt;code&gt;renv&lt;/code&gt; has created a few different files. Of these, the &lt;code&gt;renv.lock&lt;/code&gt; file is what tracks the packages and their associated versions that your project depends on. Also, you will see a line in your &lt;code&gt;.Rprofile&lt;/code&gt; file (which may be hidden, in which case you will need to show the hidden files to see it; e.g., in a terminal, run &lt;code&gt;ls -la&lt;/code&gt;) that looks like: &lt;code&gt;source(&#34;renv/activate.R&#34;)&lt;/code&gt;. If you did not know, this file is run each time &lt;code&gt;R&lt;/code&gt; is started from your project directory. In this case, it activates &lt;code&gt;renv&lt;/code&gt; automatically for you, making all the packages available for the current project. This way, if you were to open your project on another computer, you would have all the correct packages/versions ready to go. Simply running &lt;code&gt;renv::restore()&lt;/code&gt; will re-install all of them, after which you can proceed as normal. Pretty cool, right?&lt;/p&gt;
+&lt;p&gt;And that is pretty much it for &lt;code&gt;renv&lt;/code&gt;! However, you may have recognized a problem—even if we have the right package versions, what if we want to open our project on a computer with a different version of &lt;code&gt;R&lt;/code&gt;? Or, what if we share our project with someone on a different operating system? In these cases, just having the correct versions for our packages is not enough—we need the correct &lt;code&gt;R&lt;/code&gt; version too. This is where &lt;code&gt;Docker&lt;/code&gt; comes in…&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;packaging-up-your-r-project-with-docker&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Packaging up your R Project with Docker&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;Docker&lt;/code&gt; is important because it allows us to package up not only our packages, but also our &lt;code&gt;R&lt;/code&gt; version and even our operating system! In this way, creating a &lt;strong&gt;&lt;em&gt;Docker image&lt;/em&gt;&lt;/strong&gt; will ensure that (almost) any computer with &lt;code&gt;Docker&lt;/code&gt; installed will be able to run our code. This is particularly useful when we want to run computationally intensive code on cloud services such as &lt;a href=&#34;https://aws.amazon.com/&#34;&gt;AWS&lt;/a&gt;, &lt;a href=&#34;https://cloud.google.com/&#34;&gt;GCP&lt;/a&gt;, or others.&lt;/p&gt;
+&lt;div id=&#34;the-basic-steps-in-building-a-docker-image&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;The Basic Steps in Building a Docker Image&lt;/h3&gt;
+&lt;p&gt;After installing &lt;code&gt;Docker&lt;/code&gt; (&lt;a href=&#34;https://docs.docker.com/get-docker/&#34;&gt;see instructions here&lt;/a&gt;), building an image is rather straightforward—at least, it is with a bit of practice! There are basically three key steps involved in building a &lt;code&gt;Docker&lt;/code&gt; image:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Specifying the starting image to build off of,&lt;/li&gt;
+&lt;li&gt;Installing the necessary dependencies/packages that you want to use, and&lt;/li&gt;
+&lt;li&gt;Telling the image how to start when you run it&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;For us, we want our image to start using some basic version of &lt;code&gt;R&lt;/code&gt; that matches the version we have on our computer when developing a project. Then, we want to install all the &lt;code&gt;R&lt;/code&gt; packages that are specified in the &lt;code&gt;renv.lock&lt;/code&gt; file described earlier. Finally, we have a choice to either make the image start up &lt;code&gt;R&lt;/code&gt; right away, or we can alternatively start from a terminal. I like to start from the terminal, personally, but this is just preference.&lt;/p&gt;
+&lt;p&gt;To follow the above steps, we can first determine our &lt;code&gt;R&lt;/code&gt; version by running &lt;code&gt;R --version&lt;/code&gt; in the terminal. In my case, I currently have version &lt;code&gt;4.1.0&lt;/code&gt; installed:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# R version 4.1.0 (2021-05-18) -- &amp;quot;Camp Pontanezen&amp;quot;
+# Copyright (C) 2021 The R Foundation for Statistical Computing
+# Platform: aarch64-apple-darwin20 (64-bit)
+# 
+# R is free software and comes with ABSOLUTELY NO WARRANTY.
+# You are welcome to redistribute it under the terms of the
+# GNU General Public License versions 2 or 3.
+# For more information about these matters see
+# https://www.gnu.org/licenses/.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, we need to know our version of &lt;code&gt;renv&lt;/code&gt; too. For this, you can just look at the &lt;code&gt;renv.lock&lt;/code&gt; file and search for &lt;code&gt;renv&lt;/code&gt;. With these two pieces of information, we can create a &lt;code&gt;Dockerfile&lt;/code&gt; (a raw text file named “Dockerfile” with no file extensions, located in your project root directory), which is what is used to build a &lt;code&gt;Docker&lt;/code&gt; image. Here is the &lt;code&gt;Dockerfile&lt;/code&gt; that I use for the current example project:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Start with R version 4.1.0
+FROM rocker/r-ver:4.1.0
+
+#RUN apt-get update &amp;amp;&amp;amp; apt-get install -y libcurl4-openssl-dev libssl-dev
+
+# Use renv version 0.15.2
+ENV RENV_VERSION 0.15.2
+
+# Install renv
+RUN Rscript -e &amp;quot;install.packages(&amp;#39;remotes&amp;#39;, repos = c(CRAN = &amp;#39;https://cloud.r-project.org&amp;#39;))&amp;quot;
+RUN Rscript -e &amp;quot;remotes::install_github(&amp;#39;rstudio/renv@${RENV_VERSION}&amp;#39;)&amp;quot;
+
+# Create a directory named after our project directory
+WORKDIR /computational-reproducibility-in-r
+
+# Install all R packages specified in renv.lock
+RUN Rscript -e &amp;#39;renv::restore()&amp;#39;
+
+# Default to bash terminal when running docker image
+CMD [&amp;quot;bash&amp;quot;]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The comments above detail what is going on—for you, you can make this work for your project by simply changing the &lt;code&gt;R&lt;/code&gt; and &lt;code&gt;renv&lt;/code&gt; version numbers to the values for your own project.&lt;/p&gt;
+&lt;p&gt;To actually build the image so that we can run it, we can do so in the terminal using the following code:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;docker build -t my-docker-image .
+
+# [+] Building 150.2s (11/11) FINISHED                                           
+#  =&amp;gt; [internal] load build definition from Dockerfile                       0.0s
+#  =&amp;gt; =&amp;gt; transferring dockerfile: 694B                                       0.0s
+#  =&amp;gt; [internal] load .dockerignore                                          0.0s
+#  =&amp;gt; =&amp;gt; transferring context: 2B                                            0.0s
+#  =&amp;gt; [internal] load metadata for docker.io/rocker/r-ver:4.1.0              0.0s
+#  =&amp;gt; [internal] load build context                                          0.0s
+#  =&amp;gt; =&amp;gt; transferring context: 9.10kB                                        0.0s
+#  =&amp;gt; CACHED [1/6] FROM docker.io/rocker/r-ver:4.1.0                         0.0s
+#  =&amp;gt; [2/6] RUN Rscript -e &amp;quot;install.packages(&amp;#39;remotes&amp;#39;, repos = c(CRAN = &amp;#39;h  5.9s
+#  =&amp;gt; [3/6] RUN Rscript -e &amp;quot;remotes::install_github(&amp;#39;rstudio/renv@0.15.2&amp;#39;)  12.8s
+#  =&amp;gt; [4/6] WORKDIR /computational-reproducibility-in-r                      0.0s 
+#  =&amp;gt; [5/6] COPY renv.lock renv.lock                                         0.0s 
+#  =&amp;gt; [6/6] RUN Rscript -e &amp;#39;renv::restore()&amp;#39;                               130.7s 
+#  =&amp;gt; exporting to image                                                     0.7s 
+#  =&amp;gt; =&amp;gt; exporting layers                                                    0.7s 
+#  =&amp;gt; =&amp;gt; writing image sha256:348a67e88477b16e01bd38a34e73c1c72c2f12e9ec927  0.0s 
+#  =&amp;gt; =&amp;gt; naming to docker.io/library/my-docker-image                         0.0s &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The code above tells &lt;code&gt;Docker&lt;/code&gt; to build the image and tag it with the name &lt;code&gt;my-docker-image&lt;/code&gt;. Looks like it worked!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;running-a-docker-image&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Running a Docker Image&lt;/h3&gt;
+&lt;p&gt;To actually be of any use, we need to be able to run code that is in our project using our &lt;code&gt;Docker&lt;/code&gt; image. To do so, it is important to note that when you run a &lt;code&gt;Docker&lt;/code&gt; image, it is completely self-contained (which is why it is called a &lt;code&gt;Docker&lt;/code&gt; container when you are running it). This means that you will not have access to any of your local files when you are running your container unless you connect the container to your local directory.&lt;/p&gt;
+&lt;p&gt;To do this, we can use the &lt;code&gt;-v&lt;/code&gt; flag when running &lt;code&gt;Docker&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;docker run -it -v ~/computational-reproducibility-in-r:/computational-reproducibility-in-r my-docker-image&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Above, &lt;code&gt;docker run&lt;/code&gt; is starting the container, &lt;code&gt;-it&lt;/code&gt; is making it &lt;em&gt;interactive mode&lt;/em&gt; (so that we can type out commands ourselves), and the &lt;code&gt;&amp;lt;path-to-my-local-project-directory&amp;gt;:&amp;lt;docker-directory-to-mount-to&amp;gt;&lt;/code&gt; part tells &lt;code&gt;Docker&lt;/code&gt; to mount our local project directory to the &lt;code&gt;computational-reproducibility-in-r&lt;/code&gt; directory that we created in the &lt;code&gt;Dockerfile&lt;/code&gt; above (see the line that reads &lt;code&gt;WORKDIR /computational-reproducibility-in-r&lt;/code&gt;). When mounted, anything we save to the mounted directory will be saved to our local directory too! So, if we create an R script called &lt;code&gt;make_beautiful_plot.R&lt;/code&gt; that contains the same plotting code from above, but it saves the image to our local directory instead of just showing it:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
+library(ggplot2)
+
+set.seed(43210)
+
+love_for_renv &amp;lt;- rnorm(100, exp(.022*(1:100)), .8)
+
+my_plot &amp;lt;- 
+  data.frame(Time = 1:100,
+             love_for_renv = love_for_renv) %&amp;gt;%
+  ggplot(aes(x = Time, y = love_for_renv)) +
+  geom_point() +
+  geom_line() +
+  ylab(&amp;quot;Love for renv&amp;quot;) +
+  scale_y_continuous(breaks = 1:10, limits = c(0,11)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())
+
+ggsave(my_plot, file = &amp;quot;saved_plot.pdf&amp;quot;, unit = &amp;quot;in&amp;quot;,
+       height = 4, width = 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;we can run this script within the &lt;code&gt;Docker&lt;/code&gt; container by running:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;Rscript make_beautiful_plot.R&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and we will see &lt;code&gt;saved_plot.pdf&lt;/code&gt; appear in our local project directory!
+Although we just made a basic plot, what we have achieved is rather cool—theoretically, anyone could use the image that we created to run our code, making our analyses computationally reproducible across time and across different computers.&lt;/p&gt;
+&lt;p&gt;But… there is one issue… how do we share the image? Also, building the image manually and then sending it somewhere seems like a big pain if I am working on a project over the course of months or longer. Well, this is where &lt;code&gt;GitHub&lt;/code&gt; and GitHub Actions come to play!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;using-github-to-build-and-store-docker-images&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Using &lt;code&gt;GitHub&lt;/code&gt; to Build and Store Docker Images&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;GitHub&lt;/code&gt; is generally an amazing platform for version control when it comes to code, but it can also play the same role for our Docker images. Further, we can use &lt;a href=&#34;https://github.com/features/actions&#34;&gt;GitHub Actions&lt;/a&gt; to automate a good deal of our workflow—in our case, to build and push our &lt;code&gt;Docker&lt;/code&gt; images to a repository that allows for anyone to access them.&lt;/p&gt;
+&lt;p&gt;To start, once you have your local project configured to be linked with a GitHub repo, as long as you have a &lt;code&gt;Dockerfile&lt;/code&gt; in your project directory, you can actually use the template provided by GitHub to create a workflow for building and pushing images to your own GitHub account:&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;http://haines-lab.com/media/github_actions.gif&#34; alt=&#34;&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Caption: Well, that looks a bit confusing…&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;That said, the template didn’t make a whole lot of sense to me at first, so I opted to follow &lt;a href=&#34;https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions#upgrading-a-workflow-that-accesses-ghcrio&#34;&gt;the documentation here&lt;/a&gt; in hopes that I would better understand the final product.&lt;/p&gt;
+&lt;p&gt;The basic idea is that we want to build a new image using the current dependencies in our project each time that we push changes to GitHub. I made some changes the the linked code above that make this happen. The resulting code is here (I would recommend checking out the link for more details on how this works):&lt;/p&gt;
+&lt;pre eval=&#34;FALSE&#34;&gt;&lt;code&gt;name: Docker
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  push:
+    branches: [ main ]
+    # Publish semver tags as releases.
+    tags: [ &amp;#39;v*.*.*&amp;#39; ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as &amp;lt;account&amp;gt;/&amp;lt;repo&amp;gt;
+  IMAGE_NAME: ${{ github.repository }}
+
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # OR &amp;quot;2&amp;quot; -&amp;gt; To retrieve the preceding commit.
+
+      - name: Run file diff checking image
+        uses: tj-actions/changed-files@v14.1
+
+      - name: Build image
+        if: contains(steps.changed-files.outputs.modified_files, &amp;#39;renv.lock&amp;#39;)
+        run: |
+          IMAGE_NAME=$(echo $IMAGE_NAME | tr &amp;#39;[A-Z]&amp;#39; &amp;#39;[a-z]&amp;#39;)
+          docker build . --file Dockerfile --tag $IMAGE_NAME --label &amp;quot;runnumber=${GITHUB_RUN_ID}&amp;quot;
+      - name: Log in to registry
+        # This is where you will update the PAT to GITHUB_TOKEN
+        run: echo &amp;quot;${{ secrets.GITHUB_TOKEN }}&amp;quot; | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        if: contains(steps.changed-files.outputs.modified_files, &amp;#39;renv.lock&amp;#39;)
+        run: |
+          IMAGE_ID=ghcr.io/$IMAGE_NAME
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr &amp;#39;[A-Z]&amp;#39; &amp;#39;[a-z]&amp;#39;)
+          IMAGE_NAME=$(echo $IMAGE_NAME | tr &amp;#39;[A-Z]&amp;#39; &amp;#39;[a-z]&amp;#39;)
+          # Strip git ref prefix from version
+          VERSION=$(echo &amp;quot;${{ github.ref }}&amp;quot; | sed -e &amp;#39;s,.*/\(.*\),\1,&amp;#39;)
+          # Strip &amp;quot;v&amp;quot; prefix from tag name
+          [[ &amp;quot;${{ github.ref }}&amp;quot; == &amp;quot;refs/tags/&amp;quot;* ]] &amp;amp;&amp;amp; VERSION=$(echo $VERSION | sed -e &amp;#39;s/^v//&amp;#39;)
+          # Use Docker `latest` tag convention
+          [ &amp;quot;$VERSION&amp;quot; == &amp;quot;main&amp;quot; ] &amp;amp;&amp;amp; VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that, as in the template shown in the &lt;code&gt;.gif&lt;/code&gt; above, the code chunk above is saved in &lt;code&gt;computational-reproducibility-in-r/.github/workflows/docker-publish.yml&lt;/code&gt;. Once this file is in your GitHub repository, all we need to do is make changes to our code and push them to GitHub, and a new &lt;code&gt;Docker&lt;/code&gt; image will be built and pushed to your &lt;code&gt;GitHub Packages&lt;/code&gt; registry (which we will walk through later) automatically! Let’s test it out.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;testing-out-our-complete-workflow&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Testing Out Our Complete Workflow&lt;/h2&gt;
+&lt;p&gt;To test things out, let’s install a new &lt;code&gt;R&lt;/code&gt; package and then push our updated code to GitHub. This will trigger the GitHub Action from above, which will then build and push an image to our GitHub Packages registry. First, let’s install the &lt;code&gt;tidyverse&lt;/code&gt;. After opening an &lt;code&gt;R&lt;/code&gt; terminal in our project directory:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;tidyverse&amp;quot;)
+
+# Retrieving &amp;#39;https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.1/dtplyr_1.2.1.tgz&amp;#39; ...
+#         OK [downloaded 321 Kb in 0.3 secs]
+# Retrieving &amp;#39;https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.1/rvest_1.0.2.tgz&amp;#39; ...
+#         OK [downloaded 195 Kb in 0.3 secs]
+# Installing dtplyr [1.2.1] ...
+#         OK [installed binary]
+# Moving dtplyr [1.2.1] into the cache ...
+#         OK [moved to cache in 0.43 milliseconds]
+# Installing forcats [0.5.1] ...
+#         OK [linked cache]
+# Installing googledrive [2.0.0] ...
+#         OK [linked cache]
+# Installing rematch [1.0.1] ...
+#         OK [linked cache]
+# Installing cellranger [1.1.0] ...
+#         OK [linked cache]
+# Installing ids [1.0.1] ...
+#         OK [linked cache]
+# Installing googlesheets4 [1.0.0] ...
+#         OK [linked cache]
+# Installing haven [2.4.3] ...
+#         OK [linked cache]
+# Installing modelr [0.1.8] ...
+#         OK [linked cache]
+# Installing readxl [1.3.1] ...
+#         OK [linked cache]
+# Installing reprex [2.0.1] ...
+#         OK [linked cache]
+# Installing selectr [0.4-2] ...
+#         OK [linked cache]
+# Installing rvest [1.0.2] ...
+#         OK [installed binary]
+# Moving rvest [1.0.2] into the cache ...
+#         OK [moved to cache in 0.47 milliseconds]
+# Installing tidyverse [1.3.1] ...
+#         OK [linked cache]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You will see &lt;code&gt;renv&lt;/code&gt; do its magic, as per usual. Then, we need to modify our code to include the tidyverse so that &lt;code&gt;renv&lt;/code&gt; can detect it when taking a new snapshot. I will just add a new file called &lt;code&gt;new_dependency.R&lt;/code&gt; that only runs &lt;code&gt;library(tidyverse)&lt;/code&gt; as an example. After creating this file, we go back to an R terminal and run:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;renv::snapshot()
+
+# The following package(s) will be updated in the lockfile:
+# 
+# # CRAN ===============================
+# - DBI             [* -&amp;gt; 1.1.1]
+# - Rcpp            [* -&amp;gt; 1.0.8]
+# - askpass         [* -&amp;gt; 1.1]
+# - assertthat      [* -&amp;gt; 0.2.1]
+# - backports       [* -&amp;gt; 1.2.1]
+# - base64enc       [* -&amp;gt; 0.1-3]
+# - bit             [* -&amp;gt; 4.0.4]
+# - bit64           [* -&amp;gt; 4.0.5]
+# - blob            [* -&amp;gt; 1.2.2]
+# - broom           [* -&amp;gt; 0.7.11]
+# - callr           [* -&amp;gt; 3.7.0]
+# - cellranger      [* -&amp;gt; 1.1.0]
+# - clipr           [* -&amp;gt; 0.7.1]
+# - cpp11           [* -&amp;gt; 0.4.1]
+# - curl            [* -&amp;gt; 4.3.2]
+# - data.table      [* -&amp;gt; 1.14.0]
+# - dbplyr          [* -&amp;gt; 2.1.1]
+# - dtplyr          [* -&amp;gt; 1.2.1]
+# - evaluate        [* -&amp;gt; 0.14]
+# - fastmap         [* -&amp;gt; 1.1.0]
+# - forcats         [* -&amp;gt; 0.5.1]
+# - fs              [* -&amp;gt; 1.5.0]
+# - gargle          [* -&amp;gt; 1.2.0]
+# - googledrive     [* -&amp;gt; 2.0.0]
+# - googlesheets4   [* -&amp;gt; 1.0.0]
+# - haven           [* -&amp;gt; 2.4.3]
+# - highr           [* -&amp;gt; 0.9]
+# - hms             [* -&amp;gt; 1.1.0]
+# - htmltools       [* -&amp;gt; 0.5.2]
+# - httr            [* -&amp;gt; 1.4.2]
+# - ids             [* -&amp;gt; 1.0.1]
+# - jquerylib       [* -&amp;gt; 0.1.4]
+# - jsonlite        [* -&amp;gt; 1.7.3]
+# - knitr           [* -&amp;gt; 1.37]
+# - lubridate       [* -&amp;gt; 1.8.0]
+# - mime            [* -&amp;gt; 0.12]
+# - modelr          [* -&amp;gt; 0.1.8]
+# - openssl         [* -&amp;gt; 1.4.5]
+# - prettyunits     [* -&amp;gt; 1.1.1]
+# - processx        [* -&amp;gt; 3.5.2]
+# - progress        [* -&amp;gt; 1.2.2]
+# - ps              [* -&amp;gt; 1.6.0]
+# - rappdirs        [* -&amp;gt; 0.3.3]
+# - readr           [* -&amp;gt; 2.0.2]
+# - readxl          [* -&amp;gt; 1.3.1]
+# - rematch         [* -&amp;gt; 1.0.1]
+# - rematch2        [* -&amp;gt; 2.1.2]
+# - reprex          [* -&amp;gt; 2.0.1]
+# - rmarkdown       [* -&amp;gt; 2.11]
+# - rstudioapi      [* -&amp;gt; 0.13]
+# - rvest           [* -&amp;gt; 1.0.2]
+# - selectr         [* -&amp;gt; 0.4-2]
+# - stringi         [* -&amp;gt; 1.7.6]
+# - stringr         [* -&amp;gt; 1.4.0]
+# - sys             [* -&amp;gt; 3.4]
+# - tidyr           [* -&amp;gt; 1.1.3]
+# - tidyverse       [* -&amp;gt; 1.3.1]
+# - tinytex         [* -&amp;gt; 0.36]
+# - tzdb            [* -&amp;gt; 0.2.0]
+# - uuid            [* -&amp;gt; 1.0-3]
+# - vroom           [* -&amp;gt; 1.5.5]
+# - xfun            [* -&amp;gt; 0.29]
+# - xml2            [* -&amp;gt; 1.3.2]
+# - yaml            [* -&amp;gt; 2.2.1]
+# 
+# Do you want to proceed? [y/N]: y
+# * Lockfile written to &amp;#39;~/Dropbox/Box/GitHub/computational-reproducibility-in-r/renv.lock&amp;#39;.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, our &lt;code&gt;renv.lock&lt;/code&gt; file is updated! Finally, we can go back to a regular terminal in our project directory and add, commit, and push our changes to GitHub:&lt;/p&gt;
+&lt;pre class=&#34;bash&#34;&gt;&lt;code&gt;git add .
+git commit -m &amp;quot;adding new dependencies&amp;quot;
+git push&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We should be able to navigate to the &lt;code&gt;Actions&lt;/code&gt; tab in our GitHub repo and see the image being built in real time!&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;http://haines-lab.com/media/action_building.gif&#34; alt=&#34;&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Caption: Well would you look at that, it works!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;how-to-use-your-docker-images&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;How to Use Your Docker Images&lt;/h3&gt;
+&lt;p&gt;You will now be able to find you image under the &lt;code&gt;Packages&lt;/code&gt; tab on your GitHub profile. For example, you can find the image that &lt;a href=&#34;https://github.com/Nathaniel-Haines/computational-reproducibility-in-r/pkgs/container/computational-reproducibility-in-r&#34;&gt;my own workflow built here&lt;/a&gt;. Here, you will also see a command you can run to download the package so that you (or anyone!) could use the image. In my case, it is: &lt;code&gt;docker pull ghcr.io/nathaniel-haines/computational-reproducibility-in-r:latest&lt;/code&gt;. After pulling it to your local computer, you can use it as normal!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;wrapping-up&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Wrapping up&lt;/h1&gt;
+&lt;p&gt;Alright! So that was a bit long, but I hope that it was useful in covering computational reproducibility in &lt;code&gt;R&lt;/code&gt;. There are of course many other things you could include in this workflow to make it even better (e.g., only building a new image when the &lt;code&gt;renv.lock&lt;/code&gt; file changes, as opposed to each push, or integrating with &lt;a href=&#34;https://github.com/asdf-community/asdf-r&#34;&gt;&lt;code&gt;asdf&lt;/code&gt;&lt;/a&gt; so that you can use different &lt;code&gt;R&lt;/code&gt; versions across local projects akin to how &lt;code&gt;renv&lt;/code&gt; lets you use different &lt;code&gt;R&lt;/code&gt; package versions), but I will leave that as an exercise for those who are interested :D&lt;/p&gt;
+&lt;p&gt;Thanks a lot for stopping by, and I hope you find this useful in your work!&lt;/p&gt;
 &lt;/div&gt;
 </description>
     </item>
