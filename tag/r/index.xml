@@ -166,8 +166,6 @@ data.frame(Time = 1:100,
 &lt;pre&gt;&lt;code&gt;# Start with R version 4.1.0
 FROM rocker/r-ver:4.1.0
 
-#RUN apt-get update &amp;amp;&amp;amp; apt-get install -y libcurl4-openssl-dev libssl-dev
-
 # Use renv version 0.15.2
 ENV RENV_VERSION 0.15.2
 
