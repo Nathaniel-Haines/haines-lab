@@ -775,7 +775,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    19 min read
+    20 min read
   </span>
   
 
@@ -983,7 +983,33 @@ RUN Rscript -e &#39;renv::restore()&#39;
 # Default to bash terminal when running docker image
 CMD [&quot;bash&quot;]</code></pre>
 <p>The comments above detail what is going on—for you, you can make this work for your project by simply changing the <code>R</code> and <code>renv</code> version numbers to the values for your own project.</p>
-<p>To actually build the image so that we can run it, we can do so in the terminal using the following code:</p>
+<p><strong><em>Note</em></strong>: You may be wondering—where are those random linux libraries coming from? How did you know you needed them? Well, I didn’t actually know when I started! When I tried building the image without them, I would get an error message that pointed toward a library that was needed. For example, here is one of the error messages:</p>
+<pre class="base"><code>#9 628.1 Installing xml2 [1.3.2] ...
+#9 628.3    FAILED
+#9 628.3 Error installing package &#39;xml2&#39;:
+#9 628.3 ================================
+#9 628.3 
+#9 628.3 * installing to library ‘/usr/local/lib/R/site-library/.renv/1’
+#9 628.3 * installing *source* package ‘xml2’ ...
+#9 628.3 ** package ‘xml2’ successfully unpacked and MD5 sums checked
+#9 628.3 ** using staged installation
+#9 628.3 Using PKG_CFLAGS=
+#9 628.3 Using PKG_LIBS=-lxml2
+#9 628.3 ------------------------- ANTICONF ERROR ---------------------------
+#9 628.3 Configuration failed because libxml-2.0 was not found. Try installing:
+#9 628.3  * deb: libxml2-dev (Debian, Ubuntu, etc)
+#9 628.3  * rpm: libxml2-devel (Fedora, CentOS, RHEL)
+#9 628.3  * csw: libxml2_dev (Solaris)
+#9 628.3 If libxml-2.0 is already installed, check that &#39;pkg-config&#39; is in your
+#9 628.3 PATH and PKG_CONFIG_PATH contains a libxml-2.0.pc file. If pkg-config
+#9 628.3 is unavailable you can set INCLUDE_DIR and LIB_DIR manually via:
+#9 628.3 R CMD INSTALL --configure-vars=&#39;INCLUDE_DIR=... LIB_DIR=...&#39;
+#9 628.3 --------------------------------------------------------------------
+#9 628.3 ERROR: configuration failed for package ‘xml2’
+#9 628.3 * removing ‘/usr/local/lib/R/site-library/.renv/1/xml2’
+#9 628.3 Error: install of package &#39;xml2&#39; failed [error code 1]</code></pre>
+<p>This is a really helpful message—it says that <code>libxml2-dev</code> is necessary for installing the <code>R</code> package <code>xml2</code>, and because our image did not have <code>libxml2-dev</code>, the build failed. So, by adding <code>libxml2-dev</code> in the <code>Dockerfile</code>, the problem was resolved. The same thing happened for the other libraries in the <code>Dockerfile</code>. So, if you run into this issue, just check out the error message to find what you need, and add it to the line in the <code>Dockerfile</code>.</p>
+<p>OK, let’s move on to something more exciting… To actually build the image so that we can run it, we can do so in the terminal using the following code:</p>
 <pre class="bash"><code>docker build -t my-docker-image .
 
 # [+] Building 150.2s (11/11) FINISHED                                           
