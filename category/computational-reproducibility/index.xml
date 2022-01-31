@@ -178,6 +178,9 @@ RUN Rscript -e &amp;quot;remotes::install_github(&amp;#39;rstudio/renv@${RENV_VE
 # Create a directory named after our project directory
 WORKDIR /computational-reproducibility-in-r
 
+# Copy the lockfile over to the Docker image
+COPY renv.lock renv.lock
+
 # Install all R packages specified in renv.lock
 RUN Rscript -e &amp;#39;renv::restore()&amp;#39;
 
