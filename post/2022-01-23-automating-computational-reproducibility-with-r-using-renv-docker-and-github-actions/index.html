@@ -983,7 +983,29 @@ RUN Rscript -e &#39;renv::restore()&#39;
 # Default to bash terminal when running docker image
 CMD [&quot;bash&quot;]</code></pre>
 <p>The comments above detail what is going on—for you, you can make this work for your project by simply changing the <code>R</code> and <code>renv</code> version numbers to the values for your own project.</p>
-<p><strong><em>Note</em></strong>: You may be wondering—where are those random linux libraries coming from? How did you know you needed them? Well, I didn’t actually know when I started! When I tried building the image without them, I would get an error message that pointed toward a library that was needed. For example, here is one of the error messages:</p>
+<p>To actually build the image so that we can run it, we can do so in the terminal using the following code:</p>
+<pre class="bash"><code>docker build -t my-docker-image .
+
+# [+] Building 150.2s (11/11) FINISHED                                           
+#  =&gt; [internal] load build definition from Dockerfile                       0.0s
+#  =&gt; =&gt; transferring dockerfile: 694B                                       0.0s
+#  =&gt; [internal] load .dockerignore                                          0.0s
+#  =&gt; =&gt; transferring context: 2B                                            0.0s
+#  =&gt; [internal] load metadata for docker.io/rocker/r-ver:4.1.0              0.0s
+#  =&gt; [internal] load build context                                          0.0s
+#  =&gt; =&gt; transferring context: 9.10kB                                        0.0s
+#  =&gt; CACHED [1/6] FROM docker.io/rocker/r-ver:4.1.0                         0.0s
+#  =&gt; [2/6] RUN Rscript -e &quot;install.packages(&#39;remotes&#39;, repos = c(CRAN = &#39;h  5.9s
+#  =&gt; [3/6] RUN Rscript -e &quot;remotes::install_github(&#39;rstudio/renv@0.15.2&#39;)  12.8s
+#  =&gt; [4/6] WORKDIR /computational-reproducibility-in-r                      0.0s 
+#  =&gt; [5/6] COPY renv.lock renv.lock                                         0.0s 
+#  =&gt; [6/6] RUN Rscript -e &#39;renv::restore()&#39;                               130.7s 
+#  =&gt; exporting to image                                                     0.7s 
+#  =&gt; =&gt; exporting layers                                                    0.7s 
+#  =&gt; =&gt; writing image sha256:348a67e88477b16e01bd38a34e73c1c72c2f12e9ec927  0.0s 
+#  =&gt; =&gt; naming to docker.io/library/my-docker-image                         0.0s </code></pre>
+<p>The code above tells <code>Docker</code> to build the image and tag it with the name <code>my-docker-image</code>. Looks like it worked!</p>
+<p><strong><em>Note</em></strong>: You may be wondering—where are those random linux libraries in the <code>Dockerfile</code> coming from? How did you know you needed them? Well, I didn’t actually know when I started! When I tried building the image without them, I would get an error message that pointed toward a library that was needed. For example, here is one of the error messages:</p>
 <pre class="base"><code>#9 628.1 Installing xml2 [1.3.2] ...
 #9 628.3    FAILED
 #9 628.3 Error installing package &#39;xml2&#39;:
@@ -1009,28 +1031,6 @@ CMD [&quot;bash&quot;]</code></pre>
 #9 628.3 * removing ‘/usr/local/lib/R/site-library/.renv/1/xml2’
 #9 628.3 Error: install of package &#39;xml2&#39; failed [error code 1]</code></pre>
 <p>This is a really helpful message—it says that <code>libxml2-dev</code> is necessary for installing the <code>R</code> package <code>xml2</code>, and because our image did not have <code>libxml2-dev</code>, the build failed. So, by adding <code>libxml2-dev</code> in the <code>Dockerfile</code>, the problem was resolved. The same thing happened for the other libraries in the <code>Dockerfile</code>. So, if you run into this issue, just check out the error message to find what you need, and add it to the line in the <code>Dockerfile</code>.</p>
-<p>OK, let’s move on to something more exciting… To actually build the image so that we can run it, we can do so in the terminal using the following code:</p>
-<pre class="bash"><code>docker build -t my-docker-image .
-
-# [+] Building 150.2s (11/11) FINISHED                                           
-#  =&gt; [internal] load build definition from Dockerfile                       0.0s
-#  =&gt; =&gt; transferring dockerfile: 694B                                       0.0s
-#  =&gt; [internal] load .dockerignore                                          0.0s
-#  =&gt; =&gt; transferring context: 2B                                            0.0s
-#  =&gt; [internal] load metadata for docker.io/rocker/r-ver:4.1.0              0.0s
-#  =&gt; [internal] load build context                                          0.0s
-#  =&gt; =&gt; transferring context: 9.10kB                                        0.0s
-#  =&gt; CACHED [1/6] FROM docker.io/rocker/r-ver:4.1.0                         0.0s
-#  =&gt; [2/6] RUN Rscript -e &quot;install.packages(&#39;remotes&#39;, repos = c(CRAN = &#39;h  5.9s
-#  =&gt; [3/6] RUN Rscript -e &quot;remotes::install_github(&#39;rstudio/renv@0.15.2&#39;)  12.8s
-#  =&gt; [4/6] WORKDIR /computational-reproducibility-in-r                      0.0s 
-#  =&gt; [5/6] COPY renv.lock renv.lock                                         0.0s 
-#  =&gt; [6/6] RUN Rscript -e &#39;renv::restore()&#39;                               130.7s 
-#  =&gt; exporting to image                                                     0.7s 
-#  =&gt; =&gt; exporting layers                                                    0.7s 
-#  =&gt; =&gt; writing image sha256:348a67e88477b16e01bd38a34e73c1c72c2f12e9ec927  0.0s 
-#  =&gt; =&gt; naming to docker.io/library/my-docker-image                         0.0s </code></pre>
-<p>The code above tells <code>Docker</code> to build the image and tag it with the name <code>my-docker-image</code>. Looks like it worked!</p>
 </div>
 <div id="running-a-docker-image" class="section level3">
 <h3>Running a Docker Image</h3>
