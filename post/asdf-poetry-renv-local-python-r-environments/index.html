@@ -1,0 +1,1527 @@
+<!DOCTYPE html><html lang="en-us" >
+
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.4.0 for Hugo" />
+  
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Nathaniel Haines" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="The Problem In a previous blog post, we discussed the benefits of using renv, Docker, and GitHub Actions to streamline computational reproducibility workflows in R. However, this workflow is a bit overkill at times." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/" />
+
+  
+  
+  
+    <meta name="theme-color" content="hsl(339, 90%, 68%)" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.f1ecf783c14edc00c9320c205831ad8e.css" media="print" onload="this.media='all'">
+
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha512-W0xM4mr6dEP9nREo7Z9z+9X70wytKvMGeDsj7ps2+xg5QPrEBXC8tAW1IFnzjR6eoJ90JmCnFzerQJTLzIEHjA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+    
+    
+    
+      
+      
+    
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'" disabled>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'">
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.css" integrity="" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.483823b49802e3bfc12a727dbc71499e.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106994238-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-106994238-1', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+
+  
+  
+    
+    
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Computational Psychology" />
+  <meta property="og:url" content="http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/" />
+  <meta property="og:title" content="Data Science and Computational Reproducibility: Using asdf, poetry, and renv to make your local Python and R environments easy(er) to manage | Computational Psychology" />
+  <meta property="og:description" content="The Problem In a previous blog post, we discussed the benefits of using renv, Docker, and GitHub Actions to streamline computational reproducibility workflows in R. However, this workflow is a bit overkill at times." /><meta property="og:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2022-09-22T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2022-09-22T15:52:10-04:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/"
+  },
+  "headline": "Data Science and Computational Reproducibility: Using asdf, poetry, and renv to make your local Python and R environments easy(er) to manage",
+  
+  "datePublished": "2022-09-22T00:00:00Z",
+  "dateModified": "2022-09-22T15:52:10-04:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Nathaniel Haines"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Computational Psychology",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "The Problem In a previous blog post, we discussed the benefits of using renv, Docker, and GitHub Actions to streamline computational reproducibility workflows in R. However, this workflow is a bit overkill at times."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Data Science and Computational Reproducibility: Using asdf, poetry, and renv to make your local Python and R environments easy(er) to manage | Computational Psychology</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  dark " data-wc-page-id="8e6cd8291eca5be0ef8e518bfd3ef737" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.b6ac29faab89ee14db88f0bed7aa6622.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="header--fixed">
+  <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+    <div class="container-xl">
+
+      
+      <div class="d-none d-lg-inline-flex">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+      
+      <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      
+      <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+        
+        <ul class="navbar-nav d-md-inline-flex">
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#posts"><span>Posts</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#talks"><span>Talks</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#featured"><span>Publications</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#contact"><span>Contact</span></a>
+          </li>
+
+          
+          
+
+        
+
+          
+        </ul>
+      </div>
+
+      <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+        
+        
+          
+            
+            <li class="nav-item d-none d-lg-inline-flex">
+              <a class="nav-link" href="https://twitter.com/nate__haines" data-toggle="tooltip" data-placement="bottom" title="Follow me on Twitter" target="_blank" rel="noopener" aria-label="Follow me on Twitter">
+                <i class="fab fa-twitter" aria-hidden="true"></i>
+              </a>
+            </li>
+          
+        
+
+        
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+        
+        <li class="nav-item dropdown theme-dropdown">
+          <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item js-set-theme-light">
+              <span>Light</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-dark">
+              <span>Dark</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-auto">
+              <span>Automatic</span>
+            </a>
+          </div>
+        </li>
+        
+
+        
+        
+
+      </ul>
+
+    </div>
+  </nav>
+</header>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Data Science and Computational Reproducibility: Using asdf, poetry, and renv to make your local Python and R environments easy(er) to manage</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    Sep 22, 2022
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    13 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/asdf-poetry-renv-local-python-r-environments/#disqus_thread"></a>
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="the-problem" class="section level1">
+<h1>The Problem</h1>
+<p>In a <a href="http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/">previous blog post</a>, we discussed the benefits of using <code>renv</code>, Docker, and GitHub Actions to streamline computational reproducibility workflows in <code>R</code>. However, this workflow is a bit overkill at times. For example, if I start a new predictive modeling project, I may want to quickly explore some fancy new models that just got released in some new <code>Python</code>/<code>R</code> library. This package itself may require different dependencies than those of my prior or existing projects–I might even need to update my <code>Python</code>/<code>R</code> version itself.</p>
+<p>Of course, anyone who has updated their <code>Python</code> or <code>R</code> versions mid-project knows just how much chaos will ensue…</p>
+<div class="figure">
+<img src="/media/r_update_meme.png" alt="" />
+<p class="caption">Caption: When I–a mediocre software developer–update R (<a href="https://www.facebook.com/Rmemes0/posts/the-price-of-progressmeme-send-in-by-mateus-figueredorashnutin/2526492694069673/">source</a>)</p>
+</div>
+<p>This level of <strong><em>dependency hell</em></strong> can only really be resolved in two different ways:</p>
+<ol style="list-style-type: decimal">
+<li>Replace existing system <code>Python</code>/<code>R</code> installations and associated libraries with versions that are consistent with those required by the fancy new modeling library, or</li>
+<li>Install parallel versions of <code>Python</code>/<code>R</code> along with respective libraries, making sure to use the right version in the right context.</li>
+</ol>
+<p>Both of these approaches are not ideal–replacing your system installation for each new project is bound to only move the issue to another project (or a future you!). Alternatively, organizing parallel versions of <code>Python</code> and <code>R</code> sounds like a feat that can only be accomplished by an experienced software engineer–everyone knows that even <a href="https://www.quora.com/Why-is-Python-so-hard-to-install-I-got-Python-the-Hard-Way-and-I-cant-even-get-it-to-run">getting a single installation right can be a headache</a>. How does a mere programming mortal (such as myself) get multiple parallel versions to work?</p>
+</div>
+<div id="the-solution" class="section level1">
+<h1>The Solution</h1>
+<p><img src="/media/asdf.jpeg" /></p>
+<p>Fortunately, we do not need to train in the art of software development to get multiple versions working in parallel! Instead, we can take our pick of a suite of <strong>virtual environment</strong> managers that allow for us to easily install parallel versions of a programming language on our machine and run the correct one in the correct context. In this post, I will cover <code>asdf</code>, as it was designed to support installing and managing any programming language with the help of a <code>plug-in</code> (more on this later).</p>
+<p>Then, we will walk through how to use <code>poetry</code> and <code>renv</code> within <code>Python</code> and <code>R</code>, respectively, to install and manage the language-specific libraries that our project depends on. Together, this unique combination of <code>asdf</code>, <code>poetry</code>, and <code>renv</code> will allow for us to seamlessly move from one complicated project to the next (or between projects) without having to worry about the issues that arise from either updating your system <code>Python</code>/<code>R</code> installation or updating your libraries within a given <code>Python</code>/<code>R</code> project.</p>
+<div id="using-asdf-to-manage-python-and-r-versions" class="section level2">
+<h2>Using asdf to Manage Python and R Versions</h2>
+<div id="what-exactly-is-asdf" class="section level3">
+<h3>What exactly is <code>asdf</code>?</h3>
+<p>Put simply, <code>asdf</code> is a tool that allows you to install and manage parallel versions of any programming language you like. This means that we can use the same tool to manage both <code>Python</code> and <code>R</code>, which is particularly helpful in cases where we have complex projects that rely on both. Note that <code>asdf</code> does not replace language-specific library managers (e.g., <code>poetry</code> for <code>Python</code> or <code>renv</code> for <code>R</code>). Instead, when you open a project, <code>asdf</code> first boots up the right version of <code>Python</code>/<code>R</code>, and then your language-specific library manager boots up the appropriate versions of the libraries used within your project.</p>
+</div>
+<div id="installing-asdf" class="section level3">
+<h3>Installing asdf</h3>
+<p>The <a href="https://asdf-vm.com/">asdf web page</a> has instructions for how to install <code>asdf</code> in many different ways. Given that I have a macbook, I like to use <a href="https://brew.sh/"><code>homebrew</code></a> to install most of my software. So, I just booted up the terminal and used the following commands to install <code>asdf</code>:</p>
+<pre><code>brew install asdf
+echo -e &quot;\n. $(brew --prefix asdf)/libexec/asdf.sh&quot; &gt;&gt; ~/.zprofile</code></pre>
+<p>The first line uses homebrew to download and install <code>asdf</code>, and the second line configures <code>asdf</code> so that we can access it through our terminal.</p>
+</div>
+<div id="installing-asdf-plug-ins-for-python-and-r" class="section level3">
+<h3>Installing asdf plug-ins for Python and R</h3>
+<p>Once we have <code>asdf</code> installed, we need to install a <strong>plug-in</strong> for each programming language that we want to manage. These plug-ins are what <code>asdf</code> uses to find and install versions of the given programming language. Plug-ins for <code>Python</code> and <code>R</code> can be found <a href="https://github.com/asdf-community/asdf-python">here</a> and <a href="https://github.com/asdf-community/asdf-R">here</a>, respectively.</p>
+<p>From the links above, the <code>Python</code> plug-in can be installed as follows:</p>
+<pre><code>asdf plugin-add python</code></pre>
+<p>The <code>R</code> plug-in was slightly more involved. I first used <code>homebrew</code> to install some dependencies that the plug-in itself requires:</p>
+<pre><code>brew install gcc xz libxt cairo pcre2</code></pre>
+<p>Then, I installed the plug-in itself using the following command:</p>
+<pre><code>asdf plugin-add R https://github.com/asdf-community/asdf-r.git</code></pre>
+<p>And there we have it! We now have plug-ins installed that we can use to install parallel versions of both <code>Python</code> and <code>R</code>.</p>
+</div>
+<div id="using-plug-ins" class="section level3">
+<h3>Using plug-ins</h3>
+<p>With both plug-ins installed, we are now equipped to install parallel versions of both <code>Python</code> and <code>R</code>! For example, say I want to have a <code>Python</code> installation for both version <code>3.8.10</code> and <code>3.9.1</code>–a common situation if we just finished a project and want to use the latest version for projects moving forward. To install both, run:</p>
+<pre><code>env PYTHON_CONFIGURE_OPTS=&quot;--enable-shared&quot; asdf install python 3.8.10
+env PYTHON_CONFIGURE_OPTS=&quot;--enable-shared&quot; asdf install python 3.9.1</code></pre>
+<p>The first part is necessary to create a shared library for <code>python</code> to store and access packages. Everything after <code>asdf ...</code> then specifies which <code>python</code> version to install. For <code>R</code>, the command is similar–just replace <code>python</code> with <code>R</code> and include the desired version number:</p>
+<pre><code>asdf install R 4.1.0
+asdf install R 4.2.0</code></pre>
+<p>Note that I ran into the error <code>configure: error: "liblzma library and headers are required"</code> when trying to install <code>R</code>. In case you do to, the solution is described <a href="https://github.com/asdf-community/asdf-r/pull/2#issuecomment-929642247">here</a>.</p>
+<p>Now, you have two parallel versions of both <code>Python</code> and <code>R</code> installed!</p>
+<p>(<em>NOTE: with an Apple Silicon mac, I get the error</em> <code>configure: error: Unexpected output of 'arch' on OSX</code> <em>if I try installing a version of </em><code>Python &lt; 3.8</code><em>. I am sure there is a way around it, but I will leave that to readers who need older versions of Python. Similarly, issues can arise when trying to install certain versions of R. For example, I encounter the </em><code>configure: error: bzip2 library and headers are required</code> <em>error when trying to install </em><code>R &lt;= 4.0.0</code>. <em>. The main reason that issues arise is because asdf installs directly from source. Doing so provides a lot of customization options, but can be a headache.</em>)</p>
+</div>
+<div id="using-asdf-to-set-the-right-version" class="section level3">
+<h3>Using asdf to set the right version</h3>
+<p><code>asdf</code> allows you to set both global and local versions that your computer should use when booting up a particular language. The local version is what allows us to use different versions of <code>Python</code>/<code>R</code> across projects. For example, let’s create two projects and set different versions of both <code>Python</code> and <code>R</code> within each. To start, we create two different directories:</p>
+<pre><code>mkdir ~/project-1
+mkdir ~/project-2</code></pre>
+<p>Next, we navigate to each directory and set the appropriate version:</p>
+<pre><code>cd ~/project-1
+asdf local R 4.1.0
+asdf local python 3.8.10</code></pre>
+<p>You will see that there is now a <code>.tool-versions</code> file in the <code>~/project-1</code> directory. If you open it, you will simply see the versions for <code>Python</code> and <code>R</code> as specified above. <code>asdf</code> uses this file to select which version to use when running code. To see it in action, while in <code>~/project-1</code> directory, simply boot up <code>R</code> as normal:</p>
+<pre><code>nathanielhaines@Nathaniels-MBP ~ % R
+
+R version 4.1.0 (2021-05-18) -- &quot;Camp Pontanezen&quot;
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type &#39;license()&#39; or &#39;licence()&#39; for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type &#39;contributors()&#39; for more information and
+&#39;citation()&#39; on how to cite R or R packages in publications.
+
+Type &#39;demo()&#39; for some demos, &#39;help()&#39; for on-line help, or
+&#39;help.start()&#39; for an HTML browser interface to help.
+Type &#39;q()&#39; to quit R.
+
+&gt;</code></pre>
+<p>Booting up <code>Python</code> is similar:</p>
+<pre><code>nathanielhaines@Nathaniels-MBP ~ % python
+
+Python 3.8.10 (default, Sep 28 2022, 15:14:28) 
+[Clang 13.0.0 (clang-1300.0.29.3)] on darwin
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+
+&gt;&gt;&gt;</code></pre>
+<p>To show that it works across projects, we can set different versions in <code>~/project-2</code>:</p>
+<pre><code>cd ~/project-2
+asdf local R 4.1.1
+asdf local python 3.9.1</code></pre>
+<p>You will see that you now get a different <code>Python</code>/<code>R</code> version when starting an instance in the directory. For example, when I boot up <code>Python</code> in <code>~/project-2</code>, I see a different version than before:</p>
+<pre><code>nathanielhaines@Nathaniels-MBP ~ % python
+
+Python 3.9.1 (default, Sep 28 2022, 15:07:37) 
+[Clang 13.0.0 (clang-1300.0.29.3)] on darwin
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+
+&gt;&gt;&gt; </code></pre>
+<p>This is pretty cool! Although getting the source installations working can be a headache, now we can easily use different versions of languages in our data science/analysis stack dependent on the needs of the project. However, you may be wondering–what happens if we do not set a version for a directory we are in? Well, this is where the <code>global</code> settings comes in. You can set the default version for a language as follows:</p>
+<pre><code>asdf global R 4.1.0</code></pre>
+<p>Now, if you go the terminal and enter <code>R</code> in a directory without any local <code>asdf</code> settings, you will get the default <code>R</code> version <code>4.1.0</code>.</p>
+</div>
+</div>
+<div id="managing-python-libraries-with-poetry" class="section level2">
+<h2>Managing Python Libraries with poetry</h2>
+<p>With <code>asdf</code> all set up, we are finally ready to start working within our projects. Note that we set up <code>~/project-1</code> to rely on <code>Python 3.8.10</code> and <code>R 4.1.0</code>. Let’s assume that we want to install <code>sklearn</code> to do some machine learning in <code>Python</code>. To do so, we could either:</p>
+<ol style="list-style-type: decimal">
+<li>use traditional system installation methods such as <code>pip install</code>, or</li>
+<li>use a package manager such as <code>poetry</code></li>
+</ol>
+<p>Of course, given our goal to prevent as many dependency issues as possible, we will go the package manager route.</p>
+<div id="installing-poetry" class="section level3">
+<h3>Installing poetry</h3>
+<p>Specifically, <a href="https://python-poetry.org/"><code>poetry</code></a> is a package manager that works similarly to <code>renv</code> in <code>R</code>. Following the installation instructions <a href="https://python-poetry.org/docs/">here</a>, I was able to install it on my macbook using the following command:</p>
+<pre><code>curl -sSL https://install.python-poetry.org | python3 -</code></pre>
+</div>
+<div id="using-poetry" class="section level3">
+<h3>Using poetry</h3>
+<p>Once installed, we can easily install libraries within a project in a way that does not interfere with those of other projects. Returning to our example, before we add <code>scikit-learn</code> to our project, we first need to initialize <code>poetry</code> within the project:</p>
+<pre><code>cd ~/project-1
+poetry init</code></pre>
+<p>The <code>poetry init</code> command initiates an interactive prompt that helps you define the project (including useful things like selecting a license and writing a project description). Note that I set the <code>Python</code> version to <code>~3.8</code>–the tilde indicates that our project use libraries that work with <code>Python &gt;=3.8.0 &lt;3.9.0</code>. Here is what walking through the prompts looks like on my end:</p>
+<p><img src="/media/poetry_init.gif" /></p>
+<p>Once initialized, we need to tell <code>poetry</code> which <code>Python</code> version to use. Below, the <code>poetry env use python</code> line links <code>poetry</code> to the version set by <code>asdf</code>. Then, we use <code>poetry add</code> to install <code>sklearn</code>:</p>
+<pre><code>poetry env use python
+poetry add sklearn</code></pre>
+<p>Output on my end:</p>
+<p><img src="/media/poetry_add.gif" /></p>
+<p>Now, if we want to run <code>Python</code> interactively in our project, we can either boot up an interpreter using <code>poetry shell</code>, or we can set up our editor (e.g., <code>jupyter notebook</code>, <code>VScode</code>, etc.) to use the virtual environment located at the path printed after entering the <code>poetry env use python</code> command. Conversely, if we have a <code>main.py</code> script that we want to run, you can run it using poetry with the following syntax: <code>poetry run python -m main</code>.</p>
+</div>
+</div>
+<div id="managing-r-libraries-with-renv" class="section level2">
+<h2>Managing R Libraries with renv</h2>
+<p>Because I covered it in detail in a previous blog, I will not cover installation and usage information on <code>renv</code> here. Refer to the <a href="http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/">blog linked here</a> for more information on installing and using <code>renv</code>. For completeness, I will note here that <code>renv</code> accomplishes the same thing that <code>poetry</code> does for <code>Python</code>, but for <code>R</code> instead.</p>
+<p>Once <code>renv</code> is installed per the instructions linked in the blog above, we can initialize the <code>R</code> portion of our project by navigating to <code>~/project-1</code>, booting up an <code>R</code> terminal, and initializing <code>renv</code>:</p>
+<pre><code>nathanielhaines@Nathaniels-MacBook-Pro ~ % cd ~/project-1 
+nathanielhaines@Nathaniels-MacBook-Pro project-1 % R
+
+R version 4.1.0 (2021-05-18) -- &quot;Camp Pontanezen&quot;
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type &#39;license()&#39; or &#39;licence()&#39; for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type &#39;contributors()&#39; for more information and
+&#39;citation()&#39; on how to cite R or R packages in publications.
+
+Type &#39;demo()&#39; for some demos, &#39;help()&#39; for on-line help, or
+&#39;help.start()&#39; for an HTML browser interface to help.
+Type &#39;q()&#39; to quit R.
+
+&gt; renv::init()
+* Initializing project ...
+* Discovering package dependencies ... Done!
+* Copying packages into the cache ... Done!
+The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- renv   [* -&gt; 0.15.2]
+
+* Lockfile written to &#39;~/project-1/renv.lock&#39;.
+* Project &#39;~/project-1&#39; loaded. [renv 0.15.2]
+* renv activated -- please restart the R session.
+
+&gt; </code></pre>
+<p>Next, we can install any <code>R</code> libraries that we want to use in our project. Remember that we installed <code>sklearn</code> in <code>Python</code> so that we could do some machine learning–it is only natural that we would want to plot out some performance metrics for our model. However, I prefer to use <code>R</code>/<code>ggplot2</code> for making plots. Therefore, I will install <code>ggplot2</code>, <code>reticulate</code> (allowing us to run <code>python</code> code in <code>R</code>), and <code>knitr</code> (to compile an <code>Rmarkdown</code> notebook) so that I can take the machine learning model output from <code>python</code> and plot performance using <code>R</code>. Within the <code>R</code> instance started above, we can install libraries using the normal <code>R</code> syntax: <code>install.packages(c("ggplot2", "reticulate", "knitr"))</code>.</p>
+</div>
+<div id="bringing-it-all-together" class="section level2">
+<h2>Bringing it all Together!</h2>
+<p><img src="/media/rstudio_r_python.png" />
+With everything initialized and installed to meet our needs, we are finally ready to show how powerful our setup actually is! We will tie everything together by creating an <code>Rmarkdown</code> file that uses <code>Python</code> to fit a machine learning model and <code>R</code> to plot model performance metrics–all while using version-controlled <code>Python</code>/<code>R</code> installations and associated libraries 🤓</p>
+<p>To start, I created an Rmarkdown file (<code>fit_python_plot_r.Rmd</code>) with the following header and setup chunk:</p>
+<pre><code>---
+title: &quot;fit_python_plot_r&quot;
+author: &quot;Nathaniel Haines&quot;
+date: &quot;10/1/2022&quot;
+output: html_document
+---</code></pre>
+<pre class="markdown"><code>```{r setup, include=FALSE}
+library(reticulate)
+knitr::opts_chunk$set(echo = TRUE)
+
+# Telling rstudio to use the virtual environment created by poetry for python
+virtual_python_path &lt;- system2(&quot;poetry&quot;, &quot;env info -p&quot;, stdout=TRUE)
+Sys.setenv(RETICULATE_PYTHON = paste0(virtual_python_path, &quot;/bin/python3.8&quot;))
+py_discover_config()
+```</code></pre>
+<p>The setup chunk above tells <code>R</code>/<code>Rstudio</code> to use the python version and libraries associated with our poetry project created in previous steps. If we skip this step, the default is our system installation of <code>python</code>, which may be a different version or not have the correct libraries installed.</p>
+<p>Next, we can create a python chunk that fits our model to some example data:</p>
+<pre class="markdown"><code>```{python}
+from sklearn import linear_model, datasets
+
+# Loading in a dataset
+diabetes_X, diabetes_y = datasets.load_diabetes(return_X_y=True)
+
+# Initializing and fitting model
+model = linear_model.LinearRegression()
+model.fit(diabetes_X, diabetes_y)
+
+# Generating fitted model predictions
+diabetes_y_pred = model.predict(diabetes_X)
+```</code></pre>
+<p>Finally, we can access this data in an <code>R</code> chunk through the <code>py</code> variable that is implicitly created and passed along throughout the notebook:</p>
+<pre class="markdown"><code>```{r}
+library(ggplot2)
+
+# Create our plot in ggplot
+my_plot &lt;- qplot(x = py$diabetes_y, y = py$diabetes_y_pred, geom = &quot;point&quot;) +
+  xlab(&quot;Actual&quot;) +
+  ylab(&quot;Predicted&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())
+
+# save it out
+ggsave(&quot;my_plot.png&quot;, my_plot, height=5, width=6, unit=&quot;in&quot;)
+```</code></pre>
+<p>To run the notebook, I have found that it is best to use the terminal rather than <code>Rstudio</code>. The reason is that <code>Rstudio</code> does not seem to play well with the <code>R</code> environment installed through <code>asdf</code>. <em>In fact, I have created an issue <a href="https://github.com/asdf-community/asdf-r/issues/7">here</a> on this topic, so feel free to contribute if you find a solution!</em></p>
+<p>Running the notebook in the terminal is simple–just knit the notebook as follows:</p>
+<pre><code>Rscript -e &quot;knitr::knit(&#39;project-1/fit_python_plot_r.Rmd&#39;)&quot;</code></pre>
+<p><img src="/media/knit.gif" /></p>
+<p>And just like that, we have a plot of our model performance! Mine is pictured below:</p>
+<p><img src="/media/knitted_python_r_plot.png" /></p>
+</div>
+</div>
+<div id="wrap-up" class="section level1">
+<h1>Wrap-up</h1>
+<p>In this blog, we walked through how to set up your local development environment to use <code>asdf</code> to manage versions of <code>python</code> and <code>R</code> across projects. We also learned how to use <code>poetry</code> and <code>renv</code> to manage libraries within <code>python</code> and <code>R</code>. This set-up allows for you to keep the dependencies of your various research or data science projects separate, avoiding the age-old software problem of <em>dependency hell</em>.</p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+<div class="share-box">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/&amp;text=Data%20Science%20and%20Computational%20Reproducibility:%20Using%20asdf,%20poetry,%20and%20renv%20to%20make%20your%20local%20Python%20and%20R%20environments%20easy%28er%29%20to%20manage" target="_blank" rel="noopener" class="share-btn-twitter" aria-label="twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/&amp;t=Data%20Science%20and%20Computational%20Reproducibility:%20Using%20asdf,%20poetry,%20and%20renv%20to%20make%20your%20local%20Python%20and%20R%20environments%20easy%28er%29%20to%20manage" target="_blank" rel="noopener" class="share-btn-facebook" aria-label="facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Data%20Science%20and%20Computational%20Reproducibility:%20Using%20asdf,%20poetry,%20and%20renv%20to%20make%20your%20local%20Python%20and%20R%20environments%20easy%28er%29%20to%20manage&amp;body=http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/" target="_blank" rel="noopener" class="share-btn-email" aria-label="envelope">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/&amp;title=Data%20Science%20and%20Computational%20Reproducibility:%20Using%20asdf,%20poetry,%20and%20renv%20to%20make%20your%20local%20Python%20and%20R%20environments%20easy%28er%29%20to%20manage" target="_blank" rel="noopener" class="share-btn-linkedin" aria-label="linkedin-in">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Data%20Science%20and%20Computational%20Reproducibility:%20Using%20asdf,%20poetry,%20and%20renv%20to%20make%20your%20local%20Python%20and%20R%20environments%20easy%28er%29%20to%20manage%20http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/" target="_blank" rel="noopener" class="share-btn-whatsapp" aria-label="whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/&amp;title=Data%20Science%20and%20Computational%20Reproducibility:%20Using%20asdf,%20poetry,%20and%20renv%20to%20make%20your%20local%20Python%20and%20R%20environments%20easy%28er%29%20to%20manage" target="_blank" rel="noopener" class="share-btn-weibo" aria-label="weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="http://haines-lab.com/"><img class="avatar mr-3 avatar-circle" src="/author/nathaniel-haines/avatar_hu18f02a005e94be448ab5c0ae7ed66621_1477560_270x270_fill_q75_lanczos_center.jpg" alt="Nathaniel Haines"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="http://haines-lab.com/">Nathaniel Haines</a></h5>
+      <h6 class="card-subtitle">Data Scientist &amp; Computational Psychologist, PhD</h6>
+      <p class="card-text">An academic Bayesian who is currently exploring the high dimensional posterior distribution of life</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/nate__haines" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=lg741SgAAAAJ" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/Nathaniel-Haines" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/nathaniel-haines-216049101/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  <section id="comments">
+    
+<div id="disqus_thread"></div>
+<script>
+  var disqus_config = function () {
+    
+    
+    
+  };
+  (function() {
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+      return;
+    }
+    var d = document, s = d.createElement('script'); s.async = true;
+    s.src = 'https://' + "haines-lab-com" + '.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </section>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Nathaniel Haines, PhD
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-themes" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    <script src="/js/vendor-bundle.min.b73dfaac3b6499dc997741748a7c3fe2.js"></script>
+
+    
+    
+    
+      
+      
+        <script src="https://cdn.jsdelivr.net/gh/desandro/imagesloaded@v4.1.4/imagesloaded.pkgd.min.js" integrity="sha512-S5PZ9GxJZO16tT9r3WJp/Safn31eu8uWrzglMahDT4dsmgqWonRY9grk3j+3tfuPr9WJNsfooOR7Gi7HL5W2jw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/metafizzy/isotope@v3.0.6/dist/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js" integrity="sha512-Ypjm0o7jOxAd4hpdoppSEN0TQOC19UtPAqD+4s5AlXmUvbmmS/YMxYqAqarQYyxTnB6/rqip9qcxlNB/3U9Wdg==" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/r.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/python.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/latex.min.js" crossorigin="anonymous"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.js" integrity="" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdn.jsdelivr.net/gh/krisk/Fuse@v3.2.1/dist/fuse.min.js" integrity="sha512-o38bmzBGX+hD3JHWUFCDA09btWaqrNmoJ3RXLlrysA7PP01Kgs4UlE4MhelE1v5dJR3+cxlR4qQlotsW7jKsnw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/julmot/mark.js@8.11.1/dist/jquery.mark.min.js" integrity="sha512-mhbv5DqBMgrWL+32MmsDOt/OAvqr/cHimk6B8y/bx/xS88MVkYGPiVv2ixKVrkywF2qHplNRUvFsAHUdxZ3Krg==" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+      <script id="dsq-count-scr" src="https://haines-lab-com.disqus.com/count.js" async></script>
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+
+    
+    
+    
+    <script id="page-data" type="application/json">{"use_headroom":true}</script>
+
+    
+    
+      <script src="/js/wowchemy-headroom.1cb9e2fc8399acee94eab837265b73bf.js" type="module"></script>
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.247fd8f54253895301106e3006f53f38.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

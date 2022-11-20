@@ -5,12 +5,266 @@
     <link>http://haines-lab.com/post/</link>
       <atom:link href="http://haines-lab.com/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Mon, 24 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Thu, 22 Sep 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>http://haines-lab.com/media/icon_hu88408da40bfce0858e3c9c463b923e62_76530_512x512_fill_lanczos_center_3.png</url>
       <title>Posts</title>
       <link>http://haines-lab.com/post/</link>
     </image>
+    
+    <item>
+      <title>Data Science and Computational Reproducibility: Using asdf, poetry, and renv to make your local Python and R environments easy(er) to manage</title>
+      <link>http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/</link>
+      <pubDate>Thu, 22 Sep 2022 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/</guid>
+      <description>
+&lt;script src=&#34;http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;the-problem&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;The Problem&lt;/h1&gt;
+&lt;p&gt;In a &lt;a href=&#34;http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/&#34;&gt;previous blog post&lt;/a&gt;, we discussed the benefits of using &lt;code&gt;renv&lt;/code&gt;, Docker, and GitHub Actions to streamline computational reproducibility workflows in &lt;code&gt;R&lt;/code&gt;. However, this workflow is a bit overkill at times. For example, if I start a new predictive modeling project, I may want to quickly explore some fancy new models that just got released in some new &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt; library. This package itself may require different dependencies than those of my prior or existing projects–I might even need to update my &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt; version itself.&lt;/p&gt;
+&lt;p&gt;Of course, anyone who has updated their &lt;code&gt;Python&lt;/code&gt; or &lt;code&gt;R&lt;/code&gt; versions mid-project knows just how much chaos will ensue…&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;http://haines-lab.com/media/r_update_meme.png&#34; alt=&#34;&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Caption: When I–a mediocre software developer–update R (&lt;a href=&#34;https://www.facebook.com/Rmemes0/posts/the-price-of-progressmeme-send-in-by-mateus-figueredorashnutin/2526492694069673/&#34;&gt;source&lt;/a&gt;)&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;This level of &lt;strong&gt;&lt;em&gt;dependency hell&lt;/em&gt;&lt;/strong&gt; can only really be resolved in two different ways:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Replace existing system &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt; installations and associated libraries with versions that are consistent with those required by the fancy new modeling library, or&lt;/li&gt;
+&lt;li&gt;Install parallel versions of &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt; along with respective libraries, making sure to use the right version in the right context.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Both of these approaches are not ideal–replacing your system installation for each new project is bound to only move the issue to another project (or a future you!). Alternatively, organizing parallel versions of &lt;code&gt;Python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt; sounds like a feat that can only be accomplished by an experienced software engineer–everyone knows that even &lt;a href=&#34;https://www.quora.com/Why-is-Python-so-hard-to-install-I-got-Python-the-Hard-Way-and-I-cant-even-get-it-to-run&#34;&gt;getting a single installation right can be a headache&lt;/a&gt;. How does a mere programming mortal (such as myself) get multiple parallel versions to work?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-solution&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;The Solution&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/media/asdf.jpeg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Fortunately, we do not need to train in the art of software development to get multiple versions working in parallel! Instead, we can take our pick of a suite of &lt;strong&gt;virtual environment&lt;/strong&gt; managers that allow for us to easily install parallel versions of a programming language on our machine and run the correct one in the correct context. In this post, I will cover &lt;code&gt;asdf&lt;/code&gt;, as it was designed to support installing and managing any programming language with the help of a &lt;code&gt;plug-in&lt;/code&gt; (more on this later).&lt;/p&gt;
+&lt;p&gt;Then, we will walk through how to use &lt;code&gt;poetry&lt;/code&gt; and &lt;code&gt;renv&lt;/code&gt; within &lt;code&gt;Python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt;, respectively, to install and manage the language-specific libraries that our project depends on. Together, this unique combination of &lt;code&gt;asdf&lt;/code&gt;, &lt;code&gt;poetry&lt;/code&gt;, and &lt;code&gt;renv&lt;/code&gt; will allow for us to seamlessly move from one complicated project to the next (or between projects) without having to worry about the issues that arise from either updating your system &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt; installation or updating your libraries within a given &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt; project.&lt;/p&gt;
+&lt;div id=&#34;using-asdf-to-manage-python-and-r-versions&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Using asdf to Manage Python and R Versions&lt;/h2&gt;
+&lt;div id=&#34;what-exactly-is-asdf&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;What exactly is &lt;code&gt;asdf&lt;/code&gt;?&lt;/h3&gt;
+&lt;p&gt;Put simply, &lt;code&gt;asdf&lt;/code&gt; is a tool that allows you to install and manage parallel versions of any programming language you like. This means that we can use the same tool to manage both &lt;code&gt;Python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt;, which is particularly helpful in cases where we have complex projects that rely on both. Note that &lt;code&gt;asdf&lt;/code&gt; does not replace language-specific library managers (e.g., &lt;code&gt;poetry&lt;/code&gt; for &lt;code&gt;Python&lt;/code&gt; or &lt;code&gt;renv&lt;/code&gt; for &lt;code&gt;R&lt;/code&gt;). Instead, when you open a project, &lt;code&gt;asdf&lt;/code&gt; first boots up the right version of &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt;, and then your language-specific library manager boots up the appropriate versions of the libraries used within your project.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;installing-asdf&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Installing asdf&lt;/h3&gt;
+&lt;p&gt;The &lt;a href=&#34;https://asdf-vm.com/&#34;&gt;asdf web page&lt;/a&gt; has instructions for how to install &lt;code&gt;asdf&lt;/code&gt; in many different ways. Given that I have a macbook, I like to use &lt;a href=&#34;https://brew.sh/&#34;&gt;&lt;code&gt;homebrew&lt;/code&gt;&lt;/a&gt; to install most of my software. So, I just booted up the terminal and used the following commands to install &lt;code&gt;asdf&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;brew install asdf
+echo -e &amp;quot;\n. $(brew --prefix asdf)/libexec/asdf.sh&amp;quot; &amp;gt;&amp;gt; ~/.zprofile&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The first line uses homebrew to download and install &lt;code&gt;asdf&lt;/code&gt;, and the second line configures &lt;code&gt;asdf&lt;/code&gt; so that we can access it through our terminal.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;installing-asdf-plug-ins-for-python-and-r&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Installing asdf plug-ins for Python and R&lt;/h3&gt;
+&lt;p&gt;Once we have &lt;code&gt;asdf&lt;/code&gt; installed, we need to install a &lt;strong&gt;plug-in&lt;/strong&gt; for each programming language that we want to manage. These plug-ins are what &lt;code&gt;asdf&lt;/code&gt; uses to find and install versions of the given programming language. Plug-ins for &lt;code&gt;Python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt; can be found &lt;a href=&#34;https://github.com/asdf-community/asdf-python&#34;&gt;here&lt;/a&gt; and &lt;a href=&#34;https://github.com/asdf-community/asdf-R&#34;&gt;here&lt;/a&gt;, respectively.&lt;/p&gt;
+&lt;p&gt;From the links above, the &lt;code&gt;Python&lt;/code&gt; plug-in can be installed as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;asdf plugin-add python&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;R&lt;/code&gt; plug-in was slightly more involved. I first used &lt;code&gt;homebrew&lt;/code&gt; to install some dependencies that the plug-in itself requires:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;brew install gcc xz libxt cairo pcre2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then, I installed the plug-in itself using the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;asdf plugin-add R https://github.com/asdf-community/asdf-r.git&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And there we have it! We now have plug-ins installed that we can use to install parallel versions of both &lt;code&gt;Python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;using-plug-ins&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Using plug-ins&lt;/h3&gt;
+&lt;p&gt;With both plug-ins installed, we are now equipped to install parallel versions of both &lt;code&gt;Python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt;! For example, say I want to have a &lt;code&gt;Python&lt;/code&gt; installation for both version &lt;code&gt;3.8.10&lt;/code&gt; and &lt;code&gt;3.9.1&lt;/code&gt;–a common situation if we just finished a project and want to use the latest version for projects moving forward. To install both, run:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;env PYTHON_CONFIGURE_OPTS=&amp;quot;--enable-shared&amp;quot; asdf install python 3.8.10
+env PYTHON_CONFIGURE_OPTS=&amp;quot;--enable-shared&amp;quot; asdf install python 3.9.1&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The first part is necessary to create a shared library for &lt;code&gt;python&lt;/code&gt; to store and access packages. Everything after &lt;code&gt;asdf ...&lt;/code&gt; then specifies which &lt;code&gt;python&lt;/code&gt; version to install. For &lt;code&gt;R&lt;/code&gt;, the command is similar–just replace &lt;code&gt;python&lt;/code&gt; with &lt;code&gt;R&lt;/code&gt; and include the desired version number:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;asdf install R 4.1.0
+asdf install R 4.2.0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that I ran into the error &lt;code&gt;configure: error: &#34;liblzma library and headers are required&#34;&lt;/code&gt; when trying to install &lt;code&gt;R&lt;/code&gt;. In case you do to, the solution is described &lt;a href=&#34;https://github.com/asdf-community/asdf-r/pull/2#issuecomment-929642247&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Now, you have two parallel versions of both &lt;code&gt;Python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt; installed!&lt;/p&gt;
+&lt;p&gt;(&lt;em&gt;NOTE: with an Apple Silicon mac, I get the error&lt;/em&gt; &lt;code&gt;configure: error: Unexpected output of &#39;arch&#39; on OSX&lt;/code&gt; &lt;em&gt;if I try installing a version of &lt;/em&gt;&lt;code&gt;Python &amp;lt; 3.8&lt;/code&gt;&lt;em&gt;. I am sure there is a way around it, but I will leave that to readers who need older versions of Python. Similarly, issues can arise when trying to install certain versions of R. For example, I encounter the &lt;/em&gt;&lt;code&gt;configure: error: bzip2 library and headers are required&lt;/code&gt; &lt;em&gt;error when trying to install &lt;/em&gt;&lt;code&gt;R &amp;lt;= 4.0.0&lt;/code&gt;. &lt;em&gt;. The main reason that issues arise is because asdf installs directly from source. Doing so provides a lot of customization options, but can be a headache.&lt;/em&gt;)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;using-asdf-to-set-the-right-version&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Using asdf to set the right version&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;asdf&lt;/code&gt; allows you to set both global and local versions that your computer should use when booting up a particular language. The local version is what allows us to use different versions of &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt; across projects. For example, let’s create two projects and set different versions of both &lt;code&gt;Python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt; within each. To start, we create two different directories:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir ~/project-1
+mkdir ~/project-2&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, we navigate to each directory and set the appropriate version:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd ~/project-1
+asdf local R 4.1.0
+asdf local python 3.8.10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You will see that there is now a &lt;code&gt;.tool-versions&lt;/code&gt; file in the &lt;code&gt;~/project-1&lt;/code&gt; directory. If you open it, you will simply see the versions for &lt;code&gt;Python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt; as specified above. &lt;code&gt;asdf&lt;/code&gt; uses this file to select which version to use when running code. To see it in action, while in &lt;code&gt;~/project-1&lt;/code&gt; directory, simply boot up &lt;code&gt;R&lt;/code&gt; as normal:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;nathanielhaines@Nathaniels-MBP ~ % R
+
+R version 4.1.0 (2021-05-18) -- &amp;quot;Camp Pontanezen&amp;quot;
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type &amp;#39;license()&amp;#39; or &amp;#39;licence()&amp;#39; for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type &amp;#39;contributors()&amp;#39; for more information and
+&amp;#39;citation()&amp;#39; on how to cite R or R packages in publications.
+
+Type &amp;#39;demo()&amp;#39; for some demos, &amp;#39;help()&amp;#39; for on-line help, or
+&amp;#39;help.start()&amp;#39; for an HTML browser interface to help.
+Type &amp;#39;q()&amp;#39; to quit R.
+
+&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Booting up &lt;code&gt;Python&lt;/code&gt; is similar:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;nathanielhaines@Nathaniels-MBP ~ % python
+
+Python 3.8.10 (default, Sep 28 2022, 15:14:28) 
+[Clang 13.0.0 (clang-1300.0.29.3)] on darwin
+Type &amp;quot;help&amp;quot;, &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information.
+
+&amp;gt;&amp;gt;&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To show that it works across projects, we can set different versions in &lt;code&gt;~/project-2&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd ~/project-2
+asdf local R 4.1.1
+asdf local python 3.9.1&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You will see that you now get a different &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt; version when starting an instance in the directory. For example, when I boot up &lt;code&gt;Python&lt;/code&gt; in &lt;code&gt;~/project-2&lt;/code&gt;, I see a different version than before:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;nathanielhaines@Nathaniels-MBP ~ % python
+
+Python 3.9.1 (default, Sep 28 2022, 15:07:37) 
+[Clang 13.0.0 (clang-1300.0.29.3)] on darwin
+Type &amp;quot;help&amp;quot;, &amp;quot;copyright&amp;quot;, &amp;quot;credits&amp;quot; or &amp;quot;license&amp;quot; for more information.
+
+&amp;gt;&amp;gt;&amp;gt; &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is pretty cool! Although getting the source installations working can be a headache, now we can easily use different versions of languages in our data science/analysis stack dependent on the needs of the project. However, you may be wondering–what happens if we do not set a version for a directory we are in? Well, this is where the &lt;code&gt;global&lt;/code&gt; settings comes in. You can set the default version for a language as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;asdf global R 4.1.0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, if you go the terminal and enter &lt;code&gt;R&lt;/code&gt; in a directory without any local &lt;code&gt;asdf&lt;/code&gt; settings, you will get the default &lt;code&gt;R&lt;/code&gt; version &lt;code&gt;4.1.0&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;managing-python-libraries-with-poetry&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Managing Python Libraries with poetry&lt;/h2&gt;
+&lt;p&gt;With &lt;code&gt;asdf&lt;/code&gt; all set up, we are finally ready to start working within our projects. Note that we set up &lt;code&gt;~/project-1&lt;/code&gt; to rely on &lt;code&gt;Python 3.8.10&lt;/code&gt; and &lt;code&gt;R 4.1.0&lt;/code&gt;. Let’s assume that we want to install &lt;code&gt;sklearn&lt;/code&gt; to do some machine learning in &lt;code&gt;Python&lt;/code&gt;. To do so, we could either:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;use traditional system installation methods such as &lt;code&gt;pip install&lt;/code&gt;, or&lt;/li&gt;
+&lt;li&gt;use a package manager such as &lt;code&gt;poetry&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Of course, given our goal to prevent as many dependency issues as possible, we will go the package manager route.&lt;/p&gt;
+&lt;div id=&#34;installing-poetry&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Installing poetry&lt;/h3&gt;
+&lt;p&gt;Specifically, &lt;a href=&#34;https://python-poetry.org/&#34;&gt;&lt;code&gt;poetry&lt;/code&gt;&lt;/a&gt; is a package manager that works similarly to &lt;code&gt;renv&lt;/code&gt; in &lt;code&gt;R&lt;/code&gt;. Following the installation instructions &lt;a href=&#34;https://python-poetry.org/docs/&#34;&gt;here&lt;/a&gt;, I was able to install it on my macbook using the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;curl -sSL https://install.python-poetry.org | python3 -&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;using-poetry&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Using poetry&lt;/h3&gt;
+&lt;p&gt;Once installed, we can easily install libraries within a project in a way that does not interfere with those of other projects. Returning to our example, before we add &lt;code&gt;scikit-learn&lt;/code&gt; to our project, we first need to initialize &lt;code&gt;poetry&lt;/code&gt; within the project:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd ~/project-1
+poetry init&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;poetry init&lt;/code&gt; command initiates an interactive prompt that helps you define the project (including useful things like selecting a license and writing a project description). Note that I set the &lt;code&gt;Python&lt;/code&gt; version to &lt;code&gt;~3.8&lt;/code&gt;–the tilde indicates that our project use libraries that work with &lt;code&gt;Python &amp;gt;=3.8.0 &amp;lt;3.9.0&lt;/code&gt;. Here is what walking through the prompts looks like on my end:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/media/poetry_init.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Once initialized, we need to tell &lt;code&gt;poetry&lt;/code&gt; which &lt;code&gt;Python&lt;/code&gt; version to use. Below, the &lt;code&gt;poetry env use python&lt;/code&gt; line links &lt;code&gt;poetry&lt;/code&gt; to the version set by &lt;code&gt;asdf&lt;/code&gt;. Then, we use &lt;code&gt;poetry add&lt;/code&gt; to install &lt;code&gt;sklearn&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;poetry env use python
+poetry add sklearn&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Output on my end:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/media/poetry_add.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Now, if we want to run &lt;code&gt;Python&lt;/code&gt; interactively in our project, we can either boot up an interpreter using &lt;code&gt;poetry shell&lt;/code&gt;, or we can set up our editor (e.g., &lt;code&gt;jupyter notebook&lt;/code&gt;, &lt;code&gt;VScode&lt;/code&gt;, etc.) to use the virtual environment located at the path printed after entering the &lt;code&gt;poetry env use python&lt;/code&gt; command. Conversely, if we have a &lt;code&gt;main.py&lt;/code&gt; script that we want to run, you can run it using poetry with the following syntax: &lt;code&gt;poetry run python -m main&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;managing-r-libraries-with-renv&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Managing R Libraries with renv&lt;/h2&gt;
+&lt;p&gt;Because I covered it in detail in a previous blog, I will not cover installation and usage information on &lt;code&gt;renv&lt;/code&gt; here. Refer to the &lt;a href=&#34;http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/&#34;&gt;blog linked here&lt;/a&gt; for more information on installing and using &lt;code&gt;renv&lt;/code&gt;. For completeness, I will note here that &lt;code&gt;renv&lt;/code&gt; accomplishes the same thing that &lt;code&gt;poetry&lt;/code&gt; does for &lt;code&gt;Python&lt;/code&gt;, but for &lt;code&gt;R&lt;/code&gt; instead.&lt;/p&gt;
+&lt;p&gt;Once &lt;code&gt;renv&lt;/code&gt; is installed per the instructions linked in the blog above, we can initialize the &lt;code&gt;R&lt;/code&gt; portion of our project by navigating to &lt;code&gt;~/project-1&lt;/code&gt;, booting up an &lt;code&gt;R&lt;/code&gt; terminal, and initializing &lt;code&gt;renv&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;nathanielhaines@Nathaniels-MacBook-Pro ~ % cd ~/project-1 
+nathanielhaines@Nathaniels-MacBook-Pro project-1 % R
+
+R version 4.1.0 (2021-05-18) -- &amp;quot;Camp Pontanezen&amp;quot;
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type &amp;#39;license()&amp;#39; or &amp;#39;licence()&amp;#39; for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type &amp;#39;contributors()&amp;#39; for more information and
+&amp;#39;citation()&amp;#39; on how to cite R or R packages in publications.
+
+Type &amp;#39;demo()&amp;#39; for some demos, &amp;#39;help()&amp;#39; for on-line help, or
+&amp;#39;help.start()&amp;#39; for an HTML browser interface to help.
+Type &amp;#39;q()&amp;#39; to quit R.
+
+&amp;gt; renv::init()
+* Initializing project ...
+* Discovering package dependencies ... Done!
+* Copying packages into the cache ... Done!
+The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- renv   [* -&amp;gt; 0.15.2]
+
+* Lockfile written to &amp;#39;~/project-1/renv.lock&amp;#39;.
+* Project &amp;#39;~/project-1&amp;#39; loaded. [renv 0.15.2]
+* renv activated -- please restart the R session.
+
+&amp;gt; &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, we can install any &lt;code&gt;R&lt;/code&gt; libraries that we want to use in our project. Remember that we installed &lt;code&gt;sklearn&lt;/code&gt; in &lt;code&gt;Python&lt;/code&gt; so that we could do some machine learning–it is only natural that we would want to plot out some performance metrics for our model. However, I prefer to use &lt;code&gt;R&lt;/code&gt;/&lt;code&gt;ggplot2&lt;/code&gt; for making plots. Therefore, I will install &lt;code&gt;ggplot2&lt;/code&gt;, &lt;code&gt;reticulate&lt;/code&gt; (allowing us to run &lt;code&gt;python&lt;/code&gt; code in &lt;code&gt;R&lt;/code&gt;), and &lt;code&gt;knitr&lt;/code&gt; (to compile an &lt;code&gt;Rmarkdown&lt;/code&gt; notebook) so that I can take the machine learning model output from &lt;code&gt;python&lt;/code&gt; and plot performance using &lt;code&gt;R&lt;/code&gt;. Within the &lt;code&gt;R&lt;/code&gt; instance started above, we can install libraries using the normal &lt;code&gt;R&lt;/code&gt; syntax: &lt;code&gt;install.packages(c(&#34;ggplot2&#34;, &#34;reticulate&#34;, &#34;knitr&#34;))&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;bringing-it-all-together&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Bringing it all Together!&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/media/rstudio_r_python.png&#34; /&gt;
+With everything initialized and installed to meet our needs, we are finally ready to show how powerful our setup actually is! We will tie everything together by creating an &lt;code&gt;Rmarkdown&lt;/code&gt; file that uses &lt;code&gt;Python&lt;/code&gt; to fit a machine learning model and &lt;code&gt;R&lt;/code&gt; to plot model performance metrics–all while using version-controlled &lt;code&gt;Python&lt;/code&gt;/&lt;code&gt;R&lt;/code&gt; installations and associated libraries 🤓&lt;/p&gt;
+&lt;p&gt;To start, I created an Rmarkdown file (&lt;code&gt;fit_python_plot_r.Rmd&lt;/code&gt;) with the following header and setup chunk:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+title: &amp;quot;fit_python_plot_r&amp;quot;
+author: &amp;quot;Nathaniel Haines&amp;quot;
+date: &amp;quot;10/1/2022&amp;quot;
+output: html_document
+---&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;markdown&#34;&gt;&lt;code&gt;```{r setup, include=FALSE}
+library(reticulate)
+knitr::opts_chunk$set(echo = TRUE)
+
+# Telling rstudio to use the virtual environment created by poetry for python
+virtual_python_path &amp;lt;- system2(&amp;quot;poetry&amp;quot;, &amp;quot;env info -p&amp;quot;, stdout=TRUE)
+Sys.setenv(RETICULATE_PYTHON = paste0(virtual_python_path, &amp;quot;/bin/python3.8&amp;quot;))
+py_discover_config()
+```&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The setup chunk above tells &lt;code&gt;R&lt;/code&gt;/&lt;code&gt;Rstudio&lt;/code&gt; to use the python version and libraries associated with our poetry project created in previous steps. If we skip this step, the default is our system installation of &lt;code&gt;python&lt;/code&gt;, which may be a different version or not have the correct libraries installed.&lt;/p&gt;
+&lt;p&gt;Next, we can create a python chunk that fits our model to some example data:&lt;/p&gt;
+&lt;pre class=&#34;markdown&#34;&gt;&lt;code&gt;```{python}
+from sklearn import linear_model, datasets
+
+# Loading in a dataset
+diabetes_X, diabetes_y = datasets.load_diabetes(return_X_y=True)
+
+# Initializing and fitting model
+model = linear_model.LinearRegression()
+model.fit(diabetes_X, diabetes_y)
+
+# Generating fitted model predictions
+diabetes_y_pred = model.predict(diabetes_X)
+```&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally, we can access this data in an &lt;code&gt;R&lt;/code&gt; chunk through the &lt;code&gt;py&lt;/code&gt; variable that is implicitly created and passed along throughout the notebook:&lt;/p&gt;
+&lt;pre class=&#34;markdown&#34;&gt;&lt;code&gt;```{r}
+library(ggplot2)
+
+# Create our plot in ggplot
+my_plot &amp;lt;- qplot(x = py$diabetes_y, y = py$diabetes_y_pred, geom = &amp;quot;point&amp;quot;) +
+  xlab(&amp;quot;Actual&amp;quot;) +
+  ylab(&amp;quot;Predicted&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())
+
+# save it out
+ggsave(&amp;quot;my_plot.png&amp;quot;, my_plot, height=5, width=6, unit=&amp;quot;in&amp;quot;)
+```&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To run the notebook, I have found that it is best to use the terminal rather than &lt;code&gt;Rstudio&lt;/code&gt;. The reason is that &lt;code&gt;Rstudio&lt;/code&gt; does not seem to play well with the &lt;code&gt;R&lt;/code&gt; environment installed through &lt;code&gt;asdf&lt;/code&gt;. &lt;em&gt;In fact, I have created an issue &lt;a href=&#34;https://github.com/asdf-community/asdf-r/issues/7&#34;&gt;here&lt;/a&gt; on this topic, so feel free to contribute if you find a solution!&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Running the notebook in the terminal is simple–just knit the notebook as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Rscript -e &amp;quot;knitr::knit(&amp;#39;project-1/fit_python_plot_r.Rmd&amp;#39;)&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/media/knit.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;And just like that, we have a plot of our model performance! Mine is pictured below:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/media/knitted_python_r_plot.png&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;wrap-up&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Wrap-up&lt;/h1&gt;
+&lt;p&gt;In this blog, we walked through how to set up your local development environment to use &lt;code&gt;asdf&lt;/code&gt; to manage versions of &lt;code&gt;python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt; across projects. We also learned how to use &lt;code&gt;poetry&lt;/code&gt; and &lt;code&gt;renv&lt;/code&gt; to manage libraries within &lt;code&gt;python&lt;/code&gt; and &lt;code&gt;R&lt;/code&gt;. This set-up allows for you to keep the dependencies of your various research or data science projects separate, avoiding the age-old software problem of &lt;em&gt;dependency hell&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>Automating Computational Reproducibility in R using renv, Docker, and GitHub Actions</title>
