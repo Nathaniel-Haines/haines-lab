@@ -4047,9 +4047,8 @@ $$&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# For pretty plots and data manipulation
 library(ggplot2)
 library(foreach)
-library(dplyr)
-
-# Simulation paramters
+library(dplyr)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Simulation parameters
 set.seed(1)        # Random seed for replication
 mu    &amp;lt;- c(1, -1)  # Mean payoff for choices 1 and 2 
 sigma &amp;lt;- 3         # SD of payoff distributions
@@ -4145,7 +4144,7 @@ mle_bandit &amp;lt;- function(X, beta, outcomes)  {
   }
   
   # return the summed (minus) log-likelihood, because optim minimizes by default
-  sum(-1*ll)
+  -sum(ll)
 }
 
 # Because data were simulated and output into long format, we need to
@@ -4169,11 +4168,11 @@ cat(&amp;quot;The MLE for beta is: &amp;quot; , round(mle_results$par, 3))&lt;/c
 &lt;/div&gt;
 &lt;div id=&#34;maximum-a-poseriori-map-estimation&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;3.2 Maximum A Poseriori (MAP) Estimation&lt;/h2&gt;
-&lt;p&gt;MAP estimation is a straightforward extention of MLE, which allows us to incorporate prior information about the parameter that we are trying to estimate into the estimation procedure. In our example, we may know from prior studies that learning rates for a given task typically fall in the range of 0.01-0.4. MAP estimation allows us to formalize this prior research in a very simple way! We simply parameterize a prior distribution (&lt;span class=&#34;math inline&#34;&gt;\(Pr(\beta)\)&lt;/span&gt;) that is consistent with estimates from prior studies. For example, a normal distribution with a &lt;span class=&#34;math inline&#34;&gt;\(\mu = .15\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma = 0.25\)&lt;/span&gt; captures the above range nicely but does not constrain the values too much:&lt;/p&gt;
+&lt;p&gt;MAP estimation is a straightforward extention of MLE, which allows us to incorporate prior information about the parameter that we are trying to estimate into the estimation procedure. In our example, we may know from prior studies that learning rates for a given task typically fall in the range of 0.05-0.25. MAP estimation allows us to formalize this prior research in a very simple way! We simply parameterize a prior distribution (&lt;span class=&#34;math inline&#34;&gt;\(Pr(\beta)\)&lt;/span&gt;) that is consistent with estimates from prior studies. For example, a normal distribution with a &lt;span class=&#34;math inline&#34;&gt;\(\mu = .15\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\sigma = 0.05\)&lt;/span&gt; captures the above range nicely but does not constrain the values too much:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- seq(0, 1, length=1000)
-y &amp;lt;- dnorm(x, mean = .15, sd = .25)
+y &amp;lt;- dnorm(x, mean = .15, sd = .05)
 qplot(x = x, y = y, geom = &amp;quot;line&amp;quot;, xlab = expression(beta[prior]), ylab = &amp;quot;Density&amp;quot;) +
-  theme_minimal(base_size = 20)&lt;/code&gt;&lt;/pre&gt;
+  theme_minimal(base_size = 20) &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/2018-03-24-human-choice-and-reinforcement-learning-3/2018-03-24-human-choice-and-reinforcement-learning-3_files/figure-html/2018-09-08_fig4-1.svg&#34; width=&#34;672&#34; style=&#39;height: 100%; width: 100%; object-fit: contain&#39; /&gt;&lt;/p&gt;
 &lt;p&gt;So, how do we include this prior information? Easy! When we make a guess for &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt;, we will compute the likelihood just like we did for MLE, and we will multiple this value by the “likelihood” of the prior. Intuitively, this allows us to &lt;em&gt;weight&lt;/em&gt; the likelihood of each possible value for &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt; by the prior for that same value of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt;. This behavior results in a sort of trade off between the likelihood and prior distribution, which ends up &lt;strong&gt;regularizing&lt;/strong&gt; our MLE estimate by pulling it toward the center mass of the prior distribution. Formally, we represent this by adding the prior distribution (bolded) to the MLE function from above:&lt;/p&gt;
 &lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\beta}_{MAP} = \underset{\hat{\beta}}{\text{arg max}}\sum_{t=1}^{T}{\text{ln } Pr(Choice_{t}|\hat{\beta})\bf{Pr(\beta)}}\]&lt;/span&gt;&lt;/p&gt;
@@ -4191,17 +4190,16 @@ map_bandit &amp;lt;- function(X, beta, outcomes)  {
     ev[X[t]] &amp;lt;- ev[X[t]] + beta * (outcomes[t] - ev[X[t]])
     
     # Probability/likelihood of &amp;quot;true&amp;quot; simulated choice
-    like &amp;lt;- pr[X[t]]
+    lik &amp;lt;- pr[X[t]]
     
-    # Likelihood of current beta according to prior distribution
-    prior &amp;lt;- dnorm(x = beta, mean = .15, sd = 0.25)
-    
-    # Log of like*prior
-    log(like*prior)
+    # Log likelihood
+    log(lik)
   }
+  # Likelihood of current beta according to prior distribution
+  prior &amp;lt;- dnorm(x = beta, mean = .15, sd = 0.05)
   
   # return the summed (minus) log-likelihood with prior information included
-  sum(-1*ll)
+  -(sum(ll) + log(prior))
 }
 
 # Use optim to minimize the (minus) log-likelihood function
@@ -4215,8 +4213,8 @@ map_results &amp;lt;- optim(par      = 0.5,             # Initial guess for beta
 
 # Print results
 cat(&amp;quot;The MAP for beta is: &amp;quot; , round(map_results$par, 3))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## The MAP for beta is:  0.136&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Woah! The simple addition of prior information pushed our estimate of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.09\)&lt;/span&gt; to &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.136\)&lt;/span&gt;. Notice that the MAP estimator was pulled toward the mean of the prior distribution. However, is this a good thing? When is this behavior beneficial? After all, our MAP estimate is actually further than our MLE estimate from &lt;span class=&#34;math inline&#34;&gt;\(\beta_{true}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## The MAP for beta is:  0.106&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Woah! The simple addition of prior information pushed our estimate of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.09\)&lt;/span&gt; to &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} =\)&lt;/span&gt; &lt;span class=&#34;math inline&#34;&gt;\(0.106\)&lt;/span&gt;. Notice that the MAP estimator was pulled toward the mean of the prior distribution. However, is this a good thing? When is this behavior beneficial? After all, our MAP estimate is actually further than our MLE estimate from &lt;span class=&#34;math inline&#34;&gt;\(\beta_{true}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;To demonstrate the benefit of prior information, let’s take the simulated data from our learner (i.e. &lt;span class=&#34;math inline&#34;&gt;\(\beta = 0.1\)&lt;/span&gt;), but only fit the model using the first 15 trials worth of data:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Use MLE to fit the first 15 trials
 mle_results_15tr &amp;lt;- optim(par      = 0.5,             
@@ -4239,13 +4237,13 @@ map_results_15tr &amp;lt;- optim(par      = 0.5,
 cat(&amp;quot;The MLE for beta with 15 trials is: &amp;quot; , round(mle_results_15tr$par, 3), &amp;quot;\n&amp;quot;, 
     &amp;quot;The MAP for beta with 15 trials is: &amp;quot; , round(map_results_15tr$par, 3))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## The MLE for beta with 15 trials is:  0.234 
-##  The MAP for beta with 15 trials is:  0.169&lt;/code&gt;&lt;/pre&gt;
+##  The MAP for beta with 15 trials is:  0.163&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Look at that! MLE overestimates the learning rate, and MAP gives us a much better estimate. There are two main take-aways from this toy example:&lt;/p&gt;
 &lt;ol style=&#34;list-style-type: decimal&#34;&gt;
 &lt;li&gt;MLE is prone to degenerate behavior in low data settings, which can push parameters to the edge of the parameter space or lead to otherwise unreliable estimates, and&lt;/li&gt;
 &lt;li&gt;Introduction of our own, theory-based form of bias (i.e. regularization from the prior distribution) can help us avoid estimation problems—espectially in low data settings! (this will become clearer in future posts)&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;In fact, you may have realized through the above example (or math) that MLE is just a sepcial case of MAP estimation! If it is not already intuitive, think of this—what would happen to our MAP estimate if we assumed that the prior distribution was uniform (i.e. all values between 0 and 1 are equally likely for learning rate &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;)? Well, we would have to multiply &lt;span class=&#34;math inline&#34;&gt;\(Pr(Choice_{t}|\hat{\beta})\)&lt;/span&gt; by 1 for each guess of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt;! See this yourself by observing the likelihood of different values for &lt;code&gt;x&lt;/code&gt; drawn from a uniform distribution (code: &lt;code&gt;dunif(x = .15, min = 0, max = 1)&lt;/code&gt;). Therefore, MAP is analytically equivalent to MLE when we assume a uniform prior distibution. Of course, in many settings, we know that certain paremter values are very unlikely (e.g., a learning rate of .2 is more reasonable than of .99 in most settings). It follows that assuming a uniform distribution for the prior can be quite (mis)informative!&lt;/p&gt;
+&lt;p&gt;In fact, you may have realized through the above example (or math) that MLE is just a sepcial case of MAP estimation! If it is not already intuitive, think of this—what would happen to our MAP estimate if we assumed that the prior distribution was uniform (i.e. all values between 0 and 1 are equally likely for learning rate &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;)? Well, we would have to multiply &lt;span class=&#34;math inline&#34;&gt;\(Pr(Choice_{t}|\hat{\beta})\)&lt;/span&gt; by 1 for each guess of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt;! See this yourself by observing the likelihood of different values for &lt;code&gt;x&lt;/code&gt; drawn from a uniform distribution (code: &lt;code&gt;dunif(x = .15, min = 0, max = 1)&lt;/code&gt;). Therefore, MAP is analytically equivalent to MLE when we assume a uniform prior distibution. Of course, in many settings, we know that certain parameter values are very unlikely (e.g., a learning rate of .2 is more reasonable than of .99 in most settings). It follows that assuming a uniform distribution for the prior can be quite (mis)informative!&lt;/p&gt;
 &lt;p&gt;Note that MAP, like MLE, only offers a point estimate. Again, we would ideally like a proper representation of uncertainty for our estimate.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;markov-chain-monte-carlo-mcmc-estimation&#34; class=&#34;section level2&#34;&gt;
@@ -4288,17 +4286,16 @@ calc_like &amp;lt;- function(beta, X, outcomes) {
     ev[X[t]] &amp;lt;- ev[X[t]] + beta * (outcomes[t] - ev[X[t]])
     
     # Probability/likelihood of &amp;quot;true&amp;quot; simulated choice
-    like &amp;lt;- pr[X[t]]
+    lik &amp;lt;- pr[X[t]]
     
-    # Likelihood of current beta according to prior distribution
-    prior &amp;lt;- dnorm(x = beta, mean = .15, sd = 0.25)
-    
-    # log of like*prior
-    log(like*prior)
+    # log likelihood
+    log(lik)
   }
+  # Likelihood of current beta according to prior distribution
+  prior &amp;lt;- dnorm(x = beta, mean = .15, sd = 0.05)
   
   # return the summed log-likelihood with prior information included
-  sum(ll)
+  sum(ll) + log(prior) 
 }
 
 # Iterate through N samples and store each result
@@ -4322,7 +4319,7 @@ posterior &amp;lt;- foreach(n=1:samples, .combine = &amp;quot;c&amp;quot;) %do% 
     }
   }
   
-  # Retern beta_n (either updated with proposal or remains the same)
+  # Return beta_n (either updated with proposal or remains the same)
   beta_n
 }
 
@@ -4337,7 +4334,7 @@ qplot(x = 1:samples, y = posterior, geom = &amp;quot;line&amp;quot;) +
 &lt;p&gt;This &lt;em&gt;traceplot&lt;/em&gt; shows each accepted proposal across all 5,000 samples that we drew from the posterior distribution. As you can see, the samples are all distributed near the true value once they converge to a stable estimate. The samples at the beginning (before reaching convergence) will be discarded (termed &lt;em&gt;burn-in&lt;/em&gt; samples) for further analyses because they do not represent the posterior distribution. Unlike for MLE or MAP estimation, all the posterior samples after burn-in can be used to represent the uncertainty in the learning rate parameter! We simply plot the density of the samples (with the prior density shown in the black, dotted line for an idea of what we have learned):&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;qplot(posterior[200:5000], geom = &amp;quot;density&amp;quot;, fill = I(&amp;quot;gray&amp;quot;)) +
   geom_line(aes(x = x, y = y), linetype = 2) +
-  geom_vline(aes(xintercept= beta, linetype = &amp;quot;True Beta&amp;quot;), color= &amp;#39;red&amp;#39;) +
+  geom_vline(aes(xintercept = beta, linetype = &amp;quot;True Beta&amp;quot;), color= &amp;#39;red&amp;#39;) +
   scale_linetype_manual(name = &amp;quot;&amp;quot;, values = 2) +
   coord_cartesian(xlim = c(0, 1)) +
   xlab(expression(hat(beta))) +
