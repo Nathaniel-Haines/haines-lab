@@ -60,7 +60,7 @@
   
     
   
-  <meta name="description" content="  Coming Soon!  " />
+  <meta name="description" content="Goals Survey-based measures are used throughout the social, behavioral, and health sciences–but how are they developed? And how do we know they measure the constructs they are meant to measure?" />
 
   
   <link rel="alternate" hreflang="en-us" href="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/" />
@@ -345,7 +345,7 @@
   <meta property="og:site_name" content="Computational Psychology" />
   <meta property="og:url" content="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/" />
   <meta property="og:title" content="Bayesian Design Optimization: An Application to Item Reduction in Scale Development Research | Computational Psychology" />
-  <meta property="og:description" content="  Coming Soon!  " /><meta property="og:image" content="http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png" />
+  <meta property="og:description" content="Goals Survey-based measures are used throughout the social, behavioral, and health sciences–but how are they developed? And how do we know they measure the constructs they are meant to measure?" /><meta property="og:image" content="http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png" />
     <meta property="twitter:image" content="http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
   
     
@@ -398,7 +398,7 @@
       "url": "http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_192x192_fill_lanczos_center_3.png"
     }
   },
-  "description": "  Coming Soon!  "
+  "description": "Goals Survey-based measures are used throughout the social, behavioral, and health sciences–but how are they developed? And how do we know they measure the constructs they are meant to measure?"
 }
 </script>
 
@@ -777,7 +777,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    1 min read
+    33 min read
   </span>
   
 
@@ -811,11 +811,801 @@
 
     <div class="article-style">
       
-<script src="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/index_files/header-attrs/header-attrs.js"></script>
 
 
-<div id="coming-soon" class="section level1">
-<h1>Coming Soon!</h1>
+<p><img src="/media/item-reduction.png" /></p>
+<div id="goals" class="section level1">
+<h1>Goals</h1>
+<p>Survey-based measures are used throughout the social, behavioral, and health sciences–but how are they developed? And how do we know they measure the constructs they are meant to measure? The answers to these questions lie somewhere in the field of “scale development”, a research area within psychometrics more broadly wherein researchers develop and test theories on how to create reliable, valid survey-based measures.</p>
+<p>In this post, we will dive deep into a particular set of psychometric methods; namely, those used to reduce down a large pool of survey items to a smaller, more manageable set while retaining the most information possible. In doing so, we will touch on many topics including reliability, information theory, Bayes Factors, and more. My hope is that you will leave this blog with a better understanding of what survey items are from a statistical perspective, in addition to understanding some pitfalls of traditional methods used to develop surveys.</p>
+<p>This post is will be broken into two parts. Part 1 will lay out competing strategies for measuring how informative an item or set of items is. Part 2 will build upon Part 1, illustrating how to select a subset of items given various item informativeness measures.</p>
+</div>
+<div id="part-1-understanding-your-items" class="section level1">
+<h1>Part 1: Understanding your items</h1>
+<div id="a-classical-view" class="section level2">
+<h2>A classical view</h2>
+<p>Historically, Cronbach’s <span class="math inline">\(\alpha\)</span>–often referred to as a measure of internal consistency–has played a large role in helping researchers understand how informative a set of items is. Before we dive into why, let’s take a look at how Cronbach’s <span class="math inline">\(\alpha\)</span> is defined:</p>
+<p><span class="math display" id="eq:alpha">\[
+\begin{equation}
+  \alpha = \frac{N}{N - 1} \left(1 - \frac{\sum_{i=1}^N \sigma_i^2}{\sigma^2_\text{total}}\right)
+  \tag{1}
+\end{equation}
+\]</span></p>
+<p>Here, <span class="math inline">\(\sigma_i^2\)</span> is the variance of the <span class="math inline">\(i\)</span>th item, and <span class="math inline">\(\sigma^2_\text{total}\)</span> is the variance across total test scores. In our case, the total test score for each person is just the sum score across items for each person. To better understand the math, take a look at the R code below that estimates <span class="math inline">\(\alpha\)</span> given a small set of respondents:</p>
+<pre class="r"><code># Pseudo-data: columns = items, rows = people
+data &lt;- matrix(
+  c(
+    1, 2, 3, 4,
+    2, 2, 3, 5,
+    1, 3, 4, 4,
+    2, 3, 5, 5
+  ), 
+  nrow = 4, 
+  byrow = TRUE
+)
+
+# Number of items
+N &lt;- ncol(data)
+
+# sigma_i = variance of item i across people
+item_variances &lt;- apply(data, 2, var)
+
+# score for each person
+total_scores &lt;- rowSums(data)
+
+# sigma_total = variance of total scores across people
+total_variance &lt;- var(total_scores)
+
+# Cronbach&#39;s alpha
+alpha &lt;- (N / (N - 1)) * (1 - sum(item_variances) / total_variance)</code></pre>
+<p>Here, <span class="math inline">\(\alpha =\)</span> 0.73. Given a <a href="https://en.wikipedia.org/wiki/Cronbach%27s_alpha">few assumptions</a>, we can think of <span class="math inline">\(\alpha\)</span> as the average item-level correlation with the underlying “true score” of the latent trait our items measure. Higher <span class="math inline">\(\alpha\)</span> indicates higher correlation, meaning that the score we derive for each person is closer to the true score we aim to measure. We cover how reliability affects true score estimation in depth in a <a href="https://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/">pevious post</a>, but the main take-away here is that a set of items with higher reliability equates to a survey that is more informative with respect to the latent trait of interest. If reliability were perfect for a given set of items (i.e. <span class="math inline">\(\alpha = 1\)</span>), there would exist no other items that could offer further information on the underlying latent trait.</p>
+<p>However, usage of <span class="math inline">\(\alpha\)</span> assumes many things about our scale that may not be true in practice, including but not limited to the following:</p>
+<div id="alphalist">
+<ol style="list-style-type: decimal">
+<li>our scale is unidimensional,</li>
+<li>items are tau-equivalent (i.e. all items have the same true-score variance and load equally onto the latent trait),</li>
+<li>item-level errors are uncorrelated (i.e. given the latent trait and item parameters, item responses are independent), and</li>
+<li>relationships between item scores and true scores is linear</li>
+</ol>
+</div>
+<p>Such restrictive assumptions impact the type of survey that one can use <span class="math inline">\(\alpha\)</span> on for item selection, and in fact they encourage researchers to make simplifying assumptions about constructs that may deviate from the substantive theory motivating scale development in the first place.</p>
+</div>
+<div id="an-item-response-theory-view" class="section level2">
+<h2>An Item Response Theory view</h2>
+<p>Item-response theory (IRT) provides a more generative framework through which we can view survey response behavior, which allows for us to build models that more clearly map to our substantive theory of the underlying construct(s) we aim to measure (see our <a href="https://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/">pevious post</a> for a bit more on how). Alongside the added theoretical flexibility, IRT introduces new ways to conceptualize reliability–not as a single global metric, but as something that can vary locally depending on the trait level being measured. Put simply, IRT captures the fact that different items provide different levels of information across different people, making it possible to customize surveys to more precisely measure traits in populations of interest.</p>
+<div id="the-conceptual-shift-from-reliability-to-information" class="section level3">
+<h3>The conceptual shift from reliability to information</h3>
+<p>The shift from classical approaches to IRT also opens the door to more sophisticated approaches to assess item informativeness. Historically, the concept of item information has been used. Item information is the <a href="https://en.wikipedia.org/wiki/Fisher_information">Fisher Information</a> of an item. Whereas Cronbach’s <span class="math inline">\(\alpha\)</span> reflects the reliability of a scale by assessing how well the items collectively covary with the assumed latent construct, Fisher information is a more granular measure that evaluates measurement precision for individual items across specific regions of the latent parameter space (<span class="math inline">\(\theta\)</span>).</p>
+<p>It is easier to understand the concept of item information by visualizing item information curves across the latent trait. For example, let’s consider a simple 2-parameter logistic (2PL) IRT model. This model specifies the probability that an individual with a latent trait level <span class="math inline">\(\theta\)</span> answers an item <span class="math inline">\(i\)</span> with two response options as follows:</p>
+<p><span class="math display" id="eq:twopl">\[
+\begin{equation}
+  p_{i}(y_i = 1 \mid \theta) = \frac{1}{1 + e^{-a_i (\theta - b_i)}}
+  \tag{2}
+\end{equation}
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(a_i\)</span> is the discrimination parameter, capturing how sharply the item differentiates between individuals with different levels of <span class="math inline">\(\theta\)</span>, and</li>
+<li><span class="math inline">\(b_i\)</span> is the difficulty parameter, indicating the level of <span class="math inline">\(\theta\)</span> at which the item has a 50% chance of being answered with a 0 versus 1 response (i.e. disagree vs agree, etc.),</li>
+</ul>
+<p>The item information curve (i.e. the Fisher information curve, we will use the terms interchangeably) for the 2PL model is then:</p>
+<p><span class="math display" id="eq:info">\[
+\begin{equation}
+  I_{i}(\theta) = a^2 p_{i}(\theta)(1-p_{i}(\theta))
+  \tag{3}
+\end{equation}
+\]</span></p>
+<p>where <span class="math inline">\(p_{i}(\theta)\)</span> is the 2PL model “success” probability from equation <a href="#eq:twopl">(2)</a>. As noted above, each item contributes information at different levels of <span class="math inline">\(\theta\)</span>, where items with higher discriminability (<span class="math inline">\(a_i\)</span>) and difficulty levels (<span class="math inline">\(b_i\)</span>) closer to the given trait level provide higher information. Take a look at the item information curves below:</p>
+<p><a id="simtheta"></a></p>
+<pre class="r"><code>library(ggplot2)
+library(patchwork)
+library(tidyr)
+
+# generate latent trait values
+set.seed(123)
+n_persons &lt;- 500
+n_items &lt;- 10
+theta_true &lt;- rnorm(n_persons)
+
+# generate item parameters
+a &lt;- runif(n_items, 0.5, 2)  # Discrimination
+b &lt;- runif(n_items, -2, 2)   # Difficulty
+
+# two items share the exact same characteristics
+# ignore for now, we will come back to it later :D
+a[3] &lt;- a[2]
+b[3] &lt;- b[2]
+
+# fisher information function for 2PL model across theta
+theta_values &lt;- seq(-3, 3, length.out = 100)
+compute_fisher &lt;- function(theta, a, b) {
+  sapply(1:length(a), function(i) {
+    # response = 1 probability
+    p &lt;- 1 / (1 + exp(-a[i] * (theta - b[i]))) 
+    # response = 0 probability
+    q &lt;- 1 - p 
+    a[i]^2 * p * q
+  })
+}
+fisher_info &lt;- compute_fisher(theta_values, a, b)
+
+# plot item information curves across theta
+item_info_df &lt;- data.frame(
+  theta = theta_values, fisher_info
+)
+colnames(item_info_df)[-1] &lt;- sprintf(&quot;%02d&quot;, 1:n_items)
+
+item_info_long &lt;- pivot_longer(
+  item_info_df, 
+  cols=contains(&quot;0&quot;), 
+  names_to=&quot;Item&quot;, 
+  values_to=&quot;Information&quot;
+)
+
+theta_density &lt;- function(x) dnorm(x, mean = 0, sd = 1)
+
+ggplot(item_info_long, aes(x=theta, y=Information, color=Item)) +
+  geom_line() +
+  stat_function(fun = theta_density, aes(x = theta), 
+                linetype = &quot;dashed&quot;, color = &quot;black&quot;, size=1.5) +
+  labs(x = expression(theta), y = &quot;Item Information&quot;, 
+       title = &quot;2PL Item Information Curves&quot;) +
+  scale_color_discrete(name = &quot;Item&quot;) +
+  theme_minimal(base_size = 15)</code></pre>
+<p><img src="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Here, the colored density lines are the item information curves for different items, and the black dotted line is the latent trait distribution (<span class="math inline">\(\theta\)</span>) superimposed for reference. You can see that different items have higher information in different regions of the trait parameter space–some item information curves peak in the tail of <span class="math inline">\(\theta\)</span>, others more centrally, and still others show relatively flat curves across the entire latent trait distribution. These varying peaks demonstrate why different items are more-or-less informative for different people.</p>
+</div>
+<div id="why-to-prefer-information-over-reliability" class="section level3">
+<h3>Why to prefer information over reliability</h3>
+<p>What do these information curves offer that <span class="math inline">\(\alpha\)</span> does not? To see, we can first simulate responses from the 2PL IRT model given the parameters generated above, then compute <span class="math inline">\(\alpha_{\text{full}}\)</span> on the full scale. Using <span class="math inline">\(\alpha_{\text{full}}\)</span> as reference, we can then remove item <span class="math inline">\(i\)</span> from the item set and calculate alpha on the resulting items (<span class="math inline">\(\alpha_{-i}\)</span>). The difference <span class="math inline">\(\alpha_{i} = \alpha_{\text{full}} - \alpha_{-i}\)</span> gives us an idea of how much the item <span class="math inline">\(i\)</span> contributes to <span class="math inline">\(\alpha_{\text{full}}\)</span>. We will refer to this general method as the <strong>leave-one-item-out</strong> method. As we will cover in Part 2, the classic <span class="math inline">\(\alpha\)</span>-based approach to item reduction would make item selections based on something akin to these <span class="math inline">\(\alpha_{i}\)</span> values. The R code below walks through this procedure:</p>
+<p><a id="simresp"></a></p>
+<pre class="r"><code># simulate responses from IRT model
+irt &lt;- function(theta, a, b) {
+  p &lt;- 1 / (1 + exp(-a * (theta - b)))
+  rbinom(length(p), size = 1, prob = p)
+}
+responses &lt;- sapply(1:n_items, function(i) irt(theta_true, a[i], b[i]))
+
+# two items share same characteristics + responses
+# for illustration, see explanation in following text
+responses[,3] &lt;- responses[,2]
+
+# function to calculate alpha given simulated responses
+compute_alpha &lt;- function(responses) {
+  n_items &lt;- ncol(responses)
+  item_variances &lt;- apply(responses, 2, var)
+  total_variance &lt;- var(rowSums(responses))
+  (n_items / (n_items - 1)) * (1 - sum(item_variances) / total_variance)
+}
+
+# alpha on full survey
+overall_alpha &lt;- compute_alpha(responses)
+
+# alpha minus each item
+alpha_without_item &lt;- sapply(1:n_items, function(i) {
+  # Remove the i-th item from the responses matrix
+  responses_without_item &lt;- responses[, -i]
+  # Calculate Cronbach&#39;s alpha for the reduced set of items
+  compute_alpha(responses_without_item)
+})
+item_alpha_df &lt;- data.frame(
+  Item = sprintf(&quot;%02d&quot;, 1:n_items),
+  alpha = alpha_without_item
+)
+
+
+# plot both item information and alpha with a comparison
+p1 &lt;- ggplot(item_info_long, aes(x = theta, y = Information, color = Item)) +
+  geom_line() +
+  labs(x = expression(theta), y = &quot;Item information&quot;, title = &quot;Item information curves&quot;) +
+  scale_color_discrete(name = &quot;Item&quot;) +
+  theme_minimal(base_size = 15)
+
+p2 &lt;- ggplot(item_alpha_df, aes(x = .02*runif(10)-.01, y = overall_alpha-alpha, color = Item)) +
+  geom_point(size = 4, shape = 17) +
+  geom_hline(yintercept = 0, linetype=2, color = &quot;black&quot;) +
+  labs(x = &quot;&quot;, y = expression(alpha[i]), title = &quot;Reliability&quot;) +
+  scale_x_continuous(limits = c(-0.1, 0.1)) +  
+  scale_color_discrete(name = &quot;Item&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(axis.text.x = element_blank())
+
+(p1 + theme(legend.position = &quot;none&quot;)) + 
+  p2 + 
+  plot_layout(widths=c(2, 1))</code></pre>
+<p><img src="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Here, we show the previous IRT-based information curves alongside the <span class="math inline">\(\alpha_{i}\)</span> estimates from the above procedure. The higher the <span class="math inline">\(\alpha_{i}\)</span> value, the more that the given item <span class="math inline">\(i\)</span> contributes to <span class="math inline">\(\alpha_{\text{full}}\)</span>.</p>
+<p>The results are rather interesting. First, we see that item 9 actually has a negative <span class="math inline">\(\alpha_{i}\)</span> value. Indeed, <span class="math inline">\(\alpha_{\text{full}} =\)</span> 0.708, whereas <span class="math inline">\(\alpha_{-9} =\)</span> 0.717–reliability is actually higher in-sample without item 9. Looking at the information curves, we see that item 9 is essentially a flat curve, meaning that the item offers relatively little information across the entire trait distribution.</p>
+<p>Second, item 5 is one of the least informative items per the <span class="math inline">\(\alpha\)</span>-based analysis, yet we see from the information curves that item 5 is highly informative in the lower tail of <span class="math inline">\(\theta\)</span>. Therefore, removing item 5 from the scale may does not materially affect <span class="math inline">\(\alpha\)</span>, yet it will lead to a survey with a worse ability to discriminate between people with lower trait scores (i.e. lower <span class="math inline">\(\theta\)</span>). In general, you can see by comparing the <span class="math inline">\(\alpha_{i}\)</span> versus information curves that <span class="math inline">\(\alpha_{i}\)</span> is generally only high when the information curve is informative near the center of the trait distribution.</p>
+<p>Finally, items 2 and 3 both have the highest reliability contributions. If you looked through the code in detail, this may come as a surprise–we simulated items 2 and 3 as exact matches, with both the item parameters and responses all being exactly the same across respondents. Logically, given information from item 2, item 3 offers nothing new (and vice-versa), yet items 2 and 3 both have the highest rankings in terms of reliability contributions. Looking at the item curves, they don’t stick out as particularly informative. What is going on here? The answer lies in the denominator of equation <a href="#eq:alpha">(1)</a>. Recall that the variance of sum scores is made up of two parts–within item variability plus between-item covariation:</p>
+<p><span class="math display">\[
+\begin{equation}
+  \text{Var}\left(\sum_{i=1}^k X_i\right) = \sum_{i=1}^k \text{Var}(X_i) + 2 \sum_{i &lt; j} \text{Cov}(X_i, X_j)
+\end{equation}
+\]</span>
+where <span class="math inline">\(\text{Cov}(X_i, X_j) = \rho_{ij} \sqrt{\text{Var}(X_i)\text{Var}(X_j)}\)</span>. With a perfect correlation (<span class="math inline">\(\rho_{2,3} = 1\)</span>), items 2 and 3 inflate the covariance term, inflating the denominator in <a href="#eq:alpha">(1)</a>, producing higher <span class="math inline">\(\alpha\)</span> when calculated across all 10 items. When one of the items is removed and <span class="math inline">\(\alpha\)</span> is recalculated, the covariance term for those items drops out, and <span class="math inline">\(\alpha\)</span> decreases in turn. This example illustrates why <a href="#alphalist">assumption 3 from above</a> is so detrimental to the use of <span class="math inline">\(\alpha\)</span>–<em>redundant items lead to significant upward bias</em>.</p>
+</div>
+<div id="from-global-to-local-back-to-global-again" class="section level3">
+<h3>From global to local, back to global again</h3>
+<p>It is clear from the previous section that information curves offer more insight, but practically, the curves alone don’t tell us which items we should include. How do we measure the total information per a set of items, akin to what we get with <span class="math inline">\(\alpha\)</span>? Referring back to the curves plotted above, some curves peak more centrally in the latent trait distribution (i.e. items 4 and 7), and others more in the tail (i.e. item 5). Should we just take any item with a high enough peak (high <span class="math inline">\(a\)</span>), or should we consider where it peaks too (location of <span class="math inline">\(b\)</span>)?</p>
+<p>Answering these questions will require us to make some assumptions about the population we are studying with our survey. Specifically, because we have a local information density as opposed to a single global value for each item, we need to integrate the information density across the assumed latent trait distribution to get the expected total information for each item:</p>
+<p><span class="math display" id="eq:einfo">\[
+\begin{equation}
+  \mathbb{E}[I_i] = \int I_i(\theta) p_{i}(\theta) d \theta
+  \tag{4}
+\end{equation}
+\]</span></p>
+<p>The resulting expectation <span class="math inline">\(\mathbb{E}[I_i]\)</span> then indicates the total information for item <span class="math inline">\(i\)</span> across the latent trait distribution. From a theoretical perspective, we should construct the latent trait distribution to best match the characteristics of the sample we aim to administer our survey to. In practice, however, we can fall back on the assumption of the underlying IRT model–in most cases, the population-level latent trait is assumed to follow a standard normal distribution (i.e. <span class="math inline">\(\theta \sim \mathcal{N}(0,1)\)</span>).</p>
+<p>Once the latent trait distribution is defined, we can solve <a href="#eq:einfo">(4)</a> numerically by sampling from <span class="math inline">\(\theta\)</span> and computing the information for each sample and item, akin to what we did above when plotting out the information curves. We can then compare the resulting expected total information values (<span class="math inline">\(\mathbb{E}[I_i]\)</span>) to the corresponding values from the <span class="math inline">\(\alpha\)</span>-based analysis (<span class="math inline">\(\alpha_i\)</span>) to see how they differ:</p>
+<pre class="r"><code># generate theta
+theta &lt;- rnorm(10000, 0, 1)
+
+# compute fisher info (same a and b parameters as above)
+item_fisher_info &lt;- compute_fisher(theta, a, b)
+
+# total info = mean across theta for each item
+total_info &lt;- apply(item_fisher_info, 2, mean)
+
+item_info_df &lt;- data.frame(
+  Item = sprintf(&quot;%02d&quot;, 1:n_items),
+  info = total_info
+)
+
+p3 &lt;- ggplot(item_info_df, aes(x = .02*runif(10)-.01, y = info, color = Item)) +
+  geom_point(size = 4, shape = 17) +
+  geom_hline(yintercept = 0, linetype=2, color = &quot;black&quot;) +
+  labs(x = &quot;&quot;, y = expression(E*&quot;[&quot;*italic(I)[i]*&quot;]&quot;), title = &quot;Fisher Information&quot;) +
+  scale_x_continuous(limits = c(-0.1, 0.1)) +
+  scale_color_discrete(name = &quot;Item&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(axis.text.x = element_blank())
+
+(p2 + theme(legend.position = &quot;none&quot;)) + p3</code></pre>
+<p><img src="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div id="fisherredun">
+<p>From the plot, we see that the item-level contributions are ranked similarly, but not exactly the same between the <span class="math inline">\(\alpha\)</span>-based versus information-based item scores. Interestingly, we see that item 5 is given higher precedence by the total information metric compared to the <span class="math inline">\(\alpha\)</span>-based metric. Additionally, redundant items 2 and 3 are not inflated as in the <span class="math inline">\(\alpha\)</span>-based metric, although they are still ranked rather high relative to other items. In principle, if either item is in the set, we do do not need the other, so a good metric should rank them both very low. These results help solidify the story from before, but also add some nuance. <strong>Compared to <span class="math inline">\(\alpha\)</span>-based reliability metrics, information-based metrics give us richer insights into the best items to use to measure the underlying latent trait</strong>. However, Fisher information still lacks when it comes to capturing redundancy between items.</p>
+</div>
+<p>Although we will not cover it in more depth here, it is worth noting that the total information method above allows us much more flexibility in how we want to optimize our survey. For example, if our aim was to develop a survey that was best at measuring people below the median trait value, we can take the same approach as above but just sample <span class="math inline">\(\theta &lt; 0\)</span> as opposed to the entire range of <span class="math inline">\(\theta\)</span>. Doing so results in item information scores that only reflect informativeness below the median trait level:</p>
+<pre class="r"><code># generate theta (below 0/median only)
+theta &lt;- -abs(rnorm(10000, 0, 1))
+
+# compute fisher info
+item_fisher_info &lt;- compute_fisher(theta, a, b)
+
+# total info = sum across theta for each item
+total_info &lt;- apply(item_fisher_info, 2, mean)
+
+item_info_df &lt;- data.frame(
+  Item = sprintf(&quot;%02d&quot;, 1:n_items),
+  info = total_info
+)
+
+p4 &lt;- ggplot(item_info_df, aes(x = .02*runif(10)-.01, y = info, color = Item)) +
+  geom_point(size = 4, shape = 17) +
+  geom_hline(yintercept = 0, linetype=2, color = &quot;black&quot;) +
+  labs(x = &quot;&quot;, y = expression(E*&quot;[&quot;*italic(I)[i]*&quot;]&quot;), title = &quot;&lt; 50%ile&quot;) +
+  scale_x_continuous(limits = c(-0.1, 0.1)) +
+  scale_color_discrete(name = &quot;Item&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(axis.text.x = element_blank())
+
+(p3 + theme(legend.position = &quot;none&quot;)) + p4</code></pre>
+<p><img src="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>As you may expect, item 5 is even more informative relative to other items when looking only at trait levels below the median. Methods like this are particularly useful if we aim to develop a scale that will be used in settings where we need to differentiate people in particular ranges of the latent parameters space (e.g., in clinical samples where we need to differentiate between extreme levels of anxiety, depression, etc.).</p>
+</div>
+</div>
+<div id="sorry-fisher-were-going-bayesian" class="section level2">
+<h2>Sorry Fisher, we’re going Bayesian</h2>
+<p>So far, we have made a strong case for why information-based measures are superior to <span class="math inline">\(\alpha\)</span>-based measures when it comes to understanding how items individually contribute to latent trait measurement. However, the Fisher information measure does have some limitations. Most notably, akin to <span class="math inline">\(\alpha\)</span>, Fisher information does not account for correlation in information across items–we can see this by referring back to equations <a href="#eq:twopl">(2)</a> and <a href="#eq:info">(3)</a>. There is no mechanism in the information function that could capture dependence between items. The downstream effect is that, as observed in our <a href="#fisherredun">simulated example</a>, items selected into a subset based solely on their total Fisher information score can lead to inclusion of redundant items.</p>
+<div id="kullback-leibler-divergence-to-measure-informativeness" class="section level3">
+<h3>Kullback-Leibler divergence to measure informativeness</h3>
+<p>To better account for dependence between items, we are going to expand our perspective a bit, taking inspiration from <a href="https://journals.sagepub.com/doi/abs/10.1177/01466216211042803">Jonas (2021)</a>. Jonas takes a Bayesian approach, where information is measured by comparing the prior versus posterior distribution on the latent trait estimate <span class="math inline">\(\theta\)</span>. Jonas uses the Kullback-Leibler divergence between the prior <span class="math inline">\(p(\theta)\)</span> and posterior <span class="math inline">\(p(\theta | \mathbf{Y})\)</span> as an estimate of global test information. K-L divergence is an information-theoretic measure that is defined as follows:</p>
+<p><span class="math display" id="eq:kldiv">\[
+\begin{equation}
+  D_{\text{KL}}(P \| Q) = \int P(x) \log \frac{P(x)}{Q(x)} \, dx
+  \tag{5}
+\end{equation}
+\]</span>
+where <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> are the distributions we are measuring distance between, and <span class="math inline">\(x\)</span> is the underlying variable. In our case, <span class="math inline">\(P(x)\)</span> and <span class="math inline">\(Q(x)\)</span> refer to the prior and posterior distributions on <span class="math inline">\(\theta\)</span>, respectively, where the prior is the reference distribution. Like other distance measures, higher values indicate a greater distance. The idea here is rather intuitive then–in the absense of any information, our best guess for an person’s trait level <span class="math inline">\(\theta\)</span> is simply the population distribution. The assumed population distribution is encoded in our prior, so <strong>a larger K-L divergence means that we have learned something about a person’s latent trait that differentiates them within the population at large</strong>.</p>
+<p>To implement the K-L divergence method, we can first sample <span class="math inline">\(N\)</span> trait values of <span class="math inline">\(\theta\)</span> from the prior (<span class="math inline">\(\theta_{i} \sim \mathcal{N}(0,1)\)</span>), generate IRT responses for each item (<span class="math inline">\(Y_{i,1:10}\)</span>) given the sampled trait values and item parameters, and then fit the 2PL IRT model to the resulting responses. We can then compute the K-L divergence separately for each sampled trait value between the prior and the posterior that we have after fitting the model, then take the mean across trait values to get the expected K-L divergence for the set of items. We can then use the same leave-one-item-out method as for <span class="math inline">\(\alpha\)</span> above as a measure of item informativeness:</p>
+<p><span class="math display">\[
+D_{\text{KL}}(P \| Q)_{i} = D_{\text{KL}}(P \| Q)_{\text{full}} - D_{\text{KL}}(P \| Q)_{-i}
+\]</span></p>
+<p>Note that we already <a href="#simtheta">sampled <span class="math inline">\(\theta\)</span> and item parameters</a> and then <a href="#simresp">simulated responses</a> above, so we have already completed the first few steps. All that is left is to define the IRT model to fit, estimated <span class="math inline">\(\theta_i\)</span> for each sample, and then estimate K-L divergence as described above.</p>
+<p>First, let’s specify the Stan code 2PL IRT model:</p>
+<pre class="stan"><code>data {
+  int&lt;lower=1&gt; N; // Number of respondents
+  int&lt;lower=1&gt; J; // Number of items
+  array[N, J] int&lt;lower=0, upper=1&gt; Y; // Response matrix (N x J)
+  vector&lt;lower=0&gt;[J] a;
+  vector[J] b;
+}
+
+parameters {
+  vector[N] theta; // Latent trait
+}
+
+model {
+  // Priors
+  theta ~ normal(0, 1);
+
+  // Likelihood
+  for (n in 1:N) {
+    for (j in 1:J) {
+      real eta = a[j] * (theta[n] - b[j]);
+      Y[n, j] ~ bernoulli_logit(eta);
+    }
+  }
+}</code></pre>
+<p>You can see that the model is quite simple–we are only actually estimating <span class="math inline">\(\theta_i\)</span>, as we are passing in the item parameters (<span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>) as data given that we know the true values.</p>
+<p>Next, we define some convenience functions that allow us to compute K-L divergence given the Stan output:</p>
+<pre class="r"><code># returns the prior density at theta
+prior_dens &lt;- function(theta) {
+  dnorm(theta, 0, 1)
+}
+
+# approximates posterior density given MCMC samples, 
+# then returns density at theta
+posterior_dens &lt;- function(post_theta, theta) {
+  dens &lt;- density(post_theta, bw = &quot;nrd0&quot;)
+  approxfun(dens$x, dens$y, rule = 2)(theta)
+}
+
+# computes K-L divergence between prior and posterior
+kl_div &lt;- function(post_theta, theta) {
+  mean(
+    log(
+      prior_dens(theta) / 
+      posterior_dens(post_theta, theta)
+    )
+  )
+}
+
+# convenience function for extracting posterior samples
+# from cmdstanr model fit
+par_from_draws &lt;- function(fit, par) {
+  rvars_pars &lt;- as_draws_rvars(
+    fit$draws(
+      c(par)
+    )
+  )
+  return(lapply(rvars_pars, draws_of))
+}</code></pre>
+<p>Finally, the function below will run the leave-one-item-out procedure and plot out the resulting <span class="math inline">\(D_{\text{KL}}(P \| Q)_{i}\)</span> metrics:</p>
+<pre class="r"><code>library(foreach)
+library(posterior)
+
+estimate_info &lt;- function(metric=&quot;kl&quot;) {
+  results &lt;- foreach(item=0:n_items, .combine = &quot;c&quot;) %do% {
+    # data without the current item
+    stan_dat &lt;- list(
+      N = n_persons,
+      J = n_items - if (item != 0) 1 else 0,
+      Y = if (item != 0) responses[, -item] else responses,
+      a = if (item != 0) a[-item] else a,
+      b = if (item != 0) b[-item] else b
+    )
+  
+    fit &lt;- irt_2pl$sample(
+      data = stan_dat,
+      iter_sampling = 500,
+      iter_warmup = 200,
+      chains = 8,
+      parallel_chains = 8,
+      refresh = 0
+    )
+  
+    # extract posteriors on theta
+    post_theta &lt;- par_from_draws(fit, &quot;theta&quot;)$theta
+    
+    # estimate item information
+    item_info &lt;- foreach(iter=1:n_persons, .combine = &quot;c&quot;) %do% {
+      if (metric == &quot;kl&quot;) {
+        # if using K-L divergence metric
+        kl_div(post_theta[,iter], seq(-4, 4, length.out = 1000))  
+      } else if (metric == &quot;bf&quot;) {
+        # if using bayes factor metric (hey stop reading ahead)
+        bayes_factor(post_theta[,iter], theta_true[iter])  
+      }
+      
+    }
+    # mean across theta iterations/samples to get expected info
+    mean(item_info, na.rm = T)
+  }
+}
+
+results &lt;- estimate_info(&quot;kl&quot;)</code></pre>
+<pre class="r"><code>item_info_df &lt;- data.frame(
+  Item = sprintf(&quot;%02d&quot;, 1:n_items), 
+  info = results[1] - results[2:11]
+)
+
+p5 &lt;- ggplot(item_info_df, aes(x = .02*runif(10)-.01, y = info, color = Item)) +
+  geom_point(size = 4, shape = 17) +
+  geom_hline(yintercept = 0, linetype=2, color = &quot;black&quot;) +
+  labs(x = &quot;&quot;, y = expression(D[KL](&quot;P||Q&quot;)[i]), title = &quot;K-L Divergence&quot;) +
+  scale_x_continuous(limits = c(-0.1, 0.1)) +
+  scale_color_discrete(name = &quot;Item&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(
+    axis.text.x = element_blank(),
+    legend.position = &quot;none&quot;
+  )
+
+(p2 + theme(legend.position = &quot;none&quot;)) + p3 + p5 + plot_layout(nrow=2, ncol=2)</code></pre>
+<p><img src="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Looking at the results, the K-L divergence metric tells the same basic story as the Fisher information metric, although with a slightly higher preference for items with information curves peaking in the tail of the trait distribution (i.e. item 5).</p>
+<p>At first, these results surprised me a bit. However, in hindsight it makes sense why we may see a pattern like this–<em>the K-L divergence metric is largely non-specific, meaning that we can get the same K-L divergence for many potential changes in the posterior</em>. For example, take a look at the plot below, wherein each panel has an identical K-L divergence metric despite the posterior having more uncertainty, less uncertainty, becoming bimodal, or retaining the same uncertainty but shifting over relative to the prior:</p>
+<p><img src="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The implication for us is that <strong>K-L divergence does not indicate if our new view is any closer to the true underlying latent trait of interest</strong>. In other words, K-L divergence is agnostic to the “direction” of improvement–it evaluates the information change without accounting for whether that change aligns with the latent construct we aim to measure.</p>
+</div>
+<div id="bayes-factors-to-measure-informativeness" class="section level3">
+<h3>Bayes factors to measure informativeness</h3>
+<p>To resolve the non-specificity of the K-L divergence metric, but retain the idea of assessing information changes from prior to posterior, we can use <em>Bayes factors</em>. Unlike K-L divergence, <strong>Bayes factors can tell us the relative increase in evidence for the true latent trait value <span class="math inline">\(\theta_{i}\)</span> from the prior to posterior</strong>.</p>
+<p>If we have a prior distribution <span class="math inline">\(p(\theta)\)</span> and a posterior distribution <span class="math inline">\(p(\theta | \mathbf{Y})\)</span> for the latent trait <span class="math inline">\(\theta\)</span> given item responses <span class="math inline">\(\mathbf{Y}\)</span>, the Bayes factor comparing the prior and posterior can be expressed as the ratio of the posterior density to the prior density evaluated at a particular value of <span class="math inline">\(\theta\)</span>, in our case the true <span class="math inline">\(\theta_i\)</span> used to simulate the associated responses. This gives the Savage-Dickey density ratio (refer to <a href="https://youtu.be/o90ogqUv4AA?si=l2tFcpCDdLE5rjr1&amp;t=2020">this talk</a> for some visuals, or <a href="https://www.ejwagenmakers.com/2010/WagenmakersEtAlCogPsy2010.pdf">Wagenmakers et al., 2010</a> for a write-up):</p>
+<p><span class="math display">\[
+BF = \frac{p(\theta = \theta_i | \mathbf{Y})}{p(\theta = \theta_i)}
+\]</span></p>
+<p>In our context, higher values for <span class="math inline">\(BF\)</span> would indicate that the set of items used when estimating the posterior distribution <span class="math inline">\(p(\theta | \mathbf{Y})\)</span> is increasingly informative with respect to the true underlying trait value–this is exactly what we want!</p>
+<p>By focusing only on evidence for the true latent trait value, in principle, the <span class="math inline">\(BF\)</span> method should allow us to circumvent issues with both uninformative and redundant items that arose when using other item informativeness measures. To see if this actually plays out empirically, we can use the same leave-one-item-out procedure as before. We first compute the <span class="math inline">\(BF\)</span> metric for all 10 items <span class="math inline">\(BF_{\text{full}}\)</span>, then for each item set while removing item <span class="math inline">\(i\)</span> (<span class="math inline">\(BF_{-i}\)</span>), and use the difference for each item (<span class="math inline">\(BF_i = BF_{\text{full}} - BF_{-i}\)</span>) as a measure of item informativeness:</p>
+<pre class="r"><code># Savage-Dickey density ratio method for (log) BF esitimate
+bayes_factor &lt;- function(post_theta, theta) {
+  log(
+    posterior_dens(post_theta, theta) / 
+    prior_dens(theta)
+  )
+}
+
+results &lt;- estimate_info(&quot;bf&quot;)</code></pre>
+<pre class="r"><code>item_info_df &lt;- data.frame(
+  Item = sprintf(&quot;%02d&quot;, 1:n_items), 
+  info = results[1] - results[2:11]
+)
+
+p6 &lt;- ggplot(item_info_df, aes(x = .02*runif(10)-.01, y = info, color = Item)) +
+  geom_point(size = 4, shape = 17) +
+  geom_hline(yintercept = 0, linetype=2, color = &quot;black&quot;) +
+  labs(x = &quot;&quot;, y = expression(BF[i]), title = &quot;Bayes Factor&quot;) +
+  scale_x_continuous(limits = c(-0.1, 0.1)) +
+  scale_color_discrete(name = &quot;Item&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(
+    axis.text.x = element_blank(),
+    legend.position = &quot;none&quot;
+  )
+
+(p2 + theme(legend.position = &quot;none&quot;)) + p3 + p5 + p6 + plot_layout(nrow=2, ncol=2)</code></pre>
+<p><img src="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Very interesting! We see above that the <span class="math inline">\(BF_i\)</span> metric gives a negative score to redundant items 2 and 3. This is exactly what we would expect to see if our metric is able to account for redundancy–when one of the items is in the item set, the other does not offer new information (and in fact the redundant information can actually decrease evidence for the true trait value <span class="math inline">\(\theta\)</span>). Otherwise, the <span class="math inline">\(BF_i\)</span> metric ranks items 4 and 7 highest, similar to other information measures. The rest of the items are all ranked rather similarly.</p>
+</div>
+</div>
+</div>
+<div id="part-2-item-reduction" class="section level1">
+<h1>Part 2: Item reduction</h1>
+<p>In Part 1, we explored a wide range of different metrics that can be used to measure the informativeness of a set of survey items. We concluded with the results of the Bayes factor metric, which happened to be the only metric that was fully capable of accounting for item redundancy. In Part 2, we will turn toward actually using our various metrics to select a subset of maximally informative items from a full set–a practice typically referred to as “item reduction”.</p>
+<div id="a-simple-classical-approach" class="section level2">
+<h2>A simple, classical approach</h2>
+<p>There are many ways that item reduction can be done, but classically, a common method was to first compute Cronbach’s <span class="math inline">\(\alpha\)</span> <a href="#eq:alpha">(1)</a> for a set of items, and then iteratively remove items to determine some “optimal” trade-off between survey length and reliability. We will refer to this practice as <span class="math inline">\(\alpha\)</span>-hacking from hereon-out.</p>
+<p>Given how easy it is to compute and interpret <span class="math inline">\(\alpha\)</span>, it makes sense why researchers have historically used <span class="math inline">\(\alpha\)</span>-hacking to guide item reduction decisions. Of course, there is no free information lunch–<span class="math inline">\(\alpha\)</span>-hacking can often be misleading, producing <a href="https://doi.org/10.1006/obhd.1997.2702">“inflated” in-sample estimates</a> that do not generalize to out-of-sample data. More generally, in Part 1 of this post, we showed through some simulated examples how <span class="math inline">\(\alpha\)</span> misses important information that competing measures of item informativeness readily capture. Such measures include Fisher information as well as the K-L divergence and Bayes factor measures.</p>
+</div>
+<div id="a-more-modern-but-more-complicated-approach" class="section level2">
+<h2>A more modern, but more complicated, approach</h2>
+<p>In Part 1, we heavily relied on the leave-one-item-out procedure to test various item information metrics. Here, we will generalize the procedure, following an algorithm that relies on the same principles, but allows us to create a reduced item set of any desired size from a larger set:</p>
+<ol style="list-style-type: decimal">
+<li>Start the “reduced item set” with 0 items,</li>
+<li>Fit the IRT model to the reduced set plus a new candidate item,</li>
+<li>Repeat step 2 for each item outside of the reduced item set,</li>
+<li>Once 2-3 is done for each item, identity the candidate item that is most informative and add it to the reduced item set,</li>
+<li>Repeat steps 2-5 until the reduced item set is of the desired length</li>
+</ol>
+<p>We will call this algorithm “sequential greedy item selection”. The algorithm is considered greedy because we are taking a bit of a shortcut by not considering all the possible permutations of items that could, in theory, be better than what we arrive at by adding items to the set sequentially. However, the sequential approach is much more feasible to implement than looking at all possible subsets, especially when the candidate item set is very large. Even with just the 10 item simulated example we have been working with, it is a 10 choose K problem–if we want the best 5 items, that’s over 250 permutations! Greedy selection circumvents us needing to explore all possible permutations, at the cost of potentially not landing on the most optimal subset.</p>
+<div id="testing-out-our-various-item-reduction-strategies" class="section level3">
+<h3>Testing out our various item reduction strategies</h3>
+<p>We are finally ready to test out our different item reduction strategies! For the K-L divergence and Bayes factor metrics, we will use the sequential greedy item selection algorithm described above. For <span class="math inline">\(\alpha\)</span>, we will take the classic approach, starting with all items and then iteratively removing items that have the least impact on <span class="math inline">\(\alpha\)</span> until we reach the desired number of items. Finally, for the Fisher information metric, we will simply take the top <span class="math inline">\(J\)</span> items in terms of expected item information per equation <a href="#eq:einfo">(4)</a>. We can do this for Fisher information because the information score is independent for each item, so there is no benefit to implementing a sequential search algorithm.</p>
+<p>To determine how well the reduced sets of items perform, we will fit the 2PL IRT model to the response data for each of the reduced sets, extract the posterior estimates (<span class="math inline">\(\hat{\theta}\)</span>), and compare them to the true values used to simulated the responses (<span class="math inline">\(\theta_i\)</span>).</p>
+<p>For a more realistic simulation, we will generate data for 500 people across 100 items. For each metric, we will use the corresponding item reduction method to create a reduced set of just 20 items from the 100 item full set.</p>
+<p>To start, we will specify the sequential greedy item selection algorithm:</p>
+<pre class="r"><code>library(foreach)
+library(posterior)
+
+# sequential greedy item reduction algorithm using KL or BF
+reduce_items &lt;- function(desired_length, metric, responses, theta_true) {
+  reduced_item_set &lt;- c()
+  
+  while (length(reduced_item_set) &lt; desired_length) {
+    # item_set stores the information score for each item
+    item_set &lt;- foreach(item=1:ncol(responses), .combine = &quot;c&quot;) %do% {
+      if (!(item %in% reduced_item_set)) {
+        # item = the current candidate item
+        which_items &lt;- c(reduced_item_set, item)
+        
+        # include only the current reduced item set + candidate item
+        stan_dat &lt;- list(
+          N = n_persons,
+          J = length(which_items),
+          Y = as.matrix(responses[,which_items]),
+          a = a[which_items],
+          b = b[which_items]
+        )
+        
+        fit &lt;- irt_2pl$sample(
+          data = stan_dat,
+          iter_sampling = 200,
+          iter_warmup = 100,
+          chains = 8,
+          parallel_chains = 8,
+          refresh = 0
+        )
+      
+        # extract posteriors on theta
+        post_theta &lt;- par_from_draws(fit, &quot;theta&quot;)$theta
+        
+        # estimate item information
+        item_info &lt;- foreach(iter=1:n_persons, .combine = &quot;c&quot;) %do% {
+          if (metric == &quot;kl&quot;) {
+            # if using K-L divergence metric
+            kl_div(post_theta[,iter], seq(-4, 4, length.out = 1000))  
+          } else if (metric == &quot;bf&quot;) {
+            # if using bayes factor metric
+            bayes_factor(post_theta[,iter], theta_true[iter])  
+          } 
+        }
+        # mean across theta iterations/samples to get expected info
+        item_info &lt;- mean(item_info, na.rm = T)
+      } else {
+        item_info &lt;- -Inf
+      }
+      rm(fit); gc()
+      return(item_info)
+    }
+    # add the candidate item that adds most info to the reduced set
+    reduced_item_set &lt;- c(reduced_item_set, which.max(item_set))
+  } 
+  return(reduced_item_set)
+}</code></pre>
+<p>Next, we will define the iterative <span class="math inline">\(\alpha\)</span> method. To do so, we will leverage the <code>psych</code> package, a popular psychometrics library that researchers use in practice when performing these types of analyses:</p>
+<pre class="r"><code>library(psych)
+
+# iteratively remove &quot;worse&quot; items per alpha
+reduce_items_alpha &lt;- function(desired_length, responses) {
+  colnames(responses) &lt;- 1:ncol(responses)
+  selected_items &lt;- colnames(responses)
+  
+  while (length(selected_items) &gt; desired_length) {
+    alpha_result &lt;- alpha(responses[, selected_items, drop = FALSE])
+    # Find the item whose removal produces highest alpha
+    rm_idx &lt;- which.max(alpha_result$alpha.drop$raw_alpha)
+    item_to_remove &lt;- rownames(alpha_result$alpha.drop[rm_idx,])
+    selected_items &lt;- setdiff(selected_items, item_to_remove)
+  }
+  return(as.numeric(selected_items))
+}</code></pre>
+<p>Lastly, the Fisher information method can be specified rather easily as follows:</p>
+<pre class="r"><code>reduce_items_fisher &lt;- function(desired_length, a, b) {
+  # sample from the prior
+  theta &lt;- rnorm(10000)
+  
+  # compute fisher info for each item, take expectation 
+  # for expected fisher info
+  fisher_info &lt;- compute_fisher(theta, a, b)
+  expected_info &lt;- apply(fisher_info, 2, mean)
+  
+  # take top J items ranked by expected info
+  selected_items &lt;- order(expected_info, decreasing = TRUE)[1:desired_length]
+  
+  return(selected_items)
+}</code></pre>
+<p>Time to simulate data and test our strategies! Note that this code chunk takes a long time to run, so consider yourself warned if you are planning to run it:</p>
+<pre class="r"><code>set.seed(123)
+
+# how many items to keep
+n_keep &lt;- 15
+
+# simulate data
+n_persons &lt;- 500
+n_items &lt;- 100
+theta_true &lt;- rnorm(n_persons)
+
+# simulate item parameters
+a &lt;- runif(n_items, 0.5, 2)
+b &lt;- runif(n_items, -2, 2)
+
+# simulate responses
+responses &lt;- sapply(1:n_items, function(i) irt(theta_true, a[i], b[i]))
+
+# add in some problematic redundancy for good measure (:&lt;
+redundant_items &lt;- sample(2:100, 30)
+a[redundant_items-1] &lt;- a[redundant_items]
+b[redundant_items-1] &lt;- b[redundant_items]
+responses[,redundant_items-1] &lt;- responses[,redundant_items]
+
+# K-L divergence method (warning: takes a while to run!)
+reduced_set_kl &lt;- reduce_items(n_keep, &quot;kl&quot;, responses, theta_true)
+
+# BF method (warning: takes a while to run!)
+reduced_set_bf &lt;- reduce_items(n_keep, &quot;bf&quot;, responses, theta_true)
+
+# alpha method
+reduced_set_alpha &lt;- reduce_items_alpha(n_keep, responses)
+
+# Fisher info method
+reduced_set_fisher &lt;- reduce_items_fisher(n_keep, a, b)</code></pre>
+<p>… <strong><em>one day later</em></strong> …</p>
+<p>Alright! Finally done… First, let’s take a look at the reduced item sets that are different methods landed on:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">KL</th>
+<th align="right">BF</th>
+<th align="right">alpha</th>
+<th align="right">Fisher</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">72</td>
+<td align="right">73</td>
+<td align="right">13</td>
+<td align="right">72</td>
+</tr>
+<tr class="even">
+<td align="right">73</td>
+<td align="right">61</td>
+<td align="right">14</td>
+<td align="right">73</td>
+</tr>
+<tr class="odd">
+<td align="right">48</td>
+<td align="right">72</td>
+<td align="right">16</td>
+<td align="right">52</td>
+</tr>
+<tr class="even">
+<td align="right">52</td>
+<td align="right">48</td>
+<td align="right">17</td>
+<td align="right">48</td>
+</tr>
+<tr class="odd">
+<td align="right">70</td>
+<td align="right">52</td>
+<td align="right">41</td>
+<td align="right">70</td>
+</tr>
+<tr class="even">
+<td align="right">89</td>
+<td align="right">76</td>
+<td align="right">42</td>
+<td align="right">71</td>
+</tr>
+<tr class="odd">
+<td align="right">34</td>
+<td align="right">96</td>
+<td align="right">52</td>
+<td align="right">41</td>
+</tr>
+<tr class="even">
+<td align="right">97</td>
+<td align="right">41</td>
+<td align="right">54</td>
+<td align="right">42</td>
+</tr>
+<tr class="odd">
+<td align="right">69</td>
+<td align="right">89</td>
+<td align="right">55</td>
+<td align="right">89</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">19</td>
+<td align="right">61</td>
+<td align="right">61</td>
+</tr>
+<tr class="odd">
+<td align="right">61</td>
+<td align="right">21</td>
+<td align="right">70</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">42</td>
+<td align="right">85</td>
+<td align="right">71</td>
+<td align="right">76</td>
+</tr>
+<tr class="odd">
+<td align="right">22</td>
+<td align="right">3</td>
+<td align="right">72</td>
+<td align="right">69</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="right">24</td>
+<td align="right">73</td>
+<td align="right">54</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">66</td>
+<td align="right">76</td>
+<td align="right">55</td>
+</tr>
+</tbody>
+</table>
+<p>For all but the <span class="math inline">\(\alpha\)</span> items, the ordering above roughly translates to how informative each item is as determined per the associated item reduction method. Overall, we do see overlap in which items are selected across metrics, with the most overlap between the Fisher information and K-L divergence metrics. In hindsight, this should not be too surprising given that these metrics capture information in similar ways. The <span class="math inline">\(\alpha\)</span> metric gives quite a different set of items compared to other metrics, whereas the <span class="math inline">\(BF\)</span> metric shows some overlap with other information-theoretic metrics but not so much with <span class="math inline">\(\alpha\)</span>.</p>
+<p>To see which set actually performs best in terms of recovering the true underlying <span class="math inline">\(\theta\)</span> values used to simulate responses, we fit the 2PL IRT model to each reduced set below and save out the posterior means (<span class="math inline">\(\hat{\theta}\)</span>):</p>
+<pre class="r"><code>reduced_sets &lt;- list(
+  `3 K-L Divergence` = reduced_set_kl,
+  `4 Bayes Factor` = reduced_set_bf,
+  `1 Cronbach&#39;s alpha` = reduced_set_alpha,
+  `2 Fisher Information` = reduced_set_fisher
+)
+
+post_theta_means &lt;- foreach(set=names(reduced_sets), .combine = &quot;rbind&quot;) %do% {
+  items &lt;- reduced_sets[[set]]
+  stan_dat &lt;- list(
+    N = n_persons,
+    J = length(items),
+    Y = responses[,items],
+    a = a[items],
+    b = b[items]
+  )
+  fit &lt;- irt_2pl$sample(
+    data = stan_dat,
+    iter_sampling = 500,
+    iter_warmup = 200,
+    chains = 8,
+    parallel_chains = 8,
+    refresh = 0
+  )
+  post_theta &lt;- par_from_draws(fit, &quot;theta&quot;)$theta
+  
+  data.frame(
+    metric = set,
+    person = 1:n_persons,
+    theta_true = theta_true,
+    theta_est = apply(post_theta, 2, mean)
+  )
+}</code></pre>
+<p>Finally, let’s take a look at the results we have been working toward! Below, we plot out the true versus estimated <span class="math inline">\(\theta\)</span> values for each metric:</p>
+<pre class="r"><code>library(dplyr)
+
+# show r2 in plot
+r2s &lt;- post_theta_means %&gt;%
+  group_by(metric) %&gt;%
+  summarize(r2 = round(cor(theta_true, theta_est)^2, 2), .groups = &quot;drop&quot;)
+
+ggplot(post_theta_means, aes(x = theta_true, y = theta_est)) +
+  geom_point(color = &quot;gray&quot;) +
+  geom_abline(intercept = 0, slope = 1, linetype=2) +
+  facet_wrap(&quot;metric&quot;, ncol=2) +
+  xlab(expression(theta[true])) +
+  ylab(expression(hat(theta))) +
+  geom_text(
+    data = r2s, 
+    aes(x = -2, y = 2, 
+        label = paste0(&quot;r2 = &quot;, r2)),
+        inherit.aes = FALSE
+  ) +
+  theme_minimal(base_size = 15) </code></pre>
+<p><img src="http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>Above, the <span class="math inline">\(r^2\)</span> value is shown on each panel for interpretability. We see that the Bayes factor method produces <span class="math inline">\(\hat{\theta}\)</span>s that best align with the true values, followed closely by the K-L divergence and Fisher information metrics. The <span class="math inline">\(\alpha\)</span>-hacking method then performs the worse overall, which we may expect given the item redundancy we baked into the simulated data.</p>
+<p>Overall, I’d say these results are pretty good considering we reduced the original item pool from 100 to just 15 items–an 85% reduction!</p>
+</div>
+</div>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<p>In this post, we explored various methods for ascertaining the information contained in survey items. In Part 1, we learned how all of Cronbach’s <span class="math inline">\(\alpha\)</span>, Fisher information, K-L divergence, and Bayes factors could be used to measure item informativeness. We also learned about some downsides of different metrics. For example, we illustrated that <span class="math inline">\(\alpha\)</span> and Fisher information do a particularly poor job accounting for item redundancy. Additionally, we found that K-L divergence is a good measure of overall item informativeness, but that it does not tell us if the direction of information change is “correct” in the sense that it reliably captures the desired underlying latent trait. Part 1 then wrapped up with an overview of how Bayes factors can account for the shortcomings of K-L divergence.</p>
+<p>In Part 2, we then demonstrated how our various metrics could be used to implement item reduction in practice, and we compared performance across methods. We found that the Bayes factor method performed best, followed by K-L divergence, Fisher information, and then <span class="math inline">\(\alpha\)</span> methods. In fact, the Bayes factor method accounted for 10% more variance in the true <span class="math inline">\(\theta\)</span> values compared to the <span class="math inline">\(\alpha\)</span>-hacking method–a rather large difference! Although the Bayes factor method is quite computationally intensive, such a large increase in measurement precision is often worthwhile, especially when we consider that this procedure only needs to be run once.</p>
+<div id="future-directions" class="section level2">
+<h2>Future directions</h2>
+<p>We only explored item reduction strategies here with a relatively simple 2PL IRT model. In the future, I believe researchers would benefit from comparing the Bayes factor and K-L divergence metrics (using the sequential greedy item selection algorithm) to competing methods on a wider variety of IRT models. In <a href="https://x.com/Nate__Haines/status/1516759885832200201">my own industry work</a>, I have used the Bayes factor method to great success when reducing down an 11 factor, 224 item survey to just 30 items. In that application, I used a multidimensional graded response model as opposed to something simple such as the 2PL IRT model we used throughout this post.</p>
+<p>Additionally, we have focused here wholly on item selection for item reduction purposes, but there is an entire body of research on <a href="https://en.wikipedia.org/wiki/Computerized_adaptive_testing">computerized adaptive testing</a> that our methods could be applied to. The idea here is that, instead of performing item reduction up front to create the same survey for every respondent, we can instead determine the optimal item one-by-one–with each new response, we learn more about the person’s latent trait, and as a result we can select new items that help us best estimate the respondent’s trait level given our current state of knowledge. Indeed, Bayesian methods are very popular for such <a href="https://doi.org/10.1016/j.jmp.2013.05.005">adaptive design optimization</a> tasks. There are now even some open-source packages that help users implement <a href="https://doi.org/10.3758/s13428-020-01386-4">Bayesian adaptive design optimization in the context of behavioral tasks</a>. Using such methods to enhance survey informativeness and efficiency in a more widespread way could really impact the way we conduct research throughout the social and behavioral sciences.</p>
+<p>That is all for now! I hope you enjoyed the post, feel free to comment or reach out with any questions (or errata.. ) :D</p>
+</div>
 </div>
 
     </div>
