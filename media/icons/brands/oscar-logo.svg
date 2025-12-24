@@ -1,0 +1,15 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Purple gradient background -->
+  <defs>
+    <linearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B5FED;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5B4FDD;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="200" height="200" fill="url(#purpleGradient)"/>
+  
+  <!-- White circle ring (O shape) -->
+  <circle cx="100" cy="100" r="45" fill="none" stroke="white" stroke-width="18"/>
+</svg>
