@@ -5,12 +5,1909 @@
     <link>http://haines-lab.com/</link>
       <atom:link href="http://haines-lab.com/index.xml" rel="self" type="application/rss+xml" />
     <description>Computational Psychology</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Thu, 23 Nov 2023 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Mon, 26 Jan 2026 00:00:00 +0000</lastBuildDate>
     <image>
       <url>http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png</url>
       <title>Computational Psychology</title>
       <link>http://haines-lab.com/</link>
     </image>
+    
+    <item>
+      <title>A Series on Building Formal Models of Classic Psychological Effects: Part 2, Implicit Attitudes—Are They Real?</title>
+      <link>http://haines-lab.com/post/part-2-the-implicit-association-test/</link>
+      <pubDate>Mon, 26 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/post/part-2-the-implicit-association-test/</guid>
+      <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;The Implicit Association Test (IAT) is perhaps one of the most influential—and controversial—measures in all of social psychology. Since its introduction by &lt;a href=&#34;https://doi.org/10.1037/0022-3514.74.6.1464&#34;&gt;Greenwald et al. (1998)&lt;/a&gt;, the IAT has been used to measure &lt;em&gt;implicit&lt;/em&gt; attitudes across domains ranging from race and gender to political ideology and consumer preferences. The theory is that implicit attitudes are unconscious (and often automatic) evaluations, feelings, or beliefs that people have that influence behavior. The IAT then supposedly measures these implicit attitudes. For example, if you are faster to pair “Black faces” with “negative words” than with “positive words”, this reaction time difference reveals something about your underlying racial attitudes. Unlike survey questions where people may not be so willing to share their &lt;em&gt;explicit&lt;/em&gt; attitudes, the IAT promises a more &lt;em&gt;objective&lt;/em&gt; measure.&lt;/p&gt;
+&lt;p&gt;As of January 2026, the original paper has been cited over 19,000 times per Google Scholar, and millions of people have taken IATs that seek to measure implicit attitudes across a wide range of domains (see &lt;a href=&#34;https://implicit.harvard.edu/&#34;&gt;Project Implicit’s website&lt;/a&gt;). The IAT has been featured in countless news articles, incorporated into diversity trainings at &lt;a href=&#34;https://aeon.co/essays/the-implicit-bias-problem-wont-be-solved-by-training-alone&#34;&gt;major corporations&lt;/a&gt;, and even cited in &lt;a href=&#34;https://www.workplaceclassaction.com/2012/04/iowa-state-court-rejects-theory-of-unconscious-bias-and-disparate-impact-class-claims-in-bellwether/&#34;&gt;legal proceedings&lt;/a&gt;. In many ways, the IAT represents a triumph of social psychology—a clever behavioral paradigm that promised to peer beneath the surface of self-report and reveal the &lt;em&gt;objective&lt;/em&gt; attitudes people are unwilling or unable to articulate.&lt;/p&gt;
+&lt;p&gt;And yet…&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-validity-debate&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The Validity Debate&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/media/discriminant_validity_meme.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Despite its popularity, the IAT has faced persistent criticism regarding its validity, and the debate continues to rage on today. In early 2024, the American Academy of Arts &amp;amp; Sciences published &lt;a href=&#34;https://direct.mit.edu/daed/issue/153/1&#34;&gt;a special issue&lt;/a&gt; titled “Understanding Implicit Bias: Insights &amp;amp; Innovations”, featuring 18 articles and 35 authors in total. A skim through the articles themselves is telling—all discuss implicit attitudes (or biases) and impacts across American society, and many reify the IAT as the gold standard for measuring such implicit attitudes. In fact, I combed through every paper and only found &lt;a href=&#34;https://direct.mit.edu/daed/article/153/1/51/119941/The-Implicit-Association-Test&#34;&gt;a single example&lt;/a&gt; of authors even mentioning &lt;em&gt;potential&lt;/em&gt; concerns with IAT measurement reliability:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This could be a lengthy discussion, but in sum, the majority of researchers agree that enough validity evidence has accrued to conclude that the IAT does, in fact, serve as a valid and reliable way to assess individual differences in evaluations of and stereotypes about social groups, though perhaps with a bit more noise than self-report measures.
+— Ratliff &amp;amp; Smith&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For reasons that will become more clear once we start looking at actual IAT test-retest reliability in the following sections, Andrew Gelman &lt;a href=&#34;https://statmodeling.stat.columbia.edu/2024/08/20/when-is-it-appropriate-to-give-a-one-sided-perspective-implicit-association-test-example/&#34;&gt;rightfully calls out this apparent IAT sycophancy in his blog&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I was surprised that all 18 of the articles in this journal issue took the same position. Shouldn’t they have had a few saying, ‘Yeah, sure, implicit bias is a thing, it’s just not a thing that you should try to measure using the Implicit Association Test’?
+— Andrew Gelman&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Despite what the special issue may imply, Ulrich Schimmack (perhaps the IAT’s most persistent academic critic?) sets the story straight on his &lt;a href=&#34;https://replicationindex.com/2024/01/14/why-you-should-not-trust-iat-researchers/&#34;&gt;Replicability-Index blog&lt;/a&gt;, making it clear to the casual observer that the wider psychology community does not have a unified view on the IAT as a valid measure of implicit bias:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;IAT researchers continue to conflate performance on an Implicit Association Test with measurement of implicit biases, although the wider community has rejected this view.
+— Ulrich Schimmack&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;What makes this controversy even more interesting is that it has broken out of academic circles, entering the sphere of public policy debates. For example, critics have &lt;a href=&#34;https://www.city-journal.org/article/the-implicit-bias-house-of-cards&#34;&gt;characterized&lt;/a&gt; the entire implicit bias research program as “a house of cards” built on junk science—citing the IAT’s poor test-retest reliability, weak correlations with actual behavior, and the broader replication crisis in behavioral priming research as indicators of a failed research paradigm.&lt;/p&gt;
+&lt;p&gt;To be clear, this blog post is not about the policy implications of IAT research or whether implicit bias trainings “work”. Those are interesting questions, but they are downstream of a much more fundamental &lt;em&gt;methodological&lt;/em&gt; question:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;What is the relationship between implicit attitudes (as measured by the IAT) and explicit attitudes (as measured by self-report)?&lt;/strong&gt;
+— Me, in this blog&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;If both measures tap into the same underlying attitude construct, we would expect them to be highly correlated. If they measure distinct constructs (&lt;em&gt;implicit&lt;/em&gt; vs &lt;em&gt;explicit&lt;/em&gt;) we would expect a weaker relationship. The empirical answer has been rather consistent—a series of meta-analyses have found that the observed correlation between IAT scores and explicit self-report measures hovers around &lt;em&gt;r&lt;/em&gt; ≈ .2 (&lt;a href=&#34;https://pubmed.ncbi.nlm.nih.gov/16143669/&#34;&gt;Hofmann et al., 2005&lt;/a&gt;; &lt;a href=&#34;https://doi.org/10.1037/a0015575&#34;&gt;Greenwald et al., 2009&lt;/a&gt;). This modest correlation has been used to argue that implicit and explicit attitudes are indeed separate constructs. In other words, weak implicit-explicit correlations are used as evidence that the IAT has discriminant validity, or captures something fundamentally different from what people consciously report.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-measurement-error-problem-see-meme-above&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The Measurement Error Problem (see meme above)&lt;/h2&gt;
+&lt;p&gt;As we explored in a &lt;a href=&#34;https://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/&#34;&gt;previous post on the Reliability Paradox&lt;/a&gt;, low observed correlations can arise for reasons having nothing to do with the underlying psychological constructs. Specifically, &lt;em&gt;measurement error attenuates correlations&lt;/em&gt;. If both the IAT and self-report measures are noisy indicators of their respective latent constructs, the observed correlation between them will be lower than the true correlation between the constructs themselves. Measurement error is perhaps the most important factor to account for when making inference on discriminant validity, otherwise the test is a straw man.&lt;/p&gt;
+&lt;p&gt;This is not a new insight! Psychologists have been talking about correlation attenuation since the early 1900’s, and we have had corrections for it since then too (check out another &lt;a href=&#34;https://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/&#34;&gt;previous post&lt;/a&gt; for some fun history). Indeed, &lt;a href=&#34;https://pubmed.ncbi.nlm.nih.gov/11340927/&#34;&gt;Cunningham et al. (2001)&lt;/a&gt; demonstrated decades ago that when you model composite IAT scores and explicit measures using structural equation modeling (SEM)—thereby accounting for measurement error—the latent correlation jumps to somewhere around &lt;em&gt;r&lt;/em&gt; ≈ .45. &lt;a href=&#34;https://doi.org/10.1177/1745691619863798&#34;&gt;Schimmack (2021)&lt;/a&gt; has pushed this argument even further, showing that once you partition out method variance across tasks (again using SEM), latent implicit-explicit correlations leap to around &lt;em&gt;r&lt;/em&gt; ≈ .8—suggesting they may be tapping into the &lt;em&gt;same&lt;/em&gt; underlying construct after all.&lt;/p&gt;
+&lt;p&gt;If true, this would fundamentally reshape how we think about the IAT. Rather than measuring a distinct “implicit” attitude system, the IAT might simply be a more noisy measure of the same attitudes people explicitly self-report. This view has some strong evidential support. For example, despite IAT D-scores (more on these later) consistently capturing group-level differences, test-retest correlations hover around &lt;em&gt;r&lt;/em&gt; ≈ .4 across versions and timepoints (&lt;a href=&#34;https://doi.org/10.1177/1745691617691844&#34;&gt;Gawronski et al., 2017&lt;/a&gt;)—far below the .7–.8 threshold typically considered acceptable for individual-differences research. This “reliability paradox”—wherein robust group-level effects fail to capture stable individual differences—has plagued not just the IAT but behavioral tasks more broadly (&lt;a href=&#34;https://doi.org/10.3758/s13428-017-0935-1&#34;&gt;Hedge et al., 2018&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Of course, you (an avid reader of my blog :D) already know why this is an issue. All the correlations described above—whether used in the context of discriminant validity, test-retest reliability, or some other important *-ity—are derived from &lt;em&gt;summary statistics&lt;/em&gt; like the D-score, which collapse hundreds of trial-level responses into a single number per person. In &lt;a href=&#34;https://doi.org/10.1037/met0000674&#34;&gt;previous work&lt;/a&gt;, my colleagues and I showed that this approach systematically underestimates reliability because it ignores the measurement error inherent in summarizing noisy trial-level data. When we instead fit &lt;em&gt;generative models&lt;/em&gt; that respect the trial-level data-generating process—using hierarchical Bayesian methods to pool information across participants while accounting for within-person variability—test-retest reliability estimates on the actual underlying constructs of interest increase substantially across multiple tasks, including the IAT.&lt;/p&gt;
+&lt;p&gt;The implication here is that Cunningham and Schimmack are likely right, at least directionally. To make claims about discriminant validity, we need to estimate the correlation between latent implicit-explicit constructs, &lt;em&gt;not between the observed scores&lt;/em&gt; that are diluted by measurement error. After all, we don’t actually care about the observed scores—we want to understand the underlying constructs that they supposedly represent.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;a-different-approach-joint-generative-modeling&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;A Different Approach: Joint Generative Modeling&lt;/h2&gt;
+&lt;p&gt;Rather than relying on summary statistics that throw away information and then arguing about whether the resulting correlations are “real” or attenuated by measurement error, we can build a &lt;em&gt;joint generative model&lt;/em&gt; that simultaneously accounts for measurement error in both the IAT and explicit measures.&lt;/p&gt;
+&lt;p&gt;Currently, researchers tend to take one of two paths:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;SEM/latent variable approaches&lt;/strong&gt;: Fit measurement models to &lt;em&gt;summary scores&lt;/em&gt; across a battery of implicit and explicit measures (e.g., D-scores for multiple IATs, scale means for multiple self-reports), partition out shared implicit and explicit factors, and estimate latent correlations between the resulting factors..&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Process model approaches&lt;/strong&gt;: Fit cognitive models like the Diffusion Decision Model to trial-level IAT data (reaction times and accuracy), extract model parameters, and &lt;em&gt;then&lt;/em&gt; correlate these parameters with explicit measures in a separate analysis.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Neither approach is fully satisfying. The SEM approach focuses on D-scores, which conflate various cognitive processes in such a way that make it challenging to extract signal on the true latent implicit attitude we care about. There are hundreds of reaction times and accuracy indicators per person that are ignored when we callapse information down into a noisy summary score. Conversely, the process model approach uses this trial-level data (which is great!), but treats the relationship between implicit and explicit as an afterthought rather than something to be estimated jointly. The result is that we still end up correlating summary scores to make inference, which are of course attenuated my measurement error dependent on how (im)precise the estimates are.&lt;/p&gt;
+&lt;p&gt;What we need is a &lt;em&gt;joint generative model&lt;/em&gt;—one that simultaneously fits a process model to IAT trial-level responses (RTs and accuracy) &lt;em&gt;and&lt;/em&gt; a factor model to explicit item-level responses. By modeling trial- and item-level information simultaneously, we can capture the true correlation between latent implicit and explicit attitudes (we will call this &lt;strong&gt;ρ&lt;/strong&gt;).&lt;/p&gt;
+&lt;p&gt;In this post, we will develop competing generative models to answer the question: &lt;strong&gt;Are implicit and explicit attitudes the same construct or different constructs?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Along the way, we will see how thinking generatively—specifying the data-generating process from latent constructs down to observed responses—can help resolve debates that have persisted for decades using traditional descriptive approaches.&lt;/p&gt;
+&lt;p&gt;Alright, time to do some modeling!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;three-competing-hypotheses&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Three Competing Hypotheses&lt;/h2&gt;
+&lt;p&gt;To begin, let’s first clarify the core assumptions each of our models will make regarding implicit vs explicit latent attitude constructs:&lt;/p&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;14%&#34; /&gt;
+&lt;col width=&#34;24%&#34; /&gt;
+&lt;col width=&#34;18%&#34; /&gt;
+&lt;col width=&#34;42%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th&gt;Model&lt;/th&gt;
+&lt;th&gt;Hypothesis&lt;/th&gt;
+&lt;th&gt;ρ Value&lt;/th&gt;
+&lt;th&gt;Theoretical Position&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;strong&gt;Model 1&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Single Construct&lt;/td&gt;
+&lt;td&gt;ρ = 1 (fixed)&lt;/td&gt;
+&lt;td&gt;Schimmack’s view: IAT and self-report measure the same attitude with different noise&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td&gt;&lt;strong&gt;Model 2&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Correlated Constructs&lt;/td&gt;
+&lt;td&gt;ρ estimated&lt;/td&gt;
+&lt;td&gt;Agnostic: Let the data tell us how strongly implicit and explicit relate&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td&gt;&lt;strong&gt;Model 3&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Independent Constructs&lt;/td&gt;
+&lt;td&gt;ρ = 0 (fixed)&lt;/td&gt;
+&lt;td&gt;Strong dual-attitude theory: Implicit and explicit are completely separate systems&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;You may have noticed that Models 1 and 3 are nested within Model 2. If Model 1 fits the data as well as Model 2, then by parsimony we should prefer the simpler single-construct explanation. Why posit two separate attitude systems when one will do? If Model 2 fits substantially better with an estimated ρ &amp;lt;&amp;lt; 1, that’s evidence for genuinely distinct constructs (real discriminant validity!). If Model 3 fits best, we would have evidence for a genuine, strong distinction between implicit and explicit systems.&lt;/p&gt;
+&lt;p&gt;Next, we need to explicate the data generating process that explains how latent attitudes produce observed data, both in the context of IAT trial-level responses (RTs and accuracy) and explicit item-level responses (e.g., Likert or feeling thermometer ratings). We will get into the details of the dataset later, but for now you just need to know that our model of explicit responses will need to account for both Likert responses and continuous feeling thermometer responses.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;modeling-the-iat-the-linear-ballistic-accumulator&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Modeling the IAT: The Linear Ballistic Accumulator&lt;/h2&gt;
+&lt;p&gt;For the IAT, we need a model that can account for both reaction times &lt;em&gt;and&lt;/em&gt; accuracy at the trial level. When someone sees a stimulus (a face or a word) in the IAT, they have to categorize it as quickly as possible by pressing a left or right key. How do we model this process?&lt;/p&gt;
+&lt;p&gt;There are a wide range of models we could leverage for this, but here we will use the &lt;strong&gt;Linear Ballistic Accumulator&lt;/strong&gt; (LBA; &lt;a href=&#34;https://doi.org/10.1016/j.cogpsych.2007.12.002&#34;&gt;Brown &amp;amp; Heathcote, 2008&lt;/a&gt;), a model of multi-choice decision making. The basic idea is that multiple “accumulators”—one for each response option—race toward a threshold, and whichever accumulator crosses the threshold first determines the response. The winning response determines accuracy, and the time it takes to win determines response time.&lt;/p&gt;
+&lt;div id=&#34;how-the-lba-works&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;How the LBA Works&lt;/h3&gt;
+&lt;p&gt;The gif below demonstrates how the LBA works from trial-to-trial:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;lba_animation.gif&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p&gt;Each accumulator:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Starts from a random point uniformly distributed between 0 and &lt;em&gt;A&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Accumulates evidence at a drift rate &lt;em&gt;d&lt;/em&gt;, drawn from a normal distribution at the start of each trial&lt;/li&gt;
+&lt;li&gt;The first accumulator to reach threshold &lt;em&gt;b&lt;/em&gt; wins the race and triggers that response&lt;/li&gt;
+&lt;li&gt;Total RT = accumulation time + non-decision time (&lt;em&gt;t0&lt;/em&gt;) for perceptual encoding and motor execution&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each parameter has a clear psychological interpretation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Drift rate (&lt;em&gt;d&lt;/em&gt;)&lt;/strong&gt;: How quickly evidence accumulates—higher drift means faster, more confident responding&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Threshold (&lt;em&gt;b&lt;/em&gt;)&lt;/strong&gt;: Response caution—higher thresholds mean slower but more accurate responses&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Start point variability (&lt;em&gt;A&lt;/em&gt;)&lt;/strong&gt;: Trial-to-trial noise in where accumulation begins&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Non-decision time (&lt;em&gt;t0&lt;/em&gt;)&lt;/strong&gt;: Time for stimulus encoding and motor execution&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We won’t get into it in too much detail here, but the LBA can capture distinct decision making processes that the D-score alone would otherwise conflate. My favorite example is speed-accuracy tradeoffs. For example, think of what would happen to accuracy and response time if you hold all parameters constant but decrease the threshold parameter (&lt;em&gt;b&lt;/em&gt;). Watching the gif, the first thing that comes to mind is that you would expect faster response times. But if you watch a few examples, you will notice something else—occasionally, the “correct” process starts lower than the “error” process, yet it has a steeper slope. If the threshold is high enough, the correct process is able to overtake the error process, resulting in a correct response. If it were lower, the correct process may not have enough time to overtake the error process, resulting in an error response.&lt;/p&gt;
+&lt;p&gt;What is cool about the above tradeoff is that the LBA captures this rather complex speed-accuracy tradeoff through just the single threshold (&lt;em&gt;b&lt;/em&gt;) parameter. Studies have also demonstrated that you can incentivise people to respond faster, and generally we see a drop in their threshold parameters when doing so. There are some other cool effects that the LBA (and other evidence accumulation models) can capture, and I encourage interested readers to check out the LBA paper linked above to learn more.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;linking-attitudes-to-drift-rates&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Linking Attitudes to Drift Rates&lt;/h3&gt;
+&lt;p&gt;Alright, with our IAT process model decided, we now need to decide on how to link latent racial attitudes to the LBA. As detailed above, the LBA has multiple parameters that we could link implicit attitudes to, but the most sensible parameter to link to would be the drift rate. Drift rates are meant to capture the actual evidence accumulation process that occurs when a person makes a decision, resulting in the observed response on each trial. In theory, the attitudes underlying the IAT should directly influence this accumulation process (e.g., accelerating it when response stimuli are compatible, and dampening it when incompatible). Therefore, we will set up the model such that the latent attitude θ &lt;strong&gt;directly modulates&lt;/strong&gt; how quickly evidence accumulates toward the correct vs. incorrect response in each condition.&lt;/p&gt;
+&lt;p&gt;For intuition, imagine someone with a strong pro-White racial attitude (high θ) doing the race IAT. In the &lt;strong&gt;compatible condition&lt;/strong&gt; (Black+Bad / White+Good pairing), their attitude helps them—evidence accumulates more quickly for the correct response because the pairings align with their attitude. In the &lt;strong&gt;incompatible condition&lt;/strong&gt; (Black+Good / White+Bad), their attitude hurts them—evidence accumulates more slowly because the pairings conflict with their attitude.&lt;/p&gt;
+&lt;p&gt;Formally, for trial &lt;em&gt;j&lt;/em&gt; of participant &lt;em&gt;i&lt;/em&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{align}
+d_{correct,ij} &amp;amp;= d_0 + \lambda_{IAT} \cdot \theta_i \cdot \text{condition}_{ij} \\
+d_{error,ij} &amp;amp;= d_0 - \lambda_{IAT} \cdot \theta_i \cdot \text{condition}_{ij}
+\end{align}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Where condition = +1 for compatible blocks and −1 for incompatible blocks. The key parameters:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;θ&lt;em&gt;ᵢ&lt;/em&gt;&lt;/strong&gt;: Participant &lt;em&gt;i&lt;/em&gt;’s latent racial attitude (higher = stronger pro-White/anti-Black bias)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;d₀&lt;/strong&gt;: Baseline drift rate (general processing speed, independent of attitude)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;λ&lt;em&gt;ᵢₐₜ&lt;/em&gt;&lt;/strong&gt;: The “attitude loading”—how much racial attitude affects IAT drift rates&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;One thing to note here is that we are not computing a difference score between conditions. The traditional IAT D-score computes (mean RT incompatible − mean RT compatible), which compounds measurement error from both conditions. Instead, our model says that the latent attitude θ affects drift rates &lt;em&gt;within each condition on every trial&lt;/em&gt;, and the IAT effect emerges naturally from the model. This parameterization follows the insight from &lt;a href=&#34;https://pubmed.ncbi.nlm.nih.gov/37450219/&#34;&gt;Kvam et al. (2024)&lt;/a&gt;, avoiding the “compound error problem” that plagues difference scores.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;modeling-self-reported-attitudes-item-response-theory&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Modeling Self-reported Attitudes: Item Response Theory&lt;/h2&gt;
+&lt;p&gt;For the explicit measures, in the dataset we will use below, participants answered five items about their racial attitudes: preference ratings, liking ratings for each group, and feeling thermometers. The traditional approach would be to average these items into a single score, but &lt;a href=&#34;https://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/&#34;&gt;as we have covered before&lt;/a&gt;, this approach throws away useful information and introduces measurement error.&lt;/p&gt;
+&lt;p&gt;Instead, we will model each item response as a function of the latent attitude θ, using different Item Response Theory (IRT) based measurement models appropriate for each item type.&lt;/p&gt;
+&lt;div id=&#34;categorical-items-ordered-logistic&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Categorical Items: Ordered Logistic&lt;/h3&gt;
+&lt;p&gt;For Likert items with discrete categories (preference: “I strongly prefer White people” to “I strongly prefer Black people”, and liking ratings on 1-7 scales), we will use an &lt;strong&gt;ordered logistic&lt;/strong&gt; model:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+P(Y_{ik} \geq c) = \frac{1}{1 + \exp(-(\alpha_k \cdot \theta_i - \tau_{kc}))}
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;Y&lt;/em&gt;ᵢₖ is the response of person &lt;em&gt;i&lt;/em&gt; to item &lt;em&gt;k&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;α&lt;em&gt;ₖ&lt;/em&gt;&lt;/strong&gt;: The discrimination parameter—how well item &lt;em&gt;k&lt;/em&gt; differentiates people with different attitudes&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;τ&lt;em&gt;ₖc&lt;/em&gt;&lt;/strong&gt;: An intercept term for category &lt;em&gt;c&lt;/em&gt;—higher values mean higher attitude is needed to endorse that category or above&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Note that we are using a regression parameterization here because it makes it easier to code up in Stan, but the model above is identical to the graded response model—a popular model of ordinal survey data from Item Response Theory (for a nice overview on various IRT models, see &lt;a href=&#34;https://pmc.ncbi.nlm.nih.gov/articles/PMC6096466/&#34;&gt;Luo &amp;amp; Jiao, 2017&lt;/a&gt;). Specifically, we can convert the τ intercept parameter in our regression version to the IRT “difficulty” parameter per β = τ/α, which instead gives the (mathematically idential) model:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+P(Y_{ik} \geq c) = \frac{1}{1 + \exp(-\alpha_k(\theta_i - \beta_{kc}))}
+\]&lt;/span&gt;
+I find the IRT formulation here a bit more intuitive—a person becomes more likely to respond to a given category as their latent attitude θ becomes greater than the item category threshold β. In fact, from a generative perspective, you can imagine a latent continuous preference y* = α·θ that gets discretized by the β difficulty thresholds. The probability of a person endorsing each response category is then just the relative portion of the latent preference distribution between consecutive cutpoints:&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click to show visualization code
+&lt;/summary&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(patchwork)
+library(ggtext)
+
+# Function to compute category probabilities from ordered logistic
+# Uses IRT parameterization: alpha*(theta - beta)
+compute_cat_probs &amp;lt;- function(theta, alpha, beta) {
+  prob_geq &amp;lt;- plogis(alpha * (theta - beta))
+  prob_geq_all &amp;lt;- c(1, prob_geq, 0)
+  cat_probs &amp;lt;- -diff(prob_geq_all)
+  return(cat_probs)
+}
+
+# Set up difficulty parameters for a 7-point scale
+beta &amp;lt;- c(-3.7, -1.9, -0.69, 0.69, 1.9, 3.7)
+
+# Function to create a two-panel plot: latent density + response bars
+create_panel &amp;lt;- function(theta, alpha, beta, title, show_y_labels = TRUE) {
+  # Compute response probabilities
+  probs &amp;lt;- compute_cat_probs(theta, alpha, beta)
+
+  # The latent variable is: y* = alpha*theta + epsilon, where epsilon ~ Logistic(0, 1)
+  # Equivalently: y*/alpha = theta + epsilon/alpha, where epsilon/alpha ~ Logistic(0, 1/alpha)
+  # The thresholds beta are fixed; alpha changes the scale of the distribution
+  latent_mean &amp;lt;- theta
+  latent_scale &amp;lt;- 1 / alpha
+  thresholds &amp;lt;- beta
+
+  # Top plot: latent logistic density with threshold lines
+  p_density &amp;lt;- data.frame(x = seq(-6, 6, length.out = 1000)) %&amp;gt;%
+    mutate(y = dlogis(x, location = latent_mean, scale = latent_scale)) %&amp;gt;%
+    ggplot(aes(x = x, y = y)) +
+    geom_area(fill = &amp;quot;#eb3437&amp;quot;, alpha = 0.7) +
+    geom_vline(xintercept = thresholds, linetype = 2, color = &amp;quot;gray30&amp;quot;, linewidth = 0.5) +
+    labs(title = title,
+         x = NULL,
+         y = if(show_y_labels) &amp;quot;Density&amp;quot; else NULL) +
+    scale_x_continuous(limits = c(-6, 6), breaks = seq(-6, 6, 2)) +
+    theme_minimal(base_size = 15) +
+    theme(panel.grid = element_blank(),
+          axis.text.y = element_blank(),
+          plot.title = element_textbox_simple(
+            hjust = 0.5,
+            halign = 0.5,
+            face = &amp;quot;bold&amp;quot;,
+            fill = &amp;quot;gray90&amp;quot;,
+            box.color = &amp;quot;gray60&amp;quot;,
+            padding = margin(3, 3, 3, 3),
+            margin = margin(0, 0, 3, 0)
+          ))
+
+  # Bottom plot: discrete response probabilities
+  p_bars &amp;lt;- data.frame(
+    category = 1:7,
+    probability = probs
+  ) %&amp;gt;%
+    ggplot(aes(x = category, y = probability)) +
+    geom_col(fill = &amp;quot;#eb3437&amp;quot;, alpha = 0.7) +
+    geom_text(aes(label = sprintf(&amp;quot;%.2f&amp;quot;, probability)),
+              vjust = -0.5, size = 3.5) +
+    labs(x = NULL,
+         y = if(show_y_labels) &amp;quot;Probability&amp;quot; else NULL) +
+    scale_x_continuous(breaks = 1:7,
+                       labels = c(&amp;quot;1\nPro-\nBlack&amp;quot;, &amp;quot;2&amp;quot;, &amp;quot;3&amp;quot;, &amp;quot;4\nNeutral&amp;quot;,
+                                 &amp;quot;5&amp;quot;, &amp;quot;6&amp;quot;, &amp;quot;7\nPro-\nWhite&amp;quot;)) +
+    ylim(0, 0.8) +
+    theme_minimal(base_size = 15) +
+    theme(panel.grid.major.x = element_blank(),
+          axis.text.x = element_text(size = 12),
+          axis.text.y = if(!show_y_labels) element_blank() else element_text())
+
+  # Stack vertically
+  p_density / p_bars + plot_layout(heights = c(1, 1.2))
+}
+
+# Create 3x3 grid: columns = theta (increasing L to R), rows = alpha (increasing top to bottom)
+# Using Unicode Greek letters: θ = \u03B8, α = \u03B1
+# Only show y-axis labels on column 1 (leftmost)
+
+# Row 1: alpha = 0.5
+p11 &amp;lt;- create_panel(-1.5, 0.5, beta, &amp;quot;\u03B8 = -1.5, \u03B1 = 0.5&amp;quot;, show_y_labels = TRUE)
+p21 &amp;lt;- create_panel(0, 0.5, beta, &amp;quot;\u03B8 = 0, \u03B1 = 0.5&amp;quot;, show_y_labels = FALSE)
+p31 &amp;lt;- create_panel(1.5, 0.5, beta, &amp;quot;\u03B8 = 1.5, \u03B1 = 0.5&amp;quot;, show_y_labels = FALSE)
+
+# Row 2: alpha = 1
+p12 &amp;lt;- create_panel(-1.5, 1, beta, &amp;quot;\u03B8 = -1.5, \u03B1 = 1&amp;quot;, show_y_labels = TRUE)
+p22 &amp;lt;- create_panel(0, 1, beta, &amp;quot;\u03B8 = 0, \u03B1 = 1&amp;quot;, show_y_labels = FALSE)
+p32 &amp;lt;- create_panel(1.5, 1, beta, &amp;quot;\u03B8 = 1.5, \u03B1 = 1&amp;quot;, show_y_labels = FALSE)
+
+# Row 3: alpha = 2
+p13 &amp;lt;- create_panel(-1.5, 2, beta, &amp;quot;\u03B8 = -1.5, \u03B1 = 2&amp;quot;, show_y_labels = TRUE)
+p23 &amp;lt;- create_panel(0, 2, beta, &amp;quot;\u03B8 = 0, \u03B1 = 2&amp;quot;, show_y_labels = FALSE)
+p33 &amp;lt;- create_panel(1.5, 2, beta, &amp;quot;\u03B8 = 1.5, \u03B1 = 2&amp;quot;, show_y_labels = FALSE)
+
+# Arrange in 3x3 grid
+irt_plot &amp;lt;- (p11 | p21 | p31) / (p12 | p22 | p32) / (p13 | p23 | p33)&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/part-2-the-implicit-association-test/index_files/figure-html/ordered-logistic-plot-1.png&#34; alt=&#34;&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;In the plot, &lt;strong&gt;columns represent different attitudes (θ)&lt;/strong&gt; and &lt;strong&gt;rows represent different discrimination levels (α)&lt;/strong&gt;. Each panel contains two subplots: the latent continuous response (top) with a logistic distribution, and the observed discrete response probabilities (bottom). Gray dashed lines show the fixed thresholds β that discretize the latent variable into 7 response categories.&lt;/p&gt;
+&lt;p&gt;As attitude θ increases from -1.5 (pro-Black) through 0 (neutral) to 1.5 (pro-White), the latent distribution shifts rightward. The thresholds stay fixed, but as the distribution moves, response probabilities shift from lower response categories (pro-Black) to higher categories (pro-White).&lt;/p&gt;
+&lt;p&gt;As discrimination α increases from 0.5 (top) to 2 (bottom), the latent distribution becomes narrower and more peaked. Higher discrimination means the item measures attitudes more precisely—responses concentrate around the center of the latent preference distribution rather than spreading across categories.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;continuous-items-probit-transformed-normal&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Continuous Items: Probit-Transformed Normal&lt;/h3&gt;
+&lt;p&gt;For feeling thermometer items (rated from -100 to 100), we have continuous responses that are bounded at either end. Rather than artificially discretizing these into Likert categories (don’t worry I tried this and results were basically the same), we use a &lt;strong&gt;probit-transformed normal&lt;/strong&gt; model. This is a bit non-standard, but I went this way because: (1) I thought it would be fun, and (2) the structure of the model matches our categorical version quite nicely.&lt;/p&gt;
+&lt;p&gt;For the continuous model, we first scale the thermometer responses to [0,1]:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[y_{ik}^* = \frac{y_{ik} + 100}{200}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Then we apply the inverse normal CDF (probit transformation) to map [0,1] → ℝ, and model the transformed value:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\Phi^{-1}(y_{ik}^*) \sim \text{Normal}(\tau_k + \lambda_k \cdot \theta_i, 1)
+\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;λ&lt;em&gt;ₖ&lt;/em&gt;&lt;/strong&gt;: The factor loading—analogous to discrimination in IRT&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;τ&lt;em&gt;ₖ&lt;/em&gt;&lt;/strong&gt;: The intercept—average thermometer rating when θ = 0&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;σ = 1&lt;/strong&gt;: Residual standard deviation—fixed for identification (similar to the ordered logistic’s implicit fixed variance)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This approach treats thermometer ratings as if they arose from an underlying continuous normal variable that gets “squashed” through the normal CDF to get bounded in [0,1], and then we just map back from [0,1] to [-100,100] post-hoc (by running backwards through the scaling transform above) to get back real thermometer values. This model is symmetric with the ordered logistic model: both assume an underlying continuous latent response, but one is discretized (Likert) while the other is observed continuously (thermometer).&lt;/p&gt;
+&lt;p&gt;To make the model behavior more intuitive, the plot below shows how θ (attitude) and λ^std (standardized loading—we will get more into standardized loadings below) determine the distribution of observed thermometer ratings:&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click to show visualization code
+&lt;/summary&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(patchwork)
+library(ggtext)
+
+# Helper function to derive sigma from standardized loading
+# In parameterization: z = tau + lambda * theta + epsilon, epsilon ~ N(0, sigma^2)
+# Standardized loading: lambda_std = lambda^2 / sqrt(lambda^2 + sigma^2)
+# Solving for sigma: sigma = sqrt((lambda^2 - lambda_std^2) / lambda_std^2)
+# you can either set lambda = 1 or sigma = 1 for identification, 
+# for viz we will set lambda = 1 to more easily show the noise 
+# reduction in the latent variable as lambda_std increases
+std_to_sigma &amp;lt;- function(lambda_std) {
+  sqrt((1 - lambda_std^2) / lambda_std^2)
+}
+
+# Function to create a two-panel plot: latent density + observed density
+create_continuous_panel &amp;lt;- function(theta, lambda_std, tau = 0, title, show_y_labels = TRUE) {
+  # Use alternative parameterization: lambda = 1, estimate sigma
+  lambda &amp;lt;- 1
+  sigma &amp;lt;- std_to_sigma(lambda_std)
+
+  # Latent variable: z ~ N(tau + lambda*theta, sigma^2)
+  latent_mean &amp;lt;- tau + lambda * theta
+  latent_sd &amp;lt;- sigma
+
+  # Top plot: latent normal density
+  z_vals &amp;lt;- seq(-6, 6, length.out = 1000)
+  latent_data &amp;lt;- data.frame(z = z_vals) %&amp;gt;%
+    mutate(density = dnorm(z, mean = latent_mean, sd = latent_sd))
+
+  p_latent &amp;lt;- ggplot(latent_data, aes(x = z, y = density)) +
+    geom_area(fill = &amp;quot;#eb3437&amp;quot;, alpha = 0.7) +
+    labs(title = title,
+         x = NULL,
+         y = if(show_y_labels) &amp;quot;Density&amp;quot; else NULL) +
+    scale_x_continuous(limits = c(-6, 6), breaks = seq(-6, 6, 2)) +
+    theme_minimal(base_size = 15) +
+    theme(panel.grid = element_blank(),
+          axis.text.y = element_blank(),
+          plot.title = element_textbox_simple(
+            hjust = 0.5,
+            halign = 0.5,
+            face = &amp;quot;bold&amp;quot;,
+            fill = &amp;quot;gray90&amp;quot;,
+            box.color = &amp;quot;gray60&amp;quot;,
+            padding = margin(3, 3, 3, 3),
+            margin = margin(0, 0, 3, 0)
+          ))
+
+  # Bottom plot: observed distribution after probit transformation
+  # y = Phi(z), so density of y is: f_y(y) = phi(Phi^(-1)(y) - mu) where mu = latent_mean
+  y_vals &amp;lt;- seq(0.001, 0.999, length.out = 1000)
+  observed_data &amp;lt;- data.frame(y = y_vals) %&amp;gt;%
+    mutate(
+      z_inv = qnorm(y),  # Phi^(-1)(y)
+      density = dnorm(z_inv, mean = latent_mean, sd = latent_sd)
+    )
+
+  p_observed &amp;lt;- ggplot(observed_data, aes(x = y, y = density)) +
+    geom_area(fill = &amp;quot;#eb3437&amp;quot;, alpha = 0.7) +
+    labs(x = NULL,
+         y = if(show_y_labels) &amp;quot;Density&amp;quot; else NULL) +
+    scale_x_continuous(breaks = seq(0, 1, 0.2),
+                       labels = c(&amp;quot;-100\nPro-\nBlack&amp;quot;, &amp;quot;-60&amp;quot;, &amp;quot;-20&amp;quot;, &amp;quot;20&amp;quot;, &amp;quot;60&amp;quot;, &amp;quot;100\nPro-\nWhite&amp;quot;)) +
+    theme_minimal(base_size = 15) +
+    theme(panel.grid.major.x = element_blank(),
+          axis.text.x = element_text(size = 12),
+          axis.text.y = if(!show_y_labels) element_blank() else element_text())
+
+  # Stack vertically
+  p_latent / p_observed + plot_layout(heights = c(1, 1.2))
+}
+
+# Create 3x3 grid: columns = theta (increasing L to R), rows = lambda_std (increasing top to bottom)
+# Using Unicode Greek letters: θ = \u03B8, λ = \u03BB
+# Using standardized loadings: 0.25, 0.75, 0.95 (weak, moderate, strong)
+# Only show y-axis labels on column 1 (leftmost)
+# tau = 0 for all panels
+
+# Row 1: lambda_std = 0.25
+p11 &amp;lt;- create_continuous_panel(-1.5, 0.25, tau = 0, title = &amp;quot;\u03B8 = -1.5, \u03BB\u02E2\u1D57\u1D48 = 0.25&amp;quot;, show_y_labels = TRUE)
+p21 &amp;lt;- create_continuous_panel(0, 0.25, tau = 0, title = &amp;quot;\u03B8 = 0, \u03BB\u02E2\u1D57\u1D48 = 0.25&amp;quot;, show_y_labels = FALSE)
+p31 &amp;lt;- create_continuous_panel(1.5, 0.25, tau = 0, title = &amp;quot;\u03B8 = 1.5, \u03BB\u02E2\u1D57\u1D48 = 0.25&amp;quot;, show_y_labels = FALSE)
+
+# Row 2: lambda_std = 0.75
+p12 &amp;lt;- create_continuous_panel(-1.5, 0.75, tau = 0, title = &amp;quot;\u03B8 = -1.5, \u03BB\u02E2\u1D57\u1D48 = 0.75&amp;quot;, show_y_labels = TRUE)
+p22 &amp;lt;- create_continuous_panel(0, 0.75, tau = 0, title = &amp;quot;\u03B8 = 0, \u03BB\u02E2\u1D57\u1D48 = 0.75&amp;quot;, show_y_labels = FALSE)
+p32 &amp;lt;- create_continuous_panel(1.5, 0.75, tau = 0, title = &amp;quot;\u03B8 = 1.5, \u03BB\u02E2\u1D57\u1D48 = 0.75&amp;quot;, show_y_labels = FALSE)
+
+# Row 3: lambda_std = 0.95
+p13 &amp;lt;- create_continuous_panel(-1.5, .95, tau = 0, title = &amp;quot;\u03B8 = -1.5, \u03BB\u02E2\u1D57\u1D48 = 0.95&amp;quot;, show_y_labels = TRUE)
+p23 &amp;lt;- create_continuous_panel(0, .95, tau = 0, title = &amp;quot;\u03B8 = 0, \u03BB\u02E2\u1D57\u1D48 = 0.95&amp;quot;, show_y_labels = FALSE)
+p33 &amp;lt;- create_continuous_panel(1.5, .95, tau = 0, title = &amp;quot;\u03B8 = 1.5, \u03BB\u02E2\u1D57\u1D48 = 0.95&amp;quot;, show_y_labels = FALSE)
+
+# Arrange in 3x3 grid
+cont_plot &amp;lt;- (p11 | p21 | p31) / (p12 | p22 | p32) / (p13 | p23 | p33)&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/part-2-the-implicit-association-test/index_files/figure-html/continuous-plot-1.png&#34; alt=&#34;&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The figure shows a 3×3 grid where &lt;strong&gt;columns represent different attitudes (θ)&lt;/strong&gt; and &lt;strong&gt;rows represent different standardized factor loadings (λ&lt;sup&gt;std&lt;/sup&gt;)&lt;/strong&gt;. Each panel contains two subplots: the latent continuous variable z (top) with a normal distribution, and the observed thermometer rating y (bottom) after the probit transformation plus rescaling y = Φ(z)·200-100.&lt;/p&gt;
+&lt;p&gt;As attitude θ increases from -1.5 (pro-Black) through 0 (neutral) to 1.5 (pro-White), the latent distribution shifts rightward. After the probit transformation, this shift translates to higher observed thermometer ratings—probability mass moves toward the pro-White end of the scale.&lt;/p&gt;
+&lt;p&gt;As the standardized loading increases from 0.25 (weak) through 0.75 (good) to 0.95 (excellent), the observed distribution becomes dramatically more concentrated. At λ&lt;sup&gt;std&lt;/sup&gt; = 0.25 (top row), the observed distributions are nearly flat—only about 6% of variance is signal, so the thermometer provides almost no information about the person’s true attitude. You can barely distinguish someone with strong pro-Black attitudes (θ = -1.5) from someone with strong pro-White attitudes (θ = 1.5) based on their thermometer rating alone. At λ&lt;sup&gt;std&lt;/sup&gt; = 0.95 (bottom row), about 90% of variance is signal, and the distributions are tightly peaked—now the thermometer clearly differentiates attitudes.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;putting-it-together-the-three-models&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Putting It Together: The Three Models&lt;/h2&gt;
+&lt;p&gt;We now have all the pieces. The LBA links latent attitudes to trial-level RTs and accuracy; the IRT models link latent attitudes to item-level responses. As alluded to at the start, our three competing hypotheses regarding implicit-explicit attitude correlations can then be instantiated by making different assumptions about how the θ parameters from our IAT/IRT models arise.&lt;/p&gt;
+&lt;div id=&#34;model-1-single-construct-ρ-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model 1: Single Construct (ρ = 1)&lt;/h3&gt;
+&lt;p&gt;Model 1 assumes that a single latent attitude θ generates both IAT and self-report responses:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\theta_i \sim \text{Normal}(0, 1)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The same θ&lt;em&gt;ᵢ&lt;/em&gt; enters both the LBA drift rate equation (for IAT) and the IRT equations (for self-report items). This model assumes that if you have a pro-White attitude, that same attitude makes you both faster in the compatible IAT condition &lt;em&gt;and&lt;/em&gt; more likely to report preferring White people explicitly.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-2-correlated-constructs-ρ-estimated&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model 2: Correlated Constructs (ρ estimated)&lt;/h3&gt;
+&lt;p&gt;Model 2 assumes that two distinct latent attitudes generate IAT vs self-report responses, but that these attitudes have some unknown correlation:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{bmatrix} \theta_{implicit,i} \\ \theta_{explicit,i} \end{bmatrix} \sim \text{MVNormal}\left(\begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 1 &amp;amp; \rho \\ \rho &amp;amp; 1 \end{bmatrix}\right)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The IAT is driven by θ&lt;em&gt;implicit&lt;/em&gt;, the self-report items by θ&lt;em&gt;explicit&lt;/em&gt;, and the correlation ρ between them is estimated from the data.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ρ is the key parameter everyone has been arguing about!&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-3-independent-constructs-ρ-0&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model 3: Independent Constructs (ρ = 0)&lt;/h3&gt;
+&lt;p&gt;Model 3 assumes the same structure as Model 2, but we fix ρ to 0. This is the strong dual-attitude theory.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;standardized-loadings-comparing-measurement-quality&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Standardized Loadings: Comparing Measurement Quality&lt;/h2&gt;
+&lt;p&gt;To compare how well the IAT and self-report items measure their underlying constructs, we need a common metric. Each measurement component (IAT, categorical items, continuous items) has different parameters on different scales, so we’ll transform them into &lt;strong&gt;standardized factor loadings&lt;/strong&gt;—the correlation between the indicator and the latent construct.&lt;/p&gt;
+&lt;div id=&#34;the-factor-analysis-foundation&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;The Factor Analysis Foundation&lt;/h3&gt;
+&lt;p&gt;In standard confirmatory factor analysis, we model an observed indicator &lt;em&gt;y&lt;/em&gt; as:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[y = \tau + \lambda \cdot \theta + \varepsilon\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;τ&lt;/strong&gt;: The intercept (mean of &lt;em&gt;y&lt;/em&gt; when θ = 0)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;λ&lt;/strong&gt;: The unstandardized factor loading (regression slope)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;θ&lt;/strong&gt;: The latent factor (usually standardized so Var(θ) = 1)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ε&lt;/strong&gt;: Residual error, independent of θ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The variance of the observed indicator is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{Var}(y) = \lambda^2 \cdot \text{Var}(\theta) + \text{Var}(\varepsilon) = \lambda^2 + \text{Var}(\varepsilon)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;(assuming Var(θ) = 1). The &lt;strong&gt;standardized factor loading&lt;/strong&gt; is the correlation between &lt;em&gt;y&lt;/em&gt; and θ:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\lambda^{std} = \text{Cor}(y, \theta) = \frac{\text{Cov}(y, \theta)}{\sqrt{\text{Var}(y) \cdot \text{Var}(\theta)}} = \frac{\lambda}{\sqrt{\lambda^2 + \text{Var}(\varepsilon)}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This has a clear interpretation: the standardized loading is the unstandardized loading divided by the square root of the total variance. Squaring it gives the proportion of variance in &lt;em&gt;y&lt;/em&gt; explained by θ: (&lt;em&gt;λ&lt;/em&gt;&lt;sup&gt;std&lt;/sup&gt;)² = &lt;em&gt;λ&lt;/em&gt;² / (&lt;em&gt;λ&lt;/em&gt;² + Var(ε)).&lt;/p&gt;
+&lt;p&gt;Our three measurement types all follow this basic structure, but with different error variance structures and parameterizations. The deep dive section below gets into (excruciating) detail on how we derive the standardized loading transformation for each model. This part is optional if you are anxious to get into the data—feel free to skip ahead!&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click for the factor loading deep dive
+&lt;/summary&gt;
+&lt;div style=&#34;padding: 1em; border-left: 3px solid #ccc; margin: 1em 0 1em 1em;&#34;&gt;
+&lt;h3&gt;
+Continuous Items: Probit-Transformed Normal
+&lt;/h3&gt;
+&lt;p&gt;For the thermometer items, we model the probit-transformed response as:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\Phi^{-1}(y_{ik}^*) \sim \text{Normal}(\tau_k + \lambda_k \cdot \theta_i, 1)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This is exactly the standard factor analysis model, with the residual variance &lt;strong&gt;fixed at σ² = 1 for identification&lt;/strong&gt;. Just like in CFA where we either fix the factor variance or fix one loading to identify the scale, we fix the residual variance here. The total variance of the latent response is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{Var}(\Phi^{-1}(y_{ik}^*)) = \lambda_k^2 + 1\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;So the standardized loading is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\lambda_{cont,k}^{std} = \frac{\lambda_k}{\sqrt{\lambda_k^2 + 1}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Interpretation&lt;/strong&gt;: This is literally the correlation between the probit-transformed thermometer rating and the latent attitude. If &lt;em&gt;λ&lt;/em&gt;&lt;sub&gt;cont&lt;/sub&gt; = 1, then &lt;em&gt;λ&lt;/em&gt;&lt;sup&gt;std&lt;/sup&gt; = 1/√2 ≈ 0.71, meaning 50% of variance is explained by attitude.&lt;/p&gt;
+&lt;h3&gt;
+Categorical Items: Ordered Logistic with Probit Scaling
+&lt;/h3&gt;
+&lt;p&gt;The ordered logistic model is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[P(Y_{ik} \leq c) = \text{logit}^{-1}(\tau_{kc} - \alpha_k \cdot \theta_i)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This can be written as an underlying latent variable model: there exists an unobserved continuous variable &lt;em&gt;y&lt;/em&gt;* such that:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[y_{ik}^* = \alpha_k \cdot \theta_i + \epsilon_{ik}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where ε&lt;sub&gt;ik&lt;/sub&gt; follows a standard logistic distribution, and we observe &lt;em&gt;Y&lt;/em&gt;&lt;sub&gt;ik&lt;/sub&gt; = &lt;em&gt;c&lt;/em&gt; when τ&lt;sub&gt;k,c-1&lt;/sub&gt; &amp;lt; &lt;em&gt;y&lt;/em&gt;* ≤ τ&lt;sub&gt;kc&lt;/sub&gt;.&lt;/p&gt;
+&lt;p&gt;Note that our continuous items use the &lt;strong&gt;normal&lt;/strong&gt; (probit) scale, but ordered logistic uses the &lt;strong&gt;logistic&lt;/strong&gt; scale. To make them comparable, we need to convert the logistic model to an equivalent probit scale.&lt;/p&gt;
+&lt;p&gt;The logistic and normal CDFs are very similar in shape, differing primarily in tail behavior. A scaling factor &lt;em&gt;S&lt;/em&gt; = 1.7 does a reasonable job of minimizing the difference between a standard normal vs standard logistic distribution (there are &lt;a href=&#34;https://www.jiem.org/index.php/jiem/article/view/60&#34;&gt;better approximations&lt;/a&gt;, but it’s not like we are doing rocket science here). You can see the scaling effect visually by comparing the pre- vs post-scaled cumulative distribution functions:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/part-2-the-implicit-association-test/index_files/figure-html/logit-probit-scaling-1.png&#34; alt=&#34;&#34; width=&#34;1152&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The implication for us is that, if we rescale the discriminability parameters in our logistic model by the same &lt;em&gt;S = 1.7&lt;/em&gt; factor, we get the standardized loading parameters back on an approximately normal scale (i.e. the same scale as in a traditional factor analysis). We then use the same general formula as described above to standardize the resulting loadings, altogether giving:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\lambda_{cat,k}^{std} = \frac{\alpha_k / S}{\sqrt{(\alpha_k / S)^2 + 1}} = \frac{\alpha_k / 1.7}{\sqrt{(\alpha_k / 1.7)^2 + 1}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;h3&gt;
+IAT Standardized Loading: Baseline Speed vs. Attitude Variance
+&lt;/h3&gt;
+&lt;p&gt;The IAT differs fundamentally from the explicit items in its error structure. In the LBA model, the drift rate for condition &lt;em&gt;c&lt;/em&gt;, participant &lt;em&gt;i&lt;/em&gt; is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[v_{c,i} = d_{0,i} + \lambda_{IAT} \cdot \theta_i \cdot c\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;em&gt;c&lt;/em&gt; ∈ {-1, +1} indexes compatible vs. incompatible conditions.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Crucially, there is no additive error term on the drift rates themselves&lt;/strong&gt;. Unlike the explicit items where we have &lt;em&gt;y&lt;/em&gt; = τ + λ·θ + ε, the drift rates don’t have a residual component. Trial-level variability in RTs and accuracy is handled by the &lt;strong&gt;LBA accumulation process&lt;/strong&gt;—the stochastic diffusion to threshold—not by random noise on drift rates.&lt;/p&gt;
+&lt;p&gt;So where does variance in drift rates come from? Looking at the equation above, for a fixed condition &lt;em&gt;c&lt;/em&gt;, the drift rate v&lt;sub&gt;c,i&lt;/sub&gt; varies across people due to:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;strong&gt;Baseline drift rates&lt;/strong&gt; &lt;em&gt;d&lt;/em&gt;&lt;sub&gt;0,i&lt;/sub&gt;: individual differences in general processing speed on the IAT task&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Attitude effects&lt;/strong&gt; θ&lt;sub&gt;i&lt;/sub&gt;: individual differences in attitudes&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Note that &lt;em&gt;d&lt;/em&gt;₀ is &lt;strong&gt;person-specific&lt;/strong&gt;, not block-specific. It captures the fact that some people are generally faster at the IAT task than others, independent of their attitudes. Person A might have faster overall processing than Person B, but both could have the same attitude (and thus the same λ·θ contribution to drift rates).&lt;/p&gt;
+&lt;p&gt;From a factor analysis perspective, if we think of “drift rate in condition &lt;em&gt;c&lt;/em&gt;” as our indicator, its total variance across people is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{Var}(v_{c,i}) = \text{Var}(d_{0,i}) + \lambda_{IAT}^2 \cdot \text{Var}(\theta_i) \cdot c^2 = \text{Var}(d_0) + \lambda_{IAT}^2\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;(since Var(θ) = 1 and &lt;em&gt;c&lt;/em&gt;² = 1). The covariance between drift rates and attitudes is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{Cov}(v_{c,i}, \theta_i) = \lambda_{IAT} \cdot c\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;So for compatible blocks (&lt;em&gt;c&lt;/em&gt; = 1), the standardized loading is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\lambda_{IAT}^{std} = \frac{\lambda_{IAT}}{\sqrt{\text{Var}(d_0) + \lambda_{IAT}^2}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;It is worth emphasizing a difference in how we are calculating standardized loadings here vs for the self-report models. For the self-reports, we have person-level responses with measurement error: each person gives one response per item, and there’s leftover variance not explained by θ. But in the IAT, we have &lt;strong&gt;trial-level responses&lt;/strong&gt; (individual RTs and choices) that are governed by the LBA process. The drift rate is a parameter of that process, not a noisy observation. Variance at the trial level (why this particular trial was fast/slow) is captured by the accumulation dynamics, not by an error term on the drift rate.&lt;/p&gt;
+&lt;p&gt;Var(&lt;em&gt;d&lt;/em&gt;₀) plays an analogous role to residual variance: it represents individual differences in the measure that don’t reflect the construct of interest (attitudes). If Var(&lt;em&gt;d&lt;/em&gt;₀) is large relative to λ²&lt;sub&gt;IAT&lt;/sub&gt;, it means that individual differences in general processing speed create more variance in drift rates than attitude differences do, resulting in low standardized loadings. The IAT captures both attitude-related variance (λ·θ) and method variance (baseline speed differences), and &lt;em&gt;the standardized loading tells us what proportion of that drift rate variance comes from attitudes&lt;/em&gt;.&lt;/p&gt;
+&lt;h3&gt;
+Standardized Loading Summary
+&lt;/h3&gt;
+&lt;p&gt;All three formulas share the same fundamental structure from factor analysis:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\lambda^{std} = \frac{\text{unstandardized loading}}{\sqrt{\text{signal variance} + \text{non-signal variance}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;They only differ in their error structures.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;An important conceptual distinction&lt;/strong&gt;: The explicit item loadings represent correlations between &lt;strong&gt;latent responses&lt;/strong&gt; and θ—where each person’s latent response (Φ^(-1)(y&lt;em&gt;) or y&lt;/em&gt;) maps directly to their observed answer. The IAT loading represents the correlation between a &lt;strong&gt;cognitive process parameter&lt;/strong&gt; (drift rate) and θ—where the drift rate is itself inferred from patterns across many trial-level observations. So the IAT loading is one inferential step further removed from the raw data: observed RTs/choices → drift rates → attitudes. This doesn’t invalidate the comparison—standardized loadings are still interpretable as proportion of variance explained—but it means the IAT loading reflects measurement quality of a cognitive process model, not just a person’s direct response.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The Data&lt;/h2&gt;
+&lt;p&gt;We’ll use data from &lt;a href=&#34;https://www.sciencedirect.com/science/article/abs/pii/S0022103119305682&#34;&gt;Buttrick, Axt, Ebersole, and Huband’s (2020)&lt;/a&gt; large-scale replication study examining the incremental predictive validity of IATs. The dataset includes over 17,000 participants who completed multiple IATs along with explicit attitude measures. The data are publicly available on the &lt;a href=&#34;https://osf.io/6d7xp&#34;&gt;Open Science Framework&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For this post, we’ll focus on the &lt;strong&gt;race IAT&lt;/strong&gt; and accompanying explicit racial attitude measures. After downloading the data from OSF, the code below does some preprocessing to pull out the specific subset we are interested in:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+library(patchwork)
+
+# Load trial-level IAT data
+iat_data &amp;lt;- read_delim(&amp;quot;~/Downloads/iat.txt&amp;quot;, delim = &amp;quot;\t&amp;quot;,
+                       show_col_types = FALSE)
+
+# Clean column names (they have leading whitespace)
+names(iat_data) &amp;lt;- str_trim(names(iat_data))
+
+iat_data &amp;lt;- iat_data %&amp;gt;%
+  filter(task_name == &amp;quot;iat_race&amp;quot;) %&amp;gt;%
+  filter(!block_pairing_definition %in% c(&amp;quot;instructions&amp;quot;, &amp;quot;&amp;quot;)) %&amp;gt;%
+  mutate(rt_sec = trial_latency / 1000,
+         correct = 1 - trial_error)
+
+# Load explicit attitude data
+explicit_data &amp;lt;- read_delim(&amp;quot;~/Downloads/explicit.txt&amp;quot;, delim = &amp;quot;\t&amp;quot;,
+                           show_col_types = FALSE)
+
+names(explicit_data) &amp;lt;- str_trim(names(explicit_data))
+
+explicit_data &amp;lt;- explicit_data %&amp;gt;%
+  filter(questionnaire_name == &amp;quot;exp_race&amp;quot;,
+         attempt == 1) %&amp;gt;%
+  select(session_id, question_name, question_response) %&amp;gt;%
+  pivot_wider(names_from = question_name,
+              values_from = question_response) %&amp;gt;%
+  mutate(across(c(prfWhtBlk, likeBlack, likeWhite, thermBlack, thermWhite), as.numeric)) %&amp;gt;%
+  mutate(across(c(prfWhtBlk, likeBlack, likeWhite, thermBlack, thermWhite),
+                ~ifelse(.x == -999, NA, .x))) %&amp;gt;%
+  # Reverse-code Black items so higher = pro-White (matching IAT direction)
+  mutate(
+    likeBlack_rev = 8 - likeBlack,
+  )
+
+n_participants &amp;lt;- length(unique(iat_data$session_id))
+trials_per_person &amp;lt;- iat_data %&amp;gt;%
+  group_by(session_id) %&amp;gt;%
+  summarize(n_trials = n()) %&amp;gt;%
+  pull(n_trials)
+
+sprintf(&amp;quot;N = %d participants completed the race IAT\n&amp;quot;, n_participants)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;N = 1887 participants completed the race IAT\n&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sprintf(&amp;quot;Mean trials per person: %.1f (SD = %.1f)\n&amp;quot;, mean(trials_per_person), sd(trials_per_person))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Mean trials per person: 181.1 (SD = 29.4)\n&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-traditional-analysis-d-scores-and-scale-means&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The Traditional Analysis: D-Scores and Scale Means&lt;/h2&gt;
+&lt;p&gt;Before fitting our generative models, let’s see what the traditional approach tells us. The standard way to analyze IAT data is to compute a &lt;strong&gt;D-score&lt;/strong&gt;—a standardized measure of the RT difference between incompatible and compatible blocks:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Compute D-scores
+d_scores &amp;lt;- iat_data %&amp;gt;%
+  filter(rt_sec &amp;gt;= 0.4) %&amp;gt;%
+  mutate(condition = case_when(
+    grepl(&amp;quot;Black People/Bad&amp;quot;, block_pairing_definition) ~ &amp;quot;compatible&amp;quot;,
+    grepl(&amp;quot;White People/Bad&amp;quot;, block_pairing_definition) ~ &amp;quot;incompatible&amp;quot;,
+    TRUE ~ &amp;quot;practice&amp;quot;
+  )) %&amp;gt;%
+  filter(condition %in% c(&amp;quot;compatible&amp;quot;, &amp;quot;incompatible&amp;quot;)) %&amp;gt;%
+  group_by(session_id) %&amp;gt;%
+  summarize(
+    mean_rt_compatible = mean(rt_sec[condition == &amp;quot;compatible&amp;quot;], na.rm = TRUE),
+    mean_rt_incompatible = mean(rt_sec[condition == &amp;quot;incompatible&amp;quot;], na.rm = TRUE),
+    pooled_sd = sd(rt_sec, na.rm = TRUE),
+    d_score = (mean_rt_incompatible - mean_rt_compatible) / pooled_sd,
+    .groups = &amp;quot;drop&amp;quot;
+  )
+
+# Compute explicit composite
+explicit_scores &amp;lt;- explicit_data %&amp;gt;%
+  mutate(
+    pref_score = prfWhtBlk - 4,
+    like_diff = likeWhite - likeBlack,
+    therm_diff = thermWhite - thermBlack,
+    explicit_composite = (scale(pref_score)[,1] + scale(like_diff)[,1] + scale(therm_diff)[,1]) / 3
+  ) %&amp;gt;%
+  select(session_id, explicit_composite, pref_score, like_diff, therm_diff)
+
+# Join and compute correlation
+combined_data &amp;lt;- d_scores %&amp;gt;%
+  inner_join(explicit_scores, by = &amp;quot;session_id&amp;quot;)
+
+observed_r &amp;lt;- cor(combined_data$d_score,
+                  combined_data$explicit_composite,
+                  use = &amp;quot;complete.obs&amp;quot;)
+
+sprintf(&amp;quot;Observed correlation (D-score vs. explicit): r = %.3f\n&amp;quot;, observed_r)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Observed correlation (D-score vs. explicit): r = 0.309\n&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click to show visualization code
+&lt;/summary&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Panel A: Distribution of D-scores
+p1 &amp;lt;- ggplot(combined_data, aes(x = d_score)) +
+  geom_histogram(fill = &amp;quot;darkgray&amp;quot;, alpha = 0.7) +
+  geom_vline(xintercept = 0, linetype = &amp;quot;dashed&amp;quot;, color = &amp;quot;black&amp;quot;) +
+  labs(x = &amp;quot;D-score&amp;quot;, y = &amp;quot;Count&amp;quot;,
+       title = &amp;quot;A. Distribution of IAT D-scores&amp;quot;,
+       subtitle = &amp;quot;Positive = pro-White bias&amp;quot;) +
+  theme_minimal(base_size = 15)
+
+# Panel B: Distribution of explicit scores
+p2 &amp;lt;- ggplot(combined_data, aes(x = explicit_composite)) +
+  geom_histogram(fill = &amp;quot;darkgray&amp;quot;, alpha = 0.7) +
+  geom_vline(xintercept = 0, linetype = &amp;quot;dashed&amp;quot;, color = &amp;quot;black&amp;quot;) +
+  labs(x = &amp;quot;Explicit composite score&amp;quot;, y = &amp;quot;Count&amp;quot;,
+       title = &amp;quot;B. Distribution of explicit attitude scores&amp;quot;,
+       subtitle = &amp;quot;Positive = pro-White bias&amp;quot;) +
+  theme_minimal(base_size = 15)
+
+# Panel C: The observed correlation
+p3 &amp;lt;- ggplot(combined_data, aes(x = explicit_composite, y = d_score)) +
+  geom_point(alpha = 0.3, size = 0.5, color = &amp;quot;darkgray&amp;quot;) +
+  labs(x = &amp;quot;Explicit attitude composite&amp;quot;,
+       y = &amp;quot;IAT D-score&amp;quot;,
+       title = &amp;quot;C. Observed correlation&amp;quot;,
+       subtitle = sprintf(&amp;quot;r = %.3f&amp;quot;, observed_r)) +
+  theme_minimal(base_size = 15)
+
+# Panel D: RT distributions by condition
+rt_by_condition &amp;lt;- iat_data %&amp;gt;%
+  filter(rt_sec &amp;gt;= 0.4, rt_sec &amp;lt; 5) %&amp;gt;%
+  mutate(condition = case_when(
+    grepl(&amp;quot;Black People/Bad&amp;quot;, block_pairing_definition) ~ &amp;quot;Compatible&amp;quot;,
+    grepl(&amp;quot;White People/Bad&amp;quot;, block_pairing_definition) ~ &amp;quot;Incompatible&amp;quot;,
+    TRUE ~ &amp;quot;Practice&amp;quot;
+  )) %&amp;gt;%
+  filter(condition %in% c(&amp;quot;Compatible&amp;quot;, &amp;quot;Incompatible&amp;quot;))
+
+p4 &amp;lt;- ggplot(rt_by_condition, aes(x = rt_sec, fill = condition)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(values = c(&amp;quot;Compatible&amp;quot; = &amp;quot;#3054e6&amp;quot;,
+                                &amp;quot;Incompatible&amp;quot; = &amp;quot;#eb3437&amp;quot;)) +
+  labs(x = &amp;quot;Reaction time (seconds)&amp;quot;, y = &amp;quot;Density&amp;quot;,
+       title = &amp;quot;D. RT distributions by condition&amp;quot;,
+       fill = &amp;quot;Block type&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;)
+
+p_summary &amp;lt;- (p1 + p2) / (p3 + p4)&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/part-2-the-implicit-association-test/index_files/figure-html/fig-summary-stats-1.png&#34; alt=&#34;&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Here we obtain the familiar modest implicit-explicit attitude correlation of &lt;em&gt;r&lt;/em&gt; ≈ 0.31. This matches previous meta-analyses and has been used to argue that implicit and explicit attitudes are distinct constructs.&lt;/p&gt;
+&lt;p&gt;We can furhter zoom in on Panel D to see how the compatible vs incompatible RT distributions shift as explicit attitudes diverge. The plot below stratifies participants by their explicit attitude scores (in deciles) and plots out the aggregate RT distributions within each decile:&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click to show code
+&lt;/summary&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggridges)
+
+# Prepare data with explicit attitude deciles
+ridges_data &amp;lt;- iat_data %&amp;gt;%
+  filter(rt_sec &amp;gt;= 0.4, rt_sec &amp;lt; 3) %&amp;gt;%
+  mutate(condition = case_when(
+    grepl(&amp;quot;Black People/Bad&amp;quot;, block_pairing_definition) ~ &amp;quot;Compatible&amp;quot;,
+    grepl(&amp;quot;White People/Bad&amp;quot;, block_pairing_definition) ~ &amp;quot;Incompatible&amp;quot;,
+    TRUE ~ &amp;quot;Practice&amp;quot;
+  )) %&amp;gt;%
+  filter(condition %in% c(&amp;quot;Compatible&amp;quot;, &amp;quot;Incompatible&amp;quot;)) %&amp;gt;%
+  left_join(combined_data %&amp;gt;% select(session_id, explicit_composite),
+            by = &amp;quot;session_id&amp;quot;) %&amp;gt;%
+  filter(!is.na(explicit_composite)) %&amp;gt;%
+  mutate(
+    explicit_decile = ntile(explicit_composite, 10),
+    decile_label = sprintf(&amp;quot;%dth-%dth %%ile&amp;quot;,
+                          (explicit_decile - 1) * 10,
+                          explicit_decile * 10)
+  ) %&amp;gt;%
+  mutate(decile_label = fct_reorder(decile_label, -explicit_decile))
+
+# Calculate mean RT difference for each decile
+decile_stats &amp;lt;- ridges_data %&amp;gt;%
+  group_by(explicit_decile, decile_label, condition) %&amp;gt;%
+  summarise(mean_rt = mean(rt_sec, na.rm = TRUE), .groups = &amp;quot;drop&amp;quot;) %&amp;gt;%
+  pivot_wider(names_from = condition, values_from = mean_rt) %&amp;gt;%
+  mutate(rt_diff = Incompatible - Compatible)
+
+# Create ridges plot
+p_ridges &amp;lt;- ggplot(ridges_data, aes(x = rt_sec, y = decile_label, fill = condition)) +
+  geom_density_ridges(alpha = 0.6, scale = 1.2) +
+  scale_fill_manual(values = c(&amp;quot;Compatible&amp;quot; = &amp;quot;#3054e6&amp;quot;,
+                                &amp;quot;Incompatible&amp;quot; = &amp;quot;#eb3437&amp;quot;)) +
+  labs(x = &amp;quot;Reaction time (seconds)&amp;quot;,
+       y = &amp;quot;Explicit attitude percentile&amp;quot;,
+       title = &amp;quot;RT distributions stratified by explicit attitudes&amp;quot;,
+       subtitle = &amp;quot;As explicit attitudes become more negative toward Black people (higher percentiles),\nthe RT difference between incompatible and compatible trials increases&amp;quot;,
+       fill = &amp;quot;Condition&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/part-2-the-implicit-association-test/index_files/figure-html/fig-ridges-1.png&#34; alt=&#34;&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## 
+## Mean RT difference (Incompatible - Compatible) by explicit attitude decile:&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 10 × 2
+##    decile_label    rt_diff
+##    &amp;lt;fct&amp;gt;             &amp;lt;dbl&amp;gt;
+##  1 0th-10th %ile   0.00764
+##  2 10th-20th %ile  0.0765 
+##  3 20th-30th %ile  0.137  
+##  4 30th-40th %ile  0.144  
+##  5 40th-50th %ile  0.122  
+##  6 50th-60th %ile  0.139  
+##  7 60th-70th %ile  0.145  
+##  8 70th-80th %ile  0.157  
+##  9 80th-90th %ile  0.190  
+## 10 90th-100th %ile 0.249&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Pretty cool! The data here pretty clearly show a pattern where, as explicit attitudes become increasingly biased, RTs in the incompatible conditions become slower. Of course, my immediate thought upon seeing these results was “do we see something similar at the person level?”—we can plot out specific people from each decile to see:&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click to show code
+&lt;/summary&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Sample one participant from each decile
+set.seed(123)
+sampled_participants &amp;lt;- ridges_data %&amp;gt;%
+  select(session_id, explicit_decile, decile_label, explicit_composite) %&amp;gt;%
+  distinct() %&amp;gt;%
+  group_by(explicit_decile, decile_label) %&amp;gt;%
+  slice_sample(n = 1) %&amp;gt;%
+  ungroup()
+
+# Get trial-level data for sampled participants
+individual_ridges_data &amp;lt;- ridges_data %&amp;gt;%
+  semi_join(sampled_participants, by = &amp;quot;session_id&amp;quot;) %&amp;gt;%
+  group_by(session_id) %&amp;gt;%
+  mutate(
+    participant_label = sprintf(&amp;quot;%s\n(explicit = %.2f)&amp;quot;,
+                                first(decile_label), first(explicit_composite))
+  ) %&amp;gt;%
+  ungroup() %&amp;gt;%
+  mutate(participant_label = fct_reorder(participant_label, -explicit_decile))
+
+# Create individual-level ridges plot
+p_ridges_individual &amp;lt;- ggplot(individual_ridges_data, aes(x = rt_sec, y = participant_label, fill = condition)) +
+  geom_density_ridges(alpha = 0.6, scale = 1.2) +
+  scale_fill_manual(values = c(&amp;quot;Compatible&amp;quot; = &amp;quot;#3054e6&amp;quot;,
+                                &amp;quot;Incompatible&amp;quot; = &amp;quot;#eb3437&amp;quot;)) +
+  labs(x = &amp;quot;Reaction time (seconds)&amp;quot;,
+       y = &amp;quot;Explicit attitude percentile (one person per decile)&amp;quot;,
+       title = &amp;quot;Individual RT distributions across the explicit attitude spectrum&amp;quot;,
+       subtitle = &amp;quot;Each row shows one randomly sampled participant from the corresponding decile&amp;quot;,
+       fill = &amp;quot;Condition&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/part-2-the-implicit-association-test/index_files/figure-html/fig-ridges-individual-1.png&#34; alt=&#34;&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Overall the pattern still generally holds, although it is much more noisy. Of course, this is mostly expected (after all, we would not be diving into this topic if IATs could precisely measure implicit attitudes!). In fact, this illustrates exactly why it is so problematic to compress all trial-level information into a single summary metric—each person contributes ~120 trials with reaction times and accuracy. The summary approach collapses all this away, which compounds measurement error from both conditions and ignores very obvious trial-level variability. The LBA process model instead uses all trial-level information to extract out latent parameters that capture specific cognitive processes relevant to the theory of implicit attitudes. The same general argument can be made regarding the self-report data.&lt;/p&gt;
+&lt;p&gt;Overall, with better models of the data-generating process, we can get a better estimate of the latent implicit-explicit correlation (ρ)—one that both disentangles the nuisance from theory-relevant cognitive processes and better accounts for measurement error.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-implementation&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Model Implementation&lt;/h2&gt;
+&lt;p&gt;We’ll implement the models in Stan. The core components are:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;strong&gt;LBA likelihood functions&lt;/strong&gt; for IAT trial-level RTs and accuracy&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ordered logistic likelihood&lt;/strong&gt; for explicit Likert items&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Probit-transform likelihood&lt;/strong&gt; for explicit thermometer items&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Latent variable structure&lt;/strong&gt; linking the two sides&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Since all three models share the same LBA functions, we put them in a separate file and read them into each Stan model as needed.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click to see shared Stan functions
+&lt;/summary&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;stan_functions = &amp;quot;
+// LBA probability density function for single accumulator
+real lba_pdf(real t, real b, real A, real v, real s) {
+  real b_A_tv_ts = (b - A - t * v) / (t * s);
+  real b_tv_ts = (b - t * v) / (t * s);
+
+  real term_1 = v * Phi_approx(b_A_tv_ts);
+  real term_2 = s * exp(std_normal_lpdf(fabs(b_A_tv_ts)));
+  real term_3 = v * Phi_approx(b_tv_ts);
+  real term_4 = s * exp(std_normal_lpdf(fabs(b_tv_ts)));
+
+  return (1.0 / A) * (-term_1 + term_2 + term_3 - term_4);
+}
+
+// LBA cumulative distribution function for single accumulator
+real lba_cdf(real t, real b, real A, real v, real s) {
+  real b_A_tv = b - A - t * v;
+  real b_tv = b - t * v;
+  real ts = t * s;
+
+  real term_1 = (b_A_tv / A) * Phi_approx(b_A_tv / ts);
+  real term_2 = (b_tv / A) * Phi_approx(b_tv / ts);
+  real term_3 = (ts / A) * exp(std_normal_lpdf(fabs(b_A_tv / ts)));
+  real term_4 = (ts / A) * exp(std_normal_lpdf(fabs(b_tv / ts)));
+
+  return 1 + term_1 - term_2 + term_3 - term_4;
+}
+
+// Full trial-level log-likelihood
+real lba_lpdf(real rt, int response, int condition,
+              real theta, real lambda_iat,
+              real d0, real A, real b, real t0, real s) {
+  real drift_effect = lambda_iat * theta * condition;
+  real v_correct = fmax(d0 + drift_effect, 0.001);
+  real v_error = fmax(d0 - drift_effect, 0.001);
+
+  real t = rt - t0;
+  if (t &amp;lt;= 0) return negative_infinity();
+
+  real v_winner = response == 1 ? v_correct : v_error;
+  real v_loser = response == 1 ? v_error : v_correct;
+
+  real pdf_winner = lba_pdf(t, b, A, v_winner, s);
+  real cdf_loser = lba_cdf(t | b, A, v_loser, s);
+  real surv_loser = 1 - cdf_loser;
+
+  // Defective density correction
+  real prob_neg = Phi_approx(-v_correct / s) * Phi_approx(-v_error / s);
+  real prob = (pdf_winner * surv_loser) / (1 - prob_neg);
+
+  return log(fmax(prob, 1e-10));
+}
+&amp;quot;
+
+cmdstanr::write_stan_file(stan_functions, basename=&amp;quot;stan_functions&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;/var/folders/m2/mtbq7y0504l5xljf140jfnyw0000gn/T/RtmpHES4xu/stan_functions.stan&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;div id=&#34;model-1-single-construct&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model 1: Single Construct&lt;/h3&gt;
+&lt;p&gt;Here we estimate a single attitude across the IAT and self-report measures, which implicitly assumes ρ = 1.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click for Model 1 Stan code
+&lt;/summary&gt;
+&lt;pre class=&#34;stan&#34;&gt;&lt;code&gt;functions {
+  #include stan_functions.stan
+}
+
+data {
+  int&amp;lt;lower=1&amp;gt; N;
+  int&amp;lt;lower=1&amp;gt; N_trials;
+  int&amp;lt;lower=1&amp;gt; N_categorical;
+  int&amp;lt;lower=1&amp;gt; N_categorical_obs;
+  int&amp;lt;lower=1&amp;gt; N_continuous;
+  int&amp;lt;lower=1&amp;gt; N_continuous_obs;
+
+  array[N_trials] int&amp;lt;lower=1,upper=N&amp;gt; participant;
+  array[N_trials] real&amp;lt;lower=0&amp;gt; rt;
+  array[N_trials] int&amp;lt;lower=1,upper=2&amp;gt; response;
+  array[N_trials] int&amp;lt;lower=-1,upper=1&amp;gt; condition;
+
+  real&amp;lt;lower=0&amp;gt; min_rt;
+
+  array[N_categorical_obs] int&amp;lt;lower=1,upper=N&amp;gt; person_cat;
+  array[N_categorical_obs] int&amp;lt;lower=1,upper=N_categorical&amp;gt; item_cat;
+  array[N_categorical_obs] int&amp;lt;lower=1,upper=7&amp;gt; response_cat;
+
+  array[N_continuous_obs] int&amp;lt;lower=1,upper=N&amp;gt; person_cont;
+  array[N_continuous_obs] int&amp;lt;lower=1,upper=N_continuous&amp;gt; item_cont;
+  array[N_continuous_obs] real&amp;lt;lower=0,upper=1&amp;gt; value_cont;
+}
+
+transformed data {
+  real max_t0 = min_rt * 0.95;
+}
+
+parameters {
+  vector[N] theta_raw;
+
+  real mu_d0;
+  real mu_A;
+  real mu_t0;
+
+  real&amp;lt;lower=0&amp;gt; sigma_d0;
+  real&amp;lt;lower=0&amp;gt; sigma_A;
+  real&amp;lt;lower=0&amp;gt; sigma_t0;
+
+  vector[N] d0_raw;
+  vector[N] A_raw;
+  vector[N] t0_raw;
+
+  real&amp;lt;lower=0&amp;gt; lambda_iat;
+
+  // Categorical item parameters
+  vector&amp;lt;lower=0&amp;gt;[N_categorical] alpha;
+  array[N_categorical] ordered[6] tau;
+
+  // Continuous item parameters
+  vector&amp;lt;lower=0&amp;gt;[N_continuous] lambda_cont;
+  vector[N_continuous] tau_cont;
+}
+
+transformed parameters {
+  real s = 1.0;
+  real sigma_cont = 1.0;  // Fixed for identification
+  vector[N] theta = theta_raw;
+
+  vector&amp;lt;lower=0&amp;gt;[N] d0 = exp(mu_d0 + sigma_d0 * d0_raw);
+  vector&amp;lt;lower=0&amp;gt;[N] A = exp(mu_A + sigma_A * A_raw);
+  vector&amp;lt;lower=0,upper=max_t0&amp;gt;[N] t0 = inv_logit(mu_t0 + sigma_t0 * t0_raw) * max_t0;
+  vector&amp;lt;lower=0&amp;gt;[N] b = A + d0;
+}
+
+model {
+  theta_raw ~ std_normal();
+
+  mu_d0 ~ normal(log(2.0), 0.5);
+  mu_A ~ normal(log(0.5), 0.5);
+  mu_t0 ~ normal(log(0.3), 0.5);
+
+  sigma_d0 ~ normal(0, 0.5);
+  sigma_A ~ normal(0, 0.5);
+  sigma_t0 ~ normal(0, 0.5);
+
+  d0_raw ~ std_normal();
+  A_raw ~ std_normal();
+  t0_raw ~ std_normal();
+
+  lambda_iat ~ lognormal(log(0.5), 0.5);
+
+  // Priors for categorical items
+  alpha ~ lognormal(0, 0.5);
+  for (k in 1:N_categorical) {
+    tau[k] ~ normal(0, 1);
+  }
+
+  // Priors for continuous items
+  lambda_cont ~ lognormal(log(0.5), 0.5);
+  tau_cont ~ normal(0, 1);
+
+  // IAT likelihood
+  for (i in 1:N_trials) {
+    int p = participant[i];
+    target += lba_lpdf(rt[i] | response[i], condition[i], theta[p],
+                       lambda_iat, d0[p], A[p], b[p], t0[p], s);
+  }
+
+  // Categorical items likelihood (ordered logistic)
+  for (i in 1:N_categorical_obs) {
+    int p = person_cat[i];
+    int k = item_cat[i];
+    response_cat[i] ~ ordered_logistic(alpha[k] * theta[p], tau[k]);
+  }
+
+  // Continuous items likelihood (probit-transformed normal, sigma=1)
+  for (i in 1:N_continuous_obs) {
+    int p = person_cont[i];
+    int k = item_cont[i];
+    real z = inv_Phi(value_cont[i]);
+    z ~ normal(tau_cont[k] + lambda_cont[k] * theta[p], sigma_cont);
+  }
+}
+
+generated quantities {
+  vector[N_trials + N_categorical_obs + N_continuous_obs] log_lik;
+
+  // IAT log likelihood
+  for (i in 1:N_trials) {
+    int p = participant[i];
+    log_lik[i] = lba_lpdf(rt[i] | response[i], condition[i], theta[p],
+                          lambda_iat, d0[p], A[p], b[p], t0[p], s);
+  }
+
+  // Categorical items log likelihood
+  for (i in 1:N_categorical_obs) {
+    int p = person_cat[i];
+    int k = item_cat[i];
+    log_lik[N_trials + i] = ordered_logistic_lpmf(response_cat[i] |
+                                                   alpha[k] * theta[p], tau[k]);
+  }
+
+  // Continuous items log likelihood
+  for (i in 1:N_continuous_obs) {
+    int p = person_cont[i];
+    int k = item_cont[i];
+    real z = inv_Phi(value_cont[i]);
+    log_lik[N_trials + N_categorical_obs + i] = normal_lpdf(z |
+                                                             tau_cont[k] + lambda_cont[k] * theta[p],
+                                                             sigma_cont);
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-2-correlated-constructs&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model 2: Correlated Constructs&lt;/h3&gt;
+&lt;p&gt;Now we estimate separate implicit and explicit attitudes, but we allow them to correlate with free parameter ρ.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click for Model 2 Stan code
+&lt;/summary&gt;
+&lt;pre class=&#34;stan&#34;&gt;&lt;code&gt;functions {
+  #include stan_functions.stan
+}
+
+data {
+  int&amp;lt;lower=1&amp;gt; N;
+  int&amp;lt;lower=1&amp;gt; N_trials;
+  int&amp;lt;lower=1&amp;gt; N_categorical;
+  int&amp;lt;lower=1&amp;gt; N_categorical_obs;
+  int&amp;lt;lower=1&amp;gt; N_continuous;
+  int&amp;lt;lower=1&amp;gt; N_continuous_obs;
+
+  array[N_trials] int&amp;lt;lower=1,upper=N&amp;gt; participant;
+  array[N_trials] real&amp;lt;lower=0&amp;gt; rt;
+  array[N_trials] int&amp;lt;lower=1,upper=2&amp;gt; response;
+  array[N_trials] int&amp;lt;lower=-1,upper=1&amp;gt; condition;
+
+  real&amp;lt;lower=0&amp;gt; min_rt;
+
+  array[N_categorical_obs] int&amp;lt;lower=1,upper=N&amp;gt; person_cat;
+  array[N_categorical_obs] int&amp;lt;lower=1,upper=N_categorical&amp;gt; item_cat;
+  array[N_categorical_obs] int&amp;lt;lower=1,upper=7&amp;gt; response_cat;
+
+  array[N_continuous_obs] int&amp;lt;lower=1,upper=N&amp;gt; person_cont;
+  array[N_continuous_obs] int&amp;lt;lower=1,upper=N_continuous&amp;gt; item_cont;
+  array[N_continuous_obs] real&amp;lt;lower=0,upper=1&amp;gt; value_cont;
+}
+
+transformed data {
+  real max_t0 = min_rt * 0.95;
+}
+
+parameters {
+  matrix[N, 2] theta_raw;
+  real&amp;lt;lower=-1, upper=1&amp;gt; rho;
+
+  real mu_d0;
+  real mu_A;
+  real mu_t0;
+
+  real&amp;lt;lower=0&amp;gt; sigma_d0;
+  real&amp;lt;lower=0&amp;gt; sigma_A;
+  real&amp;lt;lower=0&amp;gt; sigma_t0;
+
+  vector[N] d0_raw;
+  vector[N] A_raw;
+  vector[N] t0_raw;
+
+  real&amp;lt;lower=0&amp;gt; lambda_iat;
+
+  // Categorical item parameters
+  vector&amp;lt;lower=0&amp;gt;[N_categorical] alpha;
+  array[N_categorical] ordered[6] tau;
+
+  // Continuous item parameters
+  vector&amp;lt;lower=0&amp;gt;[N_continuous] lambda_cont;
+  vector[N_continuous] tau_cont;
+}
+
+transformed parameters {
+  real s = 1.0;
+  real sigma_cont = 1.0;  // Fixed for identification
+
+  matrix[N, 2] theta;
+  {
+    matrix[2, 2] L_corr;
+    L_corr[1, 1] = 1.0;
+    L_corr[1, 2] = 0.0;
+    L_corr[2, 1] = rho;
+    L_corr[2, 2] = sqrt(1 - square(rho));
+
+    for (i in 1:N) {
+      theta[i] = (L_corr * theta_raw[i]&amp;#39;)&amp;#39;;
+    }
+  }
+
+  vector&amp;lt;lower=0&amp;gt;[N] d0 = exp(mu_d0 + sigma_d0 * d0_raw);
+  vector&amp;lt;lower=0&amp;gt;[N] A = exp(mu_A + sigma_A * A_raw);
+  vector&amp;lt;lower=0,upper=max_t0&amp;gt;[N] t0 = inv_logit(mu_t0 + sigma_t0 * t0_raw) * max_t0;
+  vector&amp;lt;lower=0&amp;gt;[N] b = A + d0;
+}
+
+model {
+  to_vector(theta_raw) ~ std_normal();
+  rho ~ uniform(-1, 1);
+
+  mu_d0 ~ normal(log(2.0), 0.5);
+  mu_A ~ normal(log(0.5), 0.5);
+  mu_t0 ~ normal(log(0.3), 0.5);
+
+  sigma_d0 ~ normal(0, 0.5);
+  sigma_A ~ normal(0, 0.5);
+  sigma_t0 ~ normal(0, 0.5);
+
+  d0_raw ~ std_normal();
+  A_raw ~ std_normal();
+  t0_raw ~ std_normal();
+
+  lambda_iat ~ lognormal(log(0.5), 0.5);
+
+  // Priors for categorical items
+  alpha ~ lognormal(0, 0.5);
+  for (k in 1:N_categorical) {
+    tau[k] ~ normal(0, 1);
+  }
+
+  // Priors for continuous items
+  lambda_cont ~ lognormal(log(0.5), 0.5);
+  tau_cont ~ normal(0, 1);
+
+  // IAT uses implicit attitude (column 1)
+  for (i in 1:N_trials) {
+    int p = participant[i];
+    target += lba_lpdf(rt[i] | response[i], condition[i], theta[p, 1],
+                       lambda_iat, d0[p], A[p], b[p], t0[p], s);
+  }
+
+  // Categorical items use explicit attitude (column 2)
+  for (i in 1:N_categorical_obs) {
+    int p = person_cat[i];
+    int k = item_cat[i];
+    response_cat[i] ~ ordered_logistic(alpha[k] * theta[p, 2], tau[k]);
+  }
+
+  // Continuous items use explicit attitude (column 2, sigma=1)
+  for (i in 1:N_continuous_obs) {
+    int p = person_cont[i];
+    int k = item_cont[i];
+    real z = inv_Phi(value_cont[i]);
+    z ~ normal(tau_cont[k] + lambda_cont[k] * theta[p, 2], sigma_cont);
+  }
+}
+
+generated quantities {
+  corr_matrix[2] Omega;
+  Omega[1, 1] = 1.0;
+  Omega[2, 2] = 1.0;
+  Omega[1, 2] = rho;
+  Omega[2, 1] = rho;
+
+  vector[N_trials + N_categorical_obs + N_continuous_obs] log_lik;
+
+  // IAT log likelihood
+  for (i in 1:N_trials) {
+    int p = participant[i];
+    log_lik[i] = lba_lpdf(rt[i] | response[i], condition[i], theta[p, 1],
+                          lambda_iat, d0[p], A[p], b[p], t0[p], s);
+  }
+
+  // Categorical items log likelihood
+  for (i in 1:N_categorical_obs) {
+    int p = person_cat[i];
+    int k = item_cat[i];
+    log_lik[N_trials + i] = ordered_logistic_lpmf(response_cat[i] |
+                                                   alpha[k] * theta[p, 2], tau[k]);
+  }
+
+  // Continuous items log likelihood
+  for (i in 1:N_continuous_obs) {
+    int p = person_cont[i];
+    int k = item_cont[i];
+    real z = inv_Phi(value_cont[i]);
+    log_lik[N_trials + N_categorical_obs + i] = normal_lpdf(z |
+                                                             tau_cont[k] + lambda_cont[k] * theta[p, 2],
+                                                             sigma_cont);
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-3-independent-constructs&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model 3: Independent Constructs&lt;/h3&gt;
+&lt;p&gt;Identical to Model 2 but with ρ fixed at 0, assuming strong independence between implicit vs explicit attitudes.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click for Model 3 Stan code
+&lt;/summary&gt;
+&lt;pre class=&#34;stan&#34;&gt;&lt;code&gt;functions {
+  #include stan_functions.stan
+}
+
+data {
+  int&amp;lt;lower=1&amp;gt; N;
+  int&amp;lt;lower=1&amp;gt; N_trials;
+  int&amp;lt;lower=1&amp;gt; N_categorical;
+  int&amp;lt;lower=1&amp;gt; N_categorical_obs;
+  int&amp;lt;lower=1&amp;gt; N_continuous;
+  int&amp;lt;lower=1&amp;gt; N_continuous_obs;
+
+  array[N_trials] int&amp;lt;lower=1,upper=N&amp;gt; participant;
+  array[N_trials] real&amp;lt;lower=0&amp;gt; rt;
+  array[N_trials] int&amp;lt;lower=1,upper=2&amp;gt; response;
+  array[N_trials] int&amp;lt;lower=-1,upper=1&amp;gt; condition;
+
+  real&amp;lt;lower=0&amp;gt; min_rt;
+
+  array[N_categorical_obs] int&amp;lt;lower=1,upper=N&amp;gt; person_cat;
+  array[N_categorical_obs] int&amp;lt;lower=1,upper=N_categorical&amp;gt; item_cat;
+  array[N_categorical_obs] int&amp;lt;lower=1,upper=7&amp;gt; response_cat;
+
+  array[N_continuous_obs] int&amp;lt;lower=1,upper=N&amp;gt; person_cont;
+  array[N_continuous_obs] int&amp;lt;lower=1,upper=N_continuous&amp;gt; item_cont;
+  array[N_continuous_obs] real&amp;lt;lower=0,upper=1&amp;gt; value_cont;
+}
+
+transformed data {
+  real max_t0 = min_rt * 0.95;
+}
+
+parameters {
+  matrix[N, 2] theta;  // Independent standard normals
+
+  real mu_d0;
+  real mu_A;
+  real mu_t0;
+
+  real&amp;lt;lower=0&amp;gt; sigma_d0;
+  real&amp;lt;lower=0&amp;gt; sigma_A;
+  real&amp;lt;lower=0&amp;gt; sigma_t0;
+
+  vector[N] d0_raw;
+  vector[N] A_raw;
+  vector[N] t0_raw;
+
+  real&amp;lt;lower=0&amp;gt; lambda_iat;
+
+  // Categorical item parameters
+  vector&amp;lt;lower=0&amp;gt;[N_categorical] alpha;
+  array[N_categorical] ordered[6] tau;
+
+  // Continuous item parameters
+  vector&amp;lt;lower=0&amp;gt;[N_continuous] lambda_cont;
+  vector[N_continuous] tau_cont;
+}
+
+transformed parameters {
+  real s = 1.0;
+  real sigma_cont = 1.0;  // Fixed for identification
+
+  vector&amp;lt;lower=0&amp;gt;[N] d0 = exp(mu_d0 + sigma_d0 * d0_raw);
+  vector&amp;lt;lower=0&amp;gt;[N] A = exp(mu_A + sigma_A * A_raw);
+  vector&amp;lt;lower=0,upper=max_t0&amp;gt;[N] t0 = inv_logit(mu_t0 + sigma_t0 * t0_raw) * max_t0;
+  vector&amp;lt;lower=0&amp;gt;[N] b = A + d0;
+}
+
+model {
+  to_vector(theta) ~ std_normal();
+
+  mu_d0 ~ normal(log(2.0), 0.5);
+  mu_A ~ normal(log(0.5), 0.5);
+  mu_t0 ~ normal(log(0.3), 0.5);
+
+  sigma_d0 ~ normal(0, 0.5);
+  sigma_A ~ normal(0, 0.5);
+  sigma_t0 ~ normal(0, 0.5);
+
+  d0_raw ~ std_normal();
+  A_raw ~ std_normal();
+  t0_raw ~ std_normal();
+
+  lambda_iat ~ lognormal(log(0.5), 0.5);
+
+  // Priors for categorical items
+  alpha ~ lognormal(0, 0.5);
+  for (k in 1:N_categorical) {
+    tau[k] ~ normal(0, 1);
+  }
+
+  // Priors for continuous items
+  lambda_cont ~ lognormal(log(0.5), 0.5);
+  tau_cont ~ normal(0, 1);
+
+  // IAT uses implicit attitude (column 1)
+  for (i in 1:N_trials) {
+    int p = participant[i];
+    target += lba_lpdf(rt[i] | response[i], condition[i], theta[p, 1],
+                       lambda_iat, d0[p], A[p], b[p], t0[p], s);
+  }
+
+  // Categorical items use explicit attitude (column 2)
+  for (i in 1:N_categorical_obs) {
+    int p = person_cat[i];
+    int k = item_cat[i];
+    response_cat[i] ~ ordered_logistic(alpha[k] * theta[p, 2], tau[k]);
+  }
+
+  // Continuous items use explicit attitude (column 2, sigma=1)
+  for (i in 1:N_continuous_obs) {
+    int p = person_cont[i];
+    int k = item_cont[i];
+    real z = inv_Phi(value_cont[i]);
+    z ~ normal(tau_cont[k] + lambda_cont[k] * theta[p, 2], sigma_cont);
+  }
+}
+
+generated quantities {
+  corr_matrix[2] Omega;
+  Omega[1, 1] = 1.0;
+  Omega[2, 2] = 1.0;
+  Omega[1, 2] = 0.0;
+  Omega[2, 1] = 0.0;
+
+  vector[N_trials + N_categorical_obs + N_continuous_obs] log_lik;
+
+  // IAT log likelihood
+  for (i in 1:N_trials) {
+    int p = participant[i];
+    log_lik[i] = lba_lpdf(rt[i] | response[i], condition[i], theta[p, 1],
+                          lambda_iat, d0[p], A[p], b[p], t0[p], s);
+  }
+
+  // Categorical items log likelihood
+  for (i in 1:N_categorical_obs) {
+    int p = person_cat[i];
+    int k = item_cat[i];
+    log_lik[N_trials + i] = ordered_logistic_lpmf(response_cat[i] |
+                                                   alpha[k] * theta[p, 2], tau[k]);
+  }
+
+  // Continuous items log likelihood
+  for (i in 1:N_continuous_obs) {
+    int p = person_cont[i];
+    int k = item_cont[i];
+    real z = inv_Phi(value_cont[i]);
+    log_lik[N_trials + N_categorical_obs + i] = normal_lpdf(z |
+                                                             tau_cont[k] + lambda_cont[k] * theta[p, 2],
+                                                             sigma_cont);
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;preparing-data-and-fitting-models&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Preparing Data and Fitting Models&lt;/h2&gt;
+&lt;p&gt;Because my laptop cannot handle fitting these joint models across 17,000 peoples’ data simultaneously, we will subsample out just 500. This is still plenty to make solid inference.&lt;/p&gt;
+&lt;p&gt;Note that we are also filtering in only trials for the IAT where people respond with a response time between 100 milliseconds and 5 seconds—shorter responses are basically superhuman (and therefore indicate people were making a response before seeing the stimuli) and longer responses are generally assumed to be contamination trials where people dozed off, etc. We could do a better job here by actually adding in a contamination mixture model to capture these responses in our model, but we will keep things simple and just filter for now when prepping for Stan:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(cmdstanr)
+
+# Prepare IAT trial-level data
+iat_for_stan &amp;lt;- iat_data %&amp;gt;%
+  filter(rt_sec &amp;gt;= 0.1, rt_sec &amp;lt; 5) %&amp;gt;%
+  mutate(
+    condition_code = case_when(
+      grepl(&amp;quot;Black People/Bad&amp;quot;, block_pairing_definition) ~ 1L,
+      grepl(&amp;quot;White People/Bad&amp;quot;, block_pairing_definition) ~ -1L
+    ),
+    response_code = ifelse(correct == 1, 1L, 2L)
+  ) %&amp;gt;%
+  filter(!is.na(condition_code)) %&amp;gt;%
+  mutate(participant_id = as.integer(factor(session_id)))
+
+# Prepare explicit data (reverse-coded so higher = pro-White for all items)
+# First create scaled thermometer variables (range -100 to 100, map to 0-1)
+explicit_with_therm &amp;lt;- explicit_data %&amp;gt;%
+  filter(session_id %in% unique(iat_for_stan$session_id)) %&amp;gt;%
+  mutate(
+    thermWhite_scaled = .0025 + ((thermWhite + 100) / 200)*.995,
+    thermBlack_scaled = .0025 + ((100 - thermBlack) / 200)*.995  # reverse score
+  )
+
+# Categorical items (ordered logistic)
+explicit_categorical &amp;lt;- explicit_with_therm %&amp;gt;%
+  select(session_id, prfWhtBlk, likeBlack_rev, likeWhite) %&amp;gt;%
+  pivot_longer(cols = c(prfWhtBlk, likeBlack_rev, likeWhite),
+               names_to = &amp;quot;item_name&amp;quot;,
+               values_to = &amp;quot;response&amp;quot;) %&amp;gt;%
+  filter(!is.na(response)) %&amp;gt;%
+  mutate(
+    participant_id = as.integer(factor(session_id,
+                                       levels = levels(factor(iat_for_stan$session_id)))),
+    item_id = as.integer(factor(item_name))
+  )
+
+# Continuous items (probit-transformed normal)
+explicit_continuous &amp;lt;- explicit_with_therm %&amp;gt;%
+  select(session_id, thermWhite_scaled, thermBlack_scaled) %&amp;gt;%
+  pivot_longer(cols = c(thermWhite_scaled, thermBlack_scaled),
+               names_to = &amp;quot;item_name&amp;quot;,
+               values_to = &amp;quot;value&amp;quot;) %&amp;gt;%
+  filter(!is.na(value)) %&amp;gt;%
+  mutate(
+    participant_id = as.integer(factor(session_id,
+                                       levels = levels(factor(iat_for_stan$session_id)))),
+    item_id = as.integer(factor(item_name))
+  )
+
+# Create Stan data list
+stan_data &amp;lt;- list(
+  N = length(unique(iat_for_stan$participant_id)),
+  N_trials = nrow(iat_for_stan),
+  N_categorical = length(unique(explicit_categorical$item_id)),
+  N_categorical_obs = nrow(explicit_categorical),
+  N_continuous = length(unique(explicit_continuous$item_id)),
+  N_continuous_obs = nrow(explicit_continuous),
+
+  participant = iat_for_stan$participant_id,
+  rt = iat_for_stan$rt_sec,
+  response = iat_for_stan$response_code,
+  condition = iat_for_stan$condition_code,
+
+  min_rt = min(iat_for_stan$rt_sec),
+
+  person_cat = explicit_categorical$participant_id,
+  item_cat = explicit_categorical$item_id,
+  response_cat = as.integer(explicit_categorical$response),
+
+  person_cont = explicit_continuous$participant_id,
+  item_cont = explicit_continuous$item_id,
+  value_cont = explicit_continuous$value
+)
+
+# Subsample for demonstration (set to FALSE for full analysis)
+SUBSAMPLE &amp;lt;- TRUE
+N_SUBSAMPLE &amp;lt;- 500
+
+if (SUBSAMPLE &amp;amp;&amp;amp; stan_data$N &amp;gt; N_SUBSAMPLE) {
+  set.seed(1234)
+  sampled_ids &amp;lt;- sample(1:stan_data$N, N_SUBSAMPLE)
+
+  iat_keep &amp;lt;- stan_data$participant %in% sampled_ids
+  cat_keep &amp;lt;- stan_data$person_cat %in% sampled_ids
+  cont_keep &amp;lt;- stan_data$person_cont %in% sampled_ids
+
+  id_map &amp;lt;- setNames(1:N_SUBSAMPLE, sampled_ids)
+
+  stan_data$N &amp;lt;- N_SUBSAMPLE
+  stan_data$participant &amp;lt;- as.integer(id_map[as.character(stan_data$participant[iat_keep])])
+  stan_data$rt &amp;lt;- stan_data$rt[iat_keep]
+  stan_data$response &amp;lt;- stan_data$response[iat_keep]
+  stan_data$condition &amp;lt;- stan_data$condition[iat_keep]
+  stan_data$N_trials &amp;lt;- sum(iat_keep)
+
+  stan_data$person_cat &amp;lt;- as.integer(id_map[as.character(stan_data$person_cat[cat_keep])])
+  stan_data$item_cat &amp;lt;- stan_data$item_cat[cat_keep]
+  stan_data$response_cat &amp;lt;- stan_data$response_cat[cat_keep]
+  stan_data$N_categorical_obs &amp;lt;- sum(cat_keep)
+
+  stan_data$person_cont &amp;lt;- as.integer(id_map[as.character(stan_data$person_cont[cont_keep])])
+  stan_data$item_cont &amp;lt;- stan_data$item_cont[cont_keep]
+  stan_data$value_cont &amp;lt;- stan_data$value_cont[cont_keep]
+  stan_data$N_continuous_obs &amp;lt;- sum(cont_keep)
+
+  stan_data$min_rt &amp;lt;- min(stan_data$rt)
+
+  cat(sprintf(&amp;quot;Subsampled to %d participants\n&amp;quot;, N_SUBSAMPLE))
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Subsampled to 500 participants&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;cat(sprintf(&amp;quot;Final sample: %d participants, %d IAT trials, %d categorical items, %d continuous items\n&amp;quot;,
+            stan_data$N, stan_data$N_trials, stan_data$N_categorical_obs, stan_data$N_continuous_obs))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Final sample: 500 participants, 58292 IAT trials, 1425 categorical items, 944 continuous items&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, time to actually fit our 3 models! Note that this will take a while if you run through the code yourself…&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# store the cmdstan files 
+output_dir &amp;lt;- &amp;quot;~/.cmdstan_output/iat_blog/&amp;quot;
+
+# Fit all three models
+fit_model1 &amp;lt;- model1$sample(
+  data = stan_data,
+  chains = 8,
+  parallel_chains = 8,
+  iter_warmup = 200,
+  iter_sampling = 200,
+  init = 0,
+  refresh = 50,
+  output_dir = output_dir
+)
+
+fit_model2 &amp;lt;- model2$sample(
+  data = stan_data,
+  chains = 8,
+  parallel_chains = 8,
+  iter_warmup = 200,
+  iter_sampling = 200,
+  init = 0,
+  refresh = 50,
+  output_dir = output_dir
+)
+
+fit_model3 &amp;lt;- model3$sample(
+  data = stan_data,
+  chains = 8,
+  parallel_chains = 8,
+  iter_warmup = 200,
+  iter_sampling = 200,
+  init = 0,
+  refresh = 50,
+  output_dir = output_dir
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;results&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Results&lt;/h2&gt;
+&lt;div id=&#34;the-key-finding-estimating-ρ&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;The Key Finding: Estimating ρ&lt;/h3&gt;
+&lt;p&gt;Let’s start with the main event—what does Model 2 tell us about the correlation between implicit and explicit attitudes?&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Extract rho posterior
+rho_posterior &amp;lt;- fit_model2$draws(&amp;quot;rho&amp;quot;, format = &amp;quot;matrix&amp;quot;)
+
+cat(sprintf(&amp;quot;Posterior mean of rho: %.2f\n&amp;quot;, mean(rho_posterior)))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Posterior mean of rho: 0.82&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;cat(sprintf(&amp;quot;95%% CI: [%.2f, %.2f]\n&amp;quot;,
+            quantile(rho_posterior, 0.025),
+            quantile(rho_posterior, 0.975)))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 95% CI: [0.57, 0.99]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;cat(sprintf(&amp;quot;Probability rho &amp;gt; 0.5: %.1f%%\n&amp;quot;, 100 * mean(rho_posterior &amp;gt; 0.5)))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Probability rho &amp;gt; 0.5: 99.2%&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;cat(sprintf(&amp;quot;Probability rho &amp;gt; 0.7: %.1f%%\n&amp;quot;, 100 * mean(rho_posterior &amp;gt; 0.7)))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Probability rho &amp;gt; 0.7: 85.9%&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+
+# Create reference line data for legend
+ref_lines &amp;lt;- data.frame(
+  xintercept = c(0, 1, mean(rho_posterior)),
+  label = c(&amp;quot;ρ = 0 (Independent)&amp;quot;, &amp;quot;ρ = 1 (Same construct)&amp;quot;, &amp;quot;Posterior Mean&amp;quot;),
+  color = c(&amp;quot;gray50&amp;quot;, &amp;quot;gray15&amp;quot;, &amp;quot;#8c1f21&amp;quot;),
+  linetype = c(&amp;quot;dashed&amp;quot;, &amp;quot;dashed&amp;quot;, &amp;quot;solid&amp;quot;)
+)
+
+ggplot(data.frame(rho = as.vector(rho_posterior)), aes(x = rho)) +
+  geom_histogram(aes(y = after_stat(density)), fill = &amp;quot;#eb3437&amp;quot;, alpha = 0.7) +
+  geom_vline(data = ref_lines, aes(xintercept = xintercept, color = label, linetype = label), linewidth = 1) +
+  scale_color_manual(
+    name = &amp;quot;Reference Lines&amp;quot;,
+    values = setNames(ref_lines$color, ref_lines$label)
+  ) +
+  scale_linetype_manual(
+    name = &amp;quot;Reference Lines&amp;quot;,
+    values = setNames(ref_lines$linetype, ref_lines$label)
+  ) +
+  labs(x = &amp;quot;Implicit-Explicit Correlation (ρ)&amp;quot;,
+       y = &amp;quot;Posterior Density&amp;quot;,
+       title = &amp;quot;Posterior Distribution of the Latent Correlation&amp;quot;,
+       subtitle = sprintf(&amp;quot;Mean = %.2f, 95%% CI = [%.2f, %.2f]&amp;quot;,
+                         mean(rho_posterior),
+                         quantile(rho_posterior, 0.025),
+                         quantile(rho_posterior, 0.975))) +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = &amp;quot;right&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/part-2-the-implicit-association-test/index_files/figure-html/rho-plot-1.png&#34; alt=&#34;&#34; width=&#34;768&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The posterior for ρ is centered around 0.82, substantially higher than the observed correlation of 0.31. This supports Schimmack’s argument that measurement error attenuates the observed IAT-explicit relationship. However, the posterior is also notably wide (95% CI: [0.57, 0.99]), with about 86% probability mass above 0.7, suggesting moderate uncertainty about whether implicit and explicit attitudes are truly the same construct.&lt;/p&gt;
+&lt;p&gt;Altogether, the estimated correlation alone rules out the strong dual-attitude theory (i.e. Model 3 or ρ = 0), but it does not give us a clear answer on whether or not ρ = 1. We will dig into this a bit more when we do model comparison, but before then we will take a look at the standardized laodings across models.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;measurement-quality-factor-loadings&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Measurement Quality: Factor Loadings&lt;/h3&gt;
+&lt;p&gt;To understand why the observed and latent correlations differ so dramatically, let’s examine the factor loadings—how well each measure captures its underlying latent variable.&lt;/p&gt;
+&lt;p&gt;First we need to define some helper functions that extract standardized loadings from our models.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click to see helper functions
+&lt;/summary&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Helper function to compute standardized loadings
+compute_standardized_loadings &amp;lt;- function(fit) {
+  # IAT standardized loading
+  lambda_iat_post &amp;lt;- fit$draws(&amp;quot;lambda_iat&amp;quot;, format = &amp;quot;matrix&amp;quot;)
+  d0_post &amp;lt;- fit$draws(&amp;quot;d0&amp;quot;, format = &amp;quot;matrix&amp;quot;)
+  var_d0_post &amp;lt;- apply(d0_post, 1, var)
+  lambda_iat_std &amp;lt;- lambda_iat_post / sqrt(var_d0_post + lambda_iat_post^2)
+
+  # Categorical items (ordered logistic with S=1.7 scaling)
+  alpha_post &amp;lt;- fit$draws(&amp;quot;alpha&amp;quot;, format = &amp;quot;matrix&amp;quot;)
+  alpha_scaled &amp;lt;- alpha_post / 1.7
+  lambda_cat_std &amp;lt;- alpha_scaled / sqrt(1 + alpha_scaled^2)
+
+  # Continuous items (probit-transformed normal, sigma=1)
+  lambda_cont_post &amp;lt;- fit$draws(&amp;quot;lambda_cont&amp;quot;, format = &amp;quot;matrix&amp;quot;)
+  lambda_cont_std &amp;lt;- lambda_cont_post / sqrt(lambda_cont_post^2 + 1)
+
+  list(
+    lambda_iat_std = lambda_iat_std,
+    lambda_cat_std = lambda_cat_std,
+    lambda_cont_std = lambda_cont_std
+  )
+}
+
+# Function to format loadings as a table
+format_loadings_table &amp;lt;- function(loadings, model_name) {
+  library(knitr)
+
+  # Item names
+  item_names &amp;lt;- c(&amp;quot;IAT&amp;quot;, &amp;quot;Preference&amp;quot;, &amp;quot;Like Black (rev)&amp;quot;, &amp;quot;Like White&amp;quot;,
+                  &amp;quot;Therm White&amp;quot;, &amp;quot;Therm Black (rev)&amp;quot;)
+
+  # Extract statistics for each item
+  loading_stats &amp;lt;- data.frame(
+    Item = item_names,
+    Type = c(&amp;quot;Implicit&amp;quot;, rep(&amp;quot;Explicit (Cat)&amp;quot;, 3), rep(&amp;quot;Explicit (Cont)&amp;quot;, 2)),
+    Mean = c(
+      mean(loadings$lambda_iat_std),
+      colMeans(loadings$lambda_cat_std),
+      colMeans(loadings$lambda_cont_std)
+    ),
+    Lower_CI = c(
+      quantile(loadings$lambda_iat_std, 0.025),
+      apply(loadings$lambda_cat_std, 2, quantile, 0.025),
+      apply(loadings$lambda_cont_std, 2, quantile, 0.025)
+    ),
+    Upper_CI = c(
+      quantile(loadings$lambda_iat_std, 0.975),
+      apply(loadings$lambda_cat_std, 2, quantile, 0.975),
+      apply(loadings$lambda_cont_std, 2, quantile, 0.975)
+    )
+  )
+
+  # Format the CI column
+  loading_stats$`95% CI` &amp;lt;- sprintf(&amp;quot;[%.2f, %.2f]&amp;quot;,
+                                    loading_stats$Lower_CI,
+                                    loading_stats$Upper_CI)
+  loading_stats$Mean &amp;lt;- sprintf(&amp;quot;%.2f&amp;quot;, loading_stats$Mean)
+
+  # Keep only relevant columns
+  loading_stats &amp;lt;- loading_stats[, c(&amp;quot;Item&amp;quot;, &amp;quot;Type&amp;quot;, &amp;quot;Mean&amp;quot;, &amp;quot;95% CI&amp;quot;)]
+
+  # Calculate summary statistics
+  mean_explicit &amp;lt;- mean(c(colMeans(loadings$lambda_cat_std),
+                          colMeans(loadings$lambda_cont_std)))
+  mean_implicit &amp;lt;- mean(loadings$lambda_iat_std)
+  ratio &amp;lt;- mean_explicit / mean_implicit
+
+  # Print table
+  cat(sprintf(&amp;quot;\n### %s\n\n&amp;quot;, model_name))
+  print(kable(loading_stats, align = c(&amp;quot;l&amp;quot;, &amp;quot;l&amp;quot;, &amp;quot;r&amp;quot;, &amp;quot;r&amp;quot;), row.names = FALSE))
+}
+
+# Function to plot loadings across all models
+plot_all_loadings &amp;lt;- function(loadings1, loadings2, loadings3) {
+  library(ggplot2)
+
+  # Item names (matching the order in stan_data)
+  item_names &amp;lt;- c(&amp;quot;IAT&amp;quot;, &amp;quot;Preference&amp;quot;, &amp;quot;Like Black (rev)&amp;quot;, &amp;quot;Like White&amp;quot;,
+                  &amp;quot;Therm White&amp;quot;, &amp;quot;Therm Black (rev)&amp;quot;)
+
+  # Helper function to extract loading stats for one model
+  extract_model_loadings &amp;lt;- function(loadings, model_name) {
+    data.frame(
+      item = item_names,
+      model = model_name,
+      loading = c(
+        mean(loadings$lambda_iat_std),
+        colMeans(loadings$lambda_cat_std),
+        colMeans(loadings$lambda_cont_std)
+      ),
+      lower = c(
+        quantile(loadings$lambda_iat_std, 0.025),
+        apply(loadings$lambda_cat_std, 2, quantile, 0.025),
+        apply(loadings$lambda_cont_std, 2, quantile, 0.025)
+      ),
+      upper = c(
+        quantile(loadings$lambda_iat_std, 0.975),
+        apply(loadings$lambda_cat_std, 2, quantile, 0.975),
+        apply(loadings$lambda_cont_std, 2, quantile, 0.975)
+      ),
+      type = c(&amp;quot;Implicit&amp;quot;, rep(&amp;quot;Explicit&amp;quot;, 5))
+    )
+  }
+
+  # Combine all three models
+  loading_data &amp;lt;- rbind(
+    extract_model_loadings(loadings1, &amp;quot;Model 1 (ρ=1)&amp;quot;),
+    extract_model_loadings(loadings2, &amp;quot;Model 2 (ρ est.)&amp;quot;),
+    extract_model_loadings(loadings3, &amp;quot;Model 3 (ρ=0)&amp;quot;)
+  )
+
+  # Order items by average loading across models
+  item_order &amp;lt;- loading_data %&amp;gt;%
+    group_by(item) %&amp;gt;%
+    summarize(avg_loading = mean(loading)) %&amp;gt;%
+    arrange(avg_loading) %&amp;gt;%
+    pull(item)
+
+  loading_data$item &amp;lt;- factor(loading_data$item, levels = item_order)
+
+  ggplot(loading_data, aes(x = item, y = loading, color = model, group = model)) +
+    geom_hline(yintercept = 0, linetype = 2) +
+    geom_point(size = 3, position = position_dodge(width = 0.5)) +
+    geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2,
+                  position = position_dodge(width = 0.5)) +
+    coord_flip() +
+    scale_color_manual(values = c(&amp;quot;Model 1 (ρ=1)&amp;quot; = &amp;quot;#eb3437&amp;quot;,
+                                   &amp;quot;Model 2 (ρ est.)&amp;quot; = &amp;quot;#8c1f21&amp;quot;,
+                                   &amp;quot;Model 3 (ρ=0)&amp;quot; = &amp;quot;#300b0b&amp;quot;)) +
+    labs(title = &amp;quot;Standardized Factor Loadings Across All Models&amp;quot;,
+         subtitle = &amp;quot;Higher loadings = stronger measurement of latent attitude&amp;quot;,
+         x = NULL,
+         y = &amp;quot;Standardized Factor Loading&amp;quot;,
+         color = &amp;quot;Model&amp;quot;) +
+    theme_minimal(base_size = 15)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;p&gt;And then we can look at the loadings for each model:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;loadings1 &amp;lt;- compute_standardized_loadings(fit_model1)
+format_loadings_table(loadings1, &amp;quot;Model 1: Single Construct (ρ=1)&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-1-single-construct-ρ1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model 1: Single Construct (ρ=1)&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;Item&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Type&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Mean&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;95% CI&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;IAT&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Implicit&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.24&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.21, 0.27]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Preference&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cat)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.27&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.15, 0.39]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Like Black (rev)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cat)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.17&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.09, 0.27]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Like White&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cat)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.50&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.38, 0.62]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Therm White&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cont)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.21&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.12, 0.30]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Therm Black (rev)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cont)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.13&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.07, 0.20]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;loadings2 &amp;lt;- compute_standardized_loadings(fit_model2)
+format_loadings_table(loadings2, &amp;quot;Model 2: Correlated Constructs (ρ estimated)&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-2-correlated-constructs-ρ-estimated-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model 2: Correlated Constructs (ρ estimated)&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;Item&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Type&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Mean&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;95% CI&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;IAT&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Implicit&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.24&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.21, 0.26]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Preference&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cat)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.32&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.18, 0.49]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Like Black (rev)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cat)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.14&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.07, 0.25]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Like White&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cat)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.55&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.42, 0.67]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Therm White&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cont)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.23&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.13, 0.33]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Therm Black (rev)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cont)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.12&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.06, 0.19]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;loadings3 &amp;lt;- compute_standardized_loadings(fit_model3)
+format_loadings_table(loadings3, &amp;quot;Model 3: Independent Constructs (ρ=0)&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-3-independent-constructs-ρ0&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model 3: Independent Constructs (ρ=0)&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;Item&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Type&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;Mean&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;95% CI&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;IAT&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Implicit&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.24&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.21, 0.26]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Preference&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cat)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.47&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.27, 0.63]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Like Black (rev)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cat)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.08&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.04, 0.16]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Like White&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cat)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.52&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.38, 0.64]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Therm White&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cont)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.28&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.17, 0.37]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Therm Black (rev)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Explicit (Cont)&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;0.09&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;[0.05, 0.15]&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot_all_loadings(loadings1, loadings2, loadings3)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/part-2-the-implicit-association-test/index_files/figure-html/fig-loadings-all-models-1.png&#34; alt=&#34;&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The factor loadings reveal considerable heterogeneity: self-report items range from weak (thermometer items ~0.12-0.23) to moderate (“Like White” ~0.55), with the preference item around 0.32. The IAT’s loading (~0.24) falls in the middle of this range, comparable to many self-report items but notably weaker than the best-measured explicit item.&lt;/p&gt;
+&lt;p&gt;This explains the attenuation puzzle. Even if implicit and explicit attitudes correlate highly at the latent level (ρ ≈ 0.82), the observed correlation will be pulled down by the square root of the product of the reliabilities:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r_{observed} = \rho \times \sqrt{\text{reliability}_{IAT} \times \text{reliability}_{explicit}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;With low IAT reliability, the observed correlation is heavily attenuated even when the latent correlation is high.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;model-comparison&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Model Comparison&lt;/h3&gt;
+&lt;p&gt;Alright, now that we have looked at measurement quality, let’s move on to some model comparison! We will use Leave-One-Out cross-validation (LOO) to compare predictive performance. Or rather, we will use an approximation of LOO that avoids actually having to do a full on brute-force cross validation exercise:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(loo)
+
+loo1 &amp;lt;- fit_model1$loo()
+loo2 &amp;lt;- fit_model2$loo()
+loo3 &amp;lt;- fit_model3$loo()
+
+loo_compare &amp;lt;- loo_compare(list(
+  &amp;quot;Model 1 (ρ = 1)&amp;quot; = loo1,
+  &amp;quot;Model 2 (ρ estimated)&amp;quot; = loo2,
+  &amp;quot;Model 3 (ρ = 0)&amp;quot; = loo3
+))
+
+print(loo_compare)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##                       elpd_diff se_diff
+## Model 2 (ρ estimated)  0.0       0.0   
+## Model 3 (ρ = 0)       -5.2       9.0   
+## Model 1 (ρ = 1)       -6.9       2.8&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The main metric from this model comparison is the Expected Log Pointwise Predictive Density (ELPD), where higher values indicate better LOO performance. Generally, an ELPD difference of 4 units is considered “strong evidence”, assuming that the standard error of the difference is not too wide.&lt;/p&gt;
+&lt;p&gt;The results are rather instructive. Model 2 (estimated ρ) performs best, with Model 3 (ρ = 0) and Model 2 (ρ = 1) both performing at least 5 ELPD units worse. However, when considering the standard errors, there is only clear evidence of Model 2 being better than Model 1 (ELPD diff = -6.9, SE = 2.8), whereas Model 3 is well within 1 SE of Model 2 (ELPD diff = -5.2, SE = 9.0). The model comparison is therefore ruling out the theory of a single factor capturing both implicit and explicit attitudes while leaving the possibility of the strong dual-attitude theory open.&lt;/p&gt;
+&lt;p&gt;Of course, it is clear from above that when looking at Model 2 in isolation that ρ &amp;gt;&amp;gt; 0—we had an estimate of ρ ≈ 0.82 (95% CI: [0.57, 0.99]), which is strong evidence against the dual-attitude theory of ρ = 0. This is a classic example of why it is important to compare models hollistically as opposed to comparing based on only a single metric. In our case, the posterior ρ from Model 2 rules out Model 3, and model comparison rules out Model 1, which leaves Model 2 as the best explanation for the empirical data.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;discussion&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Discussion&lt;/h2&gt;
+&lt;div id=&#34;what-have-we-learned&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;What Have We Learned?&lt;/h3&gt;
+&lt;p&gt;Our joint generative modeling approach reveals several key findings. First, &lt;strong&gt;implicit and explicit attitudes are distinct but highly correlated constructs.&lt;/strong&gt; Our model comparison provided clear evidence against a single underlying construct (Model 1: ELPD difference = -6.9, SE = 2.8), while Model 2’s posterior distribution strongly ruled out independence (ρ ≈ 0.82, 95% CI: [0.57, 0.99], P(ρ &amp;gt; 0.5) = 99.2%). Together, these results conclusively support Model 2.&lt;/p&gt;
+&lt;p&gt;Second, &lt;strong&gt;the latent correlation is substantially higher than observed correlations suggest.&lt;/strong&gt; The estimated latent correlation (ρ ≈ 0.82) is roughly 4× larger than the observed correlation (r ≈ 0.20), vindicating Schimmack’s measurement error argument. In our case, this attenuation is primarily driven by poor measurement quality in both the IAT (λ&lt;sup&gt;std&lt;/sup&gt; ≈ 0.24) and thermometer items (λ&lt;sup&gt;std&lt;/sup&gt; ≈ 0.12-0.23), which provided very little information about underlying attitudes.&lt;/p&gt;
+&lt;p&gt;Overall, &lt;strong&gt;measurement quality is uniformly poor.&lt;/strong&gt; The IAT’s standardized loading (~0.24) means only about 6% of variance reflects true attitude differences, with 94% being noise. However, the thermometer items from our dataset performed even worse (12-23% loadings), while the “Like White” item shows the best measurement (λ&lt;sup&gt;std&lt;/sup&gt; ≈ 0.55, ~30% signal). The categorical preference item and continuous thermometers added relatively little information beyond the categorical liking items. To the extent that other studies are using similar self-report items, we can expect results to suffer from unreliability of not just the IAT, but also of the explicit measures.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;discriminant-validity-how-distinct-is-distinct-enough&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Discriminant Validity: How Distinct is “Distinct Enough”?&lt;/h3&gt;
+&lt;p&gt;The central question is whether ρ ≈ 0.82 represents adequate discriminant validity—are implicit and explicit attitudes distinct enough to treat as separate constructs? Psychometric standards offer some guidance. We won’t get into too much detail, but a high level overview of various standards provides good direction:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Fornell-Larcker criterion&lt;/strong&gt;: Constructs should correlate less than the square root of their average variance extracted (AVE). With such low factor loadings (0.12-0.55), the AVE for our explicit measures is quite low (~0.15-0.30), suggesting √AVE ≈ 0.39-0.55. A correlation of 0.82 substantially exceeds this threshold, failing the traditional discriminant validity test.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HTMT (Heterotrait-Monotrait) ratio&lt;/strong&gt;: Modern guidelines suggest HTMT &amp;lt; 0.85 for discriminant validity, with more conservative thresholds at 0.70. Our ρ ≈ 0.82 falls right at this boundary—technically passing the liberal threshold but failing conservative standards.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Practical significance&lt;/strong&gt;: Squaring the correlation, ρ² ≈ 0.67, indicates that implicit and explicit attitudes share about 67% of their variance. Only 33% of variance is unique to each construct.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Considering these various standards, our results fail some thresholds while passing others. Unforunately, we once again find ourselves in a situation where it comes down to interpretation. Personally, I tend to not like arbitrary thresholds, so the &lt;em&gt;practical significance&lt;/em&gt; view becomes appealing. If 33% variance between implicit and explicit attitudes is indeed distinct, I think there is potentially some real value in distinguishing them. Of course, it is on the researcher making the distinction to make it clear why it matters, and the literature so far does a rather poor job of doing so.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;The IAT validity debate has persisted for over two decades, with critics and proponents often talking past each other. Much of the disagreement stems from using different statistical approaches that make different assumptions about measurement error (or ignoring measurement error entirely).&lt;/p&gt;
+&lt;p&gt;By building a joint generative model that simultaneously accounts for measurement error in both the IAT (via the LBA) and self-report measures (via IRT), we can directly estimate the latent correlation ρ—the parameter everyone is actually arguing about. Our analysis reveals that implicit and explicit racial attitudes correlate substantially more than observed correlations suggest (ρ ≈ 0.82 vs. r ≈ 0.20). This finding decisively rejects both extreme positions in the debate: implicit and explicit attitudes are neither the same construct (model comparison rules out ρ = 1) nor independent (posterior rules out ρ = 0).&lt;/p&gt;
+&lt;p&gt;However, the high correlation (ρ ≈ 0.82, implying ~67% shared variance) raises important questions about discriminant validity. By conservative psychometric standards, this correlation is too high to claim strong construct distinctiveness. Per liberal standards, it is just barely above-board, which leaves some room for interpretation. The IAT and explicit measures appear to be tapping largely overlapping—though not identical—attitude dimensions. Combined with the IAT’s poor measurement quality (only ~6% signal), our results add to a long list of growing evidence that the theoretical edifice built on the implicit-explicit distinction rests on shakier empirical ground than IAT believers like to assume.&lt;/p&gt;
+&lt;p&gt;The broader lesson is methodological: when measures are noisy, observed correlations can badly mislead us about underlying relationships. Generative models that respect the data-generating process—fitting trial-level RTs and item-level responses rather than summary statistics—can recover information that traditional approaches discard. In the case of the IAT, this information reveals that measurement error, not psychological distinctiveness, drives most of the apparent dissociation between implicit and explicit attitudes.&lt;/p&gt;
+&lt;p&gt;Ending with our original question:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;What is the relationship between implicit attitudes (as measured by the IAT) and explicit attitudes (as measured by self-report)?&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Our results support the theory that implicit and explicit attitudes are distinct in the sense that they are not perfectly correlated, although with a correlation as high as ρ ≈ 0.82 (95% CI: [0.57, 0.99]), there is a question of whether or not they are &lt;em&gt;practically distinct enough&lt;/em&gt; to warrant all the claims people make about how implicit attitudes differ from explicit ones. Whether you conclude that ρ ≈ 0.82 represents “the same thing” or “different things” may ultimately depend on your standards for discriminant validity and the theoretical importance you place on the unique 33% of variance. But hey, at least we have a principled estimate of what that correlation actually is.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>Bayesian Design Optimization: An Application to Item Reduction in Scale Development Research</title>
