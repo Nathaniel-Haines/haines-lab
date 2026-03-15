@@ -4,19 +4,31 @@
   
   
   <url>
-    <loc>http://haines-lab.com/</loc><lastmod>2026-01-26T21:59:55-05:00</lastmod></url>
+    <loc>http://haines-lab.com/</loc><lastmod>2026-03-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/bayesian-statistics/</loc><lastmod>2026-03-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/categories/</loc><lastmod>2026-03-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/</loc><lastmod>2026-03-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/measurement-error/</loc><lastmod>2026-03-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/post/</loc><lastmod>2026-03-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tag/r/</loc><lastmod>2026-03-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/category/statistical-modeling/</loc><lastmod>2026-03-15T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>http://haines-lab.com/tags/</loc><lastmod>2026-03-15T00:00:00+00:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/post/part-2-the-implicit-association-test/</loc><lastmod>2026-01-26T21:59:55-05:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/post/</loc><lastmod>2026-01-26T21:59:55-05:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/</loc><lastmod>2023-11-23T10:50:05-05:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/post/asdf-poetry-renv-local-python-r-environments/</loc><lastmod>2022-09-22T15:52:10-04:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/post/2022-01-23-automating-computational-reproducibility-with-r-using-renv-docker-and-github-actions/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/categories/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/category/computational-reproducibility/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
   <url>
@@ -28,11 +40,7 @@
   <url>
     <loc>http://haines-lab.com/tag/programming/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
   <url>
-    <loc>http://haines-lab.com/tag/r/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
     <loc>http://haines-lab.com/category/r/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/tags/</loc><lastmod>2022-01-24T00:00:00+00:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/authors/</loc><lastmod>2021-06-17T00:00:00+00:00</lastmod></url>
   <url>
@@ -56,13 +64,7 @@
   <url>
     <loc>http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
   <url>
-    <loc>http://haines-lab.com/tag/bayesian-statistics/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
-  <url>
     <loc>http://haines-lab.com/category/formal-models/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/category/measurement-error/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
-  <url>
-    <loc>http://haines-lab.com/category/statistical-modeling/</loc><lastmod>2021-01-10T00:00:00+00:00</lastmod></url>
   <url>
     <loc>http://haines-lab.com/talk/generative-models-can-advance-the-social-behavioral-and-brain-sciences/</loc><lastmod>2020-10-14T00:00:00+00:00</lastmod></url>
   <url>

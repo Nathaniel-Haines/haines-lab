@@ -5,12 +5,760 @@
     <link>http://haines-lab.com/post/</link>
       <atom:link href="http://haines-lab.com/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Mon, 26 Jan 2026 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Sun, 15 Mar 2026 00:00:00 +0000</lastBuildDate>
     <image>
       <url>http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png</url>
       <title>Posts</title>
       <link>http://haines-lab.com/post/</link>
     </image>
+    
+    <item>
+      <title>How to Estimate a Mean, and What It Means for Science</title>
+      <link>http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/</link>
+      <pubDate>Sun, 15 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/</guid>
+      <description>
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;If I asked you to estimate 30 means, you would probably compute 30 sample means. And you would be provably wrong (well.. maybe not &lt;em&gt;wrong&lt;/em&gt;, but at least provably &lt;em&gt;inefficient&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;Now, this might seem like a strange claim. After all, you may have known that the sample mean is the minimum variance unbiased estimator (MVUE) for a single mean—as the verbose name implies, this makes the sample mean the best unbiased estimator of the true underlying mean. And if we are only interested in a single mean—say, the average height of adults in the United States—the sample mean is indeed the best we can do (in terms of frequentist risk). Of course, scientists almost never estimate just one mean. We estimate means for multiple individuals, multiple conditions, multiple groups, oftentimes all within a single analysis. However, as alluded to above, once we are estimating three or more means simultaneously, the sample mean is &lt;strong&gt;inadmissible&lt;/strong&gt;—meaning there exist other estimators that have lower total mean squared error for &lt;em&gt;every possible&lt;/em&gt; set of true values.&lt;/p&gt;
+&lt;p&gt;This result, first proven by &lt;a href=&#34;https://projecteuclid.org/proceedings/berkeley-symposium-on-mathematical-statistics-and-probability/Proceedings-of-the-Third-Berkeley-Symposium-on-Mathematical-Statistics-and/Chapter/Inadmissibility-of-the-Usual-Estimator-for-the-Mean-of-a-Multivariate/bsmsp/1200501656&#34;&gt;Charles Stein in 1956&lt;/a&gt; and made constructive by &lt;a href=&#34;https://projecteuclid.org/euclid.bsmsp/1200512173&#34;&gt;James and Stein in 1961&lt;/a&gt; (i.e. the actual estimator was introduced), was so counterintuitive that it became known as “Stein’s Paradox” (for a fun, approachable read check out &lt;a href=&#34;https://www.contrib.andrew.cmu.edu/~kk3n/simplicity/stein-paradox-sci-am.pdf&#34;&gt;Efron &amp;amp; Morris, 1977&lt;/a&gt;). Yet over 60 years later, the vast majority of scientists—whether data or research scientists in industry or ivory tower academics—still use sample means as if they were optimal. Every time a researcher computes a mean response time or summed score per participant, a mean score per group, or a mean difference across conditions, they are using an estimator that is provably inferior to alternatives.&lt;/p&gt;
+&lt;p&gt;The most interesting part of all this is that alternative estimators were discovered independently across hundreds of years. Psychometricians had the core insight in the mid 1920’s through the lens of classical test theory, reliability, and &lt;a href=&#34;https://psycnet.apa.org/record/1928-00533-000&#34;&gt;Kelley’s&lt;/a&gt; true score estimation. Mathematical statisticians formalized it through James-Stein estimators in 1961. And Bayesians—going back to the Reverend himself in 1763 (see &lt;a href=&#34;https://www.contrib.andrew.cmu.edu/~kk3n/simplicity/stein-paradox-sci-am.pdf&#34;&gt;Efron &amp;amp; Morris, 1977&lt;/a&gt;), but extended later by &lt;a href=&#34;https://en.wikipedia.org/wiki/Th%C3%A9orie_analytique_des_probabilit%C3%A9s&#34;&gt;Laplace (1812)&lt;/a&gt; and &lt;a href=&#34;https://global.oup.com/academic/product/theory-of-probability-9780198503682&#34;&gt;Jeffreys (1939)&lt;/a&gt;—understood that combining outside information with observed data naturally produces shrinkage, and when done right this shrinkage produces better estimates than the observed data alone. Today, modern regularization techniques like ridge regression achieve the same effect via optimizing penalized likelihood functions. All of these approaches converge on the same fundamental principle: when estimating a mean (or really any expectation..), &lt;strong&gt;pool information across units&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;In this post, we will walk through how shrinkage works according to each of the above approaches, starting with a simulation to demonstrate the problem and ending with a discussion of what this all means for science and statistical inference more braodly. If you have read &lt;a href=&#34;http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/&#34;&gt;my previous post on measurement error&lt;/a&gt;, some of this will be familiar. Here, we will take a broader perspective, connecting the dots across fields and making the case that choosing good estimators is not just a curiosity, but an important part of getting the right answer when making statistical inference.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;setting-up-a-simulation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Setting Up a Simulation&lt;/h1&gt;
+&lt;p&gt;Before we compare estimators, we need some ground truth. Let’s simulate a realistic data-generating process where we know the true individual-level means, and we can then evaluate how well different estimators recover them.&lt;/p&gt;
+&lt;p&gt;We will simulate 30 individuals, each with a true mean &lt;span class=&#34;math inline&#34;&gt;\(\mu_i\)&lt;/span&gt; drawn from a population distribution. For each individual, we then generate 10 observations from a normal distribution centered at their true mean. The data-generating process is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\mu_i \sim \mathcal{N}(\mu_{\text{pop}}, \sigma_{\text{pop}})\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[y_{i,t} \sim \mathcal{N}(\mu_i, \sigma_{\text{obs}})\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(\mu_{\text{pop}} = 5\)&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{pop}} = 2\)&lt;/span&gt;, and &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{obs}} = 6\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
+library(tidyr)
+library(foreach)
+library(ggplot2)
+
+set.seed(43202)
+
+# Simulation parameters
+N_subj    &amp;lt;- 30
+n_obs     &amp;lt;- 10
+mu_pop    &amp;lt;- 5
+sigma_pop &amp;lt;- 2
+sigma_obs &amp;lt;- 6
+
+# Generate true individual means from population distribution
+mu_true &amp;lt;- rnorm(N_subj, mu_pop, sigma_pop)
+
+# Generate observations for each individual
+obs_data &amp;lt;- foreach(i = 1:N_subj, .combine = &amp;quot;rbind&amp;quot;) %do% {
+  data.frame(
+    subj = i,
+    mu_true = mu_true[i],
+    y = rnorm(n_obs, mu_true[i], sigma_obs)
+  )
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To get a feel for the data, let’s look at the observations for 6 randomly selected individuals. The vertical black line shows each individual’s true mean &lt;span class=&#34;math inline&#34;&gt;\(\mu_i\)&lt;/span&gt;, and the dusty rose histogram shows their observed data:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Select 6 subjects to display
+display_subjs &amp;lt;- sort(sample(1:N_subj, 6))
+
+obs_data %&amp;gt;%
+  filter(subj %in% display_subjs) %&amp;gt;%
+  mutate(subj_label = paste0(&amp;quot;Subject &amp;quot;, subj)) %&amp;gt;%
+  ggplot(aes(x = y)) +
+  geom_histogram(fill = &amp;quot;#DCBCBC&amp;quot;, color = &amp;quot;white&amp;quot;, bins = 12) +
+  geom_vline(aes(xintercept = mu_true), linetype = 1, color = &amp;quot;black&amp;quot;, size = 1) +
+  facet_wrap(~subj_label, nrow = 2, scales = &amp;quot;free_y&amp;quot;) +
+  xlab(&amp;quot;Observed Value (y)&amp;quot;) +
+  ylab(&amp;quot;Count&amp;quot;) +
+  ggtitle(&amp;quot;Observations for 6 Individuals&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-2-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As you can see, with only 10 observations per individual and a large observation-level standard deviation (&lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{obs}} = 6\)&lt;/span&gt;), the observations are quite spread out relative to the true means. This is the fundamental challenge: we are trying to estimate the “true” underlying person-level means from noisy observational data.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-sample-mean&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;The Sample Mean&lt;/h1&gt;
+&lt;p&gt;The obvious approach is to compute the sample mean for each individual:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i^{\text{sample}} = \bar{y}_i = \frac{1}{n}\sum_{t=1}^{n}y_{i,t}\]&lt;/span&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Compute sample means and standard errors
+subj_summary &amp;lt;- obs_data %&amp;gt;%
+  group_by(subj) %&amp;gt;%
+  summarize(mu_true   = unique(mu_true),
+            x_bar     = mean(y),
+            var_y     = var(y),
+            se_sample = sd(y) / sqrt(n()),
+            .groups   = &amp;quot;drop&amp;quot;)
+
+# RMSE
+rmse_sample_mean &amp;lt;- sqrt(mean((subj_summary$x_bar - subj_summary$mu_true)^2))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can evaluate how well the sample mean performs by plotting the true values against the estimated values. If the sample mean were a perfect estimator, all points would fall on the identity line (dashed gray):&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;subj_summary %&amp;gt;%
+  ggplot(aes(x = mu_true, y = x_bar)) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &amp;quot;gray&amp;quot;) +
+  geom_linerange(aes(ymin = x_bar - 1.96 * se_sample,
+                     ymax = x_bar + 1.96 * se_sample),
+                 color = &amp;quot;#DCBCBC&amp;quot;, alpha = 0.5) +
+  geom_point(color = &amp;quot;#DCBCBC&amp;quot;, size = 3) +
+  xlab(expression(&amp;quot;True&amp;quot; ~ mu[i])) +
+  ylab(expression(&amp;quot;Estimated&amp;quot; ~ hat(mu)[i])) +
+  ggtitle(paste0(&amp;quot;Sample Mean (RMSE = &amp;quot;, round(rmse_sample_mean, 2), &amp;quot;)&amp;quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-4-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The sample means scatter considerably around the identity line. Individuals with truly extreme values tend to have sample means that tend to be less extreme (regression to the mean), and individuals with truly average values can have sample means that are too extreme in either direction. We can use the root mean squared error (RMSE) to quantify this:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{RMSE} = \sqrt{\frac{1}{N}\sum_{i=1}^{N}(\hat{\mu}_i - \mu_i)^2}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;It will become more clear as we compare against other estimators, but we will note here that the sample mean is &lt;strong&gt;unbiased&lt;/strong&gt; with &lt;strong&gt;high variance&lt;/strong&gt;. This means that if we repeated the experiment many times, the sample means would be centered on the true values on average, but any &lt;em&gt;particular&lt;/em&gt; set of sample means will be scattered widely around the truth. In other words, the sample mean gets it right “on average” but can be quite far off for any given individual in any given dataset—which is, of course, the only dataset we actually have. As we are about to see, we can do considerably better by accepting a small amount of bias in exchange for a large reduction in variance (this phenomenon is known as the bias-variance tradeoff throughout statistics and machine learning).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;james-stein-estimators&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;James-Stein Estimators&lt;/h1&gt;
+&lt;p&gt;As alluded to above, in 1956, Charles Stein proved that when estimating the means of three or more normal distributions simultaneously (since extended beyond the normal), the sample mean is &lt;strong&gt;inadmissible&lt;/strong&gt;. That is, there exists another estimator that has strictly lower total mean squared error for every possible set of true means. Five years later, &lt;a href=&#34;https://projecteuclid.org/euclid.bsmsp/1200512173&#34;&gt;James and Stein (1961)&lt;/a&gt; provided a constructive proof by giving the actual estimator.&lt;/p&gt;
+&lt;p&gt;The James-Stein (JS) estimator shrinks each sample mean toward the grand mean (or any fixed target) in proportion to the total noise in the estimates:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i^{\text{JS}} = \bar{\bar{y}} + \left(1 - B_{\text{JS}}\right)(\bar{y}_i - \bar{\bar{y}})\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(\bar{\bar{y}}\)&lt;/span&gt; is the grand mean across all individuals and the shrinkage factor is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[B_{\text{JS}} = \frac{(N-3)\hat{\sigma}^2_{\text{obs}}/n}{\sum_{i=1}^{N}(\bar{y}_i - \bar{\bar{y}})^2}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Intuitively, individuals whose sample means are far from the grand mean are pulled back toward it. The amount of shrinkage depends on the ratio of within-person variability to total variability. When the person-level variability is high relative to total variability, there is a lot of shrinkage.&lt;/p&gt;
+&lt;p&gt;I find the behavior of the JS estimator more intuitive after a bit of rearranging in the shrinkage term. Specifically, note that the denominator &lt;span class=&#34;math inline&#34;&gt;\(\sum(\bar{y}_i - \bar{\bar{y}})^2\)&lt;/span&gt; estimates the total variability across individuals, which reflects both true between-person variance and within-person variability: &lt;span class=&#34;math inline&#34;&gt;\(\sum(\bar{y}_i - \bar{\bar{y}})^2 \approx \sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n\)&lt;/span&gt;. Substituting into &lt;span class=&#34;math inline&#34;&gt;\(B_{\text{JS}}\)&lt;/span&gt; and noting that the &lt;span class=&#34;math inline&#34;&gt;\((N-3)\)&lt;/span&gt; term is negligible as &lt;span class=&#34;math inline&#34;&gt;\(N\)&lt;/span&gt; increases, the shrinkage factor &lt;span class=&#34;math inline&#34;&gt;\((1 - B_{\text{JS}})\)&lt;/span&gt; simplifies to approximately:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[1 - B_{\text{JS}} \approx \frac{\sigma^2_{\text{pop}}}{\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;That is, the JS estimator shrinks in proportion to the ratio of between-person variance (signal) to total variance (signal plus noise). This “signal over signal-plus-noise” form will reappear in every method we cover from here on.&lt;/p&gt;
+&lt;p&gt;The idea that you can improve your estimate of one individual’s mean by looking at &lt;em&gt;other&lt;/em&gt; individuals’ data is genuinely strange. Stranger yet—Stein’s proof does not even require that the units being pooled together are even related (e.g., the means could be from different studies, different levels of analysis, etc.). In fact, the example in &lt;a href=&#34;https://www.contrib.andrew.cmu.edu/~kk3n/simplicity/stein-paradox-sci-am.pdf&#34;&gt;Efron &amp;amp; Morris ( 1977)&lt;/a&gt; describes pooling together batting averages and foreign automotive import rates. Regardless of what our means represent, it works because the shrinkage reduces total variance more than it introduces bias.&lt;/p&gt;
+&lt;p&gt;We will use the “positive-part” JS estimator, which ensures that the shrinkage factor does not exceed 1 (which would flip the direction of estimates):&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# James-Stein estimator
+grand_mean  &amp;lt;- mean(subj_summary$x_bar)
+sigma2_pool &amp;lt;- mean(subj_summary$var_y)
+se2_mean    &amp;lt;- sigma2_pool / n_obs
+SS          &amp;lt;- sum((subj_summary$x_bar - grand_mean)^2)
+
+B_js &amp;lt;- ((N_subj - 3) * se2_mean) / SS
+B_js &amp;lt;- min(B_js, 1)  # Positive-part JS: don&amp;#39;t over-shrink
+
+subj_summary &amp;lt;- subj_summary %&amp;gt;%
+  mutate(js_est   = grand_mean + (1 - B_js) * (x_bar - grand_mean),
+         se_js    = (1 - B_js) * se_sample)
+
+rmse_js &amp;lt;- sqrt(mean((subj_summary$js_est - subj_summary$mu_true)^2))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let’s see how the JS estimator compares to the sample mean. The lines show the connections between the sample means and shrunken JS estimates for each individual:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;subj_summary %&amp;gt;%
+  ggplot(aes(x = mu_true, y = js_est)) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &amp;quot;gray&amp;quot;) +
+  geom_linerange(aes(ymin = js_est - 1.96 * se_js,
+                     ymax = js_est + 1.96 * se_js),
+                 color = &amp;quot;#8F2727&amp;quot;) +
+  geom_segment(aes(xend = mu_true, yend = x_bar),
+               color = &amp;quot;#DCBCBC&amp;quot;) +
+  geom_point(aes(x = mu_true, y = x_bar), 
+             color = &amp;quot;#DCBCBC&amp;quot;, size = 2) +
+  geom_point(color = &amp;quot;#8F2727&amp;quot;, size = 3) +
+  xlab(expression(&amp;quot;True&amp;quot; ~ mu[i])) +
+  ylab(expression(&amp;quot;Estimated&amp;quot; ~ hat(mu)[i])) +
+  ggtitle(paste0(&amp;quot;James-Stein (RMSE = &amp;quot;, round(rmse_js, 2), &amp;quot;)&amp;quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-6-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The JS estimates (dark red points) are noticeably closer to the identity line than the sample means (dusty rose points). The RMSE has decreased—we are doing better, and we are doing so &lt;em&gt;for free&lt;/em&gt;, without collecting any additional data or making any assumptions regarding prior distributions. All we did was borrow information across individuals.&lt;/p&gt;
+&lt;p&gt;One thing worth noting is that the JS estimator does not come with a natural standard error. The error bars shown above use a conditional approximation: since &lt;span class=&#34;math inline&#34;&gt;\(\hat{\mu}_i^{JS}\)&lt;/span&gt; is a linear function of &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_i\)&lt;/span&gt; (treating &lt;span class=&#34;math inline&#34;&gt;\(B_{JS}\)&lt;/span&gt; as fixed), we can write &lt;span class=&#34;math inline&#34;&gt;\(SE_{JS} = (1 - B_{JS}) \cdot SE_{\text{sample}}\)&lt;/span&gt;. This captures the intuition that shrinkage compresses the uncertainty intervals just as it compresses the point estimates. However, this approximation ignores the uncertainty in &lt;span class=&#34;math inline&#34;&gt;\(B_{JS}\)&lt;/span&gt; itself (which is estimated from the data) and does not account for the bias that shrinkage introduces for any given individual. So these intervals should be taken as rough guides rather than calibrated confidence intervals—a limitation we will see resolved by the approaches that follow.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;classical-test-theory-and-true-score-estimation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Classical Test Theory and True Score Estimation&lt;/h1&gt;
+&lt;p&gt;OK, so James and Stein surprised the statistics world in 1961. What is perhaps less well known is that psychometricians had essentially the same insight &lt;strong&gt;forty years earlier&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;In the 1920’s, &lt;a href=&#34;https://psycnet.apa.org/record/1928-00533-000&#34;&gt;Truman Kelley&lt;/a&gt; showed that the best estimate of an individual’s “true score” is not their observed score, but a reliability-weighted combination of the observed score and the group mean. Specifically, Kelley’s regression-based true score estimate is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i^{\text{CTT}} = (1 - \hat{\rho})\bar{X} + \hat{\rho}\bar{y}_i\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;which can be rearranged as:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i^{\text{CTT}} = \bar{X} + \hat{\rho}(\bar{y}_i - \bar{X})\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(\hat{\rho}\)&lt;/span&gt; is the estimated reliability. Look at that second form carefully—we start at the grand mean, then move toward the individual’s sample mean, but only by a fraction &lt;span class=&#34;math inline&#34;&gt;\(\hat{\rho}\)&lt;/span&gt;. This is a &lt;em&gt;shrinkage estimator&lt;/em&gt;! The reliability score plays exactly the same role as &lt;span class=&#34;math inline&#34;&gt;\((1 - B_{\text{JS}})\)&lt;/span&gt; in the James-Stein estimator.&lt;/p&gt;
+&lt;p&gt;In our simulation context, the reliability is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\rho} = 1 - \frac{\hat{\sigma}^2_{\text{obs}}/n}{\text{Var}(\bar{y})}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Since &lt;span class=&#34;math inline&#34;&gt;\(\text{Var}(\bar{y}) = \hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n\)&lt;/span&gt;, this simplifies to:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\rho} = \frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;That is, reliability is the ratio of between-person variance to total variance—signal over signal-plus-noise. This is the same form of shrinkage factor that will reappear in every method we cover from here on (if you want a deeper dive into reliability and true score estimation, I cover it in detail in a &lt;a href=&#34;http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/&#34;&gt;previous post&lt;/a&gt;).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# CTT true score estimation
+var_x_bar &amp;lt;- var(subj_summary$x_bar)
+rho_hat   &amp;lt;- 1 - (se2_mean / var_x_bar)
+
+subj_summary &amp;lt;- subj_summary %&amp;gt;%
+  mutate(ctt_est = grand_mean + rho_hat * (x_bar - grand_mean),
+         se_ctt  = sd(x_bar) * sqrt(1 - rho_hat) * sqrt(rho_hat))
+
+rmse_ctt &amp;lt;- sqrt(mean((subj_summary$ctt_est - subj_summary$mu_true)^2))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In our simulated data, the estimated reliability is &lt;span class=&#34;math inline&#34;&gt;\(\hat{\rho}\)&lt;/span&gt; = 0.58, meaning that only about 58% of the variance in the sample means reflects true between-person differences—the rest is noise. Because the person-level variability (or rather, uncertainty) is high relative to between-person variability, each person’s estimate is pulled 42% of the way back toward the grand mean.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;subj_summary %&amp;gt;%
+  ggplot(aes(x = mu_true, y = ctt_est)) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &amp;quot;gray&amp;quot;) +
+  geom_linerange(aes(ymin = ctt_est - 1.96 * se_ctt,
+                     ymax = ctt_est + 1.96 * se_ctt),
+                 color = &amp;quot;#8F2727&amp;quot;) +
+  geom_segment(aes(xend = mu_true, yend = x_bar),
+               color = &amp;quot;#DCBCBC&amp;quot;) +
+  geom_point(aes(x = mu_true, y = x_bar), 
+             color = &amp;quot;#DCBCBC&amp;quot;, size = 2) +
+  geom_point(color = &amp;quot;#8F2727&amp;quot;, size = 3) +
+  xlab(expression(&amp;quot;True&amp;quot; ~ mu[i])) +
+  ylab(expression(&amp;quot;Estimated&amp;quot; ~ hat(mu)[i])) +
+  ggtitle(paste0(&amp;quot;CTT True Score (RMSE = &amp;quot;, round(rmse_ctt, 2), &amp;quot;)&amp;quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-8-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Unlike the JS estimator, the CTT framework provides a principled standard error for the true score estimates. As Kelley showed, the SE of the estimated true score is &lt;span class=&#34;math inline&#34;&gt;\(\hat{\sigma}_{\hat{\theta}} = \sigma_X\sqrt{1-\hat{\rho}}\sqrt{\hat{\rho}}\)&lt;/span&gt;, which is smaller than the SE of the observed score &lt;span class=&#34;math inline&#34;&gt;\(\sigma_X\sqrt{1-\hat{\rho}}\)&lt;/span&gt; by a factor of &lt;span class=&#34;math inline&#34;&gt;\(\sqrt{\hat{\rho}}\)&lt;/span&gt; (for a derivation, see &lt;a href=&#34;https://education.uiowa.edu/sites/education.uiowa.edu/files/2022-10/casma-technical-report-5.pdf&#34;&gt;Brennan, 2012&lt;/a&gt;, and my &lt;a href=&#34;http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/&#34;&gt;previous post&lt;/a&gt; for a more thorough treatment). Notice in the plot above that the 95% intervals for the true score estimates are indeed narrower than those of the sample means, yet they still exhibit good coverage of the underlying true values.&lt;/p&gt;
+&lt;p&gt;I said it before and I will say it again—I think this is pretty cool for a technique developed in the 1920’s :D. The CTT estimates look nearly identical to the James-Stein estimates—and they should, because they are doing essentially the same thing. Both shrink individual estimates toward the group mean in proportion to the signal-to-noise ratio. The main difference is in the exact shrinkage coefficient: JS uses a &lt;span class=&#34;math inline&#34;&gt;\((N-3)\)&lt;/span&gt; correction in the numerator, while CTT does not. In practice, these give very similar results. With a large enough number set of means, they converge to the same solution.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;empirical-bayes&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Empirical Bayes&lt;/h1&gt;
+&lt;p&gt;So we have seen that both James-Stein estimators and classical true score estimation arrive at the same fundamental insight through different paths. And we saw that psychometricians had the core insight before the mathematical statistics community. But like many discoveries, the core insight of shrinkage goes back even further than the 1920’s! Efron &amp;amp; Morris (1977) describe how (our lord and savior) Reverend Thomas Bayes had the key insight in as early as 1763:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The formula for the James-Stein estimator is strikingly similar to that of Bayes’s equation. Indeed, as the number of means being averaged grows very large, the two equations become identical… The James-Stein procedure, however, has one important advantage over Bayes’s method. The James-Stein estimator can be employed without knowledge of the prior distribution; indeed, one need not even suppose the means being estimated are normally distributed.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Although they describe limitations with Bayes’s method relative to the JS estimator (in particular, the need for a prior distribution), in practice we can skirt around this limitation by simply &lt;em&gt;deriving a prior empirically from the data&lt;/em&gt;. Specifically, Empirical Bayes (EB; coined by &lt;a href=&#34;https://projecteuclid.org/ebooks/berkeley-symposium-on-mathematical-statistics-and-probability/Proceedings-of-the-Third-Berkeley-Symposium-on-Mathematical-Statistics-and/chapter/An-Empirical-Bayes-Approach-to-Statistics/bsmsp/1200501653&#34;&gt;Robbins (1956)&lt;/a&gt;) estimates the population-level distribution from the data and then uses it to form posterior estimates for each individual. In the normal-normal case (which our simulation satisfies), the EB posterior mean is a precision-weighted average of the individual’s sample mean and the estimated population mean, where &lt;span class=&#34;math inline&#34;&gt;\(n_i\)&lt;/span&gt; is the number of observations for individual &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i^{\text{EB}} = \frac{\frac{n_i}{\hat{\sigma}^2_{\text{obs}}}\bar{y}_i + \frac{1}{\hat{\sigma}^2_{\text{pop}}}\hat{\mu}_{\text{pop}}}{\frac{n_i}{\hat{\sigma}^2_{\text{obs}}} + \frac{1}{\hat{\sigma}^2_{\text{pop}}}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This can be simplified to a shrinkage form:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i^{\text{EB}} = \hat{\mu}_{\text{pop}} + \hat{B}_{\text{EB}}(\bar{y}_i - \hat{\mu}_{\text{pop}})\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where the shrinkage factor is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{B}_{\text{EB}} = \frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The key advantage of EB over CTT and JS is its generality. Notice the &lt;span class=&#34;math inline&#34;&gt;\(n_i\)&lt;/span&gt; subscript in the formulas above—each individual’s shrinkage factor depends on their own sample size, so EB naturally accommodates &lt;strong&gt;unbalanced designs&lt;/strong&gt;—something that JS and CTT as formulated above do not handle as easily. In our current simulation all individuals share the same sample size, so this advantage does not manifest. However, it becomes important in practice when different individuals contribute different amounts of data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Empirical Bayes (method of moments for population parameters)
+mu_pop_hat     &amp;lt;- grand_mean
+sigma2_pop_hat &amp;lt;- max(var_x_bar - se2_mean, 0.001)
+
+subj_summary &amp;lt;- subj_summary %&amp;gt;%
+  mutate(
+    B_eb   = sigma2_pop_hat / (sigma2_pop_hat + sigma2_pool / n_obs),
+    eb_est = mu_pop_hat + B_eb * (x_bar - mu_pop_hat),
+    se_eb  = sqrt(1 / (n_obs / sigma2_pool + 1 / sigma2_pop_hat))
+  )
+
+rmse_eb &amp;lt;- sqrt(mean((subj_summary$eb_est - subj_summary$mu_true)^2))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;subj_summary %&amp;gt;%
+  ggplot(aes(x = mu_true, y = eb_est)) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &amp;quot;gray&amp;quot;) +
+  geom_linerange(aes(ymin = eb_est - 1.96 * se_eb,
+                     ymax = eb_est + 1.96 * se_eb),
+                 color = &amp;quot;#8F2727&amp;quot;) +
+  geom_segment(aes(xend = mu_true, yend = x_bar),
+               color = &amp;quot;#DCBCBC&amp;quot;) +
+  geom_point(aes(x = mu_true, y = x_bar), 
+             color = &amp;quot;#DCBCBC&amp;quot;, size = 2) +
+  geom_point(color = &amp;quot;#8F2727&amp;quot;, size = 3) +
+  xlab(expression(&amp;quot;True&amp;quot; ~ mu[i])) +
+  ylab(expression(&amp;quot;Estimated&amp;quot; ~ hat(mu)[i])) +
+  ggtitle(paste0(&amp;quot;Empirical Bayes (RMSE = &amp;quot;, round(rmse_eb, 2), &amp;quot;)&amp;quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-10-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Unlike the JS estimator, the EB framework naturally provides uncertainty estimates: the posterior standard deviation is &lt;span class=&#34;math inline&#34;&gt;\(\sqrt{1/(n_i/\hat{\sigma}^2_{\text{obs}} + 1/\hat{\sigma}^2_{\text{pop}})}\)&lt;/span&gt;, which follows directly from the normal-normal conjugate update. The resulting intervals in the plot above are properly calibrated (conditional on the estimated population parameters).&lt;/p&gt;
+&lt;p&gt;At this point, you may be noticing a pattern :D. James-Stein, classical true scores, and empirical Bayes are all giving us essentially the same answer. This is not a coincidence—they are all manifestations of the same fundamental principle: when you have multiple related quantities to estimate, you should pool information across the units in the group.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ridge-regression&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Ridge Regression&lt;/h1&gt;
+&lt;p&gt;So, shrinkage estimators have been re-discovered in different fields for the past couple hundred years. And yet, there is no sign of this trend stopping—modern machine learning literature is keeping the trend alive, and my favorite example is ridge regression.&lt;/p&gt;
+&lt;p&gt;Setting the stage—the sample mean for individual &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; is the same value &lt;span class=&#34;math inline&#34;&gt;\(\mu_i\)&lt;/span&gt; that minimizes the sum of squared residuals (or maximizes the normal distribution likelihood function):&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\underset{\mu_1,...,\mu_N}{argmin}\sum_{i=1}^{N}\sum_{t=1}^{n_i}(y_{i,t} - \mu_i)^2\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Ridge regression modifies this loss function by adding a &lt;strong&gt;penalty term&lt;/strong&gt; for how far each individual’s mean deviates from zero:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\underbrace{\underset{\mu_1,...,\mu_N}{argmin}\sum_{i=1}^{N}\sum_{t=1}^{n_i}(y_{i,t} - \mu_i)^2}_{\text{Traditional Loss Function}} + \underbrace{\lambda\sum_{i=1}^{N}\mu_i^2}_{\text{Ridge Penalty}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Here, &lt;span class=&#34;math inline&#34;&gt;\(\lambda~(0&amp;lt;\lambda&amp;lt;\infty)\)&lt;/span&gt; is a penalty parameter that controls how much each individual’s estimate is allowed to deviate from the group. When &lt;span class=&#34;math inline&#34;&gt;\(\lambda = 0\)&lt;/span&gt;, we recover the sample means exactly. As &lt;span class=&#34;math inline&#34;&gt;\(\lambda \rightarrow \infty\)&lt;/span&gt;, the penalty dominates and all estimates are shrunk toward zero. For our balanced design with &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; observations per subject, the solution simplifies to:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i^{\text{ridge}} = \frac{n}{n + \lambda}\bar{y}_i\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;which shrinks each sample mean toward zero by the factor &lt;span class=&#34;math inline&#34;&gt;\(n/(n + \lambda)\)&lt;/span&gt;. If we include an intercept (as we do in practice), this becomes shrinkage toward the grand mean—the same operation as JS, CTT, and EB, with &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; controlling the degree of shrinkage.&lt;/p&gt;
+&lt;p&gt;What makes this connection especially interesting is that ridge regression with an L2 penalty is &lt;em&gt;equivalent&lt;/em&gt; to placing a normal prior on the coefficients in a Bayesian regression model (I cover this equivalence in more detail in a &lt;a href=&#34;http://haines-lab.com/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/&#34;&gt;previous post&lt;/a&gt;). Under this equivalence, &lt;span class=&#34;math inline&#34;&gt;\(\lambda = \sigma^2_{\text{obs}} / \sigma^2_{\text{pop}}\)&lt;/span&gt;, and the ridge shrinkage factor becomes:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\frac{n_i}{n_i + \lambda} = \frac{n_i}{n_i + \sigma^2_{\text{obs}} / \sigma^2_{\text{pop}}} = \frac{\sigma^2_{\text{pop}}}{\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n_i}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The same signal-over-signal-plus-noise ratio we saw for JS, CTT and empirical Bayes. The penalty parameter &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; is just another way of specifying the variance ratio.&lt;/p&gt;
+&lt;p&gt;If you don’t believe me, we can use &lt;code&gt;glmnet&lt;/code&gt; to fit the ridge regression, letting cross-validation choose the penalty &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; for us:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(glmnet)
+
+# Create design matrix of subject indicators (no intercept)
+X_mat &amp;lt;- model.matrix(~ 0 + factor(subj), data = obs_data)
+
+# Fit ridge regression with cross-validation
+fit_ridge &amp;lt;- cv.glmnet(X_mat, obs_data$y, alpha = 0, intercept = TRUE,
+                       standardize = FALSE)
+
+# Extract coefficients at lambda.min
+ridge_coefs &amp;lt;- coef(fit_ridge, s = &amp;quot;lambda.min&amp;quot;)
+ridge_intercept &amp;lt;- ridge_coefs[1]
+ridge_subj      &amp;lt;- as.numeric(ridge_coefs[-1])
+
+# Individual estimates = intercept + subject coefficient
+subj_summary &amp;lt;- subj_summary %&amp;gt;%
+  mutate(ridge_est = ridge_intercept + ridge_subj)
+
+rmse_ridge &amp;lt;- sqrt(mean((subj_summary$ridge_est - subj_summary$mu_true)^2))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;subj_summary %&amp;gt;%
+  ggplot(aes(x = mu_true, y = ridge_est)) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &amp;quot;gray&amp;quot;) +
+  geom_segment(aes(xend = mu_true, yend = x_bar),
+               color = &amp;quot;#DCBCBC&amp;quot;) +
+  geom_point(aes(x = mu_true, y = x_bar),
+             color = &amp;quot;#DCBCBC&amp;quot;, size = 2) +
+  geom_point(color = &amp;quot;#8F2727&amp;quot;, size = 3) +
+  xlab(expression(&amp;quot;True&amp;quot; ~ mu[i])) +
+  ylab(expression(&amp;quot;Estimated&amp;quot; ~ hat(mu)[i])) +
+  ggtitle(paste0(&amp;quot;Ridge Regression (RMSE = &amp;quot;, round(rmse_ridge, 2), &amp;quot;)&amp;quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-12-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Once again, the ridge estimates are shrunk toward the grand mean, and the RMSE is lower than the sample mean. Note that &lt;code&gt;glmnet&lt;/code&gt; selects &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt; via cross-validation, which differs from previous approaches that use signal-to-noise ratios empirically derived from the data. However, like the JS estimator, ridge regression does not come with a natural standard error for the shrunken estimates (you could bootstrap, but I will leave that as an exercise for the reader).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;hierarchical-models&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Hierarchical Models&lt;/h1&gt;
+&lt;p&gt;All of the approaches so far share a common feature: they estimate the population parameters as point estimates and then plug those in to compute the individual-level estimates. A hierarchical model goes one step further by jointly estimating everything simultaneously. In the frequentist case, this gives us Best Linear Unbiased Predictors (BLUPs); in the Bayesian case, it gives us full posterior distributions.&lt;/p&gt;
+&lt;p&gt;The hierarchical model for our simulation is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[y_{i,t} \sim \mathcal{N}(\mu_i, \sigma_{\text{obs}})\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\mu_i \sim \mathcal{N}(\mu_{\text{pop}}, \sigma_{\text{pop}})\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;In the Bayesian version, we additionally specify priors:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\mu_{\text{pop}} \sim \mathcal{N}(0, 10)\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\sigma_{\text{pop}} \sim \text{half-}\mathcal{N}(0, 5)\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\sigma_{\text{obs}} \sim \text{half-}\mathcal{N}(0, 10)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;In either case, hierarchical models impose a (by-now-familiar) shrinkage form on the individual (i.e. random) effects (see &lt;a href=&#34;https://sites.stat.columbia.edu/gelman/research/published/rsquared.pdf&#34;&gt;Gelman &amp;amp; Pardoe, 2006&lt;/a&gt;):&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i^{\text{hier}} = \hat{\mu}_{\text{pop}} + \hat{B}_i(\bar{y}_i - \hat{\mu}_{\text{pop}}), \quad \hat{B}_i = \frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The difference from the previous methods is that &lt;span class=&#34;math inline&#34;&gt;\(\hat{\sigma}^2_{\text{pop}}\)&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;\(\hat{\sigma}^2_{\text{obs}}\)&lt;/span&gt;, and &lt;span class=&#34;math inline&#34;&gt;\(\hat{\mu}_{\text{pop}}\)&lt;/span&gt; are all estimated jointly with the individual-level parameters, rather than plugged in as fixed quantities. In practice this means that the uncertainty in variance parameters is propagated through the shrinkage term, which in theory should lead to improved performance—let’s take a look!&lt;/p&gt;
+&lt;div id=&#34;frequentist-lme4&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Frequentist: lme4&lt;/h2&gt;
+&lt;p&gt;The simplest way to fit a hierarchical model in R is with &lt;code&gt;lme4::lmer&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(lme4)
+
+# Fit hierarchical model (random intercept per subject)
+fit_lmer &amp;lt;- lmer(y ~ 1 + (1 | subj), data = obs_data)
+
+# Extract BLUPs (conditional modes + fixed effect)
+blups &amp;lt;- coef(fit_lmer)$subj[, &amp;quot;(Intercept)&amp;quot;]
+
+# Extract conditional variances for random effects
+re_vars  &amp;lt;- as.numeric(attr(ranef(fit_lmer, condVar = TRUE)$subj, &amp;quot;postVar&amp;quot;))
+se_lmer  &amp;lt;- sqrt(re_vars)
+
+subj_summary &amp;lt;- subj_summary %&amp;gt;%
+  mutate(hier_freq_est = blups,
+         se_hier_freq  = se_lmer)
+
+rmse_hier_freq &amp;lt;- sqrt(mean((subj_summary$hier_freq_est - subj_summary$mu_true)^2))&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;bayesian-brms&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Bayesian: brms&lt;/h2&gt;
+&lt;p&gt;For a fully Bayesian analysis, we can use &lt;code&gt;brms&lt;/code&gt;, which provides the same formula interface as &lt;code&gt;lme4&lt;/code&gt; but estimates full posterior distributions:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(brms)
+
+# Fit Bayesian hierarchical model
+fit_brms &amp;lt;- brm(
+  y ~ 1 + (1 | subj),
+  data   = obs_data,
+  family = gaussian(),
+  prior  = c(
+    prior(normal(0, 10), class = &amp;quot;Intercept&amp;quot;),
+    prior(normal(0, 5),  class = &amp;quot;sd&amp;quot;),
+    prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)
+  ),
+  chains = 4,
+  iter   = 2000,
+  warmup = 1000,
+  seed   = 43202
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Extract posterior means for each subject
+ranefs   &amp;lt;- ranef(fit_brms)$subj[, , &amp;quot;Intercept&amp;quot;]
+fixef_mu &amp;lt;- fixef(fit_brms)[&amp;quot;Intercept&amp;quot;, &amp;quot;Estimate&amp;quot;]
+
+subj_summary &amp;lt;- subj_summary %&amp;gt;%
+  mutate(hier_bayes_est = fixef_mu + ranefs[, &amp;quot;Estimate&amp;quot;],
+         se_hier_bayes  = ranefs[, &amp;quot;Est.Error&amp;quot;])
+
+rmse_hier_bayes &amp;lt;- sqrt(mean((subj_summary$hier_bayes_est - subj_summary$mu_true)^2))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s look at both hierarchical estimates:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Combine estimates and SEs into long format
+hier_long &amp;lt;- bind_rows(
+  subj_summary %&amp;gt;%
+    transmute(subj, mu_true, x_bar, estimate = hier_freq_est, se = se_hier_freq,
+              method = paste0(&amp;quot;lme4 (RMSE = &amp;quot;, round(rmse_hier_freq, 2), &amp;quot;)&amp;quot;)),
+  subj_summary %&amp;gt;%
+    transmute(subj, mu_true, x_bar, estimate = hier_bayes_est, se = se_hier_bayes,
+              method = paste0(&amp;quot;brms (RMSE = &amp;quot;, round(rmse_hier_bayes, 2), &amp;quot;)&amp;quot;))
+) %&amp;gt;%
+  mutate(method = factor(method, levels = unique(method)))
+
+hier_long %&amp;gt;%
+  ggplot(aes(x = mu_true, y = estimate)) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &amp;quot;gray&amp;quot;) +
+  geom_linerange(aes(ymin = estimate - 1.96 * se,
+                     ymax = estimate + 1.96 * se),
+                 color = &amp;quot;#8F2727&amp;quot;) +
+  geom_segment(aes(xend = mu_true, yend = x_bar),
+               color = &amp;quot;#DCBCBC&amp;quot;) +
+  geom_point(aes(x = mu_true, y = x_bar), 
+             color = &amp;quot;#DCBCBC&amp;quot;, size = 2) +
+  geom_point(color = &amp;quot;#8F2727&amp;quot;, size = 3) +
+  facet_wrap(~method, nrow = 1) +
+  xlab(expression(&amp;quot;True&amp;quot; ~ mu[i])) +
+  ylab(expression(&amp;quot;Estimated&amp;quot; ~ hat(mu)[i])) +
+  ggtitle(&amp;quot;Hierarchical Models&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-16-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As expected, the hierarchical model estimates are essentially identical to the JS, CTT, EB, and ridge estimates. Notice that &lt;code&gt;lme4&lt;/code&gt; provides conditional variances for its BLUPs (via &lt;code&gt;condVar = TRUE&lt;/code&gt; in &lt;code&gt;ranef()&lt;/code&gt;), while &lt;code&gt;brms&lt;/code&gt; gives us full posterior distributions from which the standard deviations follow directly. In both cases, the uncertainty intervals are narrower than those of the sample means and have principled justification—no ad-hoc approximations required. This is a major advantage over the JS estimator, where (as we saw) the standard error requires assumptions that may not hold.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;putting-it-all-together&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Putting It All Together&lt;/h1&gt;
+&lt;div id=&#34;the-shrinkage-factors&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The Shrinkage Factors&lt;/h2&gt;
+&lt;p&gt;Before comparing the estimates themselves, let’s put all the shrinkage factors side by side. Recall that every method we have covered takes the same general form:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i = \hat{\mu}_{\text{pop}} + \hat{B} \cdot (\bar{y}_i - \hat{\mu}_{\text{pop}})\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(\hat{B} \in [0, 1]\)&lt;/span&gt; controls how much we trust the individual data relative to the group. When &lt;span class=&#34;math inline&#34;&gt;\(\hat{B} = 1\)&lt;/span&gt;, we get the sample mean (no shrinkage); when &lt;span class=&#34;math inline&#34;&gt;\(\hat{B} = 0\)&lt;/span&gt;, every individual gets the grand mean (complete shrinkage). Let’s see what each method gives us:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Extract variance components from lme4 and brms
+vc_lmer &amp;lt;- as.data.frame(VarCorr(fit_lmer))
+sigma2_pop_lmer &amp;lt;- vc_lmer$vcov[1]
+sigma2_obs_lmer &amp;lt;- vc_lmer$vcov[2]
+B_lmer &amp;lt;- sigma2_pop_lmer / (sigma2_pop_lmer + sigma2_obs_lmer / n_obs)
+
+vc_brms   &amp;lt;- VarCorr(fit_brms)
+sigma2_pop_brms &amp;lt;- vc_brms$subj$sd[1]^2
+sigma2_obs_brms &amp;lt;- vc_brms$residual__$sd[1]^2
+B_brms &amp;lt;- sigma2_pop_brms / (sigma2_pop_brms + sigma2_obs_brms / n_obs)
+
+# Ridge: compute effective shrinkage from the fitted coefficients (due to glmnet internal scaling)
+# ridge_subj[i] is the subject deviation from the intercept;
+# (x_bar[i] - grand_mean) is the unshrunken deviation.
+# Their ratio gives the effective shrinkage factor.
+B_ridge &amp;lt;- mean(ridge_subj / (subj_summary$x_bar - grand_mean), na.rm = TRUE)
+
+# Collect all shrinkage factors as named scalars
+B_values &amp;lt;- c(
+  &amp;quot;James-Stein&amp;quot;     = 1 - B_js,
+  &amp;quot;CTT True Score&amp;quot;  = rho_hat,
+  &amp;quot;Empirical Bayes&amp;quot; = subj_summary$B_eb[1],
+  &amp;quot;Ridge&amp;quot;           = B_ridge,
+  &amp;quot;Hier. (lme4)&amp;quot;    = B_lmer,
+  &amp;quot;Hier. (brms)&amp;quot;    = B_brms
+)
+
+shrinkage_df &amp;lt;- data.frame(
+  Method  = names(B_values),
+  Formula = c(
+    &amp;quot;$1 - \\frac{(N-3)\\hat{\\sigma}^2_{\\text{obs}}/n}{\\sum(\\bar{y}_i - \\bar{\\bar{y}})^2} \\approx \\frac{\\hat{\\sigma}^2_{\\text{pop}}}{\\hat{\\sigma}^2_{\\text{pop}} + \\hat{\\sigma}^2_{\\text{obs}}/n}$&amp;quot;,
+    &amp;quot;$1 - \\frac{\\hat{\\sigma}^2_{\\text{obs}}/n}{\\text{Var}(\\bar{y})} = \\frac{\\hat{\\sigma}^2_{\\text{pop}}}{\\hat{\\sigma}^2_{\\text{pop}} + \\hat{\\sigma}^2_{\\text{obs}}/n}$&amp;quot;,
+    &amp;quot;$\\frac{\\hat{\\sigma}^2_{\\text{pop}}}{\\hat{\\sigma}^2_{\\text{pop}} + \\hat{\\sigma}^2_{\\text{obs}}/n_i}$&amp;quot;,
+    &amp;quot;$\\frac{n_i}{n_i + \\lambda} = \\frac{\\hat{\\sigma}^2_{\\text{pop}}}{\\hat{\\sigma}^2_{\\text{pop}} + \\hat{\\sigma}^2_{\\text{obs}}/n_i}$&amp;quot;,
+    &amp;quot;$\\frac{\\hat{\\sigma}^2_{\\text{pop}}}{\\hat{\\sigma}^2_{\\text{pop}} + \\hat{\\sigma}^2_{\\text{obs}}/n_i}$&amp;quot;,
+    &amp;quot;$\\frac{\\hat{\\sigma}^2_{\\text{pop}}}{\\hat{\\sigma}^2_{\\text{pop}} + \\hat{\\sigma}^2_{\\text{obs}}/n_i}$&amp;quot;
+  ),
+  B_hat   = round(as.numeric(B_values), 3)
+)
+
+knitr::kable(
+  shrinkage_df, 
+  col.names = c(&amp;quot;Method&amp;quot;, &amp;quot;Shrinkage Factor ($\\hat{B}$)&amp;quot;, &amp;quot;Value&amp;quot;),
+  align = &amp;quot;lcc&amp;quot;, 
+  escape = FALSE)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;7%&#34; /&gt;
+&lt;col width=&#34;89%&#34; /&gt;
+&lt;col width=&#34;3%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;Method&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Shrinkage Factor (&lt;span class=&#34;math inline&#34;&gt;\(\hat{B}\)&lt;/span&gt;)&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Value&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;James-Stein&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(1 - \frac{(N-3)\hat{\sigma}^2_{\text{obs}}/n}{\sum(\bar{y}_i - \bar{\bar{y}})^2} \approx \frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.609&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;CTT True Score&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(1 - \frac{\hat{\sigma}^2_{\text{obs}}/n}{\text{Var}(\bar{y})} = \frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.580&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Empirical Bayes&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.580&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Ridge&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\frac{n_i}{n_i + \lambda} = \frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.585&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Hier. (lme4)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.580&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Hier. (brms)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.584&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Despite arriving from very different starting points—decision theory, psychometrics, Bayesian updating, penalized optimization, and mixed-effects modeling—all six methods converge on nearly the same shrinkage factor. I absolutely love this table—if you don’t feel warm and fuzzy inside when seeing it, you simply do not have a soul.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;comparing-estimates&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Comparing Estimates&lt;/h2&gt;
+&lt;p&gt;Now let’s compare all of the estimates side by side:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Reshape to long format for faceted comparison (with SEs)
+# Order: red family (baseline/classical) -&amp;gt; green family (frequentist) -&amp;gt; blue family (Bayesian)
+comparison_long &amp;lt;- bind_rows(
+  subj_summary %&amp;gt;% transmute(subj, mu_true, estimate = x_bar,
+    se = se_sample, method = &amp;quot;Sample Mean&amp;quot;),
+  subj_summary %&amp;gt;% transmute(subj, mu_true, estimate = js_est,
+    se = se_js, method = &amp;quot;James-Stein&amp;quot;),
+  subj_summary %&amp;gt;% transmute(subj, mu_true, estimate = ctt_est,
+    se = se_ctt, method = &amp;quot;CTT True Score&amp;quot;),
+  subj_summary %&amp;gt;% transmute(subj, mu_true, estimate = ridge_est,
+    se = NA_real_, method = &amp;quot;Ridge&amp;quot;),
+  subj_summary %&amp;gt;% transmute(subj, mu_true, estimate = hier_freq_est,
+    se = se_hier_freq, method = &amp;quot;Hier. (lme4)&amp;quot;),
+  subj_summary %&amp;gt;% transmute(subj, mu_true, estimate = eb_est,
+    se = se_eb, method = &amp;quot;Empirical Bayes&amp;quot;),
+  subj_summary %&amp;gt;% transmute(subj, mu_true, estimate = hier_bayes_est,
+    se = se_hier_bayes, method = &amp;quot;Hier. (brms)&amp;quot;)
+) %&amp;gt;%
+  mutate(method = factor(method,
+    levels = c(&amp;quot;Sample Mean&amp;quot;, &amp;quot;James-Stein&amp;quot;, &amp;quot;CTT True Score&amp;quot;,
+               &amp;quot;Ridge&amp;quot;, &amp;quot;Hier. (lme4)&amp;quot;, &amp;quot;Empirical Bayes&amp;quot;, &amp;quot;Hier. (brms)&amp;quot;)))
+
+order_df &amp;lt;- comparison_long %&amp;gt;%
+  filter(method == &amp;quot;Sample Mean&amp;quot;) %&amp;gt;%
+  arrange(estimate) %&amp;gt;%
+  mutate(subj_order = row_number()) %&amp;gt;%
+  select(subj, subj_order)
+
+comparison_long &amp;lt;- comparison_long %&amp;gt;%
+  left_join(order_df, by = &amp;quot;subj&amp;quot;)
+
+truth_df &amp;lt;- comparison_long %&amp;gt;%
+  distinct(subj, subj_order, mu_true)
+
+ggplot(comparison_long,
+       aes(x = subj_order, y = estimate, color = method)) +
+  geom_line(linewidth = 1.2) +
+  geom_line(data = truth_df,
+            aes(x = subj_order, y = mu_true, color = &amp;quot;True Value&amp;quot;),
+            linewidth = 1,
+            linetype = &amp;quot;dotted&amp;quot;,
+            inherit.aes = FALSE) +
+
+  scale_color_manual(values = c(
+    &amp;quot;Sample Mean&amp;quot;     = &amp;quot;#DCBCBC&amp;quot;,
+    &amp;quot;James-Stein&amp;quot;     = &amp;quot;#8F2727&amp;quot;,
+    &amp;quot;CTT True Score&amp;quot;  = &amp;quot;#B2182B&amp;quot;,
+    &amp;quot;Ridge&amp;quot;           = &amp;quot;#4daf4a&amp;quot;,
+    &amp;quot;Hier. (lme4)&amp;quot;    = &amp;quot;#78c679&amp;quot;,
+    &amp;quot;Empirical Bayes&amp;quot; = &amp;quot;#2166AC&amp;quot;,
+    &amp;quot;Hier. (brms)&amp;quot;    = &amp;quot;#8ec2de&amp;quot;,
+    &amp;quot;True Value&amp;quot;      = &amp;quot;gray40&amp;quot;
+  )) +
+  scale_linetype_manual(values = c(&amp;quot;True Value&amp;quot; = &amp;quot;dotted&amp;quot;)) +
+  xlab(&amp;quot;Subjects (ordered by sample mean)&amp;quot;) +
+  ylab(expression(hat(mu)[i])) +
+  ggtitle(&amp;quot;Shrinkage of Individual Estimates Across Methods&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;right&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-18-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# RMSE comparison
+rmse_df &amp;lt;- data.frame(
+  Method = c(&amp;quot;Sample Mean&amp;quot;, &amp;quot;James-Stein&amp;quot;, &amp;quot;CTT True Score&amp;quot;,
+             &amp;quot;Ridge&amp;quot;, &amp;quot;Hier. (lme4)&amp;quot;, &amp;quot;Empirical Bayes&amp;quot;, &amp;quot;Hier. (brms)&amp;quot;),
+  RMSE = c(rmse_sample_mean, rmse_js, rmse_ctt, rmse_ridge,
+           rmse_hier_freq, rmse_eb, rmse_hier_bayes)
+) %&amp;gt;%
+  mutate(Method = factor(Method, levels = Method))
+
+rmse_df %&amp;gt;%
+  ggplot(aes(x = Method, y = RMSE, fill = Method)) +
+  geom_col() +
+  scale_fill_manual(values = c(
+    &amp;quot;Sample Mean&amp;quot;     = &amp;quot;#DCBCBC&amp;quot;,
+    &amp;quot;James-Stein&amp;quot;     = &amp;quot;#8F2727&amp;quot;,
+    &amp;quot;CTT True Score&amp;quot;  = &amp;quot;#B2182B&amp;quot;,
+    &amp;quot;Ridge&amp;quot;           = &amp;quot;#4daf4a&amp;quot;,
+    &amp;quot;Hier. (lme4)&amp;quot;    = &amp;quot;#78c679&amp;quot;,
+    &amp;quot;Empirical Bayes&amp;quot; = &amp;quot;#2166AC&amp;quot;,
+    &amp;quot;Hier. (brms)&amp;quot;    = &amp;quot;#8ec2de&amp;quot;
+  )) +
+  xlab(&amp;quot;&amp;quot;) +
+  ylab(&amp;quot;RMSE&amp;quot;) +
+  ggtitle(&amp;quot;Estimation Error Across Methods&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 30, hjust = 1),
+        legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-19-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Unsurprisingly, all of the shrinkage estimators substantially outperform the sample mean, and they all give very similar results to one another. This is the central message of this post—whether you call it James-Stein estimation, reliability-based true score estimation, empirical Bayes, ridge regression, or hierarchical modeling, the core insight is the same: &lt;strong&gt;pooling information across individuals in a group results in better individual-level estimates&lt;/strong&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;how-shrinkage-depends-on-sample-size&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;How Shrinkage Depends on Sample Size&lt;/h2&gt;
+&lt;p&gt;Whenever I talk to people about how they should use hierarchical models (or other shrinkage estimator techniques), they often ask, “&lt;em&gt;but how do I know that it is the right amount of shrinkage? What if it is too much?&lt;/em&gt;”. My answer is usually along the lines of, “&lt;em&gt;well, it is data dependent, if you can estimate the individual-level effects with certainty then the sample mean and shrinkage estimator will give the same answer&lt;/em&gt;”. In fact, you can see this quite easily if we just pump up the number of observations per person:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(43202)
+
+n_obs_vec &amp;lt;- c(5, 10, 25, 50, 100)
+
+rmse_by_nobs &amp;lt;- foreach(n = seq_along(n_obs_vec), .combine = &amp;quot;rbind&amp;quot;) %do% {
+  n_obs_k &amp;lt;- n_obs_vec[n]
+
+  # Generate data with same true means
+  obs_k &amp;lt;- foreach(i = 1:N_subj, .combine = &amp;quot;rbind&amp;quot;) %do% {
+    data.frame(subj = i, mu_true = mu_true[i],
+               y = rnorm(n_obs_k, mu_true[i], sigma_obs))
+  }
+
+  # Sample means
+  summ_k &amp;lt;- obs_k %&amp;gt;%
+    group_by(subj) %&amp;gt;%
+    summarize(mu_true = unique(mu_true),
+              x_bar = mean(y), var_y = var(y), .groups = &amp;quot;drop&amp;quot;)
+
+  # JS
+  gm_k   &amp;lt;- mean(summ_k$x_bar)
+  s2p_k  &amp;lt;- mean(summ_k$var_y)
+  se2_k  &amp;lt;- s2p_k / n_obs_k
+  SS_k   &amp;lt;- sum((summ_k$x_bar - gm_k)^2)
+  B_js_k &amp;lt;- min(((N_subj - 3) * se2_k) / SS_k, 1)
+  js_k   &amp;lt;- gm_k + (1 - B_js_k) * (summ_k$x_bar - gm_k)
+
+  # CTT
+  vxb_k &amp;lt;- var(summ_k$x_bar)
+  rho_k &amp;lt;- 1 - (se2_k / vxb_k)
+  ctt_k &amp;lt;- gm_k + rho_k * (summ_k$x_bar - gm_k)
+
+  # EB
+  s2pop_k &amp;lt;- max(vxb_k - se2_k, 0.001)
+  B_eb_k  &amp;lt;- s2pop_k / (s2pop_k + s2p_k / n_obs_k)
+  eb_k    &amp;lt;- gm_k + B_eb_k * (summ_k$x_bar - gm_k)
+
+  # Ridge
+  X_k     &amp;lt;- model.matrix(~ 0 + factor(subj), data = obs_k)
+  fit_r_k &amp;lt;- cv.glmnet(X_k, obs_k$y, alpha = 0, intercept = TRUE,
+                        standardize = FALSE)
+  r_coefs &amp;lt;- coef(fit_r_k, s = &amp;quot;lambda.min&amp;quot;)
+  ridge_k &amp;lt;- as.numeric(r_coefs[1] + r_coefs[-1])
+
+  # Hierarchical (lme4)
+  fit_k   &amp;lt;- lmer(y ~ 1 + (1 | subj), data = obs_k)
+  hier_k  &amp;lt;- coef(fit_k)$subj[, &amp;quot;(Intercept)&amp;quot;]
+
+  # Hierarchical (brms)
+  fit_brms_k &amp;lt;- brm(
+    y ~ 1 + (1 | subj), data = obs_k, family = gaussian(),
+    prior = c(
+      prior(normal(0, 10), class = &amp;quot;Intercept&amp;quot;),
+      prior(normal(0, 5),  class = &amp;quot;sd&amp;quot;),
+      prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)
+    ),
+    chains = 4, iter = 2000, warmup = 1000, seed = 43202,
+    silent = 2, refresh = 0
+  )
+  ranefs_k   &amp;lt;- ranef(fit_brms_k)$subj[, , &amp;quot;Intercept&amp;quot;]
+  fixef_k    &amp;lt;- fixef(fit_brms_k)[&amp;quot;Intercept&amp;quot;, &amp;quot;Estimate&amp;quot;]
+  hier_bayes_k &amp;lt;- fixef_k + ranefs_k[, &amp;quot;Estimate&amp;quot;]
+
+  data.frame(
+    n_obs  = n_obs_k,
+    Method = c(&amp;quot;Sample Mean&amp;quot;, &amp;quot;James-Stein&amp;quot;, &amp;quot;CTT True Score&amp;quot;,
+               &amp;quot;Empirical Bayes&amp;quot;, &amp;quot;Ridge&amp;quot;, &amp;quot;Hier. (lme4)&amp;quot;, &amp;quot;Hier. (brms)&amp;quot;),
+    RMSE   = c(sqrt(mean((summ_k$x_bar - summ_k$mu_true)^2)),
+               sqrt(mean((js_k - summ_k$mu_true)^2)),
+               sqrt(mean((ctt_k - summ_k$mu_true)^2)),
+               sqrt(mean((eb_k - summ_k$mu_true)^2)),
+               sqrt(mean((ridge_k - summ_k$mu_true)^2)),
+               sqrt(mean((hier_k - summ_k$mu_true)^2)),
+               sqrt(mean((hier_bayes_k - summ_k$mu_true)^2)))
+  )
+}
+
+rmse_by_nobs %&amp;gt;%
+  mutate(Method = factor(Method,
+    levels = c(&amp;quot;Sample Mean&amp;quot;, &amp;quot;James-Stein&amp;quot;, &amp;quot;CTT True Score&amp;quot;,
+               &amp;quot;Ridge&amp;quot;, &amp;quot;Hier. (lme4)&amp;quot;, &amp;quot;Empirical Bayes&amp;quot;, &amp;quot;Hier. (brms)&amp;quot;))) %&amp;gt;%
+  ggplot(aes(x = n_obs, y = RMSE, color = Method)) +
+  geom_line(size = 1) +
+  geom_point(size = 2.5) +
+  scale_color_manual(values = c(&amp;quot;Sample Mean&amp;quot;     = &amp;quot;#DCBCBC&amp;quot;,
+                                &amp;quot;James-Stein&amp;quot;     = &amp;quot;#8F2727&amp;quot;,
+                                &amp;quot;CTT True Score&amp;quot;  = &amp;quot;#B2182B&amp;quot;,
+                                &amp;quot;Ridge&amp;quot;           = &amp;quot;#4daf4a&amp;quot;,
+                                &amp;quot;Hier. (lme4)&amp;quot;    = &amp;quot;#78c679&amp;quot;,
+                                &amp;quot;Empirical Bayes&amp;quot; = &amp;quot;#2166AC&amp;quot;,
+                                &amp;quot;Hier. (brms)&amp;quot;    = &amp;quot;#8ec2de&amp;quot;)) +
+  xlab(&amp;quot;Observations per Individual (n)&amp;quot;) +
+  ylab(&amp;quot;RMSE&amp;quot;) +
+  ggtitle(&amp;quot;Shrinkage Advantage Decreases with More Data&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;right&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-20-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As you can see, the advantage of shrinkage estimators is &lt;strong&gt;largest when data are sparse&lt;/strong&gt; (small &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;). Even in big data settings, we find ourselves with sparse data when we dive deep enough into subgroups of interest, etc. It is common in behavioral research in particular, where we often have relatively few trials or items per person per measure. As &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; grows, all methods converge toward the sample mean, because the sample mean becomes precise enough (i.e. &lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_\text{obs} / n \to 0\)&lt;/span&gt;) that there is little room for improvement through shrinkage.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;what-this-all-means-for-science&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;What This All Means for Science&lt;/h1&gt;
+&lt;p&gt;So, dear reader, why should you care? It is simple, really—if you routinely estimate individual-level parameters using sample means (or analogous summary statistics) and then enter these estimates into secondary analyses (e.g., correlations, regressions, group comparisons), you are at least under-powered. You may even be biasing your statistical inference. This two-stage approach implicitly assumes that our individual-level estimates contain no measurement error, which, as we have seen, is a very strong and typically false assumption. The consequences are real and show up everywhere:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The Reliability Paradox.&lt;/strong&gt; Behavioral tasks that produce robust group-level effects (Stroop, IAT, Go/No-go, etc.) consistently show poor test-retest reliability when individual-level performance is estimated with summary statistics. As I have discussed in a &lt;a href=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/&#34;&gt;previous post&lt;/a&gt;, this is not a paradox at all—it is a direct consequence of using noisy estimators. A well specified hierarchical model can leverage shrinkage/pooling to substantially improve the reliability of individual-level estimates from these tasks.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Attenuated Correlations.&lt;/strong&gt; When we correlate two noisy summary statistic-based measures, the resulting correlation is systematically biased toward zero. This is the attenuation problem, which classical test theory addressed through disattenuation corrections (again, see my &lt;a href=&#34;http://haines-lab.com/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/&#34;&gt;post on measurement error&lt;/a&gt;). Using hierarchical models or estimators developed via Classical Test Theory are &lt;em&gt;necessary&lt;/em&gt; for unbiased inference on “true score” correlations.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Regression to the Mean Artifacts.&lt;/strong&gt; When researchers select individuals based on extreme sample means—which are noisy—and then examine their subsequent behavior, regression to the mean cannot be differentiated from true psychological effects of interest. There is an ongoing debate on whether the &lt;a href=&#34;http://haines-lab.com/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/&#34;&gt;Dunning-Kruger effect&lt;/a&gt; is actually purely a measurement artifact resulting from regression to the mean, but you can use hierarchical models to account for such statistical artifacts and make better inference on the true underlying psychological process parameters of interest. When you do so, the classic effect is still present (see my post linked above).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mis-ranking individuals.&lt;/strong&gt; Suppose you need to rank patients by health risk to decide who receives a costly intervention, or rank geographic regions by disease prevalence to target public health resources. If the data are imbalanced—some individuals (or regions) have many observations and others have few—summary statistics will produce misleading rankings. Individuals with fewer observations are more likely to land at the extremes (both top and bottom) simply due to noise, while those with more data will regress toward the middle. The result is misaligned resource allocation. Shrinkage estimators address this directly—individuals with less data get shrunk more toward the group mean, while those with more data retain estimates closer to their sample means. This produces rankings that better reflect true underlying differences rather than sampling noise. Many of the estimators we covered above can account for imbalance through variation in &lt;span class=&#34;math inline&#34;&gt;\(n_i\)&lt;/span&gt; (in the shrinkage term) across individuals.&lt;/p&gt;
+&lt;p&gt;And the list goes on!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Whether you call it James-Stein estimation, reliability-based true score estimation, empirical Bayes, ridge regression, or hierarchical modeling, the core insight is the same—when estimating multiple related quantities (and potentially even unrelated quantities…), you should pool information across individuals. For most scientists (whether you work in a brutalist building downtown or an ivory tower), the easiest path is to use hierarchical models (e.g., &lt;code&gt;lmer&lt;/code&gt; or &lt;code&gt;brms&lt;/code&gt; in R), which produce shrinkage automatically, are well-supported with extensive documentation, and are easily extendable to more complex settings. For example, estimating random effects on the individual-level variance component (i.e. allowing &lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{obs}}\)&lt;/span&gt; to vary across individuals) allows for hierarchical models to account for heteroscedasticity. For the brave souls, you can work with JS-, CTT-, or EB-based estimators to achieve similar results, although you may have to do some algebra. And hey, if you want to feel hipster you can even try your hand at accomplishing this all with ridge regression.&lt;/p&gt;
+&lt;p&gt;The sample mean had a good run. Perhaps it is time to let it go :D.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## R version 4.3.3 (2024-02-29)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Monterey 12.6
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## time zone: America/New_York
+## tzcode source: internal
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices datasets  utils     methods   base     
+## 
+## other attached packages:
+## [1] brms_2.23.0   Rcpp_1.1.1    lme4_2.0-1    glmnet_4.1-10 Matrix_1.6-5 
+## [6] ggplot2_4.0.1 foreach_1.5.2 tidyr_1.3.2   dplyr_1.1.4  
+## 
+## loaded via a namespace (and not attached):
+##  [1] tensorA_0.36.2.1      gtable_0.3.6          shape_1.4.6.1        
+##  [4] QuickJSR_1.8.1        xfun_0.56             bslib_0.9.0          
+##  [7] processx_3.8.6        inline_0.3.21         lattice_0.22-7       
+## [10] callr_3.7.6           ps_1.9.1              vctrs_0.7.1          
+## [13] tools_4.3.3           Rdpack_2.6.6          generics_0.1.4       
+## [16] stats4_4.3.3          parallel_4.3.3        tibble_3.3.1         
+## [19] pkgconfig_2.0.3       checkmate_2.3.3       RColorBrewer_1.1-3   
+## [22] S7_0.2.1              RcppParallel_5.1.11-1 distributional_0.6.0 
+## [25] lifecycle_1.0.5       compiler_4.3.3        farver_2.1.2         
+## [28] stringr_1.6.0         Brobdingnag_1.2-9     codetools_0.2-20     
+## [31] htmltools_0.5.9       sass_0.4.10           bayesplot_1.15.0     
+## [34] yaml_2.3.12           pillar_1.11.1         nloptr_2.2.1         
+## [37] jquerylib_0.1.4       MASS_7.3-60.0.1       cachem_1.1.0         
+## [40] StanHeaders_2.32.10   reformulas_0.4.4      iterators_1.0.14     
+## [43] bridgesampling_1.2-1  boot_1.3-32           abind_1.4-8          
+## [46] nlme_3.1-168          rstan_2.32.7          posterior_1.6.1      
+## [49] tidyselect_1.2.1      digest_0.6.39         mvtnorm_1.3-3        
+## [52] stringi_1.8.7         purrr_1.2.1           bookdown_0.46        
+## [55] labeling_0.4.3        splines_4.3.3         fastmap_1.2.0        
+## [58] grid_4.3.3            cli_3.6.5             magrittr_2.0.4       
+## [61] loo_2.9.0             pkgbuild_1.4.8        survival_3.8-6       
+## [64] withr_3.0.2           backports_1.5.0       scales_1.4.0         
+## [67] rmarkdown_2.30        matrixStats_1.5.0     otel_0.2.0           
+## [70] gridExtra_2.3         blogdown_1.23         coda_0.19-4.1        
+## [73] evaluate_1.0.5        knitr_1.51            rbibutils_2.4.1      
+## [76] rstantools_2.6.0      rlang_1.1.7           glue_1.8.0           
+## [79] formatR_1.14          renv_1.1.6            rstudioapi_0.18.0    
+## [82] minqa_1.2.8           jsonlite_2.0.0        R6_2.6.1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>A Series on Building Formal Models of Classic Psychological Effects: Part 2, Implicit Attitudes—Are They Real?</title>
