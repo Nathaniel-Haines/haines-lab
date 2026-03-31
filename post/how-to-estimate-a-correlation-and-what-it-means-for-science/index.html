@@ -1,0 +1,2464 @@
+<!DOCTYPE html><html lang="en-us" >
+
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.4.0 for Hugo" />
+  
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Nathaniel Haines" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Introduction In Part 1 of this series, we showed that six different methods for estimating individual means—James-Stein, classical true score estimation, empirical Bayes, ridge regression, and hierarchical models (frequentist and Bayesian)—all converge on the same fundamental principle: shrink each individual’s estimate toward the group mean by a factor of \(\sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} &#43; \sigma^2_{\text{obs}}/n)\)." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/" />
+
+  
+  
+  
+    <meta name="theme-color" content="hsl(339, 90%, 68%)" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.f1ecf783c14edc00c9320c205831ad8e.css" media="print" onload="this.media='all'">
+
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha512-W0xM4mr6dEP9nREo7Z9z+9X70wytKvMGeDsj7ps2+xg5QPrEBXC8tAW1IFnzjR6eoJ90JmCnFzerQJTLzIEHjA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+    
+    
+    
+      
+      
+    
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'" disabled>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'">
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.css" integrity="" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.483823b49802e3bfc12a727dbc71499e.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106994238-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-106994238-1', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+
+  
+  
+    
+    
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Computational Psychology" />
+  <meta property="og:url" content="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/" />
+  <meta property="og:title" content="How to Estimate a Correlation, and What It Means for Science | Computational Psychology" />
+  <meta property="og:description" content="Introduction In Part 1 of this series, we showed that six different methods for estimating individual means—James-Stein, classical true score estimation, empirical Bayes, ridge regression, and hierarchical models (frequentist and Bayesian)—all converge on the same fundamental principle: shrink each individual’s estimate toward the group mean by a factor of \(\sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} &#43; \sigma^2_{\text{obs}}/n)\)." /><meta property="og:image" content="http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2026-03-22T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2026-03-22T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/"
+  },
+  "headline": "How to Estimate a Correlation, and What It Means for Science",
+  
+  "datePublished": "2026-03-22T00:00:00Z",
+  "dateModified": "2026-03-22T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Nathaniel Haines"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Computational Psychology",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "Introduction In Part 1 of this series, we showed that six different methods for estimating individual means—James-Stein, classical true score estimation, empirical Bayes, ridge regression, and hierarchical models (frequentist and Bayesian)—all converge on the same fundamental principle: shrink each individual’s estimate toward the group mean by a factor of \\(\\sigma^2_{\\text{pop}} / (\\sigma^2_{\\text{pop}} + \\sigma^2_{\\text{obs}}/n)\\)."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>How to Estimate a Correlation, and What It Means for Science | Computational Psychology</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  dark " data-wc-page-id="b713fb4a655ab37c645cf7ab0cbcc672" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.b6ac29faab89ee14db88f0bed7aa6622.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="header--fixed">
+  <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+    <div class="container-xl">
+
+      
+      <div class="d-none d-lg-inline-flex">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+      
+      <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      
+      <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+        
+        <ul class="navbar-nav d-md-inline-flex">
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#posts"><span>Posts</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#talks"><span>Talks</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#featured"><span>Publications</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#contact"><span>Contact</span></a>
+          </li>
+
+          
+          
+
+        
+
+          
+        </ul>
+      </div>
+
+      <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+        
+        
+          
+            
+            <li class="nav-item d-none d-lg-inline-flex">
+              <a class="nav-link" href="https://twitter.com/nate__haines" data-toggle="tooltip" data-placement="bottom" title="Follow me on Twitter" target="_blank" rel="noopener" aria-label="Follow me on Twitter">
+                <i class="fab fa-twitter" aria-hidden="true"></i>
+              </a>
+            </li>
+          
+        
+
+        
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+        
+        <li class="nav-item dropdown theme-dropdown">
+          <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item js-set-theme-light">
+              <span>Light</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-dark">
+              <span>Dark</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-auto">
+              <span>Automatic</span>
+            </a>
+          </div>
+        </li>
+        
+
+        
+        
+
+      </ul>
+
+    </div>
+  </nav>
+</header>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>How to Estimate a Correlation, and What It Means for Science</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Mar 22, 2026
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    39 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+    <span class="middot-divider"></span>
+    <a href="/post/how-to-estimate-a-correlation-and-what-it-means-for-science/#disqus_thread"></a>
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/statistical-modeling/">Statistical Modeling</a>, <a href="/category/measurement-error/">Measurement Error</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In <a href="/post/how-to-estimate-a-mean-and-what-it-means-for-science/">Part 1</a> of this series, we showed that six different methods for estimating individual means—James-Stein, classical true score estimation, empirical Bayes, ridge regression, and hierarchical models (frequentist and Bayesian)—all converge on the same fundamental principle: shrink each individual’s estimate toward the group mean by a factor of <span class="math inline">\(\sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)</span>.</p>
+<p>But if you read Part 1’s implications section carefully, you may have noticed that I buried the lede… many real-world consequences we discussed—attenuated correlations, the reliability paradox, brain-behavior links—were actually <em>correlation</em> problems, not mean-estimation problems per se.</p>
+<p>Estimating correlations when measures have error is a more challenging problem than simply estimating better means (as we did in part 1). Unlike the univariate case, measurement error does not just add noise to correlations—it <em>systematically biases them toward zero</em>. Whereas the sample mean was unbiased for an individual’s true mean, the sample correlation is <em>biased for the true correlation between latent variables</em>.</p>
+<p>In this post, we expand our initial scope from univariate to multivariate shrinkage estimators, which allow us to tackle the correlation problem. Time to dive in!</p>
+</div>
+<div id="the-problem-attenuation" class="section level1">
+<h1>The Problem: Attenuation</h1>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>Consider <span class="math inline">\(N\)</span> individuals, each measured on two variables with <span class="math inline">\(n\)</span> trials per variable. The data-generating process is:</p>
+<p><span class="math display">\[\begin{aligned}
+(\theta_{1,i}, \theta_{2,i}) &amp;\sim \text{MVN}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}_{\text{pop}}\right) \\
+y_{k,i,t} &amp;\sim \mathcal{N}(\theta_{k,i}, \sigma_{\text{obs},k}), \quad k \in \{1, 2\}
+\end{aligned}\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\mu} = (\mu_1, \mu_2)^\top\)</span> is the population mean vector and <span class="math inline">\(\boldsymbol{\Sigma}_{\text{pop}}\)</span> is the <span class="math inline">\(2 \times 2\)</span> population covariance matrix:</p>
+<p><span class="math display">\[\boldsymbol{\Sigma}_{\text{pop}} = \begin{pmatrix} \sigma^2_{\text{pop},1} &amp; \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2} \\ \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2} &amp; \sigma^2_{\text{pop},2} \end{pmatrix}\]</span></p>
+<p>The diagonal entries capture between-person variability on each measure; the off-diagonal entry captures how much the two measures <em>covary</em> across individuals, which is directly determined by <span class="math inline">\(\rho_{\text{true}}\)</span>. Each individual has a true score on each measure, these true scores have a correlation, and we observe noisy realizations of those correlated true scores.</p>
+</div>
+<div id="the-attenuation-formula" class="section level2">
+<h2>The Attenuation Formula</h2>
+<p>The naive approach is to compute the sample mean for each individual on each measure, then correlate post-hoc: <span class="math inline">\(r(\bar{y}_1, \bar{y}_2)\)</span>. However, this observed correlation is systematically deflated!</p>
+<p>Recall that the Pearson correlation has a numerator (the covariance) and a denominator (the product of the standard deviations):</p>
+<p><span class="math display">\[r(\bar{y}_1, \bar{y}_2) = \frac{\text{Cov}(\bar{y}_1, \bar{y}_2)}{\sqrt{\text{Var}(\bar{y}_1) \cdot \text{Var}(\bar{y}_2)}}\]</span></p>
+<p>We can look at each to see how measurement error produces attenuation.</p>
+<p><strong>The numerator (covariance).</strong> Since <span class="math inline">\(\bar{y}_k = \theta_k + \bar{\epsilon}_k\)</span>, the covariance expands into four terms:</p>
+<p><span class="math display">\[\begin{aligned}
+\text{Cov}(\bar{y}_1, \bar{y}_2) &amp;= \text{Cov}(\theta_1 + \bar{\epsilon}_1,\; \theta_2 + \bar{\epsilon}_2) \\
+&amp;= \text{Cov}(\theta_1, \theta_2) + \underbrace{\text{Cov}(\theta_1, \bar{\epsilon}_2)}_{=0} + \underbrace{\text{Cov}(\bar{\epsilon}_1, \theta_2)}_{=0} + \underbrace{\text{Cov}(\bar{\epsilon}_1, \bar{\epsilon}_2)}_{=0} \\
+&amp;= \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}
+\end{aligned}\]</span></p>
+<p>Because the measurement errors are independent of each other and of the true scores, all three cross-terms drop out. Concisely, <span class="math inline">\(\mathbb{E}\!\left[\text{Cov}(\bar{y}_1, \bar{y}_2)\right] = \text{Cov}(\theta_1, \theta_2) = \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}\)</span>, which means that although the sample covariance may be a high variance estimator of the true covariance when dealing with lower sample sizes, it is unbiased. This means that measurement error must creap in through the denominator…</p>
+<p><strong>The denominator (variances).</strong> The variance of each individual’s sample mean has two components—true between-person variance plus the measurement error that remains after averaging over <span class="math inline">\(n\)</span> trials:</p>
+<p><span class="math display">\[\text{Var}(\bar{y}_k) = \text{Var}(\theta_k) + \text{Var}(\bar{\epsilon}_k) = \sigma^2_{\text{pop},k} + \sigma^2_{\text{obs},k}/n\]</span></p>
+<p>Notice that the <span class="math inline">\(\sigma^2_{\text{obs},k}/n\)</span> term appears only in the denominator, and it has the effect of inflating it. This asymmetry is what causes attenuation—the numerator is an unbiased estimator of the true covariance, but the denominator is actually an estimator of sample variance, which includes both true between-person variance <em>plus</em> person-level measurement error. You see it play out when substituting both pieces into the correlation formula:</p>
+<p><span class="math display">\[r(\bar{y}_1, \bar{y}_2) = \frac{\rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}}{\sqrt{(\sigma^2_{\text{pop},1} + \sigma^2_{\text{obs},1}/n)(\sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n)}}\]</span></p>
+<p>And then we can square both sides:</p>
+<p><span class="math display">\[r(\bar{y}_1, \bar{y}_2)^2 = \frac{\rho^2_{\text{true}} \cdot \sigma^2_{\text{pop},1} \cdot \sigma^2_{\text{pop},2}}{(\sigma^2_{\text{pop},1} + \sigma^2_{\text{obs},1}/n)(\sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n)}\]</span></p>
+<p>Which makes it easier to bring the form closer to something we are familiar with:</p>
+<p><span class="math display">\[r(\bar{y}_1, \bar{y}_2)^2 = \rho^2_{\text{true}} \cdot \frac{\sigma^2_{\text{pop},1}}{\sigma^2_{\text{pop},1} + \sigma^2_{\text{obs},1}/n} \cdot \frac{\sigma^2_{\text{pop},2}}{\sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n}\]</span></p>
+<p>Interesting! Look at the second and third terms. Each one is the variance of the true scores divided by the total variance of the sample means for that measure. This is exactly the reliability term from Part 1—signal over signal-plus-noise:</p>
+<p><span class="math display">\[\rho_{xx,k} = \frac{\sigma^2_{\text{pop},k}}{\sigma^2_{\text{pop},k} + \sigma^2_{\text{obs},k}/n}\]</span></p>
+<p>Substitute in the traditional reliability coefficient for the reliability terms:</p>
+<p><span class="math display">\[r(\bar{y}_1, \bar{y}_2)^2 = \rho^2_{\text{true}} \cdot \rho_{xx,1} \cdot \rho_{xx,2}\]</span></p>
+<p>Take the square root:</p>
+<p><span class="math display">\[r(\bar{y}_1, \bar{y}_2) = \rho_{\text{true}} \sqrt{\rho_{xx,1} \cdot \rho_{xx,2}}\]</span></p>
+<p>And we arrive at <a href="https://doi.org/10.2307/1412159">Spearman’s (1904)</a> attenuation formula. The observed correlation equals the true correlation shrunken down by the measure reliabilities. Since reliabilities are between 0 and 1, the observed correlation is always closer to zero than it is to the true correlation that we care about. The worse the measurement error, the more the correlation is shrunken toward zero.</p>
+<p>I will emphasize again a key difference from Part 1—the sample mean is <em>unbiased</em> for the individual’s true mean <span class="math inline">\(\theta_i\)</span>, but the sample correlation is <em>biased</em> for the true correlation between means <span class="math inline">\(\rho_{\text{true}} = r(\theta_1, \theta_2)\)</span>.</p>
+</div>
+</div>
+<div id="simulation-setup" class="section level1">
+<h1>Simulation Setup</h1>
+<p>Alright, time for some simulations. We will mirror Part 1’s setup, but now with two correlated measures:</p>
+<pre class="r"><code>library(MASS)
+library(dplyr)
+library(tidyr)
+library(foreach)
+library(ggplot2)
+
+set.seed(43202)
+
+# Simulation parameters
+N_subj     &lt;- 50
+n_obs      &lt;- 10
+mu1        &lt;- 5
+mu2        &lt;- 3
+sigma_pop1 &lt;- 2
+sigma_pop2 &lt;- 2
+rho_true   &lt;- 0.7
+sigma_obs1 &lt;- 6
+sigma_obs2 &lt;- 6
+
+# Population covariance matrix
+Sigma_pop &lt;- matrix(c(sigma_pop1^2, rho_true * sigma_pop1 * sigma_pop2,
+                       rho_true * sigma_pop1 * sigma_pop2, sigma_pop2^2), 2, 2)
+
+# Generate true individual parameters from population distribution
+theta_true &lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
+
+# Generate observations for each individual on each measure
+obs_data &lt;- foreach(i = 1:N_subj, .combine = &quot;rbind&quot;) %do% {
+  y1 &lt;- rnorm(n_obs, theta_true[i, 1], sigma_obs1)
+  y2 &lt;- rnorm(n_obs, theta_true[i, 2], sigma_obs2)
+  data.frame(
+    subj   = i,
+    trial  = 1:n_obs,
+    theta1 = theta_true[i, 1],
+    theta2 = theta_true[i, 2],
+    y1     = y1,
+    y2     = y2
+  )
+}
+
+# Compute reliabilities
+rel1 &lt;- sigma_pop1^2 / (sigma_pop1^2 + sigma_obs1^2 / n_obs)
+rel2 &lt;- sigma_pop2^2 / (sigma_pop2^2 + sigma_obs2^2 / n_obs)
+r_expected &lt;- rho_true * sqrt(rel1 * rel2)</code></pre>
+<p>The reliability of each measure is <span class="math inline">\(\hat{\rho}_{xx}\)</span> = 0.53, meaning that only about 53% of the variance in the sample means reflects true between-person differences. The expected attenuated correlation is <span class="math inline">\(r_{\text{obs}} \approx\)</span> 0.37—almost half of the true <span class="math inline">\(\rho\)</span> = 0.7.</p>
+<p>Let’s look at the observations for 5 randomly selected individuals across both measures:</p>
+<details>
+<summary>
+Click to show visualization code
+</summary>
+<pre class="r"><code>display_subjs &lt;- sort(sample(1:N_subj, 5))
+
+p_histograms &lt;- obs_data %&gt;%
+  filter(subj %in% display_subjs) %&gt;%
+  pivot_longer(cols = c(y1, y2, theta1, theta2), names_to = &quot;measure_type&quot;, values_to = &quot;value&quot;) %&gt;%
+  mutate(
+    measure = ifelse(measure_type %in% c(&quot;y1&quot;, &quot;theta1&quot;), &quot;y1&quot;, &quot;y2&quot;),
+    y = ifelse(measure_type %in% c(&quot;y1&quot;, &quot;y2&quot;), value, NA),
+    theta = ifelse(measure_type %in% c(&quot;theta1&quot;, &quot;theta2&quot;), value, NA),
+    subj_label = paste0(&quot;Subject &quot;, subj),
+    measure_label = ifelse(measure == &quot;y1&quot;, &quot;Measure 1&quot;, &quot;Measure 2&quot;)
+  ) %&gt;%
+  ggplot(aes(x = y)) +
+  geom_histogram(fill = &quot;#DCBCBC&quot;, color = &quot;white&quot;, bins = 12) +
+  geom_vline(aes(xintercept=theta)) +
+  facet_grid(measure_label ~ subj_label, scales = &quot;free_y&quot;) +
+  xlab(&quot;Observed Value (y)&quot;) +
+  ylab(&quot;Count&quot;) +
+  ggtitle(&quot;Observations for 5 Individuals Across 2 Measures&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())</code></pre>
+</details>
+<p><img src="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-3-1.svg" alt="" width="672" /></p>
+<p>As in Part 1, with only 10 observations per individual per measure and a large observation(person)-level standard deviation (<span class="math inline">\(\sigma_{\text{obs}}\)</span> = 6), the observations are quite spread out around the true means (gray bars). The challenge now is not just estimating individual means, but estimating the <em>relationship</em> between two noisy sets of means.</p>
+</div>
+<div id="the-two-stage-pearson-r-naive-approach" class="section level1">
+<h1>The Two-Stage Pearson r (Naive Approach)</h1>
+<p>The approach people often take is to compute the sample mean for each individual on each measure, then compute the Pearson’s correlation between sample means:</p>
+<pre class="r"><code># Compute individual-level sample means
+subj_summary &lt;- obs_data %&gt;%
+  group_by(subj) %&gt;%
+  summarize(
+    theta1 = unique(theta1),
+    theta2 = unique(theta2),
+    ybar1  = mean(y1),
+    ybar2  = mean(y2),
+    .groups = &quot;drop&quot;
+  )
+
+# Naive correlation
+r_naive &lt;- cor(subj_summary$ybar1, subj_summary$ybar2)
+
+# True correlation (from the actual theta values)
+r_true_sample &lt;- cor(subj_summary$theta1, subj_summary$theta2)</code></pre>
+<details>
+<summary>
+Click to show visualization code
+</summary>
+<pre class="r"><code>subj_long &lt;- bind_rows(
+  subj_summary %&gt;% transmute(x = theta1, y = theta2,
+                              Type = paste0(&quot;True (\u03B8\u2081, \u03B8\u2082)&quot;)),
+  subj_summary %&gt;% transmute(x = ybar1, y = ybar2,
+                              Type = paste0(&quot;Observed (\u0233\u2081, \u0233\u2082)&quot;))
+)
+
+p_twostage &lt;- ggplot(subj_long, aes(x = x, y = y, color = Type)) +
+  geom_point(size = 3, alpha = 0.7) +
+  scale_color_manual(values = c(setNames(&quot;gray40&quot;, paste0(&quot;True (\u03B8\u2081, \u03B8\u2082)&quot;)),
+                                 setNames(&quot;#DCBCBC&quot;, paste0(&quot;Observed (\u0233\u2081, \u0233\u2082)&quot;)))) +
+  xlab(&quot;Measure 1&quot;) +
+  ylab(&quot;Measure 2&quot;) +
+  ggtitle(paste0(&quot;Two-Stage Pearson r = &quot;, round(r_naive, 2),
+                 &quot; (True \u03C1 = &quot;, rho_true, &quot;)&quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(.2, .85))</code></pre>
+</details>
+<p><img src="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-6-1.svg" alt="" width="672" /></p>
+<p>The gray points show individuals’ true scores, and the light red points show the sample means. Measurement error has expanded the scatterplot cloud, weakening the apparent relationship. The two-stage Pearson <span class="math inline">\(r\)</span> = 0.44, much less than the true <span class="math inline">\(\rho\)</span> = 0.7.</p>
+<p>To confirm this is not sampling variability and an (un)lucky simulation seed, we can repeat the simulation many times:</p>
+<details>
+<summary>
+Click to show visualization code
+</summary>
+<pre class="r"><code>n_sims &lt;- 1000
+r_naive_dist &lt;- replicate(n_sims, {
+  theta_sim &lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
+  y1_sim &lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 1], sigma_obs1), N_subj, n_obs)
+  y2_sim &lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 2], sigma_obs2), N_subj, n_obs)
+  cor(rowMeans(y1_sim), rowMeans(y2_sim))
+})
+
+p_naive_dist &lt;- data.frame(r = r_naive_dist) %&gt;%
+  ggplot(aes(x = r)) +
+  geom_histogram(fill = &quot;#DCBCBC&quot;, color = &quot;white&quot;, bins = 50) +
+  geom_vline(xintercept = rho_true, color = &quot;gray40&quot;, size = 1.2, linetype = 1) +
+  geom_vline(xintercept = mean(r_naive_dist), color = &quot;#8F2727&quot;, size = 1.2, linetype = 2) +
+  annotate(&quot;text&quot;, x = rho_true - 0.17, y = Inf,
+           label = paste0(&quot;True \u03C1 = &quot;, rho_true), hjust = 0, vjust = 1.5,
+           color = &quot;gray40&quot;, size = 4.5) +
+  annotate(&quot;text&quot;, x = mean(r_naive_dist) - 0.02, y = Inf,
+           label = paste0(&quot;Mean r = &quot;, round(mean(r_naive_dist), 2)),
+           hjust = 1, vjust = 1.5, color = &quot;#8F2727&quot;, size = 4.5) +
+  xlab(&quot;Observed Pearson r&quot;) +
+  ylab(&quot;Count&quot;) +
+  ggtitle(&quot;Sampling Distribution of the Two-Stage Pearson r&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())</code></pre>
+</details>
+<p><img src="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-8-1.svg" alt="" width="672" /></p>
+<p>The sampling distribution is centered around 0.36, consistent with the attenuation formula’s prediction. The two-stage Pearson <span class="math inline">\(r\)</span> is a <em>biased</em> estimator of <span class="math inline">\(\rho_{\text{true}}\)</span>—it systematically underestimates the true correlation.</p>
+<p>I don’t know about you, but this all seems problematic! Many social and behavioral science papers follow the exact workflow above, and then they go on to interpret resulting correlations. Occasionally, researchers will even report things like Cronbach’s <span class="math inline">\(\alpha\)</span> (a reliability estimator, see our <a href="https://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/">previous post</a>) for their self-report summed score measures—but in the majority of cases they don’t bother using this reliability estimate to disattenuate downstream correlations. Instead, as often happens in science, researchers are following standards divorced from the rationales that motivated the standards a priori (e.g., “<em>Cronbach’s <span class="math inline">\(\alpha\)</span> = .7, which is considered good (Citation et al, 1990)</em>” — yes, but only good if you like attenuated estimates :D)</p>
+</div>
+<div id="a-tempting-but-wrong-fix-univariate-shrinkage" class="section level1">
+<h1>A Tempting But Wrong Fix: Univariate Shrinkage</h1>
+<p>Part 1 taught us that shrinking individual means toward the group-level mean produces better estimates. A natural question that comes to mind is: what if we apply the univariate shrinkage estimators from Part 1 to each measure separately, then correlate the shrunken means?</p>
+<pre class="r"><code># Univariate shrinkage for each measure separately
+grand_mean1 &lt;- mean(subj_summary$ybar1)
+grand_mean2 &lt;- mean(subj_summary$ybar2)
+sigma2_pool1 &lt;- mean(obs_data %&gt;% group_by(subj) %&gt;% summarize(v = var(y1)) %&gt;% pull(v))
+sigma2_pool2 &lt;- mean(obs_data %&gt;% group_by(subj) %&gt;% summarize(v = var(y2)) %&gt;% pull(v))
+se2_1 &lt;- sigma2_pool1 / n_obs
+se2_2 &lt;- sigma2_pool2 / n_obs
+sigma2_pop_hat1 &lt;- max(var(subj_summary$ybar1) - se2_1, 0.001)
+sigma2_pop_hat2 &lt;- max(var(subj_summary$ybar2) - se2_2, 0.001)
+B1 &lt;- sigma2_pop_hat1 / (sigma2_pop_hat1 + se2_1)
+B2 &lt;- sigma2_pop_hat2 / (sigma2_pop_hat2 + se2_2)
+
+subj_summary &lt;- subj_summary %&gt;%
+  mutate(
+    ybar1_shrunk = grand_mean1 + B1 * (ybar1 - grand_mean1),
+    ybar2_shrunk = grand_mean2 + B2 * (ybar2 - grand_mean2)
+  )
+
+r_univariate_shrunk &lt;- cor(subj_summary$ybar1_shrunk, subj_summary$ybar2_shrunk)</code></pre>
+<p>The correlation between the univariate-shrunk means is <span class="math inline">\(r\)</span> = 0.44. Compare this to the naive Pearson <span class="math inline">\(r\)</span> = 0.44.</p>
+<p>They are identical!</p>
+<p>This is because the Pearson correlation is <strong>scale and location invariant</strong>. Univariate shrinkage makes the individual mean estimates better (lower RMSE), but it does <strong>nothing</strong> for the correlation estimate. See for yourself below:</p>
+<details>
+<summary>
+Click to show animation code
+</summary>
+<pre class="r"><code>library(gganimate)
+
+# Interpolated positions for the traveling points
+anim_df &lt;- expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&gt;%
+  left_join(subj_summary, by = &quot;subj&quot;) %&gt;%
+  mutate(
+    x = (1 - t) * ybar1 + t * ybar1_shrunk,
+    y = (1 - t) * ybar2 + t * ybar2_shrunk
+  )
+
+# Correlation at each frame (constant, but display it)
+anim_cors &lt;- anim_df %&gt;%
+  group_by(t) %&gt;%
+  summarize(r = cor(x, y), .groups = &quot;drop&quot;)
+
+anim_df &lt;- anim_df %&gt;%
+  left_join(anim_cors, by = &quot;t&quot;) %&gt;%
+  mutate(r_label = paste0(&quot;r = &quot;, sprintf(&quot;%.3f&quot;, r)))
+
+p_anim &lt;- ggplot(anim_df) +
+  # Static: path segments from sample means to shrunk estimates
+  geom_segment(aes(x = ybar1, y = ybar2, xend = ybar1_shrunk, yend = ybar2_shrunk),
+               color = &quot;gray70&quot;, linewidth = 0.3, alpha = 0.5) +
+  # Static: sample means (always visible)
+  geom_point(aes(x = ybar1, y = ybar2), color = &quot;#DCBCBC&quot;, size = 2.5) +
+  # Static: shrunk estimates (always visible)
+  geom_point(aes(x = ybar1_shrunk, y = ybar2_shrunk), color = &quot;#8F2727&quot;, size = 2.5) +
+  # Static: grand mean crosshairs
+  geom_vline(xintercept = grand_mean1, linetype = &quot;dashed&quot;, color = &quot;gray60&quot;, linewidth = 0.4) +
+  geom_hline(yintercept = grand_mean2, linetype = &quot;dashed&quot;, color = &quot;gray60&quot;, linewidth = 0.4) +
+  # Animated: traveling points along the shrinkage path
+  geom_point(aes(x = x, y = y), color = &quot;#B2182B&quot;, size = 3.5) +
+  # Animated: correlation label (one row per frame to avoid overplotting)
+  geom_text(data = anim_cors %&gt;% mutate(r_label = paste0(&quot;r = &quot;, sprintf(&quot;%.3f&quot;, r))),
+            aes(label = r_label, group = t), x = Inf, y = Inf, hjust = 1.1, vjust = 1.5,
+            size = 5, color = &quot;#8F2727&quot;, fontface = &quot;bold&quot;) +
+  xlab(&quot;Measure 1&quot;) +
+  ylab(&quot;Measure 2&quot;) +
+  ggtitle(&quot;Univariate Shrinkage:&quot;, &quot;Cloud Contracts, Correlation Unaffected&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank()) +
+  transition_time(t) +
+  ease_aes(&quot;cubic-in-out&quot;)
+
+animate(p_anim, nframes = 100, fps = 10,
+        width = 1000, height = 800, res = 150,
+        renderer = magick_renderer(loop = TRUE), rewind = TRUE)
+anim_save(&quot;univariate_shrink_animation.gif&quot;)</code></pre>
+</details>
+<p><img src="univariate_shrink_animation.gif" /><!-- --></p>
+<p>From the animation, you can see the the scatterplot just shrinks down, preserving the same shape—and correlation—as the sample means.</p>
+<p>To estimate a better correlation, we need to think <em>multivariately</em>, considering methods that capture the joint distribution of the two measures.</p>
+</div>
+<div id="spearmans-correction-for-attenuation-1904" class="section level1">
+<h1>Spearman’s Correction for Attenuation (1904)</h1>
+<p>In 1904, <a href="https://doi.org/10.2307/1412159">Spearman</a> showed that if we know (or can estimate) the reliabilities of each measure, we can algebraically disattenuate the observed correlation:</p>
+<p><span class="math display">\[\hat{\rho}_{\text{true}} = \frac{r_{\text{obs}}}{\sqrt{\hat{\rho}_{xx,1} \cdot \hat{\rho}_{xx,2}}}\]</span></p>
+<p>Note that this is just the attenuation formula from above solved for <span class="math inline">\(\rho_{\text{true}}\)</span>. We can try this on our simulated data:</p>
+<pre class="r"><code># Estimate reliabilities from data
+rho_hat1 &lt;- sigma2_pop_hat1 / (sigma2_pop_hat1 + se2_1)
+rho_hat2 &lt;- sigma2_pop_hat2 / (sigma2_pop_hat2 + se2_2)
+
+# Spearman correction
+r_spearman &lt;- r_naive / sqrt(rho_hat1 * rho_hat2)</code></pre>
+<p>The corrected correlation is <span class="math inline">\(\hat{\rho}_{\text{true}}\)</span> = 0.73, much closer to the true <span class="math inline">\(\rho\)</span> = 0.7. I said this too about the Kelley true score estimator in Part 1—pretty cool for a method developed over 100 years ago!</p>
+<p>We can also check out the full sampling distribution to get a sense of how it performs more generally:</p>
+<details>
+<summary>
+Click to show visualization code
+</summary>
+<pre class="r"><code>r_spearman_dist &lt;- replicate(n_sims, {
+  theta_sim &lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
+  y1_sim &lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 1], sigma_obs1), N_subj, n_obs)
+  y2_sim &lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 2], sigma_obs2), N_subj, n_obs)
+  ybar1_sim &lt;- rowMeans(y1_sim)
+  ybar2_sim &lt;- rowMeans(y2_sim)
+  r_obs_sim &lt;- cor(ybar1_sim, ybar2_sim)
+
+  # Estimate reliabilities
+  var1_sim &lt;- mean(apply(y1_sim, 1, var))
+  var2_sim &lt;- mean(apply(y2_sim, 1, var))
+  se2_1_sim &lt;- var1_sim / n_obs
+  se2_2_sim &lt;- var2_sim / n_obs
+  s2pop1_sim &lt;- max(var(ybar1_sim) - se2_1_sim, 0.001)
+  s2pop2_sim &lt;- max(var(ybar2_sim) - se2_2_sim, 0.001)
+  rho1_sim &lt;- s2pop1_sim / (s2pop1_sim + se2_1_sim)
+  rho2_sim &lt;- s2pop2_sim / (s2pop2_sim + se2_2_sim)
+
+  r_obs_sim / sqrt(rho1_sim * rho2_sim)
+})
+
+p_spearman &lt;- data.frame(
+  r = c(r_naive_dist, r_spearman_dist),
+  Method = rep(c(&quot;Two-Stage Pearson r&quot;, &quot;Spearman Corrected&quot;), each = n_sims)
+) %&gt;%
+  ggplot(aes(x = r, fill = Method)) +
+  geom_histogram(color = &quot;white&quot;, bins = 300, alpha = 0.7, position = &quot;identity&quot;) +
+  geom_vline(xintercept = rho_true, color = &quot;gray40&quot;, size = 1.2) +
+  scale_fill_manual(values = c(&quot;Two-Stage Pearson r&quot; = &quot;#DCBCBC&quot;,
+                                &quot;Spearman Corrected&quot; = &quot;#8F2727&quot;)) +
+  coord_cartesian(xlim = c(-0.5, 1.5)) +
+  xlab(&quot;Estimated Correlation&quot;) +
+  ylab(&quot;Count&quot;) +
+  ggtitle(&quot;Spearman Correction: Unbiased but High Variance&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = c(0.2, 0.85))</code></pre>
+</details>
+<p><img src="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-14-1.svg" alt="" width="672" /></p>
+<p>Interestingly, we see that the Spearman correction is approximately unbiased (centered near <span class="math inline">\(\rho\)</span> = 0.7), but it has much higher variance than the naive estimator. Worse, 13.2% of the corrected values exceed 1.0—a clear impossibility for a correlation! This happens because both the observed correlation and the reliability estimates have sampling variability, and dividing one noisy quantity by another can produce extreme values.</p>
+<p>Spearman had the right idea in 1904, but we can see from the sampling distribution that the correction is a bit fragile. It works well for large-sample, population-level inferences, but is unreliable for individual studies—especially when reliabilities are low.</p>
+</div>
+<div id="multivariate-shrinkage" class="section level1">
+<h1>Multivariate Shrinkage</h1>
+<p>In Part 1, we showed that the James-Stein estimator (and equivalently, Kelley’s true score estimator and the empirical Bayes posterior mean) shrinks each individual’s sample mean toward the grand mean:</p>
+<p><span class="math display">\[\hat{\mu}_i = \hat{\mu}_{\text{pop}} + B(\bar{y}_i - \hat{\mu}_{\text{pop}})\]</span></p>
+<p>where <span class="math inline">\(B = \hat{\sigma}^2_{\text{pop}} / (\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n)\)</span> is a scalar shrinkage factor—signal over signal-plus-noise. What happens when we have <em>two</em> measures instead of one?</p>
+<p>If we applied Part 1’s univariate shrinkage separately to each measure, we would write:</p>
+<p><span class="math display">\[\begin{aligned}
+\hat{\theta}_{1,i} &amp;= \hat{\mu}_1 + B_1(\bar{y}_{1,i} - \hat{\mu}_1) \\
+\hat{\theta}_{2,i} &amp;= \hat{\mu}_2 + B_2(\bar{y}_{2,i} - \hat{\mu}_2)
+\end{aligned}\]</span></p>
+<p>where <span class="math inline">\(B_1\)</span> and <span class="math inline">\(B_2\)</span> are the shrinkage factors/reliabilities from Part 1. But as we just showed, this does not change the correlation. The problem is that each measure’s shrinkage ignores the other measure entirely.</p>
+<p>What if we allowed each shrunk estimate to depend on <em>both</em> observed means? For example, for <span class="math inline">\(\hat{\theta}_{1,i}\)</span>:</p>
+<p><span class="math display">\[\hat{\theta}_{1,i} = \hat{\mu}_1 + B_{11}(\bar{y}_{1,i} - \hat{\mu}_1) + B_{12}(\bar{y}_{2,i} - \hat{\mu}_2)\]</span></p>
+<p>Now we have a new coefficient <span class="math inline">\(B_{12}\)</span> that controls how much measure 2’s data contributes to the estimate of <span class="math inline">\(\theta_1\)</span>. Why would measure 2 tell us <em>anything</em> about <span class="math inline">\(\theta_1\)</span>? Well, we know that <span class="math inline">\(\bar{y}_2\)</span> is a noisy observation of <span class="math inline">\(\theta_2\)</span>, and that <span class="math inline">\(\theta_2\)</span> is correlated with <span class="math inline">\(\theta_1\)</span> (through <span class="math inline">\(\rho_{\text{true}}\)</span>), which makes <span class="math inline">\(\bar{y}_2\)</span> a noisy signal on <span class="math inline">\(\theta_1\)</span>.</p>
+<p>To see how much signal, let’s think about this the same way we thought about <span class="math inline">\(B_{11}\)</span> in Part 1. In the univariate case, we derived <span class="math inline">\(B\)</span> as the ratio of useful signal to total variation in the predictor: <span class="math inline">\(B = \text{Cov}(\theta, \bar{y}) / \text{Var}(\bar{y})\)</span>. This is just a regression coefficient—how much of the predictor’s variation is useful for estimating the target. Let’s rewrite <span class="math inline">\(B_{11}\)</span> in that language to make the parallel explicit:</p>
+<p><span class="math display">\[B_{11} = \frac{\text{Cov}(\theta_1, \bar{y}_1)}{\text{Var}(\bar{y}_1)} = \frac{\sigma^2_{\text{pop},1}}{\sigma^2_{\text{pop},1} + \sigma^2_{\text{obs},1}/n}\]</span></p>
+<p>This is exactly Part 1’s signal-over-signal-plus-noise. The numerator is the true-score variance (because <span class="math inline">\(\text{Cov}(\theta_1, \bar{y}_1) = \text{Cov}(\theta_1, \theta_1 + \bar{\epsilon}_1) = \sigma^2_{\text{pop},1}\)</span>), and the denominator is the total variance of the sample mean.</p>
+<p>Now we can ask the same question for <span class="math inline">\(B_{12}\)</span>: how much of <span class="math inline">\(\bar{y}_2\)</span>’s variation is useful for estimating <span class="math inline">\(\theta_1\)</span>? By the same logic:</p>
+<p><span class="math display">\[B_{12} = \frac{\text{Cov}(\theta_1, \bar{y}_2)}{\text{Var}(\bar{y}_2)}\]</span></p>
+<p>The denominator is the same signal-plus-noise form: <span class="math inline">\(\text{Var}(\bar{y}_2) = \sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n\)</span>. For the numerator, since <span class="math inline">\(\bar{y}_2 = \theta_2 + \bar{\epsilon}_2\)</span>:</p>
+<p><span class="math display">\[\begin{aligned}
+\text{Cov}(\theta_1, \bar{y}_2) &amp;= \text{Cov}(\theta_1, \theta_2 + \bar{\epsilon}_2) \\
+&amp;= \text{Cov}(\theta_1, \theta_2) + \underbrace{\text{Cov}(\theta_1, \bar{\epsilon}_2)}_{=0} \\
+&amp;= \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}
+\end{aligned}\]</span></p>
+<p>The measurement error on measure 2 is independent of individual <span class="math inline">\(i\)</span>’s true score on measure 1, so the noise drops out—exactly as we saw earlier when showing that the cross-measure covariance is unbiased. Putting it together:</p>
+<p><span class="math display">\[B_{12} = \frac{\rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}}{\sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n}\]</span></p>
+<p>If <span class="math inline">\(\rho_{\text{true}} \approx 0\)</span> or <span class="math inline">\(\sigma^2_{\text{obs},2}/n\)</span> is high relative to <span class="math inline">\(\sigma^2_{\text{pop},2}\)</span>, then <span class="math inline">\(B_{12} \approx 0\)</span> and we are back to univariate shrinkage—measure 2 contributes nothing. If <span class="math inline">\(\rho_{\text{true}} \neq 0\)</span>, measure 2 carries real information about <span class="math inline">\(\theta_1\)</span>, and <span class="math inline">\(B_{12}\)</span> captures how much. An individual who scores high on measure 2 is pulled <em>upward</em> on measure 1, even if their measure 1 data alone would suggest more shrinkage.</p>
+<p>One subtlety: <span class="math inline">\(B_{12}\)</span> as derived above is the <em>marginal</em> regression coefficient—how useful <span class="math inline">\(\bar{y}_2\)</span> is for predicting <span class="math inline">\(\theta_1\)</span> on its own, ignoring <span class="math inline">\(\bar{y}_1\)</span>. When both predictors enter the equation simultaneously, we need <em>partial</em> regression coefficients that account for the shared information between <span class="math inline">\(\bar{y}_1\)</span> and <span class="math inline">\(\bar{y}_2\)</span>. The scalar algebra for this gets messy, but matrix notation handles it cleanly. Writing the same equation for both measures and stacking into matrix form:</p>
+<p><span class="math display">\[\begin{pmatrix} \hat{\theta}_{1,i} \\ \hat{\theta}_{2,i} \end{pmatrix} = \begin{pmatrix} \hat{\mu}_1 \\ \hat{\mu}_2 \end{pmatrix} + \begin{pmatrix} B_{11} &amp; B_{12} \\ B_{21} &amp; B_{22} \end{pmatrix} \begin{pmatrix} \bar{y}_{1,i} - \hat{\mu}_1 \\ \bar{y}_{2,i} - \hat{\mu}_2 \end{pmatrix}\]</span></p>
+<p>or more compactly: <span class="math inline">\(\hat{\boldsymbol{\theta}}_i = \hat{\boldsymbol{\mu}} + \mathbf{B}(\bar{\mathbf{y}}_i - \hat{\boldsymbol{\mu}})\)</span>. Same form as Part 1, but the scalar <span class="math inline">\(B\)</span> has become a <span class="math inline">\(2 \times 2\)</span> matrix <span class="math inline">\(\mathbf{B}\)</span>.</p>
+<p>The matrix of <em>joint</em> regression coefficients is <span class="math inline">\(\mathbf{B} = \text{Cov}(\boldsymbol{\theta}, \bar{\mathbf{y}}) \cdot \text{Var}(\bar{\mathbf{y}})^{-1}\)</span>. Since noise is independent of true scores, <span class="math inline">\(\text{Cov}(\boldsymbol{\theta}, \bar{\mathbf{y}}) = \boldsymbol{\Sigma}_{\text{pop}}\)</span>, and the total variance of the sample means is <span class="math inline">\(\text{Var}(\bar{\mathbf{y}}) = \boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\)</span>. The matrix inverse takes care of the partialing—each coefficient is adjusted for the information carried by the other predictor. So the shrinkage matrix is:</p>
+<p><span class="math display">\[\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}\left(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\right)^{-1}\]</span></p>
+<p>This is the shrinkage matrix from the conjugate multivariate normal-normal update. <a href="https://doi.org/10.1093/biomet/59.2.335">Efron and Morris (1972)</a> built their empirical Bayes framework around this result, showing that <span class="math inline">\(\mathbf{B}\)</span> can be estimated from the data without knowing <span class="math inline">\(\boldsymbol{\Sigma}_{\text{pop}}\)</span>. The parallel with Part 1 is exact—<span class="math inline">\(\sigma^2_{\text{pop}}\)</span> becomes <span class="math inline">\(\boldsymbol{\Sigma}_{\text{pop}}\)</span>, <span class="math inline">\(\sigma^2_{\text{obs}}/n\)</span> becomes <span class="math inline">\(\boldsymbol{\Sigma}_{\text{obs}}/n\)</span>, and division becomes multiplication by a matrix inverse.</p>
+<p>Enough math, time for some code!</p>
+<pre class="r"><code># Method of moments for Sigma_pop
+ybar_mat &lt;- cbind(subj_summary$ybar1, subj_summary$ybar2)
+S &lt;- cov(ybar_mat)
+
+Sigma_obs_n &lt;- diag(c(sigma2_pool1 / n_obs, sigma2_pool2 / n_obs))
+
+# Subtract measurement error covariance
+Sigma_pop_hat &lt;- S - Sigma_obs_n
+
+# Shrinkage matrix
+B_mat &lt;- Sigma_pop_hat %*% solve(Sigma_pop_hat + Sigma_obs_n)
+
+# Apply to individual vectors
+mu_hat &lt;- colMeans(ybar_mat)
+theta_hat_mv &lt;- t(apply(ybar_mat, 1, function(yi) {
+  mu_hat + B_mat %*% (yi - mu_hat)
+}))
+
+subj_summary &lt;- subj_summary %&gt;%
+  mutate(
+    theta1_mvjs = theta_hat_mv[, 1],
+    theta2_mvjs = theta_hat_mv[, 2]
+  )
+
+r_mvjs &lt;- cor(subj_summary$theta1_mvjs, subj_summary$theta2_mvjs)
+
+# The correlation implied by Sigma_pop_hat directly
+rho_pop_hat &lt;- Sigma_pop_hat[1, 2] / sqrt(Sigma_pop_hat[1, 1] * Sigma_pop_hat[2, 2])</code></pre>
+<p>Let’s examine the shrinkage matrix <span class="math inline">\(\mathbf{B}\)</span>:</p>
+<pre class="r"><code>round(B_mat, 3)</code></pre>
+<pre><code>##       [,1]  [,2]
+## [1,] 0.462 0.229
+## [2,] 0.203 0.546</code></pre>
+<p>Notice that the off-diagonal elements are non-zero because the two measures are correlated, confirming that the matrix is borrowing strength across measures. Take a look at the shrinkage in action below:</p>
+<details>
+<summary>
+Click to show animation code
+</summary>
+<pre class="r"><code># Build interpolation frames for both methods
+shrinkage_anim &lt;- bind_rows(
+  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&gt;%
+    left_join(subj_summary, by = &quot;subj&quot;) %&gt;%
+    mutate(
+      est1 = ybar1_shrunk, est2 = ybar2_shrunk,
+      x = (1 - t) * ybar1 + t * ybar1_shrunk,
+      y = (1 - t) * ybar2 + t * ybar2_shrunk,
+      method = &quot;Univariate Shrinkage&quot;
+    ),
+  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&gt;%
+    left_join(subj_summary, by = &quot;subj&quot;) %&gt;%
+    mutate(
+      est1 = theta1_mvjs, est2 = theta2_mvjs,
+      x = (1 - t) * ybar1 + t * theta1_mvjs,
+      y = (1 - t) * ybar2 + t * theta2_mvjs,
+      method = &quot;Multivariate Shrinkage&quot;
+    )
+) %&gt;%
+  mutate(method = factor(method, levels = c(&quot;Univariate Shrinkage&quot;, &quot;Multivariate Shrinkage&quot;)))
+
+# Correlation at each frame × method
+# Univariate: cor(x, y) is constant (scale invariance)
+# Multivariate: interpolate the population covariance matrix S - t*Sigma_obs/n
+#   and extract the implied correlation (i.e., the disattenuated estimate)
+t_vals &lt;- seq(0, 1, length.out = 50)
+mv_cors &lt;- sapply(t_vals, function(ti) {
+  Sigma_t &lt;- S - ti * Sigma_obs_n
+  Sigma_t[1, 2] / sqrt(Sigma_t[1, 1] * Sigma_t[2, 2])
+})
+
+anim_cors2 &lt;- bind_rows(
+  shrinkage_anim %&gt;%
+    filter(method == &quot;Univariate Shrinkage&quot;) %&gt;%
+    group_by(method, t) %&gt;%
+    summarize(r = cor(x, y), .groups = &quot;drop&quot;),
+  data.frame(method = factor(&quot;Multivariate Shrinkage&quot;,
+             levels = c(&quot;Univariate Shrinkage&quot;, &quot;Multivariate Shrinkage&quot;)),
+             t = t_vals, r = mv_cors)
+) %&gt;%
+  mutate(r_label = ifelse(method == &quot;Univariate Shrinkage&quot;,
+                          paste0(&quot;r = &quot;, sprintf(&quot;%.3f&quot;, r)),
+                          paste0(&quot;\u03C1\u0302 = &quot;, sprintf(&quot;%.3f&quot;, r))))
+
+p_anim2 &lt;- ggplot(shrinkage_anim) +
+  geom_segment(aes(x = ybar1, y = ybar2, xend = est1, yend = est2),
+               color = &quot;gray70&quot;, linewidth = 0.3, alpha = 0.5) +
+  geom_point(aes(x = theta1, y = theta2), color = &quot;gray40&quot;, size = 2, alpha = 0.5) +
+  geom_point(aes(x = ybar1, y = ybar2), color = &quot;#DCBCBC&quot;, size = 2.5) +
+  geom_point(aes(x = est1, y = est2), color = &quot;#8F2727&quot;, size = 2.5) +
+  geom_point(aes(x = x, y = y), color = &quot;#B2182B&quot;, size = 3.5) +
+  geom_text(data = anim_cors2,
+            aes(label = r_label, group = t), x = Inf, y = Inf,
+            hjust = 1.1, vjust = 1.5, size = 5, color = &quot;#8F2727&quot;, fontface = &quot;bold&quot;) +
+  facet_wrap(~method, nrow = 1) +
+  xlab(&quot;Measure 1&quot;) +
+  ylab(&quot;Measure 2&quot;) +
+  ggtitle(&quot;Univariate vs. Multivariate Shrinkage&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank()) +
+  transition_time(t) +
+  ease_aes(&quot;cubic-in-out&quot;)
+
+animate(p_anim2, nframes = 100, fps = 10,
+        width = 1400, height = 700, res = 150,
+        renderer = magick_renderer(loop = TRUE), rewind = TRUE)
+anim_save(&quot;shrinkage_compare_animation.gif&quot;)</code></pre>
+</details>
+<p><img src="shrinkage_compare_animation.gif" /><!-- --></p>
+<p>The difference is visible in the paths that the shrinking estimates take. In the left panel, univariate shrinkage pulls each point straight toward the grand mean along each axis independently—the shrinkage paths all point to the same point. The correlation is unchanged (<span class="math inline">\(r\)</span> = 0.44, same as the naive estimate). In the right panel, multivariate shrinkage pulls points toward the population’s correlation structure. The correlation becomes “disattenuated” as a result.</p>
+</div>
+<div id="hierarchical-models" class="section level1">
+<h1>Hierarchical Models</h1>
+<p>Alright! Multivariate shrinkage is pretty cool. However, the approach above estimates the population covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}_{\text{pop}}\)</span> as a point estimate and plugs it in to the shrinkage term. Like we did in Part 1, we can do better with hierarchical models, estimating everything—population parameters, individual parameters, and their uncertainty—in a single joint model.</p>
+<p>The multivariate hierarchical model for our simulation will look familiar, as it follows the form of our simulation:</p>
+<p><span class="math display">\[\begin{aligned}
+y_{k,i,t} &amp;\sim \mathcal{N}(\theta_{k,i}, \sigma_{\text{obs},k}) \\
+(\theta_{1,i}, \theta_{2,i}) &amp;\sim \text{MVN}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}_{\text{pop}}\right)
+\end{aligned}\]</span></p>
+<p>The correlation <span class="math inline">\(\rho\)</span> between the two latent variables is now estimated <em>directly</em> as a parameter of <span class="math inline">\(\boldsymbol{\Sigma}_{\text{pop}}\)</span>, with proper uncertainty quantification.</p>
+<p>Below, we will fit this hierarchical model using a couple different approaches.</p>
+<div id="frequentist-lme4" class="section level2">
+<h2>Frequentist: lme4</h2>
+<p><code>lme4</code> does not have native multivariate response syntax, but we can fit the same model using a long-format trick: stack both measures into a single response column, add a factor indicating which measure each observation belongs to, and fit correlated random effects across measures. The formula <code>y ~ 0 + measure + (0 + measure | subj)</code> estimates a separate intercept per measure (fixed effects) and a correlated random deviation per subject per measure (random effects). The correlation between the random effects is our estimate of <span class="math inline">\(\rho\)</span>.</p>
+<pre class="r"><code>library(lme4)
+
+# Long format: stack y1 and y2
+d_long &lt;- obs_data %&gt;%
+  pivot_longer(cols = c(y1, y2), names_to = &quot;measure&quot;, values_to = &quot;y&quot;) %&gt;%
+  mutate(
+    measure = factor(measure, levels = c(&quot;y1&quot;, &quot;y2&quot;)),
+    subj    = factor(subj)
+  )
+
+# Fit multivariate hierarchical model via correlated random effects
+fit_lmer &lt;- lmer(y ~ 0 + measure + (0 + measure | subj), data = d_long)
+
+# Extract variance components
+vc_lmer   &lt;- as.data.frame(VarCorr(fit_lmer))
+rho_lmer  &lt;- vc_lmer$sdcor[!is.na(vc_lmer$var2) &amp; vc_lmer$var1 == &quot;measurey1&quot; &amp; vc_lmer$var2 == &quot;measurey2&quot;]
+
+# Extract individual-level shrunk estimates (BLUPs)
+blups_lmer &lt;- coef(fit_lmer)$subj
+theta1_lmer &lt;- blups_lmer[, &quot;measurey1&quot;]
+theta2_lmer &lt;- blups_lmer[, &quot;measurey2&quot;]
+
+subj_summary &lt;- subj_summary %&gt;%
+  mutate(
+    theta1_lmer = theta1_lmer,
+    theta2_lmer = theta2_lmer
+  )
+
+r_lmer_individual &lt;- cor(subj_summary$theta1_lmer, subj_summary$theta2_lmer)</code></pre>
+<p>The <code>lme4</code> estimate of <span class="math inline">\(\rho\)</span> is 0.73, extracted directly from the estimated random-effects correlation. The BLUPs (conditional modes) from <code>lme4</code> are shrunk toward the group-level means by the same matrix as in the multivariate shrinkage estimator case above (<span class="math inline">\(\mathbf{B}\)</span>)—just a different estimation procedure.</p>
+</div>
+<div id="bayesian-brms" class="section level2">
+<h2>Bayesian: brms</h2>
+<p>For the Bayesian case, we fit the same model with <code>brms</code>. Since <code>brms</code> accepts <code>lme4</code>-style formulas, we use the same data and the same formula:</p>
+<pre class="r"><code>library(brms)
+
+# using some wide priors for more alignment with other methods
+fit_brms &lt;- brm(
+  y ~ 0 + measure + (0 + measure | subj),
+  data   = d_long,
+  family = gaussian(),
+  backend = &quot;cmdstanr&quot;,
+  prior  = c(
+    prior(normal(0, 10), class = &quot;b&quot;),
+    prior(normal(0, 10), class = &quot;sd&quot;),
+    prior(lkj(1),        class = &quot;cor&quot;),
+    prior(normal(0, 10), class = &quot;sigma&quot;)
+  ),
+  chains = 8,
+  cores  = 8,
+  iter   = 5000,
+  warmup = 500,
+  seed   = 43202
+)</code></pre>
+<pre class="r"><code>library(posterior)
+
+# Extract the population-level correlation between random intercepts
+post &lt;- as_draws_df(fit_brms)
+rho_col &lt;- grep(&quot;cor_subj.*measurey1.*measurey2&quot;, names(post), value = TRUE)[1]
+rho_posterior &lt;- post[[rho_col]]
+
+# Point estimate (posterior mode) and 95% CI
+rho_brms_density &lt;- density(rho_posterior)
+rho_brms     &lt;- rho_brms_density$x[which.max(rho_brms_density$y)]
+rho_brms_ci  &lt;- quantile(rho_posterior, c(0.025, 0.975))
+
+# Extract individual-level shrunk estimates
+blups_brms  &lt;- coef(fit_brms)$subj[, &quot;Estimate&quot;, ]
+theta1_brms &lt;- blups_brms[, &quot;measurey1&quot;]
+theta2_brms &lt;- blups_brms[, &quot;measurey2&quot;]
+
+subj_summary &lt;- subj_summary %&gt;%
+  mutate(
+    theta1_brms = theta1_brms,
+    theta2_brms = theta2_brms
+  )
+
+r_brms_individual &lt;- cor(subj_summary$theta1_brms, subj_summary$theta2_brms)</code></pre>
+<details>
+<summary>
+Click to show visualization code
+</summary>
+<pre class="r"><code>p_posterior &lt;- data.frame(rho = rho_posterior) %&gt;%
+  ggplot(aes(x = rho)) +
+  geom_histogram(fill = &quot;#DCBCBC&quot;, color = &quot;white&quot;, bins = 30, alpha = .7) +
+  geom_vline(xintercept = rho_true, color = &quot;gray40&quot;, size = 1.2) +
+  geom_vline(xintercept = rho_brms, color = &quot;#8F2727&quot;, size = 1.2, linetype = 2) +
+  annotate(&quot;text&quot;, x = rho_true - 0.28, y = Inf,
+           label = paste0(&quot;True \u03C1 = &quot;, rho_true),
+           hjust = 0, vjust = 2.3, color = &quot;gray40&quot;, size = 4.5) +
+  annotate(&quot;text&quot;, x = rho_brms + 0.035, y = Inf,
+           label = paste0(&quot;Posterior\nmode = &quot;, round(rho_brms, 2)),
+           hjust = 0, vjust = 1.2, color = &quot;#8F2727&quot;, size = 4.5) +
+  xlab(expression(rho)) +
+  ylab(&quot;Count&quot;) +
+  ggtitle(paste0(&quot;Posterior Distribution for \u03C1 (95% CI: [&quot;,
+                 round(rho_brms_ci[1], 2), &quot;, &quot;, round(rho_brms_ci[2], 2), &quot;])&quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())</code></pre>
+</details>
+<p><img src="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-23-1.svg" alt="" width="672" /></p>
+<p>The <code>brms</code> posterior mode for <span class="math inline">\(\rho\)</span> is 0.74 with a 95% credible interval of [0.28, 0.96]. We report the posterior mode rather than the mean because it corresponds to the MAP estimate, which aligns more directly with the MLE-based point estimates from <code>lme4</code> and the analytical methods. The <code>lme4</code> point estimate (<span class="math inline">\(\hat{\rho}\)</span> = 0.73) is very similar, and overall there is a high level of agreement between the Spearman corrected estimate, the multivariate shrinkage estimate, and the hierarchical estimates.</p>
+<p>We can get a better comprehensive understanding of how each estimator works by repeating the simulation many times:</p>
+<pre class="r"><code># Sampling distributions of all estimators
+sampling_results &lt;- foreach(i = 1:n_sims, .combine = rbind) %do% {
+  theta_sim &lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
+  y1_sim &lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 1], sigma_obs1), N_subj, n_obs)
+  y2_sim &lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 2], sigma_obs2), N_subj, n_obs)
+  ybar1_sim &lt;- rowMeans(y1_sim)
+  ybar2_sim &lt;- rowMeans(y2_sim)
+
+  # Naive Pearson r
+  r_naive_sim &lt;- cor(ybar1_sim, ybar2_sim)
+
+  # Spearman correction
+  var1_s &lt;- mean(apply(y1_sim, 1, var))
+  var2_s &lt;- mean(apply(y2_sim, 1, var))
+  se2_1_sim &lt;- var1_s / n_obs
+  se2_2_sim &lt;- var2_s / n_obs
+  s2pop1_sim &lt;- max(var(ybar1_sim) - se2_1_sim, 0.001)
+  s2pop2_sim &lt;- max(var(ybar2_sim) - se2_2_sim, 0.001)
+  rho1_sim &lt;- s2pop1_sim / (s2pop1_sim + se2_1_sim)
+  rho2_sim &lt;- s2pop2_sim / (s2pop2_sim + se2_2_sim)
+  r_spear_sim &lt;- r_naive_sim / sqrt(rho1_sim * rho2_sim)
+
+  # MV Shrinkage
+  S_sim &lt;- cov(cbind(ybar1_sim, ybar2_sim))
+  Sig_obs_n_sim &lt;- diag(c(var1_s / n_obs, var2_s / n_obs))
+  Sig_pop_sim &lt;- S_sim - Sig_obs_n_sim
+  eig_s &lt;- eigen(Sig_pop_sim)
+  eig_s$values &lt;- pmax(eig_s$values, 0.001)
+  Sig_pop_sim &lt;- eig_s$vectors %*% diag(eig_s$values) %*% t(eig_s$vectors)
+  rho_mvs_sim &lt;- Sig_pop_sim[1, 2] / sqrt(Sig_pop_sim[1, 1] * Sig_pop_sim[2, 2])
+
+  # Build long-format data for hierarchical models
+  d_sim &lt;- data.frame(
+    subj = factor(rep(1:N_subj, each = 2 * n_obs)),
+    measure = factor(rep(rep(c(&quot;y1&quot;, &quot;y2&quot;), each = n_obs), N_subj)),
+    y = c(t(cbind(y1_sim, y2_sim)))
+  )
+
+  # lmer
+  rho_lmer_sim &lt;- tryCatch({
+    fit_lmer_sim &lt;- lmer(y ~ 0 + measure + (0 + measure | subj), data = d_sim,
+                         control = lmerControl(optimizer = &quot;bobyqa&quot;))
+    vc_sim &lt;- as.data.frame(VarCorr(fit_lmer_sim))
+    vc_sim$sdcor[!is.na(vc_sim$var2) &amp; vc_sim$var1 == &quot;measurey1&quot; &amp; vc_sim$var2 == &quot;measurey2&quot;]
+  }, error = function(e) NA)
+
+  # brms
+  rho_brms_sim &lt;- tryCatch({
+    fit_brms_sim &lt;- brm(
+      bf(y ~ 0 + measure + (0 + measure | subj)),
+      data = d_sim,
+      family = gaussian(),
+      chains = 8, cores = 8,
+      iter = 1500, backend = &quot;cmdstanr&quot;,
+      prior = c(
+        prior(normal(0, 10), class = &quot;b&quot;),
+        prior(normal(0, 10), class = &quot;sd&quot;),
+        prior(lkj(1),        class = &quot;cor&quot;),
+        prior(normal(0, 10), class = &quot;sigma&quot;)
+      ),
+      warmup = 200,
+      seed = 43202 + i,
+      silent = 2,
+      refresh = 0
+    )
+    post_sim &lt;- as_draws_df(fit_brms_sim)
+    rho_col_sim &lt;- grep(&quot;cor_subj.*measurey1.*measurey2&quot;, names(post_sim), value = TRUE)[1]
+    rho_draws &lt;- post_sim[[rho_col_sim]]
+    # Posterior mode via kernel density
+    d_rho &lt;- density(rho_draws)
+    d_rho$x[which.max(d_rho$y)]
+  }, error = function(e) NA)
+
+  data.frame(iter = i, r_naive = r_naive_sim, r_spearman = r_spear_sim,
+             rho_mvs = rho_mvs_sim, rho_lmer = rho_lmer_sim, rho_brms = rho_brms_sim)
+}</code></pre>
+<details>
+<summary>
+Click to show visualization code
+</summary>
+<pre class="r"><code># Reshape to long format with facet panels: each method vs naive
+facet_df &lt;- bind_rows(
+  data.frame(r = sampling_results$r_naive, type = &quot;Two-Stage Pearson r&quot;,
+             panel = &quot;Spearman Correction&quot;),
+  data.frame(r = sampling_results$r_spearman, type = &quot;Spearman Corrected&quot;,
+             panel = &quot;Spearman Correction&quot;),
+  data.frame(r = sampling_results$r_naive, type = &quot;Two-Stage Pearson r&quot;,
+             panel = &quot;MV Shrinkage&quot;),
+  data.frame(r = sampling_results$rho_mvs, type = &quot;MV Shrinkage&quot;,
+             panel = &quot;MV Shrinkage&quot;),
+  data.frame(r = sampling_results$r_naive, type = &quot;Two-Stage Pearson r&quot;,
+             panel = &quot;Hierarchical (lme4)&quot;),
+  data.frame(r = sampling_results$rho_lmer[!is.na(sampling_results$rho_lmer)],
+             type = &quot;Hierarchical (lme4)&quot;,
+             panel = &quot;Hierarchical (lme4)&quot;),
+  data.frame(r = sampling_results$r_naive, type = &quot;Two-Stage Pearson r&quot;,
+             panel = &quot;Hierarchical (brms)&quot;),
+  data.frame(r = sampling_results$rho_brms[!is.na(sampling_results$rho_brms)],
+             type = &quot;Hierarchical (brms)&quot;,
+             panel = &quot;Hierarchical (brms)&quot;)
+) %&gt;%
+  mutate(
+    panel = factor(panel, levels = c(&quot;Spearman Correction&quot;, &quot;MV Shrinkage&quot;, &quot;Hierarchical (lme4)&quot;, &quot;Hierarchical (brms)&quot;)),
+    type = factor(type, levels = c(&quot;Two-Stage Pearson r&quot;, &quot;Spearman Corrected&quot;, &quot;MV Shrinkage&quot;, &quot;Hierarchical (lme4)&quot;, &quot;Hierarchical (brms)&quot;))
+  )
+
+p_sampling_dist &lt;- ggplot(facet_df, aes(x = r, fill = type)) +
+  geom_histogram(color = &quot;white&quot;, bins = 350, alpha = 0.5, position = &quot;identity&quot;) +
+  geom_vline(xintercept = rho_true, color = &quot;gray40&quot;, size = 1.2) +
+  scale_fill_manual(values = c(&quot;Two-Stage Pearson r&quot;  = &quot;#DCBCBC&quot;,
+                                &quot;Spearman Corrected&quot;   = &quot;#c97979&quot;,
+                                &quot;MV Shrinkage&quot;         = &quot;#B2182B&quot;,
+                                &quot;Hierarchical (lme4)&quot;  = &quot;#8F2727&quot;,
+                                &quot;Hierarchical (brms)&quot;  = &quot;#601414&quot;)) +
+  facet_wrap(~panel, nrow = 2) +
+  coord_cartesian(xlim = c(-0.5, 1.5)) +
+  xlab(&quot;Estimated Correlation&quot;) +
+  ylab(&quot;Count&quot;) +
+  ggtitle(&quot;Sampling Distributions: Naive Pearson r vs Multivariate Estimators&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = &quot;bottom&quot;)</code></pre>
+</details>
+<p><img src="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-24-1.svg" alt="" width="960" /></p>
+<p>Each panel compares the naive two-stage Pearson <span class="math inline">\(r\)</span> (light red) against a single corrected estimator (red). The Spearman correction is unbiased but quite variable, with many estimates exceeding 1.0. The MV shrinkage and hierarchical estimators are centered near the true <span class="math inline">\(\rho\)</span> with much tighter spread—and none of the impossible values. The MV and <code>lme4</code> results are actually quite closely aligned, and the <code>brms</code> results appear to have less results up at the 1.0 boundary.</p>
+</div>
+</div>
+<div id="putting-it-all-together" class="section level1">
+<h1>Putting it All Together</h1>
+<p>Now we can put all of the estimates side by side:</p>
+<pre class="r"><code>library(kableExtra)
+
+summary_df &lt;- data.frame(
+  Method = c(&quot;Two-Stage Pearson r&quot;, &quot;Univariate Shrinkage + r&quot;,
+             &quot;Spearman Correction&quot;, &quot;MV Shrinkage (JS / Kelley)&quot;,
+             &quot;Hierarchical (lme4)&quot;,
+             &quot;Hierarchical (brms)&quot;),
+  Estimate = round(c(r_naive, r_univariate_shrunk, r_spearman,
+                      rho_pop_hat, rho_lmer, rho_brms), 3),
+  Source = c(&quot;$\\text{cor}(\\bar{y}_1, \\bar{y}_2)$&quot;,
+             &quot;$\\text{cor}(\\hat{\\theta}_1, \\hat{\\theta}_2)$&quot;,
+             &quot;$r_{\\text{obs}} / \\sqrt{\\hat{\\rho}_{xx,1} \\cdot \\hat{\\rho}_{xx,2}}$&quot;,
+             &quot;$\\hat{\\Sigma}_{\\text{pop},12} / \\sqrt{\\hat{\\Sigma}_{\\text{pop},11} \\cdot \\hat{\\Sigma}_{\\text{pop},22}}$&quot;,
+             &quot;REML estimate of $\\rho$ from $\\boldsymbol{\\Sigma}_{\\text{pop}}$&quot;,
+             &quot;posterior mode of $\\rho$ from $\\boldsymbol{\\Sigma}_{\\text{pop}}$&quot;)
+)
+
+knitr::kable(
+  summary_df,
+  col.names = c(&quot;Method&quot;, &quot;$\\hat{\\rho}$&quot;, &quot;Source&quot;),
+  align = &quot;lcc&quot;,
+  escape = FALSE
+)</code></pre>
+<table>
+<colgroup>
+<col width="18%" />
+<col width="9%" />
+<col width="71%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Method</th>
+<th align="center"><span class="math inline">\(\hat{\rho}\)</span></th>
+<th align="center">Source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Two-Stage Pearson r</td>
+<td align="center">0.437</td>
+<td align="center"><span class="math inline">\(\text{cor}(\bar{y}_1, \bar{y}_2)\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">Univariate Shrinkage + r</td>
+<td align="center">0.437</td>
+<td align="center"><span class="math inline">\(\text{cor}(\hat{\theta}_1, \hat{\theta}_2)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Spearman Correction</td>
+<td align="center">0.730</td>
+<td align="center"><span class="math inline">\(r_{\text{obs}} / \sqrt{\hat{\rho}_{xx,1} \cdot \hat{\rho}_{xx,2}}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">MV Shrinkage (JS / Kelley)</td>
+<td align="center">0.730</td>
+<td align="center"><span class="math inline">\(\hat{\Sigma}_{\text{pop},12} / \sqrt{\hat{\Sigma}_{\text{pop},11} \cdot \hat{\Sigma}_{\text{pop},22}}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left">Hierarchical (lme4)</td>
+<td align="center">0.729</td>
+<td align="center">REML estimate of <span class="math inline">\(\rho\)</span> from <span class="math inline">\(\boldsymbol{\Sigma}_{\text{pop}}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">Hierarchical (brms)</td>
+<td align="center">0.739</td>
+<td align="center">posterior mode of <span class="math inline">\(\rho\)</span> from <span class="math inline">\(\boldsymbol{\Sigma}_{\text{pop}}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The naive Pearson <span class="math inline">\(r\)</span> and univariate shrinkage approaches give the same attenuated estimate, whereas the multivariate approaches all converge tightly around the true value <span class="math inline">\(\rho\)</span> = 0.7.</p>
+<p>And now for the pièce de résistance:</p>
+<details>
+<summary>
+Click to show animation code
+</summary>
+<pre class="r"><code># 2x2 animation: univariate, MV shrinkage, lme4, brms
+shrinkage_all_anim &lt;- bind_rows(
+  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&gt;%
+    left_join(subj_summary, by = &quot;subj&quot;) %&gt;%
+    mutate(est1 = ybar1_shrunk, est2 = ybar2_shrunk,
+           x = (1 - t) * ybar1 + t * ybar1_shrunk,
+           y = (1 - t) * ybar2 + t * ybar2_shrunk,
+           method = &quot;Univariate Shrinkage&quot;),
+  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&gt;%
+    left_join(subj_summary, by = &quot;subj&quot;) %&gt;%
+    mutate(est1 = theta1_mvjs, est2 = theta2_mvjs,
+           x = (1 - t) * ybar1 + t * theta1_mvjs,
+           y = (1 - t) * ybar2 + t * theta2_mvjs,
+           method = &quot;MV Shrinkage&quot;),
+  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&gt;%
+    left_join(subj_summary, by = &quot;subj&quot;) %&gt;%
+    mutate(est1 = theta1_lmer, est2 = theta2_lmer,
+           x = (1 - t) * ybar1 + t * theta1_lmer,
+           y = (1 - t) * ybar2 + t * theta2_lmer,
+           method = &quot;Hierarchical (lme4)&quot;),
+  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&gt;%
+    left_join(subj_summary, by = &quot;subj&quot;) %&gt;%
+    mutate(est1 = theta1_brms, est2 = theta2_brms,
+           x = (1 - t) * ybar1 + t * theta1_brms,
+           y = (1 - t) * ybar2 + t * theta2_brms,
+           method = &quot;Hierarchical (brms)&quot;)
+) %&gt;%
+  mutate(method = factor(method, levels = c(&quot;Univariate Shrinkage&quot;, &quot;MV Shrinkage&quot;,
+                                             &quot;Hierarchical (lme4)&quot;, &quot;Hierarchical (brms)&quot;)))
+
+# Correlation labels per frame per method
+# Univariate: cor of interpolated points (constant)
+# Others: interpolate covariance matrix S - t*Sigma_obs/n
+t_vals &lt;- seq(0, 1, length.out = 50)
+mv_cors_all &lt;- sapply(t_vals, function(ti) {
+  Sigma_t &lt;- S - ti * Sigma_obs_n
+  Sigma_t[1, 2] / sqrt(Sigma_t[1, 1] * Sigma_t[2, 2])
+})
+
+anim_cors_all &lt;- bind_rows(
+  # Univariate: constant correlation
+  shrinkage_all_anim %&gt;%
+    filter(method == &quot;Univariate Shrinkage&quot;) %&gt;%
+    group_by(method, t) %&gt;%
+    summarize(r = cor(x, y), .groups = &quot;drop&quot;),
+  # MV shrinkage, lme4, brms: all use the same population-level correction
+  expand.grid(method = c(&quot;MV Shrinkage&quot;, &quot;Hierarchical (lme4)&quot;, &quot;Hierarchical (brms)&quot;),
+              t = t_vals, stringsAsFactors = FALSE) %&gt;%
+    mutate(r = rep(mv_cors_all, 3))
+) %&gt;%
+  mutate(
+    method = factor(method, levels = c(&quot;Univariate Shrinkage&quot;, &quot;MV Shrinkage&quot;,
+                                        &quot;Hierarchical (lme4)&quot;, &quot;Hierarchical (brms)&quot;)),
+    r_label = ifelse(method == &quot;Univariate Shrinkage&quot;,
+                     paste0(&quot;r = &quot;, sprintf(&quot;%.3f&quot;, r)),
+                     paste0(&quot;\u03C1\u0302 = &quot;, sprintf(&quot;%.3f&quot;, r)))
+  )
+
+p_all_anim &lt;- ggplot(shrinkage_all_anim) +
+  # Static: path segments
+  geom_segment(aes(x = ybar1, y = ybar2, xend = est1, yend = est2),
+               color = &quot;gray70&quot;, linewidth = 0.3, alpha = 0.5) +
+  # Static: true values
+  geom_point(aes(x = theta1, y = theta2), color = &quot;gray40&quot;, size = 1.5, alpha = 0.5) +
+  # Static: sample means
+  geom_point(aes(x = ybar1, y = ybar2), color = &quot;#DCBCBC&quot;, size = 2) +
+  # Static: shrunk estimates
+  geom_point(aes(x = est1, y = est2), color = &quot;#8F2727&quot;, size = 2) +
+  # Animated: traveling points
+  geom_point(aes(x = x, y = y), color = &quot;#B2182B&quot;, size = 3) +
+  # Animated: correlation label
+  geom_text(data = anim_cors_all,
+            aes(label = r_label, group = t), x = Inf, y = Inf,
+            hjust = 1.1, vjust = 1.5, size = 4, color = &quot;#8F2727&quot;, fontface = &quot;bold&quot;) +
+  facet_wrap(~method, nrow = 2) +
+  xlab(&quot;Measure 1&quot;) +
+  ylab(&quot;Measure 2&quot;) +
+  ggtitle(&quot;Shrinkage Across All Methods&quot;) +
+  theme_minimal(base_size = 14) +
+  theme(panel.grid = element_blank()) +
+  transition_time(t) +
+  ease_aes(&quot;cubic-in-out&quot;)
+
+animate(p_all_anim, nframes = 100, fps = 10,
+        width = 1200, height = 1000, res = 150,
+        renderer = magick_renderer(loop = TRUE), rewind = TRUE)
+anim_save(&quot;shrinkage_all_animation.gif&quot;)</code></pre>
+</details>
+<p><img src="shrinkage_all_animation.gif" /><!-- --></p>
+<p>This <em>may</em> be the best figure I have ever created… it is at least top 5, and I hope it brings you as much joy as it does me. We see, like before, that univariate shrinkage (top left) contracts the cloud but preserves the correlation exactly. The remaining three methods—MV shrinkage plus frequentist- Bayesian hierarchical models—all pull points toward the correlation structure, borrowing strength across measures and ending up with a better estimate of the true correlation <span class="math inline">\(\rho_{\text{true}}\)</span> compared to the naive or univariate estimator.</p>
+<div id="rmse-comparisons" class="section level2">
+<h2>RMSE Comparisons</h2>
+<p>How much better are our estimates? First, let’s replicate Part 1’s result and confirm that all shrinkage estimators given better individual-level estimates than the sample means:</p>
+<details>
+<summary>
+Click to show visualization code
+</summary>
+<pre class="r"><code># RMSE for each method (computed over both theta1 and theta2)
+rmse_fn &lt;- function(est1, est2, true1, true2) {
+  sqrt(mean(c((est1 - true1)^2, (est2 - true2)^2)))
+}
+
+rmse_df &lt;- data.frame(
+  Method = c(&quot;Sample Mean&quot;, &quot;Univariate Shrinkage&quot;,
+             &quot;MV Shrinkage&quot;, &quot;Hier. (lme4)&quot;, &quot;Hier. (brms)&quot;),
+  RMSE = c(
+    rmse_fn(subj_summary$ybar1, subj_summary$ybar2,
+            subj_summary$theta1, subj_summary$theta2),
+    rmse_fn(subj_summary$ybar1_shrunk, subj_summary$ybar2_shrunk,
+            subj_summary$theta1, subj_summary$theta2),
+    rmse_fn(subj_summary$theta1_mvjs, subj_summary$theta2_mvjs,
+            subj_summary$theta1, subj_summary$theta2),
+    rmse_fn(subj_summary$theta1_lmer, subj_summary$theta2_lmer,
+            subj_summary$theta1, subj_summary$theta2),
+    rmse_fn(subj_summary$theta1_brms, subj_summary$theta2_brms,
+            subj_summary$theta1, subj_summary$theta2)
+  )
+) %&gt;%
+  mutate(Method = factor(Method, levels = Method))
+
+p_rmse &lt;- rmse_df %&gt;%
+  ggplot(aes(x = Method, y = RMSE, fill = Method)) +
+  geom_col() +
+  scale_fill_manual(values = c(
+    &quot;Sample Mean&quot;          = &quot;#DCBCBC&quot;,
+    &quot;Univariate Shrinkage&quot; = &quot;#c97979&quot;,
+    &quot;MV Shrinkage&quot;         = &quot;#B2182B&quot;,
+    &quot;Hier. (lme4)&quot;         = &quot;#8F2727&quot;,
+    &quot;Hier. (brms)&quot;         = &quot;#601414&quot;
+  )) +
+  xlab(&quot;&quot;) +
+  ylab(&quot;RMSE&quot;) +
+  ggtitle(&quot;Individual-Level Estimation Error Across Methods&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 30, hjust = 1),
+        legend.position = &quot;none&quot;)</code></pre>
+</details>
+<p><img src="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-28-1.svg" alt="" width="672" /></p>
+<p>Nice. All shrinkage methods improve on the sample mean as explected. Even in the multvariate case, univariate shrinkage <em>still improves the individual estimates</em> but—as we showed—does not improve the <em>correlation</em> estimate. The multivariate methods improve both, because they leverage the cross-measure structure.</p>
+<p>Next, we can look at RMSE of the correlation estimate itself. When doing so, it is useful to look at how various estimators perform as sample size increases. As in Part 1, the multivariate estimators are expected to shine most in small sample settings, but all approaches should converge as sample size increases:</p>
+<pre class="r"><code>n_obs_vec   &lt;- c(5, 10, 25, 50, 100, 200)
+n_sims_rmse &lt;- 100
+
+rmse_rho_by_n &lt;- foreach(n_k = n_obs_vec, .combine = &quot;rbind&quot;) %do% {
+  sim_results &lt;- foreach(i = 1:n_sims_rmse, .combine = rbind) %do% {
+    theta_sim &lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
+    y1_sim &lt;- matrix(rnorm(N_subj * n_k, theta_sim[, 1], sigma_obs1), N_subj, n_k)
+    y2_sim &lt;- matrix(rnorm(N_subj * n_k, theta_sim[, 2], sigma_obs2), N_subj, n_k)
+    ybar1_sim &lt;- rowMeans(y1_sim)
+    ybar2_sim &lt;- rowMeans(y2_sim)
+
+    # Naive
+    r_naive_sim &lt;- cor(ybar1_sim, ybar2_sim)
+
+    # Spearman correction
+    var1_s &lt;- mean(apply(y1_sim, 1, var))
+    var2_s &lt;- mean(apply(y2_sim, 1, var))
+    se2_1s &lt;- var1_s / n_k; se2_2s &lt;- var2_s / n_k
+    sp1 &lt;- max(var(ybar1_sim) - se2_1s, 0.001)
+    sp2 &lt;- max(var(ybar2_sim) - se2_2s, 0.001)
+    rho1s &lt;- sp1 / (sp1 + se2_1s); rho2s &lt;- sp2 / (sp2 + se2_2s)
+    r_spear_sim &lt;- min(max(r_naive_sim / sqrt(rho1s * rho2s), -1), 1)
+
+    # MV Shrinkage
+    S_sim &lt;- cov(cbind(ybar1_sim, ybar2_sim))
+    Sig_obs_n_sim &lt;- diag(c(var1_s / n_k, var2_s / n_k))
+    Sig_pop_sim &lt;- S_sim - Sig_obs_n_sim
+    eig_s &lt;- eigen(Sig_pop_sim)
+    eig_s$values &lt;- pmax(eig_s$values, 0.001)
+    Sig_pop_sim &lt;- eig_s$vectors %*% diag(eig_s$values) %*% t(eig_s$vectors)
+    rho_mvs_sim &lt;- Sig_pop_sim[1, 2] / sqrt(Sig_pop_sim[1, 1] * Sig_pop_sim[2, 2])
+
+    # Long-format data for hierarchical models
+    d_sim &lt;- data.frame(
+      subj = factor(rep(1:N_subj, each = 2 * n_k)),
+      measure = factor(rep(rep(c(&quot;y1&quot;, &quot;y2&quot;), each = n_k), N_subj)),
+      y = c(t(cbind(y1_sim, y2_sim)))
+    )
+
+    # Hierarchical (lme4)
+    rho_lmer_sim &lt;- tryCatch({
+      fit_sim &lt;- lmer(y ~ 0 + measure + (0 + measure | subj), data = d_sim,
+                      control = lmerControl(optimizer = &quot;bobyqa&quot;))
+      vc_sim &lt;- as.data.frame(VarCorr(fit_sim))
+      vc_sim$sdcor[!is.na(vc_sim$var2) &amp; vc_sim$var1 == &quot;measurey1&quot; &amp; vc_sim$var2 == &quot;measurey2&quot;]
+    }, error = function(e) NA)
+
+    # Hierarchical (brms)
+    rho_brms_sim &lt;- tryCatch({
+      fit_brms_sim &lt;- brm(
+        bf(y ~ 0 + measure + (0 + measure | subj)),
+        data = d_sim,
+        family = gaussian(),
+        chains = 8, cores = 8,
+        iter = 1500, backend = &quot;cmdstanr&quot;,
+        prior = c(
+          prior(normal(0, 10), class = &quot;b&quot;),
+          prior(normal(0, 10), class = &quot;sd&quot;),
+          prior(lkj(1),        class = &quot;cor&quot;),
+          prior(normal(0, 10), class = &quot;sigma&quot;)
+        ),
+        warmup = 200,
+        seed = 43202 + i + n_k,
+        silent = 2,
+        refresh = 0
+      )
+      post_sim &lt;- as_draws_df(fit_brms_sim)
+      rho_col_sim &lt;- grep(&quot;cor_subj.*measurey1.*measurey2&quot;, names(post_sim), value = TRUE)[1]
+      rho_draws &lt;- post_sim[[rho_col_sim]]
+      d_rho &lt;- density(rho_draws)
+      d_rho$x[which.max(d_rho$y)]
+    }, error = function(e) NA)
+
+    data.frame(naive = r_naive_sim, spearman = r_spear_sim,
+               mv_shrinkage = rho_mvs_sim, hier_lmer = rho_lmer_sim,
+               hier_brms = rho_brms_sim)
+  }
+
+  data.frame(
+    n_obs  = n_k,
+    Method = c(&quot;Two-Stage Pearson r&quot;, &quot;Spearman Correction&quot;,
+               &quot;MV Shrinkage&quot;, &quot;Hierarchical (lme4)&quot;, &quot;Hierarchical (brms)&quot;),
+    RMSE   = c(
+      sqrt(mean((sim_results$naive - rho_true)^2)),
+      sqrt(mean((sim_results$spearman - rho_true)^2)),
+      sqrt(mean((sim_results$mv_shrinkage - rho_true)^2)),
+      sqrt(mean((sim_results$hier_lmer[!is.na(sim_results$hier_lmer)] - rho_true)^2)),
+      sqrt(mean((sim_results$hier_brms[!is.na(sim_results$hier_brms)] - rho_true)^2))
+    )
+  )
+}</code></pre>
+<details>
+<summary>
+Click to show visualization code
+</summary>
+<pre class="r"><code>p_sample_size &lt;- rmse_rho_by_n %&gt;%
+  mutate(Method = factor(Method, levels = c(&quot;Two-Stage Pearson r&quot;,
+                                             &quot;Spearman Correction&quot;,
+                                             &quot;MV Shrinkage&quot;,
+                                             &quot;Hierarchical (lme4)&quot;,
+                                             &quot;Hierarchical (brms)&quot;))) %&gt;%
+  ggplot(aes(x = n_obs, y = RMSE, color = Method)) +
+  geom_line(size = 1) +
+  geom_point(size = 2.5) +
+  scale_color_manual(values = c(&quot;Two-Stage Pearson r&quot;    = &quot;#DCBCBC&quot;,
+                                 &quot;Spearman Correction&quot;    = &quot;#c97979&quot;,
+                                 &quot;MV Shrinkage&quot;           = &quot;#B2182B&quot;,
+                                 &quot;Hierarchical (lme4)&quot;    = &quot;#8F2727&quot;,
+                                 &quot;Hierarchical (brms)&quot;    = &quot;#601414&quot;)) +
+  xlab(&quot;Observations per Individual (n)&quot;) +
+  ylab(expression(&quot;RMSE for&quot; ~ hat(rho))) +
+  ggtitle(&quot;Correlation Estimation Error by Sample Size&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = c(.7, .7))</code></pre>
+</details>
+<p><img src="http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-29-1.svg" alt="" width="672" /></p>
+<p>As expected, the multivariate methods dominate at small <span class="math inline">\(n\)</span>, where measurement error is most severe. As <span class="math inline">\(n\)</span> grows, all methods do converge—the data become informative enough that even the naive Pearson <span class="math inline">\(r\)</span> approaches the truth.</p>
+<p>Notably, the hierarchical Bayesian approach shows a clear advantage over other approaches when working with very low sample sizes. I have recognized this pattern time and time again—even a model with minimally informative priors can do wonders for small sample inference.</p>
+</div>
+</div>
+<div id="what-this-means-for-science" class="section level1">
+<h1>What This Means for Science</h1>
+<p>If you routinely compute summary statistics (questionnaire summed scores, mean RTs or accuracy rates, etc.) for individuals and then correlate them, you are consistently underestimating the true correlations you care about.</p>
+<p>Any correlation between summary statistics is attenuated by the measurement error in both variables. If both measures have reliability of 0.5 (which is common for behavioral tasks in psychology), the observed correlation is only <span class="math inline">\(\sqrt{0.5 \times 0.5} = 50\)</span>% of the true value. A true <span class="math inline">\(\rho\)</span> = 0.7 appears as <span class="math inline">\(r \approx 0.35\)</span>. A true <span class="math inline">\(\rho\)</span> = 0.3 appears as <span class="math inline">\(r \approx 0.15\)</span>—barely detectable in a typical sample.</p>
+<p>One of my favorite recent examples of over-interpreting attenuated correlations is the invention of the so-called <strong>Reliability Paradox</strong>. Behavioral tasks that produce robust group-level effects (Stroop, IAT, Go/No-go, etc.) consistently show poor test-retest reliability when individual-level performance is estimated with summary statistics (<a href="https://doi.org/10.3758/s13428-017-0935-1">Hedge et al., 2017</a>). As discussed in Part 1 and in a <a href="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/">previous post</a>, this is not a paradox—it is a direct consequence of using noisy estimators. A low test-retest reliability estimate derived from sample means usually indicates that person-level error is high (either through small <span class="math inline">\(n\)</span>, high <span class="math inline">\(\sigma^2_{\text{obs}}\)</span>, or both). If you want to make inferential statements about true changes in some trait (measured per a behavioral task) over time, you need to estimate the test-retest correlation of the “true” parameters—you need multivariate shrinkage estimators!</p>
+<p>Another high-stakes example is studies looking at <strong>brain-behavior correlations.</strong> In model-based neuroscience, a common workflow is: (1) estimate cognitive/computational model parameters from a behavioral task, then (2) enter point estimates of parameters into a GLM predicting neural responses. When an hour of fMRI scanning will run you in the neighborhood of $1000 USD, most researchers are stuck with shortened behavioral tasks (i.e. low <span class="math inline">\(n\)</span>) in addition to low subject counts—both which exacerbate low reliability issues. In such cases, attenuated estimates are a huge waste of resources (see <a href="https://doi.org/10.1016/j.bpsc.2023.01.001">Haines, Sullivan-Toole, &amp; Olino, 2023</a>), and using generative models that jointly estimate neural and behavioral parameters is an excellent way to get the right estimates while also not compromising on model complexity.</p>
+<p>More generally, attenuated correlations means <strong>lower statistical power.</strong> Regardless of the context, if the true correlation is <span class="math inline">\(\rho\)</span> = 0.7 but the observed <span class="math inline">\(r \approx 0.37\)</span> due to attenuation, you would need roughly <span class="math inline">\(N \approx 55\)</span> participants to detect the attenuated effect at 80% power (for <span class="math inline">\(r = 0.37\)</span>), compared to <span class="math inline">\(N \approx 13\)</span> for the true effect (for <span class="math inline">\(\rho = 0.7\)</span>). That is a ~4<span class="math inline">\(\times\)</span> increase in required sample size—not because the effect is small, but because the measurement is noisy. And this is for a <em>large</em> true effect; for moderate true correlations (<span class="math inline">\(\rho\)</span> = 0.3), the power implications are even worse. Note that, as we saw in the sampling distributions above, simply disattenuating the correlation doesn’t hand you this power back for free—corrected estimates like Spearman’s have higher variance, partially offsetting the gain from a larger point estimate. Hierarchical models strike a better balance, but either way you still have to pay for your lunch.</p>
+<p>So, whenever you compute a correlation between <em>estimated</em> quantities (not raw data), you should worry about attenuation. In order of increasing sophistication, your options for a fix are:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Spearman’s correction</strong>: simple, unbiased on average, but high variance and can exceed 1.0. Use for quick sanity checks.</li>
+<li><strong>Multivariate shrinkage</strong>: a natural extension of univariate shrinkage, motivated by James-Stein and empirical Bayesian estimators. More principled than Spearman’s correction (e.g., you won’t get any <span class="math inline">\(\hat{\rho}_{\text{true}} &gt; 1\)</span>), but still uses point estimate plug-ins (so misses some important uncertainty).</li>
+<li><strong>Hierarchical models</strong>: estimate the correlation directly, with proper uncertainty. You can use <code>brms</code> or Stan for Bayesian flavor, or <code>lme4</code> for frequentist.</li>
+</ol>
+<p>Of these, hierarchical models are the most principled solution in my opinion—they jointly estimate everything, propagate uncertainty, and naturally produce shrunken estimates and disattenuated correlation estimates that can be used for inference.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>In Part 1, <span class="math inline">\(\sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)</span> unified mean estimation across six methodological traditions. The same principle applies to correlations:</p>
+<p><span class="math display">\[\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}\left(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\right)^{-1}\]</span></p>
+<p>Univariate shrinkage, while improving individual mean estimates, does not help with correlation estimation. You need multivariate thinking—methods that model the joint distribution of the two measures—to correct for attenuation and recover the true latent correlation. Every method that does this, from Spearman’s 1904 correction to hierarchical Bayesian models, is implementing the same essential principle.</p>
+<p>Next time you compute a correlation on derived quantities, I hope you consider disattenuating it :D.</p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 4.3.3 (2024-02-29)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Monterey 12.6
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## time zone: America/New_York
+## tzcode source: internal
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices datasets  utils     methods   base     
+## 
+## other attached packages:
+##  [1] kableExtra_1.4.0    rstan_2.32.7        StanHeaders_2.32.10
+##  [4] posterior_1.6.1     lme4_2.0-1          Matrix_1.6-5       
+##  [7] ggplot2_4.0.1       foreach_1.5.2       tidyr_1.3.2        
+## [10] dplyr_1.1.4         MASS_7.3-60.0.1    
+## 
+## loaded via a namespace (and not attached):
+##  [1] tidyselect_1.2.1      viridisLite_0.4.2     farver_2.1.2         
+##  [4] loo_2.9.0             S7_0.2.1              fastmap_1.2.0        
+##  [7] tensorA_0.36.2.1      blogdown_1.23         digest_0.6.39        
+## [10] lifecycle_1.0.5       processx_3.8.6        magrittr_2.0.4       
+## [13] compiler_4.3.3        rlang_1.1.7           sass_0.4.10          
+## [16] tools_4.3.3           yaml_2.3.12           knitr_1.51           
+## [19] labeling_0.4.3        bridgesampling_1.2-1  pkgbuild_1.4.8       
+## [22] xml2_1.5.2            RColorBrewer_1.1-3    cmdstanr_0.8.1       
+## [25] abind_1.4-8           withr_3.0.2           purrr_1.2.1          
+## [28] grid_4.3.3            stats4_4.3.3          inline_0.3.21        
+## [31] scales_1.4.0          iterators_1.0.14      cli_3.6.5            
+## [34] mvtnorm_1.3-3         rmarkdown_2.30        reformulas_0.4.4     
+## [37] generics_0.1.4        otel_0.2.0            RcppParallel_5.1.11-1
+## [40] rstudioapi_0.18.0     minqa_1.2.8           cachem_1.1.0         
+## [43] stringr_1.6.0         splines_4.3.3         bayesplot_1.15.0     
+## [46] parallel_4.3.3        formatR_1.14          matrixStats_1.5.0    
+## [49] brms_2.23.0           vctrs_0.7.1           boot_1.3-32          
+## [52] jsonlite_2.0.0        bookdown_0.46         systemfonts_1.3.1    
+## [55] jquerylib_0.1.4       glue_1.8.0            nloptr_2.2.1         
+## [58] codetools_0.2-20      ps_1.9.1              distributional_0.6.0 
+## [61] stringi_1.8.7         gtable_0.3.6          QuickJSR_1.8.1       
+## [64] tibble_3.3.1          pillar_1.11.1         htmltools_0.5.9      
+## [67] Brobdingnag_1.2-9     R6_2.6.1              textshaping_1.0.4    
+## [70] Rdpack_2.6.6          evaluate_1.0.5        lattice_0.22-7       
+## [73] rbibutils_2.4.1       backports_1.5.0       renv_1.1.6           
+## [76] bslib_0.9.0           rstantools_2.6.0      Rcpp_1.1.1           
+## [79] svglite_2.2.2         coda_0.19-4.1         gridExtra_2.3        
+## [82] nlme_3.1-168          checkmate_2.3.3       xfun_0.56            
+## [85] pkgconfig_2.0.3</code></pre>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/r/">R</a>
+  
+  <a class="badge badge-light" href="/tag/bayesian-statistics/">Bayesian Statistics</a>
+  
+</div>
+
+
+
+<div class="share-box">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/&amp;text=How%20to%20Estimate%20a%20Correlation,%20and%20What%20It%20Means%20for%20Science" target="_blank" rel="noopener" class="share-btn-twitter" aria-label="twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/&amp;t=How%20to%20Estimate%20a%20Correlation,%20and%20What%20It%20Means%20for%20Science" target="_blank" rel="noopener" class="share-btn-facebook" aria-label="facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=How%20to%20Estimate%20a%20Correlation,%20and%20What%20It%20Means%20for%20Science&amp;body=http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/" target="_blank" rel="noopener" class="share-btn-email" aria-label="envelope">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/&amp;title=How%20to%20Estimate%20a%20Correlation,%20and%20What%20It%20Means%20for%20Science" target="_blank" rel="noopener" class="share-btn-linkedin" aria-label="linkedin-in">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=How%20to%20Estimate%20a%20Correlation,%20and%20What%20It%20Means%20for%20Science%20http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/" target="_blank" rel="noopener" class="share-btn-whatsapp" aria-label="whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/&amp;title=How%20to%20Estimate%20a%20Correlation,%20and%20What%20It%20Means%20for%20Science" target="_blank" rel="noopener" class="share-btn-weibo" aria-label="weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="http://haines-lab.com/"><img class="avatar mr-3 avatar-circle" src="/author/nathaniel-haines/avatar_hu46ca18ad745f0410f34f184d73ea03a3_141031_270x270_fill_q75_lanczos_center.jpeg" alt="Nathaniel Haines"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="http://haines-lab.com/">Nathaniel Haines</a></h5>
+      <h6 class="card-subtitle">Senior Manager, Data Science</h6>
+      <p class="card-text">An academic Bayesian who is currently exploring the high dimensional posterior distribution of life</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/nate__haines" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=lg741SgAAAAJ" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/Nathaniel-Haines" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/nathaniel-haines-216049101/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  <section id="comments">
+    
+<div id="disqus_thread"></div>
+<script>
+  var disqus_config = function () {
+    
+    
+    
+  };
+  (function() {
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+      return;
+    }
+    var d = document, s = d.createElement('script'); s.async = true;
+    s.src = 'https://' + "haines-lab-com" + '.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </section>
+  
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="/post/how-to-estimate-a-mean-and-what-it-means-for-science/">How to Estimate a Mean, and What It Means for Science</a></li>
+      
+      <li><a href="/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/">A Series on Building Formal Models of Classic Psychological Effects: Part 1, the Dunning-Kruger Effect</a></li>
+      
+      <li><a href="/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/">On Curbing Your Measurement Error: From Classical Corrections to Generative Models</a></li>
+      
+      <li><a href="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/">Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</a></li>
+      
+      <li><a href="/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/">On the equivalency between frequentist Ridge (and LASSO) regression and hierarchial Bayesian regression</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Nathaniel Haines, PhD
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-themes" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    <script src="/js/vendor-bundle.min.b73dfaac3b6499dc997741748a7c3fe2.js"></script>
+
+    
+    
+    
+      
+      
+        <script src="https://cdn.jsdelivr.net/gh/desandro/imagesloaded@v4.1.4/imagesloaded.pkgd.min.js" integrity="sha512-S5PZ9GxJZO16tT9r3WJp/Safn31eu8uWrzglMahDT4dsmgqWonRY9grk3j+3tfuPr9WJNsfooOR7Gi7HL5W2jw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/metafizzy/isotope@v3.0.6/dist/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js" integrity="sha512-Ypjm0o7jOxAd4hpdoppSEN0TQOC19UtPAqD+4s5AlXmUvbmmS/YMxYqAqarQYyxTnB6/rqip9qcxlNB/3U9Wdg==" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/r.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/python.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/latex.min.js" crossorigin="anonymous"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.js" integrity="" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdn.jsdelivr.net/gh/krisk/Fuse@v3.2.1/dist/fuse.min.js" integrity="sha512-o38bmzBGX+hD3JHWUFCDA09btWaqrNmoJ3RXLlrysA7PP01Kgs4UlE4MhelE1v5dJR3+cxlR4qQlotsW7jKsnw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/julmot/mark.js@8.11.1/dist/jquery.mark.min.js" integrity="sha512-mhbv5DqBMgrWL+32MmsDOt/OAvqr/cHimk6B8y/bx/xS88MVkYGPiVv2ixKVrkywF2qHplNRUvFsAHUdxZ3Krg==" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+      <script id="dsq-count-scr" src="https://haines-lab-com.disqus.com/count.js" async></script>
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+
+    
+    
+    
+    <script id="page-data" type="application/json">{"use_headroom":true}</script>
+
+    
+    
+      <script src="/js/wowchemy-headroom.1cb9e2fc8399acee94eab837265b73bf.js" type="module"></script>
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.247fd8f54253895301106e3006f53f38.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>
