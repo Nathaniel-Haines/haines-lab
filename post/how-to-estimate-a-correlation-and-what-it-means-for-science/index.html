@@ -775,7 +775,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    39 min read
+    40 min read
   </span>
   
 
@@ -1347,9 +1347,7 @@ subj_summary &lt;- subj_summary %&gt;%
   mutate(
     theta1_lmer = theta1_lmer,
     theta2_lmer = theta2_lmer
-  )
-
-r_lmer_individual &lt;- cor(subj_summary$theta1_lmer, subj_summary$theta2_lmer)</code></pre>
+  )</code></pre>
 <p>The <code>lme4</code> estimate of <span class="math inline">\(\rho\)</span> is 0.73, extracted directly from the estimated random-effects correlation. The BLUPs (conditional modes) from <code>lme4</code> are shrunk toward the group-level means by the same matrix as in the multivariate shrinkage estimator case above (<span class="math inline">\(\mathbf{B}\)</span>)—just a different estimation procedure.</p>
 </div>
 <div id="bayesian-brms" class="section level2">
@@ -1396,9 +1394,7 @@ subj_summary &lt;- subj_summary %&gt;%
   mutate(
     theta1_brms = theta1_brms,
     theta2_brms = theta2_brms
-  )
-
-r_brms_individual &lt;- cor(subj_summary$theta1_brms, subj_summary$theta2_brms)</code></pre>
+  )</code></pre>
 <details>
 <summary>
 Click to show visualization code
@@ -1661,24 +1657,53 @@ shrinkage_all_anim &lt;- bind_rows(
                                              &quot;Hierarchical (lme4)&quot;, &quot;Hierarchical (brms)&quot;)))
 
 # Correlation labels per frame per method
-# Univariate: cor of interpolated points (constant)
-# Others: interpolate covariance matrix S - t*Sigma_obs/n
+# Each method interpolates from S (observed) to its own Sigma_pop estimate
 t_vals &lt;- seq(0, 1, length.out = 50)
-mv_cors_all &lt;- sapply(t_vals, function(ti) {
-  Sigma_t &lt;- S - ti * Sigma_obs_n
+
+# MV shrinkage: method-of-moments (S and Sigma_obs_n already computed above)
+# S = Sigma_pop_hat + Sigma_obs_n, so interpolation goes from S to Sigma_pop_hat
+S_mvs &lt;- Sigma_pop_hat + Sigma_obs_n  # = S (by construction)
+mv_cors_mvs &lt;- sapply(t_vals, function(ti) {
+  Sigma_t &lt;- (1 - ti) * S_mvs + ti * Sigma_pop_hat
+  Sigma_t[1, 2] / sqrt(Sigma_t[1, 1] * Sigma_t[2, 2])
+})
+
+# lme4: extract Sigma_pop and residual variance from REML
+Sigma_pop_lmer &lt;- as.matrix(VarCorr(fit_lmer)$subj)
+Sigma_obs_n_lmer &lt;- diag(rep(sigma(fit_lmer)^2 / n_obs, 2))
+S_lmer &lt;- Sigma_pop_lmer + Sigma_obs_n_lmer
+mv_cors_lmer &lt;- sapply(t_vals, function(ti) {
+  Sigma_t &lt;- (1 - ti) * S_lmer + ti * Sigma_pop_lmer
+  Sigma_t[1, 2] / sqrt(Sigma_t[1, 1] * Sigma_t[2, 2])
+})
+
+# brms: reconstruct Sigma_pop from posterior modes (to align with MLE-based estimates)
+sd1_draws &lt;- post$sd_subj__measurey1
+sd2_draws &lt;- post$sd_subj__measurey2
+sd1_mode &lt;- density(sd1_draws)$x[which.max(density(sd1_draws)$y)]
+sd2_mode &lt;- density(sd2_draws)$x[which.max(density(sd2_draws)$y)]
+Sigma_pop_brms &lt;- diag(c(sd1_mode, sd2_mode)) %*%
+  matrix(c(1, rho_brms, rho_brms, 1), 2, 2) %*%
+  diag(c(sd1_mode, sd2_mode))
+sigma_draws &lt;- post$sigma
+sigma_mode &lt;- density(sigma_draws)$x[which.max(density(sigma_draws)$y)]
+Sigma_obs_n_brms &lt;- diag(rep(sigma_mode^2 / n_obs, 2))
+S_brms &lt;- Sigma_pop_brms + Sigma_obs_n_brms
+mv_cors_brms &lt;- sapply(t_vals, function(ti) {
+  Sigma_t &lt;- (1 - ti) * S_brms + ti * Sigma_pop_brms
   Sigma_t[1, 2] / sqrt(Sigma_t[1, 1] * Sigma_t[2, 2])
 })
 
 anim_cors_all &lt;- bind_rows(
-  # Univariate: constant correlation
+  # Univariate: constant correlation (scale invariance)
   shrinkage_all_anim %&gt;%
     filter(method == &quot;Univariate Shrinkage&quot;) %&gt;%
     group_by(method, t) %&gt;%
     summarize(r = cor(x, y), .groups = &quot;drop&quot;),
-  # MV shrinkage, lme4, brms: all use the same population-level correction
-  expand.grid(method = c(&quot;MV Shrinkage&quot;, &quot;Hierarchical (lme4)&quot;, &quot;Hierarchical (brms)&quot;),
-              t = t_vals, stringsAsFactors = FALSE) %&gt;%
-    mutate(r = rep(mv_cors_all, 3))
+  # Each multivariate method uses its own Sigma_pop estimate
+  data.frame(method = &quot;MV Shrinkage&quot;, t = t_vals, r = mv_cors_mvs),
+  data.frame(method = &quot;Hierarchical (lme4)&quot;, t = t_vals, r = mv_cors_lmer),
+  data.frame(method = &quot;Hierarchical (brms)&quot;, t = t_vals, r = mv_cors_brms)
 ) %&gt;%
   mutate(
     method = factor(method, levels = c(&quot;Univariate Shrinkage&quot;, &quot;MV Shrinkage&quot;,
@@ -1689,18 +1714,12 @@ anim_cors_all &lt;- bind_rows(
   )
 
 p_all_anim &lt;- ggplot(shrinkage_all_anim) +
-  # Static: path segments
   geom_segment(aes(x = ybar1, y = ybar2, xend = est1, yend = est2),
                color = &quot;gray70&quot;, linewidth = 0.3, alpha = 0.5) +
-  # Static: true values
   geom_point(aes(x = theta1, y = theta2), color = &quot;gray40&quot;, size = 1.5, alpha = 0.5) +
-  # Static: sample means
   geom_point(aes(x = ybar1, y = ybar2), color = &quot;#DCBCBC&quot;, size = 2) +
-  # Static: shrunk estimates
   geom_point(aes(x = est1, y = est2), color = &quot;#8F2727&quot;, size = 2) +
-  # Animated: traveling points
   geom_point(aes(x = x, y = y), color = &quot;#B2182B&quot;, size = 3) +
-  # Animated: correlation label
   geom_text(data = anim_cors_all,
             aes(label = r_label, group = t), x = Inf, y = Inf,
             hjust = 1.1, vjust = 1.5, size = 4, color = &quot;#8F2727&quot;, fontface = &quot;bold&quot;) +
