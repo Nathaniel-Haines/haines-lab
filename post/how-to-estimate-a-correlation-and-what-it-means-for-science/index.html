@@ -775,7 +775,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    40 min read
+    39 min read
   </span>
   
 
@@ -1072,19 +1072,13 @@ anim_df &lt;- anim_df %&gt;%
   mutate(r_label = paste0(&quot;r = &quot;, sprintf(&quot;%.3f&quot;, r)))
 
 p_anim &lt;- ggplot(anim_df) +
-  # Static: path segments from sample means to shrunk estimates
   geom_segment(aes(x = ybar1, y = ybar2, xend = ybar1_shrunk, yend = ybar2_shrunk),
                color = &quot;gray70&quot;, linewidth = 0.3, alpha = 0.5) +
-  # Static: sample means (always visible)
   geom_point(aes(x = ybar1, y = ybar2), color = &quot;#DCBCBC&quot;, size = 2.5) +
-  # Static: shrunk estimates (always visible)
   geom_point(aes(x = ybar1_shrunk, y = ybar2_shrunk), color = &quot;#8F2727&quot;, size = 2.5) +
-  # Static: grand mean crosshairs
   geom_vline(xintercept = grand_mean1, linetype = &quot;dashed&quot;, color = &quot;gray60&quot;, linewidth = 0.4) +
   geom_hline(yintercept = grand_mean2, linetype = &quot;dashed&quot;, color = &quot;gray60&quot;, linewidth = 0.4) +
-  # Animated: traveling points along the shrinkage path
   geom_point(aes(x = x, y = y), color = &quot;#B2182B&quot;, size = 3.5) +
-  # Animated: correlation label (one row per frame to avoid overplotting)
   geom_text(data = anim_cors %&gt;% mutate(r_label = paste0(&quot;r = &quot;, sprintf(&quot;%.3f&quot;, r))),
             aes(label = r_label, group = t), x = Inf, y = Inf, hjust = 1.1, vjust = 1.5,
             size = 5, color = &quot;#8F2727&quot;, fontface = &quot;bold&quot;) +
