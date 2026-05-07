@@ -5,7 +5,7 @@
     <link>http://haines-lab.com/tag/r/</link>
       <atom:link href="http://haines-lab.com/tag/r/index.xml" rel="self" type="application/rss+xml" />
     <description>R</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Sun, 22 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Nathaniel Haines, PhD</copyright><lastBuildDate>Thu, 09 Apr 2026 00:00:00 +0000</lastBuildDate>
     <image>
       <url>http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png</url>
       <title>R</title>
@@ -13,1124 +13,1033 @@
     </image>
     
     <item>
-      <title>How to Estimate a Correlation, and What It Means for Science</title>
-      <link>http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/</link>
-      <pubDate>Sun, 22 Mar 2026 00:00:00 +0000</pubDate>
-      <guid>http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/</guid>
+      <title>What is Regression, Really?</title>
+      <link>http://haines-lab.com/post/what-is-regression-really/</link>
+      <pubDate>Thu, 09 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>http://haines-lab.com/post/what-is-regression-really/</guid>
       <description>
 
 
 &lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;In &lt;a href=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/&#34;&gt;Part 1&lt;/a&gt; of this series, we showed that six different methods for estimating individual means—James-Stein, classical true score estimation, empirical Bayes, ridge regression, and hierarchical models (frequentist and Bayesian)—all converge on the same fundamental principle: shrink each individual’s estimate toward the group mean by a factor of &lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;But if you read Part 1’s implications section carefully, you may have noticed that I buried the lede… many real-world consequences we discussed—attenuated correlations, the reliability paradox, brain-behavior links—were actually &lt;em&gt;correlation&lt;/em&gt; problems, not mean-estimation problems per se.&lt;/p&gt;
-&lt;p&gt;Estimating correlations when measures have error is a more challenging problem than simply estimating better means (as we did in part 1). Unlike the univariate case, measurement error does not just add noise to correlations—it &lt;em&gt;systematically biases them toward zero&lt;/em&gt;. Whereas the sample mean was unbiased for an individual’s true mean, the sample correlation is &lt;em&gt;biased for the true correlation between latent variables&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;In this post, we expand our initial scope from univariate to multivariate shrinkage estimators, which allow us to tackle the correlation problem. Time to dive in!&lt;/p&gt;
+&lt;p&gt;If you have been following this series, you might have noticed something hiding in plain sight: the word “regression” literally means shrinkage toward the mean. This is not a metaphor or a historical curiosity—it is the phenomenon itself, and it turns out to be deeply connected to everything we have been discussing.&lt;/p&gt;
+&lt;p&gt;In &lt;a href=&#34;http://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/&#34;&gt;Part 1&lt;/a&gt; of this series, we showed that six different methods for estimating individual means—James-Stein, classical true score estimation, empirical Bayes, ridge regression, and hierarchical models—all converge on the same shrinkage factor: &lt;span class=&#34;math inline&#34;&gt;\(B = \sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)&lt;/span&gt;. In &lt;a href=&#34;http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/&#34;&gt;Part 2&lt;/a&gt;, we extended this to the multivariate case, showing that measurement error systematically attenuates correlations and that the matrix-valued shrinkage &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n)^{-1}\)&lt;/span&gt; provides the fix.&lt;/p&gt;
+&lt;p&gt;In this post, we complete the picture. The regression coefficient &lt;span class=&#34;math inline&#34;&gt;\(\beta = \text{Cov}(X, Y) / \text{Var}(X)\)&lt;/span&gt; is itself a reliability-weighted quantity—when predictors are measured with error, OLS regression coefficients are attenuated by exactly the same shrinkage factor we have been studying all along. We will trace this from Galton’s original discovery through Pearson’s formalization, errors-in-variables models, and multiple regression (where the story becomes considerably more interesting than you might expect), ending with hierarchical Bayesian models that provide a principled solution.&lt;/p&gt;
 &lt;/div&gt;
-&lt;div id=&#34;the-problem-attenuation&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;The Problem: Attenuation&lt;/h1&gt;
-&lt;div id=&#34;setup&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Setup&lt;/h2&gt;
-&lt;p&gt;Consider &lt;span class=&#34;math inline&#34;&gt;\(N\)&lt;/span&gt; individuals, each measured on two variables with &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; trials per variable. The data-generating process is:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned}
-(\theta_{1,i}, \theta_{2,i}) &amp;amp;\sim \text{MVN}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}_{\text{pop}}\right) \\
-y_{k,i,t} &amp;amp;\sim \mathcal{N}(\theta_{k,i}, \sigma_{\text{obs},k}), \quad k \in \{1, 2\}
-\end{aligned}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(\boldsymbol{\mu} = (\mu_1, \mu_2)^\top\)&lt;/span&gt; is the population mean vector and &lt;span class=&#34;math inline&#34;&gt;\(\boldsymbol{\Sigma}_{\text{pop}}\)&lt;/span&gt; is the &lt;span class=&#34;math inline&#34;&gt;\(2 \times 2\)&lt;/span&gt; population covariance matrix:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\boldsymbol{\Sigma}_{\text{pop}} = \begin{pmatrix} \sigma^2_{\text{pop},1} &amp;amp; \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2} \\ \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2} &amp;amp; \sigma^2_{\text{pop},2} \end{pmatrix}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;The diagonal entries capture between-person variability on each measure; the off-diagonal entry captures how much the two measures &lt;em&gt;covary&lt;/em&gt; across individuals, which is directly determined by &lt;span class=&#34;math inline&#34;&gt;\(\rho_{\text{true}}\)&lt;/span&gt;. Each individual has a true score on each measure, these true scores have a correlation, and we observe noisy realizations of those correlated true scores.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;the-attenuation-formula&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;The Attenuation Formula&lt;/h2&gt;
-&lt;p&gt;The naive approach is to compute the sample mean for each individual on each measure, then correlate post-hoc: &lt;span class=&#34;math inline&#34;&gt;\(r(\bar{y}_1, \bar{y}_2)\)&lt;/span&gt;. However, this observed correlation is systematically deflated!&lt;/p&gt;
-&lt;p&gt;Recall that the Pearson correlation has a numerator (the covariance) and a denominator (the product of the standard deviations):&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r(\bar{y}_1, \bar{y}_2) = \frac{\text{Cov}(\bar{y}_1, \bar{y}_2)}{\sqrt{\text{Var}(\bar{y}_1) \cdot \text{Var}(\bar{y}_2)}}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;We can look at each to see how measurement error produces attenuation.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;The numerator (covariance).&lt;/strong&gt; Since &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_k = \theta_k + \bar{\epsilon}_k\)&lt;/span&gt;, the covariance expands into four terms:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned}
-\text{Cov}(\bar{y}_1, \bar{y}_2) &amp;amp;= \text{Cov}(\theta_1 + \bar{\epsilon}_1,\; \theta_2 + \bar{\epsilon}_2) \\
-&amp;amp;= \text{Cov}(\theta_1, \theta_2) + \underbrace{\text{Cov}(\theta_1, \bar{\epsilon}_2)}_{=0} + \underbrace{\text{Cov}(\bar{\epsilon}_1, \theta_2)}_{=0} + \underbrace{\text{Cov}(\bar{\epsilon}_1, \bar{\epsilon}_2)}_{=0} \\
-&amp;amp;= \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}
-\end{aligned}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Because the measurement errors are independent of each other and of the true scores, all three cross-terms drop out. Concisely, &lt;span class=&#34;math inline&#34;&gt;\(\mathbb{E}\!\left[\text{Cov}(\bar{y}_1, \bar{y}_2)\right] = \text{Cov}(\theta_1, \theta_2) = \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}\)&lt;/span&gt;, which means that although the sample covariance may be a high variance estimator of the true covariance when dealing with lower sample sizes, it is unbiased. This means that measurement error must creap in through the denominator…&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;The denominator (variances).&lt;/strong&gt; The variance of each individual’s sample mean has two components—true between-person variance plus the measurement error that remains after averaging over &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; trials:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{Var}(\bar{y}_k) = \text{Var}(\theta_k) + \text{Var}(\bar{\epsilon}_k) = \sigma^2_{\text{pop},k} + \sigma^2_{\text{obs},k}/n\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Notice that the &lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_{\text{obs},k}/n\)&lt;/span&gt; term appears only in the denominator, and it has the effect of inflating it. This asymmetry is what causes attenuation—the numerator is an unbiased estimator of the true covariance, but the denominator is actually an estimator of sample variance, which includes both true between-person variance &lt;em&gt;plus&lt;/em&gt; person-level measurement error. You see it play out when substituting both pieces into the correlation formula:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r(\bar{y}_1, \bar{y}_2) = \frac{\rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}}{\sqrt{(\sigma^2_{\text{pop},1} + \sigma^2_{\text{obs},1}/n)(\sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n)}}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;And then we can square both sides:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r(\bar{y}_1, \bar{y}_2)^2 = \frac{\rho^2_{\text{true}} \cdot \sigma^2_{\text{pop},1} \cdot \sigma^2_{\text{pop},2}}{(\sigma^2_{\text{pop},1} + \sigma^2_{\text{obs},1}/n)(\sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n)}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Which makes it easier to bring the form closer to something we are familiar with:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r(\bar{y}_1, \bar{y}_2)^2 = \rho^2_{\text{true}} \cdot \frac{\sigma^2_{\text{pop},1}}{\sigma^2_{\text{pop},1} + \sigma^2_{\text{obs},1}/n} \cdot \frac{\sigma^2_{\text{pop},2}}{\sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Interesting! Look at the second and third terms. Each one is the variance of the true scores divided by the total variance of the sample means for that measure. This is exactly the reliability term from Part 1—signal over signal-plus-noise:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\rho_{xx,k} = \frac{\sigma^2_{\text{pop},k}}{\sigma^2_{\text{pop},k} + \sigma^2_{\text{obs},k}/n}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Substitute in the traditional reliability coefficient for the reliability terms:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r(\bar{y}_1, \bar{y}_2)^2 = \rho^2_{\text{true}} \cdot \rho_{xx,1} \cdot \rho_{xx,2}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Take the square root:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r(\bar{y}_1, \bar{y}_2) = \rho_{\text{true}} \sqrt{\rho_{xx,1} \cdot \rho_{xx,2}}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;And we arrive at &lt;a href=&#34;https://doi.org/10.2307/1412159&#34;&gt;Spearman’s (1904)&lt;/a&gt; attenuation formula. The observed correlation equals the true correlation shrunken down by the measure reliabilities. Since reliabilities are between 0 and 1, the observed correlation is always closer to zero than it is to the true correlation that we care about. The worse the measurement error, the more the correlation is shrunken toward zero.&lt;/p&gt;
-&lt;p&gt;I will emphasize again a key difference from Part 1—the sample mean is &lt;em&gt;unbiased&lt;/em&gt; for the individual’s true mean &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;, but the sample correlation is &lt;em&gt;biased&lt;/em&gt; for the true correlation between means &lt;span class=&#34;math inline&#34;&gt;\(\rho_{\text{true}} = r(\theta_1, \theta_2)\)&lt;/span&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;simulation-setup&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Simulation Setup&lt;/h1&gt;
-&lt;p&gt;Alright, time for some simulations. We will mirror Part 1’s setup, but now with two correlated measures:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(MASS)
-library(dplyr)
+&lt;div id=&#34;galtons-discovery-the-origin-of-regression&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Galton’s Discovery — The Origin of “Regression”&lt;/h1&gt;
+&lt;div id=&#34;the-historical-dataset&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The Historical Dataset&lt;/h2&gt;
+&lt;p&gt;In 1886, Francis Galton published &lt;a href=&#34;https://doi.org/10.2307/2841583&#34;&gt;“Regression towards Mediocrity in Hereditary Stature”&lt;/a&gt;—a paper whose title describes the phenomenon so precisely that it became the name of an entire statistical method. Galton observed that children of tall parents tend to be tall, but &lt;em&gt;less extreme&lt;/em&gt; than their parents. Children of short parents tend to be short, but again &lt;em&gt;less extreme&lt;/em&gt;. The children’s heights “regressed” toward the population average, and Galton’s &lt;span class=&#34;math inline&#34;&gt;\(\approx 2/3\)&lt;/span&gt; proportionality factor is itself a shrinkage coefficient in the sense we have been discussing.&lt;/p&gt;
+&lt;p&gt;Let’s look at the actual data:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
 library(tidyr)
 library(foreach)
 library(ggplot2)
+library(MASS)
+library(HistData)
+library(posterior)
 
 set.seed(43202)
 
-# Simulation parameters
-N_subj     &amp;lt;- 50
-n_obs      &amp;lt;- 10
-mu1        &amp;lt;- 5
-mu2        &amp;lt;- 3
-sigma_pop1 &amp;lt;- 2
-sigma_pop2 &amp;lt;- 2
-rho_true   &amp;lt;- 0.7
-sigma_obs1 &amp;lt;- 6
-sigma_obs2 &amp;lt;- 6
+data(Galton)
 
-# Population covariance matrix
-Sigma_pop &amp;lt;- matrix(c(sigma_pop1^2, rho_true * sigma_pop1 * sigma_pop2,
-                       rho_true * sigma_pop1 * sigma_pop2, sigma_pop2^2), 2, 2)
+# Galton&amp;#39;s data: mid-parent height vs child height (in inches)
+galton_df &amp;lt;- Galton %&amp;gt;%
+  mutate(parent = parent, child = child)
 
-# Generate true individual parameters from population distribution
-theta_true &amp;lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
+# OLS fit
+galton_fit &amp;lt;- lm(child ~ parent, data = galton_df)
+beta_galton &amp;lt;- coef(galton_fit)[2]
+r_galton &amp;lt;- cor(galton_df$parent, galton_df$child)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(galton_df, aes(x = parent, y = child)) +
+  geom_jitter(color = &amp;quot;#DCBCBC&amp;quot;, alpha = 0.4, size = 2, width = 0.3, height = 0.3) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &amp;quot;gray50&amp;quot;, linewidth = 0.8) +
+  geom_smooth(method = &amp;quot;lm&amp;quot;, se = FALSE, color = &amp;quot;#8F2727&amp;quot;, linewidth = 1.2) +
+  annotate(&amp;quot;text&amp;quot;, x = 64, y = 78,
+           label = paste0(&amp;quot;OLS slope = &amp;quot;, round(beta_galton, 2)),
+           color = &amp;quot;#8F2727&amp;quot;, size = 4.5) +
+  annotate(&amp;quot;text&amp;quot;, x = 64, y = 76,
+           label = &amp;quot;Identity line (slope = 1)&amp;quot;,
+           color = &amp;quot;gray50&amp;quot;, size = 4.5) +
+  xlab(&amp;quot;Mid-Parent Height (inches)&amp;quot;) +
+  ylab(&amp;quot;Child Height (inches)&amp;quot;) +
+  ggtitle(&amp;quot;Galton&amp;#39;s (1886) Data: Regression to the Mean&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-2-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The dashed gray line is the identity line (slope = 1), which would correspond to children having the &lt;em&gt;same&lt;/em&gt; height as their mid-parent value. The dark red line is the OLS regression line, with a slope of 0.65—substantially less than 1. Children of tall parents are tall, but not &lt;em&gt;as&lt;/em&gt; tall. Children of short parents are short, but not &lt;em&gt;as&lt;/em&gt; short. This is regression to the mean in its original, literal form, and the slope &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} \approx\)&lt;/span&gt; 0.65 is the shrinkage coefficient.&lt;/p&gt;
+&lt;p&gt;We can also see this as a 2D density:&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click to show visualization code
+&lt;/summary&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p_galton_density &amp;lt;- ggplot(galton_df, aes(x = parent, y = child)) +
+  stat_density_2d(aes(fill = after_stat(density)), geom = &amp;quot;raster&amp;quot;, contour = FALSE) +
+  scale_fill_gradient(low = &amp;quot;white&amp;quot;, high = &amp;quot;#8F2727&amp;quot;) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &amp;quot;gray50&amp;quot;, linewidth = 0.8) +
+  geom_smooth(method = &amp;quot;lm&amp;quot;, se = FALSE, color = &amp;quot;#DCBCBC&amp;quot;, linewidth = 1.2) +
+  xlab(&amp;quot;Mid-Parent Height (inches)&amp;quot;) +
+  ylab(&amp;quot;Child Height (inches)&amp;quot;) +
+  ggtitle(&amp;quot;Galton&amp;#39;s Data: 2D Density&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/details&gt;
+&lt;pre&gt;&lt;code&gt;## `geom_smooth()` using formula = &amp;#39;y ~ x&amp;#39;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-4-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The density cloud is tilted toward the identity line, but the regression line (dusty rose) cuts through it at a shallower angle—the classic signature of regression to the mean.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-math&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The Math&lt;/h2&gt;
+&lt;p&gt;When both variables are standardized, the regression slope equals the Pearson correlation: &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}^{(z)} = r_{XY}\)&lt;/span&gt;. And from Part 2, we know that the observed correlation between two noisy measures is attenuated:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[r_{XY} = \rho_{\text{true}} \sqrt{\rho_{xx} \cdot \rho_{yy}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;So the regression slope is a &lt;em&gt;shrunken&lt;/em&gt; version of the true relationship. Galton’s &lt;span class=&#34;math inline&#34;&gt;\(\approx 2/3\)&lt;/span&gt; factor is an estimate of the correlation between mid-parent and child heights, which is itself a product of the true heritability and the reliabilities of both measures.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;simulation&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Simulation&lt;/h2&gt;
+&lt;p&gt;To evaluate estimators against ground truth—consistent with the approach in Parts 1 and 2—let’s generate data from a known data-generating process where we have a true regression coefficient and measurement error on the predictor:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Simulation parameters
+N_subj      &amp;lt;- 200
+n_obs       &amp;lt;- 5       # observations per person per variable
+beta_true   &amp;lt;- 0.8     # true regression coefficient (latent X -&amp;gt; Y)
+mu_x        &amp;lt;- 68      # population mean of latent X
+sigma_x     &amp;lt;- 3       # population SD of latent X (between-person)
+sigma_obs_x &amp;lt;- 4       # observation-level SD for X
+sigma_eta   &amp;lt;- 3       # residual SD in structural equation
 
-# Generate observations for each individual on each measure
+# Generate latent true scores
+theta_x &amp;lt;- rnorm(N_subj, mu_x, sigma_x)
+theta_y &amp;lt;- beta_true * theta_x + rnorm(N_subj, 0, sigma_eta)
+
+# Generate noisy observations
 obs_data &amp;lt;- foreach(i = 1:N_subj, .combine = &amp;quot;rbind&amp;quot;) %do% {
-  y1 &amp;lt;- rnorm(n_obs, theta_true[i, 1], sigma_obs1)
-  y2 &amp;lt;- rnorm(n_obs, theta_true[i, 2], sigma_obs2)
+  x_obs &amp;lt;- rnorm(n_obs, theta_x[i], sigma_obs_x)
+  y_obs &amp;lt;- theta_y[i] + rnorm(n_obs, 0, sigma_eta)
   data.frame(
-    subj   = i,
-    trial  = 1:n_obs,
-    theta1 = theta_true[i, 1],
-    theta2 = theta_true[i, 2],
-    y1     = y1,
-    y2     = y2
+    subj    = i,
+    trial   = 1:n_obs,
+    theta_x = theta_x[i],
+    theta_y = theta_y[i],
+    x       = x_obs,
+    y       = y_obs
   )
 }
 
-# Compute reliabilities
-rel1 &amp;lt;- sigma_pop1^2 / (sigma_pop1^2 + sigma_obs1^2 / n_obs)
-rel2 &amp;lt;- sigma_pop2^2 / (sigma_pop2^2 + sigma_obs2^2 / n_obs)
-r_expected &amp;lt;- rho_true * sqrt(rel1 * rel2)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The reliability of each measure is &lt;span class=&#34;math inline&#34;&gt;\(\hat{\rho}_{xx}\)&lt;/span&gt; = 0.53, meaning that only about 53% of the variance in the sample means reflects true between-person differences. The expected attenuated correlation is &lt;span class=&#34;math inline&#34;&gt;\(r_{\text{obs}} \approx\)&lt;/span&gt; 0.37—almost half of the true &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; = 0.7.&lt;/p&gt;
-&lt;p&gt;Let’s look at the observations for 5 randomly selected individuals across both measures:&lt;/p&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show visualization code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;display_subjs &amp;lt;- sort(sample(1:N_subj, 5))
-
-p_histograms &amp;lt;- obs_data %&amp;gt;%
-  filter(subj %in% display_subjs) %&amp;gt;%
-  pivot_longer(cols = c(y1, y2, theta1, theta2), names_to = &amp;quot;measure_type&amp;quot;, values_to = &amp;quot;value&amp;quot;) %&amp;gt;%
-  mutate(
-    measure = ifelse(measure_type %in% c(&amp;quot;y1&amp;quot;, &amp;quot;theta1&amp;quot;), &amp;quot;y1&amp;quot;, &amp;quot;y2&amp;quot;),
-    y = ifelse(measure_type %in% c(&amp;quot;y1&amp;quot;, &amp;quot;y2&amp;quot;), value, NA),
-    theta = ifelse(measure_type %in% c(&amp;quot;theta1&amp;quot;, &amp;quot;theta2&amp;quot;), value, NA),
-    subj_label = paste0(&amp;quot;Subject &amp;quot;, subj),
-    measure_label = ifelse(measure == &amp;quot;y1&amp;quot;, &amp;quot;Measure 1&amp;quot;, &amp;quot;Measure 2&amp;quot;)
-  ) %&amp;gt;%
-  ggplot(aes(x = y)) +
-  geom_histogram(fill = &amp;quot;#DCBCBC&amp;quot;, color = &amp;quot;white&amp;quot;, bins = 12) +
-  geom_vline(aes(xintercept=theta)) +
-  facet_grid(measure_label ~ subj_label, scales = &amp;quot;free_y&amp;quot;) +
-  xlab(&amp;quot;Observed Value (y)&amp;quot;) +
-  ylab(&amp;quot;Count&amp;quot;) +
-  ggtitle(&amp;quot;Observations for 5 Individuals Across 2 Measures&amp;quot;) +
-  theme_minimal(base_size = 15) +
-  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-3-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;As in Part 1, with only 10 observations per individual per measure and a large observation(person)-level standard deviation (&lt;span class=&#34;math inline&#34;&gt;\(\sigma_{\text{obs}}\)&lt;/span&gt; = 6), the observations are quite spread out around the true means (gray bars). The challenge now is not just estimating individual means, but estimating the &lt;em&gt;relationship&lt;/em&gt; between two noisy sets of means.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;the-two-stage-pearson-r-naive-approach&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;The Two-Stage Pearson r (Naive Approach)&lt;/h1&gt;
-&lt;p&gt;The approach people often take is to compute the sample mean for each individual on each measure, then compute the Pearson’s correlation between sample means:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Compute individual-level sample means
+# Compute sample means per individual
 subj_summary &amp;lt;- obs_data %&amp;gt;%
   group_by(subj) %&amp;gt;%
   summarize(
-    theta1 = unique(theta1),
-    theta2 = unique(theta2),
-    ybar1  = mean(y1),
-    ybar2  = mean(y2),
+    theta_x = unique(theta_x),
+    theta_y = unique(theta_y),
+    x_bar   = mean(x),
+    y_bar   = mean(y),
     .groups = &amp;quot;drop&amp;quot;
   )
 
-# Naive correlation
-r_naive &amp;lt;- cor(subj_summary$ybar1, subj_summary$ybar2)
+# Reliability of X
+rho_xx &amp;lt;- sigma_x^2 / (sigma_x^2 + sigma_obs_x^2 / n_obs)
 
-# True correlation (from the actual theta values)
-r_true_sample &amp;lt;- cor(subj_summary$theta1, subj_summary$theta2)&lt;/code&gt;&lt;/pre&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show visualization code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;subj_long &amp;lt;- bind_rows(
-  subj_summary %&amp;gt;% transmute(x = theta1, y = theta2,
-                              Type = paste0(&amp;quot;True (\u03B8\u2081, \u03B8\u2082)&amp;quot;)),
-  subj_summary %&amp;gt;% transmute(x = ybar1, y = ybar2,
-                              Type = paste0(&amp;quot;Observed (\u0233\u2081, \u0233\u2082)&amp;quot;))
-)
+# OLS on sample means
+fit_ols &amp;lt;- lm(y_bar ~ x_bar, data = subj_summary)
+beta_ols &amp;lt;- coef(fit_ols)[2]
 
-p_twostage &amp;lt;- ggplot(subj_long, aes(x = x, y = y, color = Type)) +
-  geom_point(size = 3, alpha = 0.7) +
-  scale_color_manual(values = c(setNames(&amp;quot;gray40&amp;quot;, paste0(&amp;quot;True (\u03B8\u2081, \u03B8\u2082)&amp;quot;)),
-                                 setNames(&amp;quot;#DCBCBC&amp;quot;, paste0(&amp;quot;Observed (\u0233\u2081, \u0233\u2082)&amp;quot;)))) +
-  xlab(&amp;quot;Measure 1&amp;quot;) +
-  ylab(&amp;quot;Measure 2&amp;quot;) +
-  ggtitle(paste0(&amp;quot;Two-Stage Pearson r = &amp;quot;, round(r_naive, 2),
-                 &amp;quot; (True \u03C1 = &amp;quot;, rho_true, &amp;quot;)&amp;quot;)) +
+# True regression of theta_y on theta_x
+fit_true &amp;lt;- lm(theta_y ~ theta_x, data = subj_summary)
+beta_latent &amp;lt;- coef(fit_true)[2]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The reliability of &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; is &lt;span class=&#34;math inline&#34;&gt;\(\rho_{xx}\)&lt;/span&gt; = 0.74, so the predicted attenuation of &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; is &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\text{true}} \times \rho_{xx}\)&lt;/span&gt; = 0.59. Let’s see how the OLS estimate compares:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(subj_summary, aes(x = x_bar, y = y_bar)) +
+  geom_point(color = &amp;quot;#DCBCBC&amp;quot;, alpha = 0.5, size = 2) +
+  geom_smooth(method = &amp;quot;lm&amp;quot;, se = FALSE, color = &amp;quot;#DCBCBC&amp;quot;, linewidth = 1.2) +
+  geom_smooth(aes(x = theta_x, y = theta_y), method = &amp;quot;lm&amp;quot;, se = FALSE,
+              color = &amp;quot;#8F2727&amp;quot;, linewidth = 1.2, linetype = 1) +
+  annotate(&amp;quot;text&amp;quot;, x = min(subj_summary$x_bar) + 1, y = max(subj_summary$y_bar),
+           label = paste0(&amp;quot;OLS on observed: \u03B2\u0302 = &amp;quot;, round(beta_ols, 2)),
+           color = &amp;quot;#DCBCBC&amp;quot;, size = 4.5, hjust = 0) +
+  annotate(&amp;quot;text&amp;quot;, x = min(subj_summary$x_bar) + 1, y = max(subj_summary$y_bar) - 3,
+           label = paste0(&amp;quot;True relationship: \u03B2 = &amp;quot;, round(beta_latent, 2)),
+           color = &amp;quot;#8F2727&amp;quot;, size = 4.5, hjust = 0) +
+  xlab(&amp;quot;Observed X (sample mean)&amp;quot;) +
+  ylab(&amp;quot;Observed Y (sample mean)&amp;quot;) +
+  ggtitle(&amp;quot;OLS Regression with Measurement Error in X&amp;quot;) +
   theme_minimal(base_size = 15) +
-  theme(panel.grid = element_blank(),
-        legend.title = element_blank(),
-        legend.position = c(.2, .85))&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-6-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;The gray points show individuals’ true scores, and the light red points show the sample means. Measurement error has expanded the scatterplot cloud, weakening the apparent relationship. The two-stage Pearson &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; = 0.44, much less than the true &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; = 0.7.&lt;/p&gt;
-&lt;p&gt;To confirm this is not sampling variability and an (un)lucky simulation seed, we can repeat the simulation many times:&lt;/p&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show visualization code
-&lt;/summary&gt;
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-6-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The OLS slope (dusty rose) is visibly shallower than the true latent relationship (dark red). This is not a small-sample accident—it is a systematic bias caused by measurement error in the predictor. Let’s formalize why.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pearsons-formalization-beta-covvar-as-shrinkage&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Pearson’s Formalization — &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; = Cov/Var as Shrinkage&lt;/h1&gt;
+&lt;div id=&#34;the-clean-case&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The Clean Case&lt;/h2&gt;
+&lt;p&gt;In 1896, &lt;a href=&#34;https://doi.org/10.1098/rsta.1896.0007&#34;&gt;Karl Pearson&lt;/a&gt; formalized Galton’s observations into the framework we now call regression. The population regression coefficient is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\beta = \frac{\text{Cov}(X, Y)}{\text{Var}(X)}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;When &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; is measured without error, OLS gives an unbiased estimate of &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;. No problems there.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;introducing-measurement-error-on-x&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Introducing Measurement Error on X&lt;/h2&gt;
+&lt;p&gt;Now suppose we do not observe &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; directly. Instead, we observe &lt;span class=&#34;math inline&#34;&gt;\(\tilde{X} = \theta + \epsilon\)&lt;/span&gt;, where &lt;span class=&#34;math inline&#34;&gt;\(\theta\)&lt;/span&gt; is the true latent predictor and &lt;span class=&#34;math inline&#34;&gt;\(\epsilon\)&lt;/span&gt; is measurement error. The key decomposition is:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{Var}(\tilde{X}) = \text{Var}(\theta) + \text{Var}(\epsilon)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\text{Cov}(\tilde{X}, Y) = \text{Cov}(\theta + \epsilon, Y) = \text{Cov}(\theta, Y)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The covariance is unbiased (error is uncorrelated with &lt;span class=&#34;math inline&#34;&gt;\(Y\)&lt;/span&gt;), but the variance is inflated. Therefore:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\beta}_{\text{OLS}} = \frac{\text{Cov}(\tilde{X}, Y)}{\text{Var}(\tilde{X})} = \frac{\text{Cov}(\theta, Y)}{\text{Var}(\theta) + \text{Var}(\epsilon)} = \beta_{\text{true}} \cdot \frac{\text{Var}(\theta)}{\text{Var}(\theta) + \text{Var}(\epsilon)} = \beta_{\text{true}} \cdot \rho_{xx}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The OLS regression coefficient &lt;strong&gt;is the true coefficient times the predictor reliability&lt;/strong&gt;. This is the same signal-over-signal-plus-noise ratio from Parts 1 and 2—&lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)&lt;/span&gt;—now showing up in the context of regression.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-asymmetry&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The Asymmetry&lt;/h2&gt;
+&lt;p&gt;One important subtlety worth highlighting: measurement error in &lt;span class=&#34;math inline&#34;&gt;\(Y\)&lt;/span&gt; increases the residual variance (and thus widens confidence intervals), but it does &lt;strong&gt;not&lt;/strong&gt; bias &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt;. Only measurement error in &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; causes attenuation. This asymmetry arises because &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; enters the denominator of &lt;span class=&#34;math inline&#34;&gt;\(\beta = \text{Cov}/\text{Var}(X)\)&lt;/span&gt;, while &lt;span class=&#34;math inline&#34;&gt;\(Y\)&lt;/span&gt; enters only the numerator—and as we showed in Part 2, measurement error in the numerator washes out, while error in the denominator inflates it.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;simulation-varying-predictor-reliability&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Simulation: Varying Predictor Reliability&lt;/h2&gt;
+&lt;p&gt;Alright, to see this attenuation in action, let’s vary the measurement error on &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; while holding everything else constant:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sigma_obs_x_vec &amp;lt;- c(0.01, 2, 4, 8)
+
+panel_data &amp;lt;- foreach(k = seq_along(sigma_obs_x_vec), .combine = &amp;quot;rbind&amp;quot;) %do% {
+  sigma_k &amp;lt;- sigma_obs_x_vec[k]
+  rho_k   &amp;lt;- sigma_x^2 / (sigma_x^2 + sigma_k^2 / n_obs)
+
+  obs_k &amp;lt;- foreach(i = 1:N_subj, .combine = &amp;quot;rbind&amp;quot;) %do% {
+    data.frame(
+      subj    = i,
+      theta_x = theta_x[i],
+      theta_y = theta_y[i],
+      x       = rnorm(n_obs, theta_x[i], sigma_k),
+      y       = theta_y[i] + rnorm(n_obs, 0, sigma_eta)
+    )
+  }
+
+  summ_k &amp;lt;- obs_k %&amp;gt;%
+    group_by(subj) %&amp;gt;%
+    summarize(theta_x = unique(theta_x), theta_y = unique(theta_y),
+              x_bar = mean(x), y_bar = mean(y), .groups = &amp;quot;drop&amp;quot;)
+
+  fit_k  &amp;lt;- lm(y_bar ~ x_bar, data = summ_k)
+
+  summ_k %&amp;gt;%
+    mutate(
+      rho_xx  = round(rho_k, 2),
+      beta_ols = round(coef(fit_k)[2], 2),
+      panel_label = paste0(&amp;quot;\u03C1_xx = &amp;quot;, round(rho_k, 2),
+                           &amp;quot; (\u03B2\u0302 = &amp;quot;, round(coef(fit_k)[2], 2), &amp;quot;)&amp;quot;)
+    )
+}
+
+panel_data %&amp;gt;%
+  ggplot(aes(x = x_bar, y = y_bar)) +
+  geom_point(color = &amp;quot;#DCBCBC&amp;quot;, alpha = 0.4, size = 1.5) +
+  geom_smooth(method = &amp;quot;lm&amp;quot;, se = FALSE, color = &amp;quot;#DCBCBC&amp;quot;, linewidth = 1) +
+  geom_smooth(aes(x = theta_x, y = theta_y), method = &amp;quot;lm&amp;quot;, se = FALSE,
+              color = &amp;quot;#8F2727&amp;quot;, linewidth = 1) +
+  facet_wrap(~panel_label, nrow = 1, scales = &amp;quot;free_x&amp;quot;) +
+  xlab(&amp;quot;Observed X (sample mean)&amp;quot;) +
+  ylab(&amp;quot;Observed Y (sample mean)&amp;quot;) +
+  ggtitle(&amp;quot;Attenuation of Regression Slope with Decreasing Predictor Reliability&amp;quot;) +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-7-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As reliability decreases from left to right, the OLS slope (dusty rose) flattens toward zero while the true relationship (dark red) remains unchanged. The slope is being &lt;em&gt;shrunk&lt;/em&gt; by the reliability factor—exactly as predicted by the formula above.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;sampling-distribution&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Sampling Distribution&lt;/h2&gt;
+&lt;p&gt;To confirm that this is not an (un)lucky simulation seed, we can repeat the simulation many times and look at the sampling distribution of &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}_{\text{OLS}}\)&lt;/span&gt;:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n_sims &amp;lt;- 1000
-r_naive_dist &amp;lt;- replicate(n_sims, {
-  theta_sim &amp;lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
-  y1_sim &amp;lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 1], sigma_obs1), N_subj, n_obs)
-  y2_sim &amp;lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 2], sigma_obs2), N_subj, n_obs)
-  cor(rowMeans(y1_sim), rowMeans(y2_sim))
+beta_sims &amp;lt;- replicate(n_sims, {
+  theta_sim &amp;lt;- rnorm(N_subj, mu_x, sigma_x)
+  y_sim     &amp;lt;- beta_true * theta_sim + rnorm(N_subj, 0, sigma_eta)
+
+  x_obs_sim &amp;lt;- foreach(i = 1:N_subj, .combine = &amp;quot;c&amp;quot;) %do% {
+    mean(rnorm(n_obs, theta_sim[i], sigma_obs_x))
+  }
+  y_obs_sim &amp;lt;- foreach(i = 1:N_subj, .combine = &amp;quot;c&amp;quot;) %do% {
+    mean(y_sim[i] + rnorm(n_obs, 0, sigma_eta))
+  }
+
+  coef(lm(y_obs_sim ~ x_obs_sim))[2]
 })
 
-p_naive_dist &amp;lt;- data.frame(r = r_naive_dist) %&amp;gt;%
-  ggplot(aes(x = r)) +
+data.frame(beta = beta_sims) %&amp;gt;%
+  ggplot(aes(x = beta)) +
   geom_histogram(fill = &amp;quot;#DCBCBC&amp;quot;, color = &amp;quot;white&amp;quot;, bins = 50) +
-  geom_vline(xintercept = rho_true, color = &amp;quot;gray40&amp;quot;, size = 1.2, linetype = 1) +
-  geom_vline(xintercept = mean(r_naive_dist), color = &amp;quot;#8F2727&amp;quot;, size = 1.2, linetype = 2) +
-  annotate(&amp;quot;text&amp;quot;, x = rho_true - 0.17, y = Inf,
-           label = paste0(&amp;quot;True \u03C1 = &amp;quot;, rho_true), hjust = 0, vjust = 1.5,
-           color = &amp;quot;gray40&amp;quot;, size = 4.5) +
-  annotate(&amp;quot;text&amp;quot;, x = mean(r_naive_dist) - 0.02, y = Inf,
-           label = paste0(&amp;quot;Mean r = &amp;quot;, round(mean(r_naive_dist), 2)),
+  geom_vline(xintercept = beta_true, color = &amp;quot;gray40&amp;quot;, linewidth = 1.2) +
+  geom_vline(xintercept = beta_true * rho_xx, color = &amp;quot;#8F2727&amp;quot;,
+             linewidth = 1.2, linetype = 2) +
+  annotate(&amp;quot;text&amp;quot;, x = beta_true + 0.02, y = Inf,
+           label = paste0(&amp;quot;\u03B2_true = &amp;quot;, beta_true),
+           hjust = 0, vjust = 1.5, color = &amp;quot;gray40&amp;quot;, size = 4.5) +
+  annotate(&amp;quot;text&amp;quot;, x = beta_true * rho_xx - 0.02, y = Inf,
+           label = paste0(&amp;quot;\u03B2_true \u00D7 \u03C1_xx = &amp;quot;, round(beta_true * rho_xx, 2)),
            hjust = 1, vjust = 1.5, color = &amp;quot;#8F2727&amp;quot;, size = 4.5) +
-  xlab(&amp;quot;Observed Pearson r&amp;quot;) +
+  xlab(expression(hat(beta)[OLS])) +
   ylab(&amp;quot;Count&amp;quot;) +
-  ggtitle(&amp;quot;Sampling Distribution of the Two-Stage Pearson r&amp;quot;) +
+  ggtitle(&amp;quot;Sampling Distribution of OLS Slope with Measurement Error in X&amp;quot;) +
   theme_minimal(base_size = 15) +
   theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-8-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;The sampling distribution is centered around 0.36, consistent with the attenuation formula’s prediction. The two-stage Pearson &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; is a &lt;em&gt;biased&lt;/em&gt; estimator of &lt;span class=&#34;math inline&#34;&gt;\(\rho_{\text{true}}\)&lt;/span&gt;—it systematically underestimates the true correlation.&lt;/p&gt;
-&lt;p&gt;I don’t know about you, but this all seems problematic! Many social and behavioral science papers follow the exact workflow above, and then they go on to interpret resulting correlations. Occasionally, researchers will even report things like Cronbach’s &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; (a reliability estimator, see our &lt;a href=&#34;https://haines-lab.com/post/bayesian-design-optimization-an-application-to-item-reduction-in-scale-development-research/&#34;&gt;previous post&lt;/a&gt;) for their self-report summed score measures—but in the majority of cases they don’t bother using this reliability estimate to disattenuate downstream correlations. Instead, as often happens in science, researchers are following standards divorced from the rationales that motivated the standards a priori (e.g., “&lt;em&gt;Cronbach’s &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; = .7, which is considered good (Citation et al, 1990)&lt;/em&gt;” — yes, but only good if you like attenuated estimates :D)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/sampling-dist-beta-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The sampling distribution is centered at &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\text{true}} \times \rho_{xx}\)&lt;/span&gt; = 0.59, not at the true value &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; = 0.8. The OLS estimator is &lt;em&gt;biased&lt;/em&gt;, and the bias is entirely determined by the predictor reliability.&lt;/p&gt;
 &lt;/div&gt;
-&lt;div id=&#34;a-tempting-but-wrong-fix-univariate-shrinkage&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;A Tempting But Wrong Fix: Univariate Shrinkage&lt;/h1&gt;
-&lt;p&gt;Part 1 taught us that shrinking individual means toward the group-level mean produces better estimates. A natural question that comes to mind is: what if we apply the univariate shrinkage estimators from Part 1 to each measure separately, then correlate the shrunken means?&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Univariate shrinkage for each measure separately
-grand_mean1 &amp;lt;- mean(subj_summary$ybar1)
-grand_mean2 &amp;lt;- mean(subj_summary$ybar2)
-sigma2_pool1 &amp;lt;- mean(obs_data %&amp;gt;% group_by(subj) %&amp;gt;% summarize(v = var(y1)) %&amp;gt;% pull(v))
-sigma2_pool2 &amp;lt;- mean(obs_data %&amp;gt;% group_by(subj) %&amp;gt;% summarize(v = var(y2)) %&amp;gt;% pull(v))
-se2_1 &amp;lt;- sigma2_pool1 / n_obs
-se2_2 &amp;lt;- sigma2_pool2 / n_obs
-sigma2_pop_hat1 &amp;lt;- max(var(subj_summary$ybar1) - se2_1, 0.001)
-sigma2_pop_hat2 &amp;lt;- max(var(subj_summary$ybar2) - se2_2, 0.001)
-B1 &amp;lt;- sigma2_pop_hat1 / (sigma2_pop_hat1 + se2_1)
-B2 &amp;lt;- sigma2_pop_hat2 / (sigma2_pop_hat2 + se2_2)
-
-subj_summary &amp;lt;- subj_summary %&amp;gt;%
-  mutate(
-    ybar1_shrunk = grand_mean1 + B1 * (ybar1 - grand_mean1),
-    ybar2_shrunk = grand_mean2 + B2 * (ybar2 - grand_mean2)
+&lt;/div&gt;
+&lt;div id=&#34;the-standardized-case-connecting-all-three-posts&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;The Standardized Case — Connecting All Three Posts&lt;/h1&gt;
+&lt;p&gt;When both &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(Y\)&lt;/span&gt; are standardized, the regression slope reduces to the Pearson correlation:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\beta}^{(z)} = r_{XY} = \rho_{\text{true}} \sqrt{\rho_{xx} \cdot \rho_{yy}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This connects all three posts:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;unification_df &amp;lt;- data.frame(
+  Post = c(&amp;quot;1 (Means)&amp;quot;, &amp;quot;2 (Correlations)&amp;quot;, &amp;quot;3 (Regression)&amp;quot;),
+  Estimand = c(&amp;quot;Mean $\\mu_i$&amp;quot;, &amp;quot;Correlation $\\rho$&amp;quot;, &amp;quot;Regression $\\beta$&amp;quot;),
+  `Attenuation Factor` = c(
+    &amp;quot;$B = \\sigma^2_{\\text{pop}} / (\\sigma^2_{\\text{pop}} + \\sigma^2_{\\text{obs}}/n)$&amp;quot;,
+    &amp;quot;$r = \\rho_{\\text{true}} \\sqrt{\\rho_{xx,1} \\cdot \\rho_{xx,2}}$&amp;quot;,
+    &amp;quot;$\\hat{\\beta} = \\beta_{\\text{true}} \\times \\rho_{xx}$&amp;quot;
   )
-
-r_univariate_shrunk &amp;lt;- cor(subj_summary$ybar1_shrunk, subj_summary$ybar2_shrunk)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The correlation between the univariate-shrunk means is &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; = 0.44. Compare this to the naive Pearson &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; = 0.44.&lt;/p&gt;
-&lt;p&gt;They are identical!&lt;/p&gt;
-&lt;p&gt;This is because the Pearson correlation is &lt;strong&gt;scale and location invariant&lt;/strong&gt;. Univariate shrinkage makes the individual mean estimates better (lower RMSE), but it does &lt;strong&gt;nothing&lt;/strong&gt; for the correlation estimate. See for yourself below:&lt;/p&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show animation code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(gganimate)
-
-# Interpolated positions for the traveling points
-anim_df &amp;lt;- expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&amp;gt;%
-  left_join(subj_summary, by = &amp;quot;subj&amp;quot;) %&amp;gt;%
-  mutate(
-    x = (1 - t) * ybar1 + t * ybar1_shrunk,
-    y = (1 - t) * ybar2 + t * ybar2_shrunk
-  )
-
-# Correlation at each frame (constant, but display it)
-anim_cors &amp;lt;- anim_df %&amp;gt;%
-  group_by(t) %&amp;gt;%
-  summarize(r = cor(x, y), .groups = &amp;quot;drop&amp;quot;)
-
-anim_df &amp;lt;- anim_df %&amp;gt;%
-  left_join(anim_cors, by = &amp;quot;t&amp;quot;) %&amp;gt;%
-  mutate(r_label = paste0(&amp;quot;r = &amp;quot;, sprintf(&amp;quot;%.3f&amp;quot;, r)))
-
-p_anim &amp;lt;- ggplot(anim_df) +
-  geom_segment(aes(x = ybar1, y = ybar2, xend = ybar1_shrunk, yend = ybar2_shrunk),
-               color = &amp;quot;gray70&amp;quot;, linewidth = 0.3, alpha = 0.5) +
-  geom_point(aes(x = ybar1, y = ybar2), color = &amp;quot;#DCBCBC&amp;quot;, size = 2.5) +
-  geom_point(aes(x = ybar1_shrunk, y = ybar2_shrunk), color = &amp;quot;#8F2727&amp;quot;, size = 2.5) +
-  geom_vline(xintercept = grand_mean1, linetype = &amp;quot;dashed&amp;quot;, color = &amp;quot;gray60&amp;quot;, linewidth = 0.4) +
-  geom_hline(yintercept = grand_mean2, linetype = &amp;quot;dashed&amp;quot;, color = &amp;quot;gray60&amp;quot;, linewidth = 0.4) +
-  geom_point(aes(x = x, y = y), color = &amp;quot;#B2182B&amp;quot;, size = 3.5) +
-  geom_text(data = anim_cors %&amp;gt;% mutate(r_label = paste0(&amp;quot;r = &amp;quot;, sprintf(&amp;quot;%.3f&amp;quot;, r))),
-            aes(label = r_label, group = t), x = Inf, y = Inf, hjust = 1.1, vjust = 1.5,
-            size = 5, color = &amp;quot;#8F2727&amp;quot;, fontface = &amp;quot;bold&amp;quot;) +
-  xlab(&amp;quot;Measure 1&amp;quot;) +
-  ylab(&amp;quot;Measure 2&amp;quot;) +
-  ggtitle(&amp;quot;Univariate Shrinkage:&amp;quot;, &amp;quot;Cloud Contracts, Correlation Unaffected&amp;quot;) +
-  theme_minimal(base_size = 15) +
-  theme(panel.grid = element_blank()) +
-  transition_time(t) +
-  ease_aes(&amp;quot;cubic-in-out&amp;quot;)
-
-animate(p_anim, nframes = 100, fps = 10,
-        width = 1000, height = 800, res = 150,
-        renderer = magick_renderer(loop = TRUE), rewind = TRUE)
-anim_save(&amp;quot;univariate_shrink_animation.gif&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;univariate_shrink_animation.gif&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
-&lt;p&gt;From the animation, you can see the the scatterplot just shrinks down, preserving the same shape—and correlation—as the sample means.&lt;/p&gt;
-&lt;p&gt;To estimate a better correlation, we need to think &lt;em&gt;multivariately&lt;/em&gt;, considering methods that capture the joint distribution of the two measures.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;spearmans-correction-for-attenuation-1904&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Spearman’s Correction for Attenuation (1904)&lt;/h1&gt;
-&lt;p&gt;In 1904, &lt;a href=&#34;https://doi.org/10.2307/1412159&#34;&gt;Spearman&lt;/a&gt; showed that if we know (or can estimate) the reliabilities of each measure, we can algebraically disattenuate the observed correlation:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\rho}_{\text{true}} = \frac{r_{\text{obs}}}{\sqrt{\hat{\rho}_{xx,1} \cdot \hat{\rho}_{xx,2}}}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Note that this is just the attenuation formula from above solved for &lt;span class=&#34;math inline&#34;&gt;\(\rho_{\text{true}}\)&lt;/span&gt;. We can try this on our simulated data:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Estimate reliabilities from data
-rho_hat1 &amp;lt;- sigma2_pop_hat1 / (sigma2_pop_hat1 + se2_1)
-rho_hat2 &amp;lt;- sigma2_pop_hat2 / (sigma2_pop_hat2 + se2_2)
-
-# Spearman correction
-r_spearman &amp;lt;- r_naive / sqrt(rho_hat1 * rho_hat2)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The corrected correlation is &lt;span class=&#34;math inline&#34;&gt;\(\hat{\rho}_{\text{true}}\)&lt;/span&gt; = 0.73, much closer to the true &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; = 0.7. I said this too about the Kelley true score estimator in Part 1—pretty cool for a method developed over 100 years ago!&lt;/p&gt;
-&lt;p&gt;We can also check out the full sampling distribution to get a sense of how it performs more generally:&lt;/p&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show visualization code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;r_spearman_dist &amp;lt;- replicate(n_sims, {
-  theta_sim &amp;lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
-  y1_sim &amp;lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 1], sigma_obs1), N_subj, n_obs)
-  y2_sim &amp;lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 2], sigma_obs2), N_subj, n_obs)
-  ybar1_sim &amp;lt;- rowMeans(y1_sim)
-  ybar2_sim &amp;lt;- rowMeans(y2_sim)
-  r_obs_sim &amp;lt;- cor(ybar1_sim, ybar2_sim)
-
-  # Estimate reliabilities
-  var1_sim &amp;lt;- mean(apply(y1_sim, 1, var))
-  var2_sim &amp;lt;- mean(apply(y2_sim, 1, var))
-  se2_1_sim &amp;lt;- var1_sim / n_obs
-  se2_2_sim &amp;lt;- var2_sim / n_obs
-  s2pop1_sim &amp;lt;- max(var(ybar1_sim) - se2_1_sim, 0.001)
-  s2pop2_sim &amp;lt;- max(var(ybar2_sim) - se2_2_sim, 0.001)
-  rho1_sim &amp;lt;- s2pop1_sim / (s2pop1_sim + se2_1_sim)
-  rho2_sim &amp;lt;- s2pop2_sim / (s2pop2_sim + se2_2_sim)
-
-  r_obs_sim / sqrt(rho1_sim * rho2_sim)
-})
-
-p_spearman &amp;lt;- data.frame(
-  r = c(r_naive_dist, r_spearman_dist),
-  Method = rep(c(&amp;quot;Two-Stage Pearson r&amp;quot;, &amp;quot;Spearman Corrected&amp;quot;), each = n_sims)
-) %&amp;gt;%
-  ggplot(aes(x = r, fill = Method)) +
-  geom_histogram(color = &amp;quot;white&amp;quot;, bins = 300, alpha = 0.7, position = &amp;quot;identity&amp;quot;) +
-  geom_vline(xintercept = rho_true, color = &amp;quot;gray40&amp;quot;, size = 1.2) +
-  scale_fill_manual(values = c(&amp;quot;Two-Stage Pearson r&amp;quot; = &amp;quot;#DCBCBC&amp;quot;,
-                                &amp;quot;Spearman Corrected&amp;quot; = &amp;quot;#8F2727&amp;quot;)) +
-  coord_cartesian(xlim = c(-0.5, 1.5)) +
-  xlab(&amp;quot;Estimated Correlation&amp;quot;) +
-  ylab(&amp;quot;Count&amp;quot;) +
-  ggtitle(&amp;quot;Spearman Correction: Unbiased but High Variance&amp;quot;) +
-  theme_minimal(base_size = 15) +
-  theme(panel.grid = element_blank(),
-        legend.position = c(0.2, 0.85))&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-14-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Interestingly, we see that the Spearman correction is approximately unbiased (centered near &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; = 0.7), but it has much higher variance than the naive estimator. Worse, 13.2% of the corrected values exceed 1.0—a clear impossibility for a correlation! This happens because both the observed correlation and the reliability estimates have sampling variability, and dividing one noisy quantity by another can produce extreme values.&lt;/p&gt;
-&lt;p&gt;Spearman had the right idea in 1904, but we can see from the sampling distribution that the correction is a bit fragile. It works well for large-sample, population-level inferences, but is unreliable for individual studies—especially when reliabilities are low.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;multivariate-shrinkage&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Multivariate Shrinkage&lt;/h1&gt;
-&lt;p&gt;In Part 1, we showed that the James-Stein estimator (and equivalently, Kelley’s true score estimator and the empirical Bayes posterior mean) shrinks each individual’s sample mean toward the grand mean:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\mu}_i = \hat{\mu}_{\text{pop}} + B(\bar{y}_i - \hat{\mu}_{\text{pop}})\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(B = \hat{\sigma}^2_{\text{pop}} / (\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n)\)&lt;/span&gt; is a scalar shrinkage factor—signal over signal-plus-noise. What happens when we have &lt;em&gt;two&lt;/em&gt; measures instead of one?&lt;/p&gt;
-&lt;p&gt;If we applied Part 1’s univariate shrinkage separately to each measure, we would write:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned}
-\hat{\theta}_{1,i} &amp;amp;= \hat{\mu}_1 + B_1(\bar{y}_{1,i} - \hat{\mu}_1) \\
-\hat{\theta}_{2,i} &amp;amp;= \hat{\mu}_2 + B_2(\bar{y}_{2,i} - \hat{\mu}_2)
-\end{aligned}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\(B_1\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(B_2\)&lt;/span&gt; are the shrinkage factors/reliabilities from Part 1. But as we just showed, this does not change the correlation. The problem is that each measure’s shrinkage ignores the other measure entirely.&lt;/p&gt;
-&lt;p&gt;What if we allowed each shrunk estimate to depend on &lt;em&gt;both&lt;/em&gt; observed means? For example, for &lt;span class=&#34;math inline&#34;&gt;\(\hat{\theta}_{1,i}\)&lt;/span&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\theta}_{1,i} = \hat{\mu}_1 + B_{11}(\bar{y}_{1,i} - \hat{\mu}_1) + B_{12}(\bar{y}_{2,i} - \hat{\mu}_2)\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Now we have a new coefficient &lt;span class=&#34;math inline&#34;&gt;\(B_{12}\)&lt;/span&gt; that controls how much measure 2’s data contributes to the estimate of &lt;span class=&#34;math inline&#34;&gt;\(\theta_1\)&lt;/span&gt;. Why would measure 2 tell us &lt;em&gt;anything&lt;/em&gt; about &lt;span class=&#34;math inline&#34;&gt;\(\theta_1\)&lt;/span&gt;? Well, we know that &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_2\)&lt;/span&gt; is a noisy observation of &lt;span class=&#34;math inline&#34;&gt;\(\theta_2\)&lt;/span&gt;, and that &lt;span class=&#34;math inline&#34;&gt;\(\theta_2\)&lt;/span&gt; is correlated with &lt;span class=&#34;math inline&#34;&gt;\(\theta_1\)&lt;/span&gt; (through &lt;span class=&#34;math inline&#34;&gt;\(\rho_{\text{true}}\)&lt;/span&gt;), which makes &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_2\)&lt;/span&gt; a noisy signal on &lt;span class=&#34;math inline&#34;&gt;\(\theta_1\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;To see how much signal, let’s think about this the same way we thought about &lt;span class=&#34;math inline&#34;&gt;\(B_{11}\)&lt;/span&gt; in Part 1. In the univariate case, we derived &lt;span class=&#34;math inline&#34;&gt;\(B\)&lt;/span&gt; as the ratio of useful signal to total variation in the predictor: &lt;span class=&#34;math inline&#34;&gt;\(B = \text{Cov}(\theta, \bar{y}) / \text{Var}(\bar{y})\)&lt;/span&gt;. This is just a regression coefficient—how much of the predictor’s variation is useful for estimating the target. Let’s rewrite &lt;span class=&#34;math inline&#34;&gt;\(B_{11}\)&lt;/span&gt; in that language to make the parallel explicit:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[B_{11} = \frac{\text{Cov}(\theta_1, \bar{y}_1)}{\text{Var}(\bar{y}_1)} = \frac{\sigma^2_{\text{pop},1}}{\sigma^2_{\text{pop},1} + \sigma^2_{\text{obs},1}/n}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;This is exactly Part 1’s signal-over-signal-plus-noise. The numerator is the true-score variance (because &lt;span class=&#34;math inline&#34;&gt;\(\text{Cov}(\theta_1, \bar{y}_1) = \text{Cov}(\theta_1, \theta_1 + \bar{\epsilon}_1) = \sigma^2_{\text{pop},1}\)&lt;/span&gt;), and the denominator is the total variance of the sample mean.&lt;/p&gt;
-&lt;p&gt;Now we can ask the same question for &lt;span class=&#34;math inline&#34;&gt;\(B_{12}\)&lt;/span&gt;: how much of &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_2\)&lt;/span&gt;’s variation is useful for estimating &lt;span class=&#34;math inline&#34;&gt;\(\theta_1\)&lt;/span&gt;? By the same logic:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[B_{12} = \frac{\text{Cov}(\theta_1, \bar{y}_2)}{\text{Var}(\bar{y}_2)}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;The denominator is the same signal-plus-noise form: &lt;span class=&#34;math inline&#34;&gt;\(\text{Var}(\bar{y}_2) = \sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n\)&lt;/span&gt;. For the numerator, since &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_2 = \theta_2 + \bar{\epsilon}_2\)&lt;/span&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned}
-\text{Cov}(\theta_1, \bar{y}_2) &amp;amp;= \text{Cov}(\theta_1, \theta_2 + \bar{\epsilon}_2) \\
-&amp;amp;= \text{Cov}(\theta_1, \theta_2) + \underbrace{\text{Cov}(\theta_1, \bar{\epsilon}_2)}_{=0} \\
-&amp;amp;= \rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}
-\end{aligned}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;The measurement error on measure 2 is independent of individual &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt;’s true score on measure 1, so the noise drops out—exactly as we saw earlier when showing that the cross-measure covariance is unbiased. Putting it together:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[B_{12} = \frac{\rho_{\text{true}}\sigma_{\text{pop},1}\sigma_{\text{pop},2}}{\sigma^2_{\text{pop},2} + \sigma^2_{\text{obs},2}/n}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;If &lt;span class=&#34;math inline&#34;&gt;\(\rho_{\text{true}} \approx 0\)&lt;/span&gt; or &lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_{\text{obs},2}/n\)&lt;/span&gt; is high relative to &lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_{\text{pop},2}\)&lt;/span&gt;, then &lt;span class=&#34;math inline&#34;&gt;\(B_{12} \approx 0\)&lt;/span&gt; and we are back to univariate shrinkage—measure 2 contributes nothing. If &lt;span class=&#34;math inline&#34;&gt;\(\rho_{\text{true}} \neq 0\)&lt;/span&gt;, measure 2 carries real information about &lt;span class=&#34;math inline&#34;&gt;\(\theta_1\)&lt;/span&gt;, and &lt;span class=&#34;math inline&#34;&gt;\(B_{12}\)&lt;/span&gt; captures how much. An individual who scores high on measure 2 is pulled &lt;em&gt;upward&lt;/em&gt; on measure 1, even if their measure 1 data alone would suggest more shrinkage.&lt;/p&gt;
-&lt;p&gt;One subtlety: &lt;span class=&#34;math inline&#34;&gt;\(B_{12}\)&lt;/span&gt; as derived above is the &lt;em&gt;marginal&lt;/em&gt; regression coefficient—how useful &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_2\)&lt;/span&gt; is for predicting &lt;span class=&#34;math inline&#34;&gt;\(\theta_1\)&lt;/span&gt; on its own, ignoring &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_1\)&lt;/span&gt;. When both predictors enter the equation simultaneously, we need &lt;em&gt;partial&lt;/em&gt; regression coefficients that account for the shared information between &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_1\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\bar{y}_2\)&lt;/span&gt;. The scalar algebra for this gets messy, but matrix notation handles it cleanly. Writing the same equation for both measures and stacking into matrix form:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{pmatrix} \hat{\theta}_{1,i} \\ \hat{\theta}_{2,i} \end{pmatrix} = \begin{pmatrix} \hat{\mu}_1 \\ \hat{\mu}_2 \end{pmatrix} + \begin{pmatrix} B_{11} &amp;amp; B_{12} \\ B_{21} &amp;amp; B_{22} \end{pmatrix} \begin{pmatrix} \bar{y}_{1,i} - \hat{\mu}_1 \\ \bar{y}_{2,i} - \hat{\mu}_2 \end{pmatrix}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;or more compactly: &lt;span class=&#34;math inline&#34;&gt;\(\hat{\boldsymbol{\theta}}_i = \hat{\boldsymbol{\mu}} + \mathbf{B}(\bar{\mathbf{y}}_i - \hat{\boldsymbol{\mu}})\)&lt;/span&gt;. Same form as Part 1, but the scalar &lt;span class=&#34;math inline&#34;&gt;\(B\)&lt;/span&gt; has become a &lt;span class=&#34;math inline&#34;&gt;\(2 \times 2\)&lt;/span&gt; matrix &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{B}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;The matrix of &lt;em&gt;joint&lt;/em&gt; regression coefficients is &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{B} = \text{Cov}(\boldsymbol{\theta}, \bar{\mathbf{y}}) \cdot \text{Var}(\bar{\mathbf{y}})^{-1}\)&lt;/span&gt;. Since noise is independent of true scores, &lt;span class=&#34;math inline&#34;&gt;\(\text{Cov}(\boldsymbol{\theta}, \bar{\mathbf{y}}) = \boldsymbol{\Sigma}_{\text{pop}}\)&lt;/span&gt;, and the total variance of the sample means is &lt;span class=&#34;math inline&#34;&gt;\(\text{Var}(\bar{\mathbf{y}}) = \boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\)&lt;/span&gt;. The matrix inverse takes care of the partialing—each coefficient is adjusted for the information carried by the other predictor. So the shrinkage matrix is:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}\left(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\right)^{-1}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;This is the shrinkage matrix from the conjugate multivariate normal-normal update. &lt;a href=&#34;https://doi.org/10.1093/biomet/59.2.335&#34;&gt;Efron and Morris (1972)&lt;/a&gt; built their empirical Bayes framework around this result, showing that &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{B}\)&lt;/span&gt; can be estimated from the data without knowing &lt;span class=&#34;math inline&#34;&gt;\(\boldsymbol{\Sigma}_{\text{pop}}\)&lt;/span&gt;. The parallel with Part 1 is exact—&lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_{\text{pop}}\)&lt;/span&gt; becomes &lt;span class=&#34;math inline&#34;&gt;\(\boldsymbol{\Sigma}_{\text{pop}}\)&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_{\text{obs}}/n\)&lt;/span&gt; becomes &lt;span class=&#34;math inline&#34;&gt;\(\boldsymbol{\Sigma}_{\text{obs}}/n\)&lt;/span&gt;, and division becomes multiplication by a matrix inverse.&lt;/p&gt;
-&lt;p&gt;Enough math, time for some code!&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Method of moments for Sigma_pop
-ybar_mat &amp;lt;- cbind(subj_summary$ybar1, subj_summary$ybar2)
-S &amp;lt;- cov(ybar_mat)
-
-Sigma_obs_n &amp;lt;- diag(c(sigma2_pool1 / n_obs, sigma2_pool2 / n_obs))
-
-# Subtract measurement error covariance
-Sigma_pop_hat &amp;lt;- S - Sigma_obs_n
-
-# Shrinkage matrix
-B_mat &amp;lt;- Sigma_pop_hat %*% solve(Sigma_pop_hat + Sigma_obs_n)
-
-# Apply to individual vectors
-mu_hat &amp;lt;- colMeans(ybar_mat)
-theta_hat_mv &amp;lt;- t(apply(ybar_mat, 1, function(yi) {
-  mu_hat + B_mat %*% (yi - mu_hat)
-}))
-
-subj_summary &amp;lt;- subj_summary %&amp;gt;%
-  mutate(
-    theta1_mvjs = theta_hat_mv[, 1],
-    theta2_mvjs = theta_hat_mv[, 2]
-  )
-
-r_mvjs &amp;lt;- cor(subj_summary$theta1_mvjs, subj_summary$theta2_mvjs)
-
-# The correlation implied by Sigma_pop_hat directly
-rho_pop_hat &amp;lt;- Sigma_pop_hat[1, 2] / sqrt(Sigma_pop_hat[1, 1] * Sigma_pop_hat[2, 2])&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Let’s examine the shrinkage matrix &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{B}\)&lt;/span&gt;:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;round(B_mat, 3)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##       [,1]  [,2]
-## [1,] 0.462 0.229
-## [2,] 0.203 0.546&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Notice that the off-diagonal elements are non-zero because the two measures are correlated, confirming that the matrix is borrowing strength across measures. Take a look at the shrinkage in action below:&lt;/p&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show animation code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Build interpolation frames for both methods
-shrinkage_anim &amp;lt;- bind_rows(
-  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&amp;gt;%
-    left_join(subj_summary, by = &amp;quot;subj&amp;quot;) %&amp;gt;%
-    mutate(
-      est1 = ybar1_shrunk, est2 = ybar2_shrunk,
-      x = (1 - t) * ybar1 + t * ybar1_shrunk,
-      y = (1 - t) * ybar2 + t * ybar2_shrunk,
-      method = &amp;quot;Univariate Shrinkage&amp;quot;
-    ),
-  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&amp;gt;%
-    left_join(subj_summary, by = &amp;quot;subj&amp;quot;) %&amp;gt;%
-    mutate(
-      est1 = theta1_mvjs, est2 = theta2_mvjs,
-      x = (1 - t) * ybar1 + t * theta1_mvjs,
-      y = (1 - t) * ybar2 + t * theta2_mvjs,
-      method = &amp;quot;Multivariate Shrinkage&amp;quot;
-    )
-) %&amp;gt;%
-  mutate(method = factor(method, levels = c(&amp;quot;Univariate Shrinkage&amp;quot;, &amp;quot;Multivariate Shrinkage&amp;quot;)))
-
-# Correlation at each frame × method
-# Univariate: cor(x, y) is constant (scale invariance)
-# Multivariate: interpolate the population covariance matrix S - t*Sigma_obs/n
-#   and extract the implied correlation (i.e., the disattenuated estimate)
-t_vals &amp;lt;- seq(0, 1, length.out = 50)
-mv_cors &amp;lt;- sapply(t_vals, function(ti) {
-  Sigma_t &amp;lt;- S - ti * Sigma_obs_n
-  Sigma_t[1, 2] / sqrt(Sigma_t[1, 1] * Sigma_t[2, 2])
-})
-
-anim_cors2 &amp;lt;- bind_rows(
-  shrinkage_anim %&amp;gt;%
-    filter(method == &amp;quot;Univariate Shrinkage&amp;quot;) %&amp;gt;%
-    group_by(method, t) %&amp;gt;%
-    summarize(r = cor(x, y), .groups = &amp;quot;drop&amp;quot;),
-  data.frame(method = factor(&amp;quot;Multivariate Shrinkage&amp;quot;,
-             levels = c(&amp;quot;Univariate Shrinkage&amp;quot;, &amp;quot;Multivariate Shrinkage&amp;quot;)),
-             t = t_vals, r = mv_cors)
-) %&amp;gt;%
-  mutate(r_label = ifelse(method == &amp;quot;Univariate Shrinkage&amp;quot;,
-                          paste0(&amp;quot;r = &amp;quot;, sprintf(&amp;quot;%.3f&amp;quot;, r)),
-                          paste0(&amp;quot;\u03C1\u0302 = &amp;quot;, sprintf(&amp;quot;%.3f&amp;quot;, r))))
-
-p_anim2 &amp;lt;- ggplot(shrinkage_anim) +
-  geom_segment(aes(x = ybar1, y = ybar2, xend = est1, yend = est2),
-               color = &amp;quot;gray70&amp;quot;, linewidth = 0.3, alpha = 0.5) +
-  geom_point(aes(x = theta1, y = theta2), color = &amp;quot;gray40&amp;quot;, size = 2, alpha = 0.5) +
-  geom_point(aes(x = ybar1, y = ybar2), color = &amp;quot;#DCBCBC&amp;quot;, size = 2.5) +
-  geom_point(aes(x = est1, y = est2), color = &amp;quot;#8F2727&amp;quot;, size = 2.5) +
-  geom_point(aes(x = x, y = y), color = &amp;quot;#B2182B&amp;quot;, size = 3.5) +
-  geom_text(data = anim_cors2,
-            aes(label = r_label, group = t), x = Inf, y = Inf,
-            hjust = 1.1, vjust = 1.5, size = 5, color = &amp;quot;#8F2727&amp;quot;, fontface = &amp;quot;bold&amp;quot;) +
-  facet_wrap(~method, nrow = 1) +
-  xlab(&amp;quot;Measure 1&amp;quot;) +
-  ylab(&amp;quot;Measure 2&amp;quot;) +
-  ggtitle(&amp;quot;Univariate vs. Multivariate Shrinkage&amp;quot;) +
-  theme_minimal(base_size = 15) +
-  theme(panel.grid = element_blank()) +
-  transition_time(t) +
-  ease_aes(&amp;quot;cubic-in-out&amp;quot;)
-
-animate(p_anim2, nframes = 100, fps = 10,
-        width = 1400, height = 700, res = 150,
-        renderer = magick_renderer(loop = TRUE), rewind = TRUE)
-anim_save(&amp;quot;shrinkage_compare_animation.gif&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;shrinkage_compare_animation.gif&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
-&lt;p&gt;The difference is visible in the paths that the shrinking estimates take. In the left panel, univariate shrinkage pulls each point straight toward the grand mean along each axis independently—the shrinkage paths all point to the same point. The correlation is unchanged (&lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; = 0.44, same as the naive estimate). In the right panel, multivariate shrinkage pulls points toward the population’s correlation structure. The correlation becomes “disattenuated” as a result.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;hierarchical-models&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Hierarchical Models&lt;/h1&gt;
-&lt;p&gt;Alright! Multivariate shrinkage is pretty cool. However, the approach above estimates the population covariance matrix &lt;span class=&#34;math inline&#34;&gt;\(\boldsymbol{\Sigma}_{\text{pop}}\)&lt;/span&gt; as a point estimate and plugs it in to the shrinkage term. Like we did in Part 1, we can do better with hierarchical models, estimating everything—population parameters, individual parameters, and their uncertainty—in a single joint model.&lt;/p&gt;
-&lt;p&gt;The multivariate hierarchical model for our simulation will look familiar, as it follows the form of our simulation:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned}
-y_{k,i,t} &amp;amp;\sim \mathcal{N}(\theta_{k,i}, \sigma_{\text{obs},k}) \\
-(\theta_{1,i}, \theta_{2,i}) &amp;amp;\sim \text{MVN}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}_{\text{pop}}\right)
-\end{aligned}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;The correlation &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; between the two latent variables is now estimated &lt;em&gt;directly&lt;/em&gt; as a parameter of &lt;span class=&#34;math inline&#34;&gt;\(\boldsymbol{\Sigma}_{\text{pop}}\)&lt;/span&gt;, with proper uncertainty quantification.&lt;/p&gt;
-&lt;p&gt;Below, we will fit this hierarchical model using a couple different approaches.&lt;/p&gt;
-&lt;div id=&#34;frequentist-lme4&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Frequentist: lme4&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;lme4&lt;/code&gt; does not have native multivariate response syntax, but we can fit the same model using a long-format trick: stack both measures into a single response column, add a factor indicating which measure each observation belongs to, and fit correlated random effects across measures. The formula &lt;code&gt;y ~ 0 + measure + (0 + measure | subj)&lt;/code&gt; estimates a separate intercept per measure (fixed effects) and a correlated random deviation per subject per measure (random effects). The correlation between the random effects is our estimate of &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt;.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(lme4)
-
-# Long format: stack y1 and y2
-d_long &amp;lt;- obs_data %&amp;gt;%
-  pivot_longer(cols = c(y1, y2), names_to = &amp;quot;measure&amp;quot;, values_to = &amp;quot;y&amp;quot;) %&amp;gt;%
-  mutate(
-    measure = factor(measure, levels = c(&amp;quot;y1&amp;quot;, &amp;quot;y2&amp;quot;)),
-    subj    = factor(subj)
-  )
-
-# Fit multivariate hierarchical model via correlated random effects
-fit_lmer &amp;lt;- lmer(y ~ 0 + measure + (0 + measure | subj), data = d_long)
-
-# Extract variance components
-vc_lmer   &amp;lt;- as.data.frame(VarCorr(fit_lmer))
-rho_lmer  &amp;lt;- vc_lmer$sdcor[!is.na(vc_lmer$var2) &amp;amp; vc_lmer$var1 == &amp;quot;measurey1&amp;quot; &amp;amp; vc_lmer$var2 == &amp;quot;measurey2&amp;quot;]
-
-# Extract individual-level shrunk estimates (BLUPs)
-blups_lmer &amp;lt;- coef(fit_lmer)$subj
-theta1_lmer &amp;lt;- blups_lmer[, &amp;quot;measurey1&amp;quot;]
-theta2_lmer &amp;lt;- blups_lmer[, &amp;quot;measurey2&amp;quot;]
-
-subj_summary &amp;lt;- subj_summary %&amp;gt;%
-  mutate(
-    theta1_lmer = theta1_lmer,
-    theta2_lmer = theta2_lmer
-  )&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The &lt;code&gt;lme4&lt;/code&gt; estimate of &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; is 0.73, extracted directly from the estimated random-effects correlation. The BLUPs (conditional modes) from &lt;code&gt;lme4&lt;/code&gt; are shrunk toward the group-level means by the same matrix as in the multivariate shrinkage estimator case above (&lt;span class=&#34;math inline&#34;&gt;\(\mathbf{B}\)&lt;/span&gt;)—just a different estimation procedure.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;bayesian-brms&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Bayesian: brms&lt;/h2&gt;
-&lt;p&gt;For the Bayesian case, we fit the same model with &lt;code&gt;brms&lt;/code&gt;. Since &lt;code&gt;brms&lt;/code&gt; accepts &lt;code&gt;lme4&lt;/code&gt;-style formulas, we use the same data and the same formula:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(brms)
-
-# using some wide priors for more alignment with other methods
-fit_brms &amp;lt;- brm(
-  y ~ 0 + measure + (0 + measure | subj),
-  data   = d_long,
-  family = gaussian(),
-  backend = &amp;quot;cmdstanr&amp;quot;,
-  prior  = c(
-    prior(normal(0, 10), class = &amp;quot;b&amp;quot;),
-    prior(normal(0, 10), class = &amp;quot;sd&amp;quot;),
-    prior(lkj(1),        class = &amp;quot;cor&amp;quot;),
-    prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)
-  ),
-  chains = 8,
-  cores  = 8,
-  iter   = 5000,
-  warmup = 500,
-  seed   = 43202
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(posterior)
-
-# Extract the population-level correlation between random intercepts
-post &amp;lt;- as_draws_df(fit_brms)
-rho_col &amp;lt;- grep(&amp;quot;cor_subj.*measurey1.*measurey2&amp;quot;, names(post), value = TRUE)[1]
-rho_posterior &amp;lt;- post[[rho_col]]
-
-# Point estimate (posterior mode) and 95% CI
-rho_brms_density &amp;lt;- density(rho_posterior)
-rho_brms     &amp;lt;- rho_brms_density$x[which.max(rho_brms_density$y)]
-rho_brms_ci  &amp;lt;- quantile(rho_posterior, c(0.025, 0.975))
-
-# Extract individual-level shrunk estimates
-blups_brms  &amp;lt;- coef(fit_brms)$subj[, &amp;quot;Estimate&amp;quot;, ]
-theta1_brms &amp;lt;- blups_brms[, &amp;quot;measurey1&amp;quot;]
-theta2_brms &amp;lt;- blups_brms[, &amp;quot;measurey2&amp;quot;]
-
-subj_summary &amp;lt;- subj_summary %&amp;gt;%
-  mutate(
-    theta1_brms = theta1_brms,
-    theta2_brms = theta2_brms
-  )&lt;/code&gt;&lt;/pre&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show visualization code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p_posterior &amp;lt;- data.frame(rho = rho_posterior) %&amp;gt;%
-  ggplot(aes(x = rho)) +
-  geom_histogram(fill = &amp;quot;#DCBCBC&amp;quot;, color = &amp;quot;white&amp;quot;, bins = 30, alpha = .7) +
-  geom_vline(xintercept = rho_true, color = &amp;quot;gray40&amp;quot;, size = 1.2) +
-  geom_vline(xintercept = rho_brms, color = &amp;quot;#8F2727&amp;quot;, size = 1.2, linetype = 2) +
-  annotate(&amp;quot;text&amp;quot;, x = rho_true - 0.28, y = Inf,
-           label = paste0(&amp;quot;True \u03C1 = &amp;quot;, rho_true),
-           hjust = 0, vjust = 2.3, color = &amp;quot;gray40&amp;quot;, size = 4.5) +
-  annotate(&amp;quot;text&amp;quot;, x = rho_brms + 0.035, y = Inf,
-           label = paste0(&amp;quot;Posterior\nmode = &amp;quot;, round(rho_brms, 2)),
-           hjust = 0, vjust = 1.2, color = &amp;quot;#8F2727&amp;quot;, size = 4.5) +
-  xlab(expression(rho)) +
-  ylab(&amp;quot;Count&amp;quot;) +
-  ggtitle(paste0(&amp;quot;Posterior Distribution for \u03C1 (95% CI: [&amp;quot;,
-                 round(rho_brms_ci[1], 2), &amp;quot;, &amp;quot;, round(rho_brms_ci[2], 2), &amp;quot;])&amp;quot;)) +
-  theme_minimal(base_size = 15) +
-  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-23-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;brms&lt;/code&gt; posterior mode for &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; is 0.74 with a 95% credible interval of [0.28, 0.96]. We report the posterior mode rather than the mean because it corresponds to the MAP estimate, which aligns more directly with the MLE-based point estimates from &lt;code&gt;lme4&lt;/code&gt; and the analytical methods. The &lt;code&gt;lme4&lt;/code&gt; point estimate (&lt;span class=&#34;math inline&#34;&gt;\(\hat{\rho}\)&lt;/span&gt; = 0.73) is very similar, and overall there is a high level of agreement between the Spearman corrected estimate, the multivariate shrinkage estimate, and the hierarchical estimates.&lt;/p&gt;
-&lt;p&gt;We can get a better comprehensive understanding of how each estimator works by repeating the simulation many times:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Sampling distributions of all estimators
-sampling_results &amp;lt;- foreach(i = 1:n_sims, .combine = rbind) %do% {
-  theta_sim &amp;lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
-  y1_sim &amp;lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 1], sigma_obs1), N_subj, n_obs)
-  y2_sim &amp;lt;- matrix(rnorm(N_subj * n_obs, theta_sim[, 2], sigma_obs2), N_subj, n_obs)
-  ybar1_sim &amp;lt;- rowMeans(y1_sim)
-  ybar2_sim &amp;lt;- rowMeans(y2_sim)
-
-  # Naive Pearson r
-  r_naive_sim &amp;lt;- cor(ybar1_sim, ybar2_sim)
-
-  # Spearman correction
-  var1_s &amp;lt;- mean(apply(y1_sim, 1, var))
-  var2_s &amp;lt;- mean(apply(y2_sim, 1, var))
-  se2_1_sim &amp;lt;- var1_s / n_obs
-  se2_2_sim &amp;lt;- var2_s / n_obs
-  s2pop1_sim &amp;lt;- max(var(ybar1_sim) - se2_1_sim, 0.001)
-  s2pop2_sim &amp;lt;- max(var(ybar2_sim) - se2_2_sim, 0.001)
-  rho1_sim &amp;lt;- s2pop1_sim / (s2pop1_sim + se2_1_sim)
-  rho2_sim &amp;lt;- s2pop2_sim / (s2pop2_sim + se2_2_sim)
-  r_spear_sim &amp;lt;- r_naive_sim / sqrt(rho1_sim * rho2_sim)
-
-  # MV Shrinkage
-  S_sim &amp;lt;- cov(cbind(ybar1_sim, ybar2_sim))
-  Sig_obs_n_sim &amp;lt;- diag(c(var1_s / n_obs, var2_s / n_obs))
-  Sig_pop_sim &amp;lt;- S_sim - Sig_obs_n_sim
-  eig_s &amp;lt;- eigen(Sig_pop_sim)
-  eig_s$values &amp;lt;- pmax(eig_s$values, 0.001)
-  Sig_pop_sim &amp;lt;- eig_s$vectors %*% diag(eig_s$values) %*% t(eig_s$vectors)
-  rho_mvs_sim &amp;lt;- Sig_pop_sim[1, 2] / sqrt(Sig_pop_sim[1, 1] * Sig_pop_sim[2, 2])
-
-  # Build long-format data for hierarchical models
-  d_sim &amp;lt;- data.frame(
-    subj = factor(rep(1:N_subj, each = 2 * n_obs)),
-    measure = factor(rep(rep(c(&amp;quot;y1&amp;quot;, &amp;quot;y2&amp;quot;), each = n_obs), N_subj)),
-    y = c(t(cbind(y1_sim, y2_sim)))
-  )
-
-  # lmer
-  rho_lmer_sim &amp;lt;- tryCatch({
-    fit_lmer_sim &amp;lt;- lmer(y ~ 0 + measure + (0 + measure | subj), data = d_sim,
-                         control = lmerControl(optimizer = &amp;quot;bobyqa&amp;quot;))
-    vc_sim &amp;lt;- as.data.frame(VarCorr(fit_lmer_sim))
-    vc_sim$sdcor[!is.na(vc_sim$var2) &amp;amp; vc_sim$var1 == &amp;quot;measurey1&amp;quot; &amp;amp; vc_sim$var2 == &amp;quot;measurey2&amp;quot;]
-  }, error = function(e) NA)
-
-  # brms
-  rho_brms_sim &amp;lt;- tryCatch({
-    fit_brms_sim &amp;lt;- brm(
-      bf(y ~ 0 + measure + (0 + measure | subj)),
-      data = d_sim,
-      family = gaussian(),
-      chains = 8, cores = 8,
-      iter = 1500, backend = &amp;quot;cmdstanr&amp;quot;,
-      prior = c(
-        prior(normal(0, 10), class = &amp;quot;b&amp;quot;),
-        prior(normal(0, 10), class = &amp;quot;sd&amp;quot;),
-        prior(lkj(1),        class = &amp;quot;cor&amp;quot;),
-        prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)
-      ),
-      warmup = 200,
-      seed = 43202 + i,
-      silent = 2,
-      refresh = 0
-    )
-    post_sim &amp;lt;- as_draws_df(fit_brms_sim)
-    rho_col_sim &amp;lt;- grep(&amp;quot;cor_subj.*measurey1.*measurey2&amp;quot;, names(post_sim), value = TRUE)[1]
-    rho_draws &amp;lt;- post_sim[[rho_col_sim]]
-    # Posterior mode via kernel density
-    d_rho &amp;lt;- density(rho_draws)
-    d_rho$x[which.max(d_rho$y)]
-  }, error = function(e) NA)
-
-  data.frame(iter = i, r_naive = r_naive_sim, r_spearman = r_spear_sim,
-             rho_mvs = rho_mvs_sim, rho_lmer = rho_lmer_sim, rho_brms = rho_brms_sim)
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show visualization code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Reshape to long format with facet panels: each method vs naive
-facet_df &amp;lt;- bind_rows(
-  data.frame(r = sampling_results$r_naive, type = &amp;quot;Two-Stage Pearson r&amp;quot;,
-             panel = &amp;quot;Spearman Correction&amp;quot;),
-  data.frame(r = sampling_results$r_spearman, type = &amp;quot;Spearman Corrected&amp;quot;,
-             panel = &amp;quot;Spearman Correction&amp;quot;),
-  data.frame(r = sampling_results$r_naive, type = &amp;quot;Two-Stage Pearson r&amp;quot;,
-             panel = &amp;quot;MV Shrinkage&amp;quot;),
-  data.frame(r = sampling_results$rho_mvs, type = &amp;quot;MV Shrinkage&amp;quot;,
-             panel = &amp;quot;MV Shrinkage&amp;quot;),
-  data.frame(r = sampling_results$r_naive, type = &amp;quot;Two-Stage Pearson r&amp;quot;,
-             panel = &amp;quot;Hierarchical (lme4)&amp;quot;),
-  data.frame(r = sampling_results$rho_lmer[!is.na(sampling_results$rho_lmer)],
-             type = &amp;quot;Hierarchical (lme4)&amp;quot;,
-             panel = &amp;quot;Hierarchical (lme4)&amp;quot;),
-  data.frame(r = sampling_results$r_naive, type = &amp;quot;Two-Stage Pearson r&amp;quot;,
-             panel = &amp;quot;Hierarchical (brms)&amp;quot;),
-  data.frame(r = sampling_results$rho_brms[!is.na(sampling_results$rho_brms)],
-             type = &amp;quot;Hierarchical (brms)&amp;quot;,
-             panel = &amp;quot;Hierarchical (brms)&amp;quot;)
-) %&amp;gt;%
-  mutate(
-    panel = factor(panel, levels = c(&amp;quot;Spearman Correction&amp;quot;, &amp;quot;MV Shrinkage&amp;quot;, &amp;quot;Hierarchical (lme4)&amp;quot;, &amp;quot;Hierarchical (brms)&amp;quot;)),
-    type = factor(type, levels = c(&amp;quot;Two-Stage Pearson r&amp;quot;, &amp;quot;Spearman Corrected&amp;quot;, &amp;quot;MV Shrinkage&amp;quot;, &amp;quot;Hierarchical (lme4)&amp;quot;, &amp;quot;Hierarchical (brms)&amp;quot;))
-  )
-
-p_sampling_dist &amp;lt;- ggplot(facet_df, aes(x = r, fill = type)) +
-  geom_histogram(color = &amp;quot;white&amp;quot;, bins = 350, alpha = 0.5, position = &amp;quot;identity&amp;quot;) +
-  geom_vline(xintercept = rho_true, color = &amp;quot;gray40&amp;quot;, size = 1.2) +
-  scale_fill_manual(values = c(&amp;quot;Two-Stage Pearson r&amp;quot;  = &amp;quot;#DCBCBC&amp;quot;,
-                                &amp;quot;Spearman Corrected&amp;quot;   = &amp;quot;#c97979&amp;quot;,
-                                &amp;quot;MV Shrinkage&amp;quot;         = &amp;quot;#B2182B&amp;quot;,
-                                &amp;quot;Hierarchical (lme4)&amp;quot;  = &amp;quot;#8F2727&amp;quot;,
-                                &amp;quot;Hierarchical (brms)&amp;quot;  = &amp;quot;#601414&amp;quot;)) +
-  facet_wrap(~panel, nrow = 2) +
-  coord_cartesian(xlim = c(-0.5, 1.5)) +
-  xlab(&amp;quot;Estimated Correlation&amp;quot;) +
-  ylab(&amp;quot;Count&amp;quot;) +
-  ggtitle(&amp;quot;Sampling Distributions: Naive Pearson r vs Multivariate Estimators&amp;quot;) +
-  theme_minimal(base_size = 15) +
-  theme(panel.grid = element_blank(),
-        legend.title = element_blank(),
-        legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-24-1.svg&#34; alt=&#34;&#34; width=&#34;960&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Each panel compares the naive two-stage Pearson &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; (light red) against a single corrected estimator (red). The Spearman correction is unbiased but quite variable, with many estimates exceeding 1.0. The MV shrinkage and hierarchical estimators are centered near the true &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; with much tighter spread—and none of the impossible values. The MV and &lt;code&gt;lme4&lt;/code&gt; results are actually quite closely aligned, and the &lt;code&gt;brms&lt;/code&gt; results appear to have less results up at the 1.0 boundary.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;putting-it-all-together&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Putting it All Together&lt;/h1&gt;
-&lt;p&gt;Now we can put all of the estimates side by side:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(kableExtra)
-
-summary_df &amp;lt;- data.frame(
-  Method = c(&amp;quot;Two-Stage Pearson r&amp;quot;, &amp;quot;Univariate Shrinkage + r&amp;quot;,
-             &amp;quot;Spearman Correction&amp;quot;, &amp;quot;MV Shrinkage (JS / Kelley)&amp;quot;,
-             &amp;quot;Hierarchical (lme4)&amp;quot;,
-             &amp;quot;Hierarchical (brms)&amp;quot;),
-  Estimate = round(c(r_naive, r_univariate_shrunk, r_spearman,
-                      rho_pop_hat, rho_lmer, rho_brms), 3),
-  Source = c(&amp;quot;$\\text{cor}(\\bar{y}_1, \\bar{y}_2)$&amp;quot;,
-             &amp;quot;$\\text{cor}(\\hat{\\theta}_1, \\hat{\\theta}_2)$&amp;quot;,
-             &amp;quot;$r_{\\text{obs}} / \\sqrt{\\hat{\\rho}_{xx,1} \\cdot \\hat{\\rho}_{xx,2}}$&amp;quot;,
-             &amp;quot;$\\hat{\\Sigma}_{\\text{pop},12} / \\sqrt{\\hat{\\Sigma}_{\\text{pop},11} \\cdot \\hat{\\Sigma}_{\\text{pop},22}}$&amp;quot;,
-             &amp;quot;REML estimate of $\\rho$ from $\\boldsymbol{\\Sigma}_{\\text{pop}}$&amp;quot;,
-             &amp;quot;posterior mode of $\\rho$ from $\\boldsymbol{\\Sigma}_{\\text{pop}}$&amp;quot;)
 )
 
 knitr::kable(
-  summary_df,
-  col.names = c(&amp;quot;Method&amp;quot;, &amp;quot;$\\hat{\\rho}$&amp;quot;, &amp;quot;Source&amp;quot;),
+  unification_df,
+  col.names = c(&amp;quot;Post&amp;quot;, &amp;quot;Estimand&amp;quot;, &amp;quot;Attenuation Factor&amp;quot;),
   align = &amp;quot;lcc&amp;quot;,
   escape = FALSE
 )&lt;/code&gt;&lt;/pre&gt;
 &lt;table&gt;
 &lt;colgroup&gt;
-&lt;col width=&#34;18%&#34; /&gt;
-&lt;col width=&#34;9%&#34; /&gt;
-&lt;col width=&#34;71%&#34; /&gt;
+&lt;col width=&#34;14%&#34; /&gt;
+&lt;col width=&#34;16%&#34; /&gt;
+&lt;col width=&#34;68%&#34; /&gt;
 &lt;/colgroup&gt;
 &lt;thead&gt;
 &lt;tr class=&#34;header&#34;&gt;
-&lt;th align=&#34;left&#34;&gt;Method&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\hat{\rho}\)&lt;/span&gt;&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;Source&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Post&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Estimand&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Attenuation Factor&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr class=&#34;odd&#34;&gt;
-&lt;td align=&#34;left&#34;&gt;Two-Stage Pearson r&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;0.437&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\text{cor}(\bar{y}_1, \bar{y}_2)\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1 (Means)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Mean &lt;span class=&#34;math inline&#34;&gt;\(\mu_i\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(B = \sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)&lt;/span&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr class=&#34;even&#34;&gt;
-&lt;td align=&#34;left&#34;&gt;Univariate Shrinkage + r&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;0.437&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\text{cor}(\hat{\theta}_1, \hat{\theta}_2)\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2 (Correlations)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Correlation &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(r = \rho_{\text{true}} \sqrt{\rho_{xx,1} \cdot \rho_{xx,2}}\)&lt;/span&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr class=&#34;odd&#34;&gt;
-&lt;td align=&#34;left&#34;&gt;Spearman Correction&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;0.730&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(r_{\text{obs}} / \sqrt{\hat{\rho}_{xx,1} \cdot \hat{\rho}_{xx,2}}\)&lt;/span&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
-&lt;td align=&#34;left&#34;&gt;MV Shrinkage (JS / Kelley)&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;0.730&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\hat{\Sigma}_{\text{pop},12} / \sqrt{\hat{\Sigma}_{\text{pop},11} \cdot \hat{\Sigma}_{\text{pop},22}}\)&lt;/span&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;odd&#34;&gt;
-&lt;td align=&#34;left&#34;&gt;Hierarchical (lme4)&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;0.729&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;REML estimate of &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; from &lt;span class=&#34;math inline&#34;&gt;\(\boldsymbol{\Sigma}_{\text{pop}}\)&lt;/span&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class=&#34;even&#34;&gt;
-&lt;td align=&#34;left&#34;&gt;Hierarchical (brms)&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;0.739&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;posterior mode of &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; from &lt;span class=&#34;math inline&#34;&gt;\(\boldsymbol{\Sigma}_{\text{pop}}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;3 (Regression)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Regression &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} = \beta_{\text{true}} \times \rho_{xx}\)&lt;/span&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;The naive Pearson &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; and univariate shrinkage approaches give the same attenuated estimate, whereas the multivariate approaches all converge tightly around the true value &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; = 0.7.&lt;/p&gt;
-&lt;p&gt;And now for the pièce de résistance:&lt;/p&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show animation code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# 2x2 animation: univariate, MV shrinkage, lme4, brms
-shrinkage_all_anim &amp;lt;- bind_rows(
-  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&amp;gt;%
-    left_join(subj_summary, by = &amp;quot;subj&amp;quot;) %&amp;gt;%
-    mutate(est1 = ybar1_shrunk, est2 = ybar2_shrunk,
-           x = (1 - t) * ybar1 + t * ybar1_shrunk,
-           y = (1 - t) * ybar2 + t * ybar2_shrunk,
-           method = &amp;quot;Univariate Shrinkage&amp;quot;),
-  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&amp;gt;%
-    left_join(subj_summary, by = &amp;quot;subj&amp;quot;) %&amp;gt;%
-    mutate(est1 = theta1_mvjs, est2 = theta2_mvjs,
-           x = (1 - t) * ybar1 + t * theta1_mvjs,
-           y = (1 - t) * ybar2 + t * theta2_mvjs,
-           method = &amp;quot;MV Shrinkage&amp;quot;),
-  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&amp;gt;%
-    left_join(subj_summary, by = &amp;quot;subj&amp;quot;) %&amp;gt;%
-    mutate(est1 = theta1_lmer, est2 = theta2_lmer,
-           x = (1 - t) * ybar1 + t * theta1_lmer,
-           y = (1 - t) * ybar2 + t * theta2_lmer,
-           method = &amp;quot;Hierarchical (lme4)&amp;quot;),
-  expand.grid(subj = 1:N_subj, t = seq(0, 1, length.out = 50)) %&amp;gt;%
-    left_join(subj_summary, by = &amp;quot;subj&amp;quot;) %&amp;gt;%
-    mutate(est1 = theta1_brms, est2 = theta2_brms,
-           x = (1 - t) * ybar1 + t * theta1_brms,
-           y = (1 - t) * ybar2 + t * theta2_brms,
-           method = &amp;quot;Hierarchical (brms)&amp;quot;)
-) %&amp;gt;%
-  mutate(method = factor(method, levels = c(&amp;quot;Univariate Shrinkage&amp;quot;, &amp;quot;MV Shrinkage&amp;quot;,
-                                             &amp;quot;Hierarchical (lme4)&amp;quot;, &amp;quot;Hierarchical (brms)&amp;quot;)))
+&lt;p&gt;I absolutely love this table. Three different posts, three different estimands, and the same signal-over-signal-plus-noise structure running through all of them.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;errors-in-variables-the-measurement-model-perspective&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Errors-in-Variables — The Measurement Model Perspective&lt;/h1&gt;
+&lt;div id=&#34;the-eiv-model&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The EIV Model&lt;/h2&gt;
+&lt;p&gt;At this point, it is worth reframing regression as a latent variable problem. The &lt;strong&gt;errors-in-variables&lt;/strong&gt; (EIV) model makes explicit what we have been describing implicitly throughout this post:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Structural equation:&lt;/strong&gt;
+&lt;span class=&#34;math display&#34;&gt;\[Y_i = \beta_0 + \beta_1 \theta_i + \eta_i\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Measurement model:&lt;/strong&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\tilde{X}_i = \theta_i + \epsilon_i\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;We observe &lt;span class=&#34;math inline&#34;&gt;\(\tilde{X}\)&lt;/span&gt;, not the latent &lt;span class=&#34;math inline&#34;&gt;\(\theta\)&lt;/span&gt;. This is exactly the measurement model from Parts 1 and 2, now applied to regression predictors. The key reframe is that OLS on observed &lt;span class=&#34;math inline&#34;&gt;\(\tilde{X}\)&lt;/span&gt; is &lt;strong&gt;not&lt;/strong&gt; estimating the relationship between the true &lt;span class=&#34;math inline&#34;&gt;\(\theta\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(Y\)&lt;/span&gt;—it is estimating a shrunken version of that relationship, attenuated by the predictor reliability.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;reliability-correction&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Reliability Correction&lt;/h2&gt;
+&lt;p&gt;If we know (or can estimate) the reliability &lt;span class=&#34;math inline&#34;&gt;\(\rho_{xx}\)&lt;/span&gt;, we can correct the OLS estimate:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\beta}_{\text{corrected}} = \frac{\hat{\beta}_{\text{OLS}}}{\rho_{xx}}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This is the regression analogue of Spearman’s correction from Part 2. And like Spearman’s correction, it is unbiased on average but can have high variance—the same bias-variance tradeoff we have seen throughout this series.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Reliability-corrected estimate
+beta_corrected &amp;lt;- beta_ols / rho_xx
 
-# Correlation labels per frame per method
-# Each method interpolates from S (observed) to its own Sigma_pop estimate
-t_vals &amp;lt;- seq(0, 1, length.out = 50)
+# Sampling distributions: naive OLS vs corrected
+beta_corrected_sims &amp;lt;- beta_sims / rho_xx
 
-# MV shrinkage: method-of-moments (S and Sigma_obs_n already computed above)
-# S = Sigma_pop_hat + Sigma_obs_n, so interpolation goes from S to Sigma_pop_hat
-S_mvs &amp;lt;- Sigma_pop_hat + Sigma_obs_n  # = S (by construction)
-mv_cors_mvs &amp;lt;- sapply(t_vals, function(ti) {
-  Sigma_t &amp;lt;- (1 - ti) * S_mvs + ti * Sigma_pop_hat
-  Sigma_t[1, 2] / sqrt(Sigma_t[1, 1] * Sigma_t[2, 2])
-})
+beta_compare_df &amp;lt;- data.frame(
+  beta   = c(beta_sims, beta_corrected_sims),
+  Method = rep(c(&amp;quot;Naive OLS&amp;quot;, &amp;quot;Reliability-Corrected&amp;quot;), each = n_sims)
+)
 
-# lme4: extract Sigma_pop and residual variance from REML
-Sigma_pop_lmer &amp;lt;- as.matrix(VarCorr(fit_lmer)$subj)
-Sigma_obs_n_lmer &amp;lt;- diag(rep(sigma(fit_lmer)^2 / n_obs, 2))
-S_lmer &amp;lt;- Sigma_pop_lmer + Sigma_obs_n_lmer
-mv_cors_lmer &amp;lt;- sapply(t_vals, function(ti) {
-  Sigma_t &amp;lt;- (1 - ti) * S_lmer + ti * Sigma_pop_lmer
-  Sigma_t[1, 2] / sqrt(Sigma_t[1, 1] * Sigma_t[2, 2])
-})
+beta_compare_df %&amp;gt;%
+  ggplot(aes(x = beta, fill = Method)) +
+  geom_histogram(color = &amp;quot;white&amp;quot;, bins = 80, alpha = 0.6, position = &amp;quot;identity&amp;quot;) +
+  geom_vline(xintercept = beta_true, color = &amp;quot;gray40&amp;quot;, linewidth = 1.2) +
+  scale_fill_manual(values = c(&amp;quot;Naive OLS&amp;quot; = &amp;quot;#DCBCBC&amp;quot;,
+                                &amp;quot;Reliability-Corrected&amp;quot; = &amp;quot;#8F2727&amp;quot;)) +
+  xlab(expression(hat(beta))) +
+  ylab(&amp;quot;Count&amp;quot;) +
+  ggtitle(&amp;quot;Naive OLS vs. Reliability-Corrected Estimates&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = c(0.8, 0.85))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-9-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The corrected estimates (dark red) are centered on the true &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; = 0.8, but with considerably higher variance than the naive OLS (dusty rose). We saw this exact pattern with Spearman’s correction in Part 2—dividing one noisy quantity by another can produce extreme values, so the correction removes bias at the cost of increased variance.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;multiple-regression-with-measurement-error&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Multiple Regression with Measurement Error&lt;/h1&gt;
+&lt;div id=&#34;an-important-complication&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;An Important Complication&lt;/h2&gt;
+&lt;p&gt;So far, the story has been straightforward: measurement error on the predictor attenuates &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; toward zero, and the attenuation factor is the reliability &lt;span class=&#34;math inline&#34;&gt;\(\rho_{xx}\)&lt;/span&gt;. You might reasonably expect the same thing to happen in multiple regression. It does not—at least, not in the simple way you would expect.&lt;/p&gt;
+&lt;p&gt;With two predictors &lt;span class=&#34;math inline&#34;&gt;\(\tilde{X}_1\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\tilde{X}_2\)&lt;/span&gt; both measured with error:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\hat{\boldsymbol{\beta}}_{\text{OLS}} = (\tilde{\mathbf{X}}&amp;#39;\tilde{\mathbf{X}})^{-1}\tilde{\mathbf{X}}&amp;#39;\mathbf{Y}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The matrix &lt;span class=&#34;math inline&#34;&gt;\(\tilde{\mathbf{X}}&amp;#39;\tilde{\mathbf{X}}\)&lt;/span&gt; has inflated diagonal entries (&lt;span class=&#34;math inline&#34;&gt;\(\text{Var}(\theta_k) + \text{Var}(\epsilon_k)\)&lt;/span&gt;) but unchanged off-diagonal entries (&lt;span class=&#34;math inline&#34;&gt;\(\text{Cov}(\theta_1, \theta_2)\)&lt;/span&gt;). This asymmetric distortion of the covariance matrix, once inverted, can push coefficients in &lt;em&gt;either&lt;/em&gt; direction—a coefficient can be attenuated, inflated, or even change sign, depending on the correlation structure among the predictors and how reliable each one is.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;intuition&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Intuition&lt;/h2&gt;
+&lt;p&gt;Why does this happen? When two correlated predictors have different reliabilities, the more reliable predictor effectively “steals” variance from the less reliable one during the partialing process that multiple regression performs. This creates suppression-like effects that are qualitatively different from the simple regression case.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;simulation-two-correlated-predictors&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Simulation: Two Correlated Predictors&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Multiple regression setup
+N_mr        &amp;lt;- 300
+n_obs_mr    &amp;lt;- 5
+sigma_pop1  &amp;lt;- 3
+sigma_pop2  &amp;lt;- 3
+rho_x1x2    &amp;lt;- 0.6
+beta1_true  &amp;lt;- 0.5
+beta2_true  &amp;lt;- 0.5
+sigma_eta_mr &amp;lt;- 4
 
-# brms: reconstruct Sigma_pop from posterior modes (to align with MLE-based estimates)
-sd1_draws &amp;lt;- post$sd_subj__measurey1
-sd2_draws &amp;lt;- post$sd_subj__measurey2
-sd1_mode &amp;lt;- density(sd1_draws)$x[which.max(density(sd1_draws)$y)]
-sd2_mode &amp;lt;- density(sd2_draws)$x[which.max(density(sd2_draws)$y)]
-Sigma_pop_brms &amp;lt;- diag(c(sd1_mode, sd2_mode)) %*%
-  matrix(c(1, rho_brms, rho_brms, 1), 2, 2) %*%
-  diag(c(sd1_mode, sd2_mode))
-sigma_draws &amp;lt;- post$sigma
-sigma_mode &amp;lt;- density(sigma_draws)$x[which.max(density(sigma_draws)$y)]
-Sigma_obs_n_brms &amp;lt;- diag(rep(sigma_mode^2 / n_obs, 2))
-S_brms &amp;lt;- Sigma_pop_brms + Sigma_obs_n_brms
-mv_cors_brms &amp;lt;- sapply(t_vals, function(ti) {
-  Sigma_t &amp;lt;- (1 - ti) * S_brms + ti * Sigma_pop_brms
-  Sigma_t[1, 2] / sqrt(Sigma_t[1, 1] * Sigma_t[2, 2])
-})
+# Varying reliabilities
+sigma_obs1_mr &amp;lt;- 4    # moderate reliability for X1
+sigma_obs2_mr &amp;lt;- 8    # low reliability for X2
 
-anim_cors_all &amp;lt;- bind_rows(
-  # Univariate: constant correlation (scale invariance)
-  shrinkage_all_anim %&amp;gt;%
-    filter(method == &amp;quot;Univariate Shrinkage&amp;quot;) %&amp;gt;%
-    group_by(method, t) %&amp;gt;%
-    summarize(r = cor(x, y), .groups = &amp;quot;drop&amp;quot;),
-  # Each multivariate method uses its own Sigma_pop estimate
-  data.frame(method = &amp;quot;MV Shrinkage&amp;quot;, t = t_vals, r = mv_cors_mvs),
-  data.frame(method = &amp;quot;Hierarchical (lme4)&amp;quot;, t = t_vals, r = mv_cors_lmer),
-  data.frame(method = &amp;quot;Hierarchical (brms)&amp;quot;, t = t_vals, r = mv_cors_brms)
-) %&amp;gt;%
-  mutate(
-    method = factor(method, levels = c(&amp;quot;Univariate Shrinkage&amp;quot;, &amp;quot;MV Shrinkage&amp;quot;,
-                                        &amp;quot;Hierarchical (lme4)&amp;quot;, &amp;quot;Hierarchical (brms)&amp;quot;)),
-    r_label = ifelse(method == &amp;quot;Univariate Shrinkage&amp;quot;,
-                     paste0(&amp;quot;r = &amp;quot;, sprintf(&amp;quot;%.3f&amp;quot;, r)),
-                     paste0(&amp;quot;\u03C1\u0302 = &amp;quot;, sprintf(&amp;quot;%.3f&amp;quot;, r)))
+# Population covariance matrix for latent predictors
+Sigma_theta &amp;lt;- matrix(c(sigma_pop1^2, rho_x1x2 * sigma_pop1 * sigma_pop2,
+                          rho_x1x2 * sigma_pop1 * sigma_pop2, sigma_pop2^2), 2, 2)
+
+# Reliabilities
+rho_xx1 &amp;lt;- sigma_pop1^2 / (sigma_pop1^2 + sigma_obs1_mr^2 / n_obs_mr)
+rho_xx2 &amp;lt;- sigma_pop2^2 / (sigma_pop2^2 + sigma_obs2_mr^2 / n_obs_mr)
+
+# Simulate data
+theta_mr &amp;lt;- MASS::mvrnorm(N_mr, mu = c(0, 0), Sigma = Sigma_theta)
+y_mr     &amp;lt;- beta1_true * theta_mr[, 1] + beta2_true * theta_mr[, 2] + rnorm(N_mr, 0, sigma_eta_mr)
+
+obs_mr &amp;lt;- foreach(i = 1:N_mr, .combine = &amp;quot;rbind&amp;quot;) %do% {
+  data.frame(
+    subj = i,
+    trial = 1:n_obs_mr,
+    theta1 = theta_mr[i, 1],
+    theta2 = theta_mr[i, 2],
+    y_true = y_mr[i],
+    x1 = rnorm(n_obs_mr, theta_mr[i, 1], sigma_obs1_mr),
+    x2 = rnorm(n_obs_mr, theta_mr[i, 2], sigma_obs2_mr),
+    y  = y_mr[i] + rnorm(n_obs_mr, 0, sigma_eta_mr)
   )
-
-p_all_anim &amp;lt;- ggplot(shrinkage_all_anim) +
-  geom_segment(aes(x = ybar1, y = ybar2, xend = est1, yend = est2),
-               color = &amp;quot;gray70&amp;quot;, linewidth = 0.3, alpha = 0.5) +
-  geom_point(aes(x = theta1, y = theta2), color = &amp;quot;gray40&amp;quot;, size = 1.5, alpha = 0.5) +
-  geom_point(aes(x = ybar1, y = ybar2), color = &amp;quot;#DCBCBC&amp;quot;, size = 2) +
-  geom_point(aes(x = est1, y = est2), color = &amp;quot;#8F2727&amp;quot;, size = 2) +
-  geom_point(aes(x = x, y = y), color = &amp;quot;#B2182B&amp;quot;, size = 3) +
-  geom_text(data = anim_cors_all,
-            aes(label = r_label, group = t), x = Inf, y = Inf,
-            hjust = 1.1, vjust = 1.5, size = 4, color = &amp;quot;#8F2727&amp;quot;, fontface = &amp;quot;bold&amp;quot;) +
-  facet_wrap(~method, nrow = 2) +
-  xlab(&amp;quot;Measure 1&amp;quot;) +
-  ylab(&amp;quot;Measure 2&amp;quot;) +
-  ggtitle(&amp;quot;Shrinkage Across All Methods&amp;quot;) +
-  theme_minimal(base_size = 14) +
-  theme(panel.grid = element_blank()) +
-  transition_time(t) +
-  ease_aes(&amp;quot;cubic-in-out&amp;quot;)
-
-animate(p_all_anim, nframes = 100, fps = 10,
-        width = 1200, height = 1000, res = 150,
-        renderer = magick_renderer(loop = TRUE), rewind = TRUE)
-anim_save(&amp;quot;shrinkage_all_animation.gif&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;shrinkage_all_animation.gif&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
-&lt;p&gt;This &lt;em&gt;may&lt;/em&gt; be the best figure I have ever created… it is at least top 5, and I hope it brings you as much joy as it does me. We see, like before, that univariate shrinkage (top left) contracts the cloud but preserves the correlation exactly. The remaining three methods—MV shrinkage plus frequentist- Bayesian hierarchical models—all pull points toward the correlation structure, borrowing strength across measures and ending up with a better estimate of the true correlation &lt;span class=&#34;math inline&#34;&gt;\(\rho_{\text{true}}\)&lt;/span&gt; compared to the naive or univariate estimator.&lt;/p&gt;
-&lt;div id=&#34;rmse-comparisons&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;RMSE Comparisons&lt;/h2&gt;
-&lt;p&gt;How much better are our estimates? First, let’s replicate Part 1’s result and confirm that all shrinkage estimators given better individual-level estimates than the sample means:&lt;/p&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show visualization code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# RMSE for each method (computed over both theta1 and theta2)
-rmse_fn &amp;lt;- function(est1, est2, true1, true2) {
-  sqrt(mean(c((est1 - true1)^2, (est2 - true2)^2)))
 }
 
-rmse_df &amp;lt;- data.frame(
-  Method = c(&amp;quot;Sample Mean&amp;quot;, &amp;quot;Univariate Shrinkage&amp;quot;,
-             &amp;quot;MV Shrinkage&amp;quot;, &amp;quot;Hier. (lme4)&amp;quot;, &amp;quot;Hier. (brms)&amp;quot;),
+summ_mr &amp;lt;- obs_mr %&amp;gt;%
+  group_by(subj) %&amp;gt;%
+  summarize(
+    theta1 = unique(theta1), theta2 = unique(theta2), y_true = unique(y_true),
+    x1_bar = mean(x1), x2_bar = mean(x2), y_bar = mean(y),
+    .groups = &amp;quot;drop&amp;quot;
+  )
+
+# OLS on sample means
+fit_mr_ols &amp;lt;- lm(y_bar ~ x1_bar + x2_bar, data = summ_mr)
+beta_mr_ols &amp;lt;- coef(fit_mr_ols)[-1]
+
+# True regression on latent
+fit_mr_true &amp;lt;- lm(y_true ~ theta1 + theta2, data = summ_mr)
+beta_mr_true &amp;lt;- coef(fit_mr_true)[-1]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With &lt;span class=&#34;math inline&#34;&gt;\(\rho_{xx,1}\)&lt;/span&gt; = 0.74 and &lt;span class=&#34;math inline&#34;&gt;\(\rho_{xx,2}\)&lt;/span&gt; = 0.41, the OLS estimates are &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}_1\)&lt;/span&gt; = 0.52 and &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}_2\)&lt;/span&gt; = 0.22 (true values: &lt;span class=&#34;math inline&#34;&gt;\(\beta_1 = \beta_2\)&lt;/span&gt; = 0.5). Notice what has happened—the more reliable predictor (&lt;span class=&#34;math inline&#34;&gt;\(X_1\)&lt;/span&gt;) has an &lt;em&gt;inflated&lt;/em&gt; coefficient, while the less reliable one (&lt;span class=&#34;math inline&#34;&gt;\(X_2\)&lt;/span&gt;) is more severely attenuated than it would be in simple regression. The measurement error has not just shrunk things toward zero; it has redistributed variance across the predictors in a way that depends on their relative reliabilities and intercorrelation.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;how-bias-depends-on-reliability-and-correlation&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;How Bias Depends on Reliability and Correlation&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Analytical computation of OLS bias in multiple regression
+# For two predictors with equal true betas
+rho_grid     &amp;lt;- seq(0, 0.9, by = 0.05)
+rho_xx2_grid &amp;lt;- seq(0.1, 0.95, by = 0.05)
+
+bias_grid &amp;lt;- expand.grid(rho_12 = rho_grid, rho_xx2 = rho_xx2_grid)
+
+bias_grid$beta1_ratio &amp;lt;- sapply(1:nrow(bias_grid), function(k) {
+  rho_12_k   &amp;lt;- bias_grid$rho_12[k]
+  rho_xx2_k  &amp;lt;- bias_grid$rho_xx2[k]
+  rho_xx1_k  &amp;lt;- rho_xx1  # fix X1 reliability
+
+  # Observed covariance matrix of sample means
+  # Var(x_bar_j) = sigma_pop_j^2 + sigma_obs_j^2 / n = sigma_pop_j^2 / rho_xx_j
+  var_x1 &amp;lt;- sigma_pop1^2 / rho_xx1_k
+  var_x2 &amp;lt;- sigma_pop2^2 / rho_xx2_k
+  cov_12 &amp;lt;- rho_12_k * sigma_pop1 * sigma_pop2  # unchanged by measurement error
+
+  Sigma_obs &amp;lt;- matrix(c(var_x1, cov_12, cov_12, var_x2), 2, 2)
+
+  # Cov(X_obs, Y) = Cov(theta, Y) = beta_true * Sigma_theta columns
+  cov_xy &amp;lt;- c(beta1_true * sigma_pop1^2 + beta2_true * rho_12_k * sigma_pop1 * sigma_pop2,
+              beta2_true * sigma_pop2^2 + beta1_true * rho_12_k * sigma_pop1 * sigma_pop2)
+
+  beta_ols_k &amp;lt;- solve(Sigma_obs) %*% cov_xy
+  beta_ols_k[1] / beta1_true  # ratio of OLS to true for beta1
+})
+
+bias_grid %&amp;gt;%
+  ggplot(aes(x = rho_12, y = rho_xx2, fill = beta1_ratio)) +
+  geom_tile() +
+  scale_fill_gradient2(low = &amp;quot;#2166AC&amp;quot;, mid = &amp;quot;white&amp;quot;, high = &amp;quot;#8F2727&amp;quot;,
+                       midpoint = 1, name = expression(hat(beta)[1] / beta[1])) +
+  geom_contour(aes(z = beta1_ratio), color = &amp;quot;gray30&amp;quot;, breaks = 1, linewidth = 0.8) +
+  xlab(expression(&amp;quot;Correlation between predictors &amp;quot; * rho(X[1], X[2]))) +
+  ylab(expression(&amp;quot;Reliability of X&amp;quot;[2] * &amp;quot; (&amp;quot; * rho[xx2] * &amp;quot;)&amp;quot;)) +
+  ggtitle(expression(&amp;quot;Bias of &amp;quot; * hat(beta)[1] * &amp;quot; in Multiple Regression&amp;quot;),
+          subtitle = paste0(&amp;quot;(\u03C1_xx1 = &amp;quot;, round(rho_xx1, 2), &amp;quot; held fixed)&amp;quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-11-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The contour line at 1.0 marks the boundary between attenuation (blue, &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}_1 / \beta_1 &amp;lt; 1\)&lt;/span&gt;) and inflation (red, &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}_1 / \beta_1 &amp;gt; 1\)&lt;/span&gt;). When predictors are uncorrelated (&lt;span class=&#34;math inline&#34;&gt;\(\rho_{12} = 0\)&lt;/span&gt;), &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}_1\)&lt;/span&gt; is simply attenuated by &lt;span class=&#34;math inline&#34;&gt;\(\rho_{xx,1}\)&lt;/span&gt; as in simple regression—the familiar story. But when predictors are correlated and have differential reliabilities, &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}_1\)&lt;/span&gt; can be &lt;em&gt;inflated beyond its true value&lt;/em&gt;. I think this is genuinely underappreciated in the social sciences, where multiple regression with noisy predictors is the bread and butter of empirical research.&lt;/p&gt;
+&lt;p&gt;We can also see this as a coefficient comparison across several configurations:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Run multiple regression sims across different reliability configurations
+configs &amp;lt;- list(
+  list(s1 = 0.01, s2 = 0.01, label = &amp;quot;Both reliable&amp;quot;),
+  list(s1 = 4,    s2 = 4,    label = &amp;quot;Equal error&amp;quot;),
+  list(s1 = 4,    s2 = 8,    label = &amp;quot;X2 noisier&amp;quot;),
+  list(s1 = 8,    s2 = 4,    label = &amp;quot;X1 noisier&amp;quot;)
+)
+
+coef_compare &amp;lt;- foreach(cfg = configs, .combine = &amp;quot;rbind&amp;quot;) %do% {
+  obs_cfg &amp;lt;- foreach(i = 1:N_mr, .combine = &amp;quot;rbind&amp;quot;) %do% {
+    data.frame(
+      subj = i,
+      x1 = rnorm(n_obs_mr, theta_mr[i, 1], cfg$s1),
+      x2 = rnorm(n_obs_mr, theta_mr[i, 2], cfg$s2),
+      y  = y_mr[i] + rnorm(n_obs_mr, 0, sigma_eta_mr)
+    )
+  }
+
+  summ_cfg &amp;lt;- obs_cfg %&amp;gt;%
+    group_by(subj) %&amp;gt;%
+    summarize(x1_bar = mean(x1), x2_bar = mean(x2), y_bar = mean(y), .groups = &amp;quot;drop&amp;quot;)
+
+  fit_cfg &amp;lt;- lm(y_bar ~ x1_bar + x2_bar, data = summ_cfg)
+
+  data.frame(
+    config = cfg$label,
+    predictor = c(&amp;quot;X1&amp;quot;, &amp;quot;X2&amp;quot;),
+    beta_ols = coef(fit_cfg)[-1],
+    beta_true = c(beta1_true, beta2_true)
+  )
+}
+
+coef_compare %&amp;gt;%
+  mutate(config = factor(config, levels = sapply(configs, `[[`, &amp;quot;label&amp;quot;))) %&amp;gt;%
+  ggplot(aes(x = predictor)) +
+  geom_col(aes(y = beta_ols, fill = &amp;quot;OLS&amp;quot;), alpha = 0.7, width = 0.4,
+           position = position_nudge(x = -0.2)) +
+  geom_col(aes(y = beta_true, fill = &amp;quot;True&amp;quot;), alpha = 0.7, width = 0.4,
+           position = position_nudge(x = 0.2)) +
+  scale_fill_manual(values = c(&amp;quot;OLS&amp;quot; = &amp;quot;#DCBCBC&amp;quot;, &amp;quot;True&amp;quot; = &amp;quot;#8F2727&amp;quot;)) +
+  facet_wrap(~config, nrow = 1) +
+  xlab(&amp;quot;Predictor&amp;quot;) +
+  ylab(expression(beta)) +
+  ggtitle(&amp;quot;OLS vs True Coefficients Across Reliability Configurations&amp;quot;) +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-12-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;When both predictors have equal reliability, both coefficients are attenuated proportionally—similar to the simple regression case. But with differential reliability, the more reliable predictor absorbs variance from the less reliable one, producing inflation in one coefficient and stronger attenuation in the other. The pattern flips when you flip which predictor is noisier.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;hierarchical-bayesian-regression&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Hierarchical / Bayesian Regression&lt;/h1&gt;
+&lt;div id=&#34;from-measurement-models-to-generative-models&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;From Measurement Models to Generative Models&lt;/h2&gt;
+&lt;p&gt;OK, so we have seen that OLS regression coefficients are systematically biased when predictors are measured with error, and that in the multiple regression case this bias can go in unpredictable directions. The errors-in-variables perspective from the previous section makes the problem clear by distinguishing between the latent &lt;span class=&#34;math inline&#34;&gt;\(\theta\)&lt;/span&gt; and the observed &lt;span class=&#34;math inline&#34;&gt;\(\tilde{X}\)&lt;/span&gt;—and this distinction naturally suggests a solution. If we acknowledge that predictors are noisy measures of latent constructs, we should model that explicitly. The generative model jointly estimates the latent &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;, the regression coefficient &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;, and all variance components:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Structural equation:&lt;/strong&gt;
+&lt;span class=&#34;math display&#34;&gt;\[Y_i = \beta_0 + \beta_1 \theta_i + \eta_i\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Measurement model:&lt;/strong&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\tilde{X}_{i,t} \sim \mathcal{N}(\theta_i, \sigma_{\text{obs}})\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Population model:&lt;/strong&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\theta_i \sim \mathcal{N}(\mu_\theta, \sigma_\theta)\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Because the model separates signal from noise, the posterior for &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt; is centered on &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\text{true}}\)&lt;/span&gt; rather than the attenuated value. This is the same principle from Parts 1 and 2—hierarchical models produce the right amount of shrinkage because they jointly estimate the variance components that determine it, rather than plugging in point estimates.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;simple-regression-comparing-methods&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Simple Regression: Comparing Methods&lt;/h2&gt;
+&lt;div id=&#34;frequentist-lme4&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Frequentist: lme4&lt;/h3&gt;
+&lt;p&gt;We can approximate the EIV model with &lt;code&gt;lme4&lt;/code&gt; by fitting a hierarchical model with random intercepts per subject on &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt;, and then using the BLUPs as denoised predictors:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(lme4)
+
+# Fit random-intercept model for X to get denoised estimates
+fit_x_lmer &amp;lt;- lmer(x ~ 1 + (1 | subj), data = obs_data)
+theta_hat_lmer &amp;lt;- coef(fit_x_lmer)$subj[, &amp;quot;(Intercept)&amp;quot;]
+
+# Fit random-intercept model for Y
+fit_y_lmer &amp;lt;- lmer(y ~ 1 + (1 | subj), data = obs_data)
+theta_y_hat_lmer &amp;lt;- coef(fit_y_lmer)$subj[, &amp;quot;(Intercept)&amp;quot;]
+
+# Regression on denoised estimates
+subj_summary &amp;lt;- subj_summary %&amp;gt;%
+  mutate(x_lmer = theta_hat_lmer,
+         y_lmer = theta_y_hat_lmer)
+
+fit_lmer_reg &amp;lt;- lm(y_lmer ~ x_lmer, data = subj_summary)
+beta_lmer &amp;lt;- coef(fit_lmer_reg)[2]&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;bayesian-brms-eiv-model&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Bayesian: brms EIV Model&lt;/h3&gt;
+&lt;p&gt;For a fully Bayesian analysis, we can specify the errors-in-variables model directly in &lt;code&gt;brms&lt;/code&gt;. We first fit a measurement model for &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; to get posterior estimates of &lt;span class=&#34;math inline&#34;&gt;\(\theta_i\)&lt;/span&gt;, then use these in the structural model:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(brms)
+
+# Bayesian measurement model for X
+fit_x_brms &amp;lt;- brm(
+  x ~ 1 + (1 | subj),
+  data   = obs_data,
+  family = gaussian(),
+  backend = &amp;quot;cmdstanr&amp;quot;,
+  prior  = c(
+    prior(normal(70, 10), class = &amp;quot;Intercept&amp;quot;),
+    prior(normal(0, 5),   class = &amp;quot;sd&amp;quot;),
+    prior(normal(0, 10),  class = &amp;quot;sigma&amp;quot;)
+  ),
+  chains  = 8,
+  cores   = 8,
+  iter    = 1500,
+  warmup  = 500,
+  seed    = 43202,
+  silent  = 2,
+  refresh = 0
+)
+
+# Extract posterior mean of theta_i for each subject
+ranefs_x  &amp;lt;- ranef(fit_x_brms)$subj[, , &amp;quot;Intercept&amp;quot;]
+fixef_x   &amp;lt;- fixef(fit_x_brms)[&amp;quot;Intercept&amp;quot;, &amp;quot;Estimate&amp;quot;]
+theta_hat_brms &amp;lt;- fixef_x + ranefs_x[, &amp;quot;Estimate&amp;quot;]
+
+# Bayesian measurement model for Y
+fit_y_brms &amp;lt;- brm(
+  y ~ 1 + (1 | subj),
+  data   = obs_data,
+  family = gaussian(),
+  backend = &amp;quot;cmdstanr&amp;quot;,
+  prior  = c(
+    prior(normal(0, 50), class = &amp;quot;Intercept&amp;quot;),
+    prior(normal(0, 10), class = &amp;quot;sd&amp;quot;),
+    prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)
+  ),
+  chains  = 8,
+  cores   = 8,
+  iter    = 1500,
+  warmup  = 500,
+  seed    = 43202,
+  silent  = 2,
+  refresh = 0
+)
+
+ranefs_y &amp;lt;- ranef(fit_y_brms)$subj[, , &amp;quot;Intercept&amp;quot;]
+fixef_y  &amp;lt;- fixef(fit_y_brms)[&amp;quot;Intercept&amp;quot;, &amp;quot;Estimate&amp;quot;]
+theta_y_hat_brms &amp;lt;- fixef_y + ranefs_y[, &amp;quot;Estimate&amp;quot;]
+
+subj_summary &amp;lt;- subj_summary %&amp;gt;%
+  mutate(x_brms = theta_hat_brms,
+         y_brms = theta_y_hat_brms)
+
+fit_brms_reg &amp;lt;- lm(y_brms ~ x_brms, data = subj_summary)
+beta_brms &amp;lt;- coef(fit_brms_reg)[2]&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;comparing-all-methods&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Comparing All Methods&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(subj_summary) +
+  geom_point(aes(x = x_bar, y = y_bar), color = &amp;quot;#DCBCBC&amp;quot;, alpha = 0.3, size = 2) +
+  geom_smooth(aes(x = x_bar, y = y_bar, color = &amp;quot;Naive OLS&amp;quot;),
+              method = &amp;quot;lm&amp;quot;, se = FALSE, linewidth = 1.2) +
+  geom_smooth(aes(x = x_bar, y = y_bar, color = &amp;quot;Reliability-Corrected&amp;quot;),
+              method = &amp;quot;lm&amp;quot;, se = FALSE, linewidth = 1.2,
+              formula = y ~ I(x / rho_xx)) +
+  geom_smooth(aes(x = x_lmer, y = y_lmer, color = &amp;quot;Hierarchical (lme4)&amp;quot;),
+              method = &amp;quot;lm&amp;quot;, se = FALSE, linewidth = 1.2) +
+  geom_smooth(aes(x = x_brms, y = y_brms, color = &amp;quot;Hierarchical (brms)&amp;quot;),
+              method = &amp;quot;lm&amp;quot;, se = FALSE, linewidth = 1.2) +
+  geom_abline(aes(slope = beta_true, intercept = mean(theta_y) - beta_true * mean(theta_x),
+                  color = &amp;quot;True Relationship&amp;quot;),
+              linewidth = 1, linetype = 2) +
+  scale_color_manual(values = c(
+    &amp;quot;Naive OLS&amp;quot;              = &amp;quot;#DCBCBC&amp;quot;,
+    &amp;quot;Reliability-Corrected&amp;quot;  = &amp;quot;#B2182B&amp;quot;,
+    &amp;quot;Hierarchical (lme4)&amp;quot;    = &amp;quot;#4daf4a&amp;quot;,
+    &amp;quot;Hierarchical (brms)&amp;quot;    = &amp;quot;#2166AC&amp;quot;,
+    &amp;quot;True Relationship&amp;quot;      = &amp;quot;gray40&amp;quot;
+  )) +
+  xlab(&amp;quot;X&amp;quot;) +
+  ylab(&amp;quot;Y&amp;quot;) +
+  ggtitle(&amp;quot;All Methods&amp;#39; Regression Lines&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.25, 0.85))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-14-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The naive OLS line (dusty rose) is visibly shallower than the others. The reliability-corrected, &lt;code&gt;lme4&lt;/code&gt;, and &lt;code&gt;brms&lt;/code&gt; estimates all cluster near the true relationship (gray dashed). What I find most appealing about the hierarchical approaches is that they recover &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\text{true}}\)&lt;/span&gt; without requiring knowledge of the reliability coefficient—the model figures out the right amount of denoising from the data itself.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;multiple-regression&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Multiple Regression&lt;/h2&gt;
+&lt;p&gt;Now let’s extend to the multiple regression case, where we showed that OLS biases can go in unpredictable directions. The hierarchical approach generalizes naturally—we simply fit a separate measurement model for each predictor:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# lme4: denoise each predictor separately
+fit_x1_lmer &amp;lt;- lmer(x1 ~ 1 + (1 | subj), data = obs_mr)
+fit_x2_lmer &amp;lt;- lmer(x2 ~ 1 + (1 | subj), data = obs_mr)
+fit_y_mr_lmer &amp;lt;- lmer(y ~ 1 + (1 | subj), data = obs_mr)
+
+x1_hat_lmer &amp;lt;- coef(fit_x1_lmer)$subj[, &amp;quot;(Intercept)&amp;quot;]
+x2_hat_lmer &amp;lt;- coef(fit_x2_lmer)$subj[, &amp;quot;(Intercept)&amp;quot;]
+y_hat_mr_lmer &amp;lt;- coef(fit_y_mr_lmer)$subj[, &amp;quot;(Intercept)&amp;quot;]
+
+fit_mr_lmer &amp;lt;- lm(y_hat_mr_lmer ~ x1_hat_lmer + x2_hat_lmer)
+beta_mr_lmer &amp;lt;- coef(fit_mr_lmer)[-1]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# brms: denoise each predictor separately
+fit_x1_brms &amp;lt;- brm(
+  x1 ~ 1 + (1 | subj), data = obs_mr, family = gaussian(),
+  backend = &amp;quot;cmdstanr&amp;quot;,
+  prior = c(prior(normal(0, 10), class = &amp;quot;Intercept&amp;quot;),
+            prior(normal(0, 5),  class = &amp;quot;sd&amp;quot;),
+            prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)),
+  chains = 8, cores = 8, iter = 1500, warmup = 500, seed = 43202,
+  silent = 2, refresh = 0
+)
+
+fit_x2_brms &amp;lt;- brm(
+  x2 ~ 1 + (1 | subj), data = obs_mr, family = gaussian(),
+  backend = &amp;quot;cmdstanr&amp;quot;,
+  prior = c(prior(normal(0, 10), class = &amp;quot;Intercept&amp;quot;),
+            prior(normal(0, 5),  class = &amp;quot;sd&amp;quot;),
+            prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)),
+  chains = 8, cores = 8, iter = 1500, warmup = 500, seed = 43202,
+  silent = 2, refresh = 0
+)
+
+fit_y_mr_brms &amp;lt;- brm(
+  y ~ 1 + (1 | subj), data = obs_mr, family = gaussian(),
+  backend = &amp;quot;cmdstanr&amp;quot;,
+  prior = c(prior(normal(0, 50), class = &amp;quot;Intercept&amp;quot;),
+            prior(normal(0, 10), class = &amp;quot;sd&amp;quot;),
+            prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)),
+  chains = 8, cores = 8, iter = 1500, warmup = 500, seed = 43202,
+  silent = 2, refresh = 0
+)
+
+x1_hat_brms &amp;lt;- fixef(fit_x1_brms)[&amp;quot;Intercept&amp;quot;, &amp;quot;Estimate&amp;quot;] +
+  ranef(fit_x1_brms)$subj[, , &amp;quot;Intercept&amp;quot;][, &amp;quot;Estimate&amp;quot;]
+x2_hat_brms &amp;lt;- fixef(fit_x2_brms)[&amp;quot;Intercept&amp;quot;, &amp;quot;Estimate&amp;quot;] +
+  ranef(fit_x2_brms)$subj[, , &amp;quot;Intercept&amp;quot;][, &amp;quot;Estimate&amp;quot;]
+y_hat_mr_brms &amp;lt;- fixef(fit_y_mr_brms)[&amp;quot;Intercept&amp;quot;, &amp;quot;Estimate&amp;quot;] +
+  ranef(fit_y_mr_brms)$subj[, , &amp;quot;Intercept&amp;quot;][, &amp;quot;Estimate&amp;quot;]
+
+fit_mr_brms &amp;lt;- lm(y_hat_mr_brms ~ x1_hat_brms + x2_hat_brms)
+beta_mr_brms &amp;lt;- coef(fit_mr_brms)[-1]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Coefficient comparison plot
+mr_coef_df &amp;lt;- data.frame(
+  Method = rep(c(&amp;quot;True&amp;quot;, &amp;quot;Naive OLS&amp;quot;, &amp;quot;Hier. (lme4)&amp;quot;, &amp;quot;Hier. (brms)&amp;quot;), each = 2),
+  Predictor = rep(c(&amp;quot;\u03B21&amp;quot;, &amp;quot;\u03B22&amp;quot;), 4),
+  Beta = c(beta1_true, beta2_true,
+           beta_mr_ols[1], beta_mr_ols[2],
+           beta_mr_lmer[1], beta_mr_lmer[2],
+           beta_mr_brms[1], beta_mr_brms[2])
+) %&amp;gt;%
+  mutate(Method = factor(Method, levels = c(&amp;quot;True&amp;quot;, &amp;quot;Naive OLS&amp;quot;,
+                                             &amp;quot;Hier. (lme4)&amp;quot;, &amp;quot;Hier. (brms)&amp;quot;)))
+
+mr_coef_df %&amp;gt;%
+  ggplot(aes(x = Predictor, y = Beta, fill = Method)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6) +
+  scale_fill_manual(values = c(&amp;quot;True&amp;quot; = &amp;quot;gray40&amp;quot;, &amp;quot;Naive OLS&amp;quot; = &amp;quot;#DCBCBC&amp;quot;,
+                                &amp;quot;Hier. (lme4)&amp;quot; = &amp;quot;#4daf4a&amp;quot;, &amp;quot;Hier. (brms)&amp;quot; = &amp;quot;#2166AC&amp;quot;)) +
+  geom_hline(yintercept = beta1_true, linetype = 2, color = &amp;quot;gray40&amp;quot;) +
+  xlab(&amp;quot;&amp;quot;) +
+  ylab(expression(hat(beta))) +
+  ggtitle(&amp;quot;Multiple Regression: Hierarchical Models Recover True Coefficients&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &amp;quot;bottom&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-16-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The hierarchical models (green and blue) recover both true coefficients far more accurately than naive OLS (dusty rose), which shows the pattern of inflation and attenuation we saw in the previous section. This is where hierarchical models really earn their keep—in the simple regression case, you could get away with a reliability correction, but in the multiple regression case the bias structure is too complex for a simple scalar fix.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;posterior-density-for-beta&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Posterior Density for &lt;span class=&#34;math inline&#34;&gt;\(\beta\)&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;We can also look at the full posterior distribution from a Bayesian regression using the denoised predictors:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Bayesian regression on denoised predictors
+hier_reg_data &amp;lt;- data.frame(
+  y     = y_hat_mr_brms,
+  x1    = x1_hat_brms,
+  x2    = x2_hat_brms
+)
+
+fit_beta_brms &amp;lt;- brm(
+  y ~ x1 + x2,
+  data   = hier_reg_data,
+  family = gaussian(),
+  backend = &amp;quot;cmdstanr&amp;quot;,
+  prior  = c(
+    prior(normal(0, 10), class = &amp;quot;Intercept&amp;quot;),
+    prior(normal(0, 5),  class = &amp;quot;b&amp;quot;),
+    prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)
+  ),
+  chains  = 8,
+  cores   = 8,
+  iter    = 1500,
+  warmup  = 500,
+  seed    = 43202,
+  silent  = 2,
+  refresh = 0
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;post_beta &amp;lt;- as_draws_df(fit_beta_brms)
+
+data.frame(
+  beta = c(post_beta$b_x1, post_beta$b_x2),
+  Predictor = rep(c(&amp;quot;\u03B21 (X1)&amp;quot;, &amp;quot;\u03B22 (X2)&amp;quot;), each = nrow(post_beta))
+) %&amp;gt;%
+  ggplot(aes(x = beta, fill = Predictor)) +
+  geom_histogram(color = &amp;quot;white&amp;quot;, bins = 50, alpha = 0.6, position = &amp;quot;identity&amp;quot;) +
+  geom_vline(xintercept = beta1_true, color = &amp;quot;gray40&amp;quot;, linewidth = 1.2) +
+  geom_vline(xintercept = beta_mr_ols[1], color = &amp;quot;#DCBCBC&amp;quot;, linewidth = 1, linetype = 2) +
+  geom_vline(xintercept = beta_mr_ols[2], color = &amp;quot;#DCBCBC&amp;quot;, linewidth = 1, linetype = 3) +
+  scale_fill_manual(values = c(&amp;quot;\u03B21 (X1)&amp;quot; = &amp;quot;#8F2727&amp;quot;, &amp;quot;\u03B22 (X2)&amp;quot; = &amp;quot;#2166AC&amp;quot;)) +
+  annotate(&amp;quot;text&amp;quot;, x = beta1_true + 0.02, y = Inf,
+           label = paste0(&amp;quot;\u03B2_true = &amp;quot;, beta1_true),
+           hjust = 0, vjust = 1.5, color = &amp;quot;gray40&amp;quot;, size = 4.5) +
+  xlab(expression(hat(beta))) +
+  ylab(&amp;quot;Count&amp;quot;) +
+  ggtitle(&amp;quot;Posterior Densities for Multiple Regression Coefficients&amp;quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = c(0.85, 0.85))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-17-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The posteriors for both coefficients are centered near &lt;span class=&#34;math inline&#34;&gt;\(\beta_{\text{true}}\)&lt;/span&gt; = 0.5 (gray line), while the naive OLS estimates (dashed dusty rose lines) are off in different directions—one inflated, one attenuated. The hierarchical model does not have this problem because it estimates the latent predictors directly.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;putting-it-all-together&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Putting It All Together&lt;/h1&gt;
+&lt;div id=&#34;shrinkage-factor-table&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Shrinkage Factor Table&lt;/h2&gt;
+&lt;p&gt;As in Parts 1 and 2, let’s compare the shrinkage factors across all methods:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Compute effective shrinkage / beta estimates for simple regression
+beta_df &amp;lt;- data.frame(
+  Method = c(&amp;quot;Naive OLS&amp;quot;, &amp;quot;Reliability-Corrected&amp;quot;,
+             &amp;quot;Hierarchical (lme4)&amp;quot;, &amp;quot;Hierarchical (brms)&amp;quot;),
+  Formula = c(
+    &amp;quot;$\\hat{\\beta}_{\\text{OLS}} = \\beta_{\\text{true}} \\times \\rho_{xx}$&amp;quot;,
+    &amp;quot;$\\hat{\\beta}_{\\text{OLS}} / \\hat{\\rho}_{xx}$&amp;quot;,
+    &amp;quot;$\\hat{\\beta}$ from regression on BLUPs&amp;quot;,
+    &amp;quot;$\\hat{\\beta}$ from regression on posterior means&amp;quot;
+  ),
+  Estimate = round(c(beta_ols, beta_corrected, beta_lmer, beta_brms), 3),
+  True = beta_true
+)
+
+knitr::kable(
+  beta_df,
+  col.names = c(&amp;quot;Method&amp;quot;, &amp;quot;Formula&amp;quot;, &amp;quot;$\\hat{\\beta}$&amp;quot;, &amp;quot;$\\beta_{\\text{true}}$&amp;quot;),
+  align = &amp;quot;lccc&amp;quot;,
+  escape = FALSE
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;colgroup&gt;
+&lt;col width=&#34;17%&#34; /&gt;
+&lt;col width=&#34;52%&#34; /&gt;
+&lt;col width=&#34;11%&#34; /&gt;
+&lt;col width=&#34;18%&#34; /&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr class=&#34;header&#34;&gt;
+&lt;th align=&#34;left&#34;&gt;Method&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Formula&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt;&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\beta_{\text{true}}\)&lt;/span&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Naive OLS&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}_{\text{OLS}} = \beta_{\text{true}} \times \rho_{xx}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.567&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Reliability-Corrected&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}_{\text{OLS}} / \hat{\rho}_{xx}\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.769&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;odd&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Hierarchical (lme4)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt; from regression on BLUPs&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.645&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class=&#34;even&#34;&gt;
+&lt;td align=&#34;left&#34;&gt;Hierarchical (brms)&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt; from regression on posterior means&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.645&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;0.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rmse-comparison&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;RMSE Comparison&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Run simulation to get RMSE across methods
+n_sims_rmse &amp;lt;- 500
+
+rmse_results &amp;lt;- foreach(i = 1:n_sims_rmse, .combine = &amp;quot;rbind&amp;quot;) %do% {
+  theta_sim &amp;lt;- rnorm(N_subj, mu_x, sigma_x)
+  y_true_sim &amp;lt;- beta_true * theta_sim + rnorm(N_subj, 0, sigma_eta)
+
+  obs_sim &amp;lt;- foreach(j = 1:N_subj, .combine = &amp;quot;rbind&amp;quot;) %do% {
+    data.frame(
+      subj = j,
+      x = rnorm(n_obs, theta_sim[j], sigma_obs_x),
+      y = y_true_sim[j] + rnorm(n_obs, 0, sigma_eta)
+    )
+  }
+
+  summ_sim &amp;lt;- obs_sim %&amp;gt;%
+    group_by(subj) %&amp;gt;%
+    summarize(x_bar = mean(x), y_bar = mean(y), .groups = &amp;quot;drop&amp;quot;)
+
+  # Naive OLS
+  beta_naive_sim &amp;lt;- coef(lm(y_bar ~ x_bar, data = summ_sim))[2]
+
+  # Reliability-corrected
+  beta_corr_sim &amp;lt;- beta_naive_sim / rho_xx
+
+  # lme4 denoising
+  fit_x_sim &amp;lt;- tryCatch({
+    lmer(x ~ 1 + (1 | subj), data = obs_sim)
+  }, error = function(e) NULL)
+
+  fit_y_sim &amp;lt;- tryCatch({
+    lmer(y ~ 1 + (1 | subj), data = obs_sim)
+  }, error = function(e) NULL)
+
+  if (!is.null(fit_x_sim) &amp;amp;&amp;amp; !is.null(fit_y_sim)) {
+    x_hat_sim &amp;lt;- coef(fit_x_sim)$subj[, &amp;quot;(Intercept)&amp;quot;]
+    y_hat_sim &amp;lt;- coef(fit_y_sim)$subj[, &amp;quot;(Intercept)&amp;quot;]
+    beta_lmer_sim &amp;lt;- coef(lm(y_hat_sim ~ x_hat_sim))[2]
+  } else {
+    beta_lmer_sim &amp;lt;- NA
+  }
+
+  data.frame(naive = beta_naive_sim, corrected = beta_corr_sim,
+             hier_lmer = beta_lmer_sim)
+}
+
+rmse_beta &amp;lt;- data.frame(
+  Method = c(&amp;quot;Naive OLS&amp;quot;, &amp;quot;Reliability-Corrected&amp;quot;, &amp;quot;Hierarchical (lme4)&amp;quot;),
   RMSE = c(
-    rmse_fn(subj_summary$ybar1, subj_summary$ybar2,
-            subj_summary$theta1, subj_summary$theta2),
-    rmse_fn(subj_summary$ybar1_shrunk, subj_summary$ybar2_shrunk,
-            subj_summary$theta1, subj_summary$theta2),
-    rmse_fn(subj_summary$theta1_mvjs, subj_summary$theta2_mvjs,
-            subj_summary$theta1, subj_summary$theta2),
-    rmse_fn(subj_summary$theta1_lmer, subj_summary$theta2_lmer,
-            subj_summary$theta1, subj_summary$theta2),
-    rmse_fn(subj_summary$theta1_brms, subj_summary$theta2_brms,
-            subj_summary$theta1, subj_summary$theta2)
+    sqrt(mean((rmse_results$naive - beta_true)^2)),
+    sqrt(mean((rmse_results$corrected - beta_true)^2)),
+    sqrt(mean((rmse_results$hier_lmer[!is.na(rmse_results$hier_lmer)] - beta_true)^2))
   )
 ) %&amp;gt;%
   mutate(Method = factor(Method, levels = Method))
 
-p_rmse &amp;lt;- rmse_df %&amp;gt;%
+rmse_beta %&amp;gt;%
   ggplot(aes(x = Method, y = RMSE, fill = Method)) +
   geom_col() +
-  scale_fill_manual(values = c(
-    &amp;quot;Sample Mean&amp;quot;          = &amp;quot;#DCBCBC&amp;quot;,
-    &amp;quot;Univariate Shrinkage&amp;quot; = &amp;quot;#c97979&amp;quot;,
-    &amp;quot;MV Shrinkage&amp;quot;         = &amp;quot;#B2182B&amp;quot;,
-    &amp;quot;Hier. (lme4)&amp;quot;         = &amp;quot;#8F2727&amp;quot;,
-    &amp;quot;Hier. (brms)&amp;quot;         = &amp;quot;#601414&amp;quot;
-  )) +
+  scale_fill_manual(values = c(&amp;quot;Naive OLS&amp;quot; = &amp;quot;#DCBCBC&amp;quot;,
+                                &amp;quot;Reliability-Corrected&amp;quot; = &amp;quot;#8F2727&amp;quot;,
+                                &amp;quot;Hierarchical (lme4)&amp;quot; = &amp;quot;#4daf4a&amp;quot;)) +
   xlab(&amp;quot;&amp;quot;) +
   ylab(&amp;quot;RMSE&amp;quot;) +
-  ggtitle(&amp;quot;Individual-Level Estimation Error Across Methods&amp;quot;) +
+  ggtitle(expression(&amp;quot;RMSE for &amp;quot; * hat(beta) * &amp;quot; Across Methods&amp;quot;)) +
   theme_minimal(base_size = 15) +
   theme(panel.grid = element_blank(),
-        axis.text.x = element_text(angle = 30, hjust = 1),
+        axis.text.x = element_text(angle = 20, hjust = 1),
         legend.position = &amp;quot;none&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-28-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Nice. All shrinkage methods improve on the sample mean as explected. Even in the multvariate case, univariate shrinkage &lt;em&gt;still improves the individual estimates&lt;/em&gt; but—as we showed—does not improve the &lt;em&gt;correlation&lt;/em&gt; estimate. The multivariate methods improve both, because they leverage the cross-measure structure.&lt;/p&gt;
-&lt;p&gt;Next, we can look at RMSE of the correlation estimate itself. When doing so, it is useful to look at how various estimators perform as sample size increases. As in Part 1, the multivariate estimators are expected to shine most in small sample settings, but all approaches should converge as sample size increases:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n_obs_vec   &amp;lt;- c(5, 10, 25, 50, 100, 200)
-n_sims_rmse &amp;lt;- 100
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/rmse-comparison-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As we have seen throughout this series, the hierarchical approach provides the best balance of bias and variance. The reliability-corrected estimate removes bias but at the cost of higher variance (dividing one noisy estimate by another), while naive OLS has low variance but is systematically biased. The hierarchical model threads the needle.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rmse-vs.-sample-size&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;RMSE vs. Sample Size&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n_obs_vec &amp;lt;- c(3, 5, 10, 25, 50, 100)
+n_sims_n &amp;lt;- 200
 
-rmse_rho_by_n &amp;lt;- foreach(n_k = n_obs_vec, .combine = &amp;quot;rbind&amp;quot;) %do% {
-  sim_results &amp;lt;- foreach(i = 1:n_sims_rmse, .combine = rbind) %do% {
-    theta_sim &amp;lt;- MASS::mvrnorm(N_subj, mu = c(mu1, mu2), Sigma = Sigma_pop)
-    y1_sim &amp;lt;- matrix(rnorm(N_subj * n_k, theta_sim[, 1], sigma_obs1), N_subj, n_k)
-    y2_sim &amp;lt;- matrix(rnorm(N_subj * n_k, theta_sim[, 2], sigma_obs2), N_subj, n_k)
-    ybar1_sim &amp;lt;- rowMeans(y1_sim)
-    ybar2_sim &amp;lt;- rowMeans(y2_sim)
+rmse_by_n &amp;lt;- foreach(n_k = n_obs_vec, .combine = &amp;quot;rbind&amp;quot;) %do% {
+  rho_xx_k &amp;lt;- sigma_x^2 / (sigma_x^2 + sigma_obs_x^2 / n_k)
 
-    # Naive
-    r_naive_sim &amp;lt;- cor(ybar1_sim, ybar2_sim)
+  sim_k &amp;lt;- foreach(i = 1:n_sims_n, .combine = &amp;quot;rbind&amp;quot;) %do% {
+    theta_sim &amp;lt;- rnorm(N_subj, mu_x, sigma_x)
+    y_true_sim &amp;lt;- beta_true * theta_sim + rnorm(N_subj, 0, sigma_eta)
 
-    # Spearman correction
-    var1_s &amp;lt;- mean(apply(y1_sim, 1, var))
-    var2_s &amp;lt;- mean(apply(y2_sim, 1, var))
-    se2_1s &amp;lt;- var1_s / n_k; se2_2s &amp;lt;- var2_s / n_k
-    sp1 &amp;lt;- max(var(ybar1_sim) - se2_1s, 0.001)
-    sp2 &amp;lt;- max(var(ybar2_sim) - se2_2s, 0.001)
-    rho1s &amp;lt;- sp1 / (sp1 + se2_1s); rho2s &amp;lt;- sp2 / (sp2 + se2_2s)
-    r_spear_sim &amp;lt;- min(max(r_naive_sim / sqrt(rho1s * rho2s), -1), 1)
+    obs_sim &amp;lt;- foreach(j = 1:N_subj, .combine = &amp;quot;rbind&amp;quot;) %do% {
+      data.frame(subj = j,
+                 x = rnorm(n_k, theta_sim[j], sigma_obs_x),
+                 y = y_true_sim[j] + rnorm(n_k, 0, sigma_eta))
+    }
 
-    # MV Shrinkage
-    S_sim &amp;lt;- cov(cbind(ybar1_sim, ybar2_sim))
-    Sig_obs_n_sim &amp;lt;- diag(c(var1_s / n_k, var2_s / n_k))
-    Sig_pop_sim &amp;lt;- S_sim - Sig_obs_n_sim
-    eig_s &amp;lt;- eigen(Sig_pop_sim)
-    eig_s$values &amp;lt;- pmax(eig_s$values, 0.001)
-    Sig_pop_sim &amp;lt;- eig_s$vectors %*% diag(eig_s$values) %*% t(eig_s$vectors)
-    rho_mvs_sim &amp;lt;- Sig_pop_sim[1, 2] / sqrt(Sig_pop_sim[1, 1] * Sig_pop_sim[2, 2])
+    summ_sim &amp;lt;- obs_sim %&amp;gt;%
+      group_by(subj) %&amp;gt;%
+      summarize(x_bar = mean(x), y_bar = mean(y), .groups = &amp;quot;drop&amp;quot;)
 
-    # Long-format data for hierarchical models
-    d_sim &amp;lt;- data.frame(
-      subj = factor(rep(1:N_subj, each = 2 * n_k)),
-      measure = factor(rep(rep(c(&amp;quot;y1&amp;quot;, &amp;quot;y2&amp;quot;), each = n_k), N_subj)),
-      y = c(t(cbind(y1_sim, y2_sim)))
-    )
+    beta_naive_k &amp;lt;- coef(lm(y_bar ~ x_bar, data = summ_sim))[2]
+    beta_corr_k  &amp;lt;- beta_naive_k / rho_xx_k
 
-    # Hierarchical (lme4)
-    rho_lmer_sim &amp;lt;- tryCatch({
-      fit_sim &amp;lt;- lmer(y ~ 0 + measure + (0 + measure | subj), data = d_sim,
-                      control = lmerControl(optimizer = &amp;quot;bobyqa&amp;quot;))
-      vc_sim &amp;lt;- as.data.frame(VarCorr(fit_sim))
-      vc_sim$sdcor[!is.na(vc_sim$var2) &amp;amp; vc_sim$var1 == &amp;quot;measurey1&amp;quot; &amp;amp; vc_sim$var2 == &amp;quot;measurey2&amp;quot;]
-    }, error = function(e) NA)
+    fit_x_k &amp;lt;- tryCatch(lmer(x ~ 1 + (1 | subj), data = obs_sim), error = function(e) NULL)
+    fit_y_k &amp;lt;- tryCatch(lmer(y ~ 1 + (1 | subj), data = obs_sim), error = function(e) NULL)
 
-    # Hierarchical (brms)
-    rho_brms_sim &amp;lt;- tryCatch({
-      fit_brms_sim &amp;lt;- brm(
-        bf(y ~ 0 + measure + (0 + measure | subj)),
-        data = d_sim,
-        family = gaussian(),
-        chains = 8, cores = 8,
-        iter = 1500, backend = &amp;quot;cmdstanr&amp;quot;,
-        prior = c(
-          prior(normal(0, 10), class = &amp;quot;b&amp;quot;),
-          prior(normal(0, 10), class = &amp;quot;sd&amp;quot;),
-          prior(lkj(1),        class = &amp;quot;cor&amp;quot;),
-          prior(normal(0, 10), class = &amp;quot;sigma&amp;quot;)
-        ),
-        warmup = 200,
-        seed = 43202 + i + n_k,
-        silent = 2,
-        refresh = 0
-      )
-      post_sim &amp;lt;- as_draws_df(fit_brms_sim)
-      rho_col_sim &amp;lt;- grep(&amp;quot;cor_subj.*measurey1.*measurey2&amp;quot;, names(post_sim), value = TRUE)[1]
-      rho_draws &amp;lt;- post_sim[[rho_col_sim]]
-      d_rho &amp;lt;- density(rho_draws)
-      d_rho$x[which.max(d_rho$y)]
-    }, error = function(e) NA)
+    if (!is.null(fit_x_k) &amp;amp;&amp;amp; !is.null(fit_y_k)) {
+      x_hat_k &amp;lt;- coef(fit_x_k)$subj[, &amp;quot;(Intercept)&amp;quot;]
+      y_hat_k &amp;lt;- coef(fit_y_k)$subj[, &amp;quot;(Intercept)&amp;quot;]
+      beta_lmer_k &amp;lt;- coef(lm(y_hat_k ~ x_hat_k))[2]
+    } else {
+      beta_lmer_k &amp;lt;- NA
+    }
 
-    data.frame(naive = r_naive_sim, spearman = r_spear_sim,
-               mv_shrinkage = rho_mvs_sim, hier_lmer = rho_lmer_sim,
-               hier_brms = rho_brms_sim)
+    data.frame(naive = beta_naive_k, corrected = beta_corr_k, hier = beta_lmer_k)
   }
 
   data.frame(
-    n_obs  = n_k,
-    Method = c(&amp;quot;Two-Stage Pearson r&amp;quot;, &amp;quot;Spearman Correction&amp;quot;,
-               &amp;quot;MV Shrinkage&amp;quot;, &amp;quot;Hierarchical (lme4)&amp;quot;, &amp;quot;Hierarchical (brms)&amp;quot;),
-    RMSE   = c(
-      sqrt(mean((sim_results$naive - rho_true)^2)),
-      sqrt(mean((sim_results$spearman - rho_true)^2)),
-      sqrt(mean((sim_results$mv_shrinkage - rho_true)^2)),
-      sqrt(mean((sim_results$hier_lmer[!is.na(sim_results$hier_lmer)] - rho_true)^2)),
-      sqrt(mean((sim_results$hier_brms[!is.na(sim_results$hier_brms)] - rho_true)^2))
+    n_obs = n_k,
+    Method = c(&amp;quot;Naive OLS&amp;quot;, &amp;quot;Reliability-Corrected&amp;quot;, &amp;quot;Hierarchical (lme4)&amp;quot;),
+    RMSE = c(
+      sqrt(mean((sim_k$naive - beta_true)^2)),
+      sqrt(mean((sim_k$corrected - beta_true)^2)),
+      sqrt(mean((sim_k$hier[!is.na(sim_k$hier)] - beta_true)^2))
     )
   )
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;details&gt;
-&lt;summary&gt;
-Click to show visualization code
-&lt;/summary&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p_sample_size &amp;lt;- rmse_rho_by_n %&amp;gt;%
-  mutate(Method = factor(Method, levels = c(&amp;quot;Two-Stage Pearson r&amp;quot;,
-                                             &amp;quot;Spearman Correction&amp;quot;,
-                                             &amp;quot;MV Shrinkage&amp;quot;,
-                                             &amp;quot;Hierarchical (lme4)&amp;quot;,
-                                             &amp;quot;Hierarchical (brms)&amp;quot;))) %&amp;gt;%
+}
+
+rmse_by_n %&amp;gt;%
+  mutate(Method = factor(Method, levels = c(&amp;quot;Naive OLS&amp;quot;, &amp;quot;Reliability-Corrected&amp;quot;,
+                                             &amp;quot;Hierarchical (lme4)&amp;quot;))) %&amp;gt;%
   ggplot(aes(x = n_obs, y = RMSE, color = Method)) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_point(size = 2.5) +
-  scale_color_manual(values = c(&amp;quot;Two-Stage Pearson r&amp;quot;    = &amp;quot;#DCBCBC&amp;quot;,
-                                 &amp;quot;Spearman Correction&amp;quot;    = &amp;quot;#c97979&amp;quot;,
-                                 &amp;quot;MV Shrinkage&amp;quot;           = &amp;quot;#B2182B&amp;quot;,
-                                 &amp;quot;Hierarchical (lme4)&amp;quot;    = &amp;quot;#8F2727&amp;quot;,
-                                 &amp;quot;Hierarchical (brms)&amp;quot;    = &amp;quot;#601414&amp;quot;)) +
+  scale_color_manual(values = c(&amp;quot;Naive OLS&amp;quot; = &amp;quot;#DCBCBC&amp;quot;,
+                                 &amp;quot;Reliability-Corrected&amp;quot; = &amp;quot;#8F2727&amp;quot;,
+                                 &amp;quot;Hierarchical (lme4)&amp;quot; = &amp;quot;#4daf4a&amp;quot;)) +
   xlab(&amp;quot;Observations per Individual (n)&amp;quot;) +
-  ylab(expression(&amp;quot;RMSE for&amp;quot; ~ hat(rho))) +
-  ggtitle(&amp;quot;Correlation Estimation Error by Sample Size&amp;quot;) +
+  ylab(expression(&amp;quot;RMSE for &amp;quot; * hat(beta))) +
+  ggtitle(&amp;quot;Advantage of Hierarchical Models Largest with High Measurement Error&amp;quot;) +
   theme_minimal(base_size = 15) +
   theme(panel.grid = element_blank(),
-        legend.position = c(.7, .7))&lt;/code&gt;&lt;/pre&gt;
-&lt;/details&gt;
-&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/index_files/figure-html/unnamed-chunk-29-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;As expected, the multivariate methods dominate at small &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;, where measurement error is most severe. As &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; grows, all methods do converge—the data become informative enough that even the naive Pearson &lt;span class=&#34;math inline&#34;&gt;\(r\)&lt;/span&gt; approaches the truth.&lt;/p&gt;
-&lt;p&gt;Notably, the hierarchical Bayesian approach shows a clear advantage over other approaches when working with very low sample sizes. I have recognized this pattern time and time again—even a model with minimally informative priors can do wonders for small sample inference.&lt;/p&gt;
+        legend.position = c(0.7, 0.7))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/rmse-by-sample-size-1.svg&#34; alt=&#34;&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As in Parts 1 and 2, the advantage of hierarchical approaches is &lt;strong&gt;largest when data are sparse&lt;/strong&gt; (small &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;). As &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; grows and the reliability approaches 1, all methods converge because there is less measurement error to correct for. This is the same pattern we have seen throughout the series—shrinkage helps most when the data are noisy, and gracefully steps aside when the data speak for themselves.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;a-brief-note-on-ridge-regression&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;A Brief Note on Ridge Regression&lt;/h2&gt;
+&lt;p&gt;One connection worth noting: the ridge regression penalty &lt;span class=&#34;math inline&#34;&gt;\(\lambda \mathbf{I}\)&lt;/span&gt; added to &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}&amp;#39;\mathbf{X}\)&lt;/span&gt; is structurally identical to measurement error inflating &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{X}&amp;#39;\mathbf{X}\)&lt;/span&gt;. Ridge literally behaves &lt;em&gt;as if&lt;/em&gt; your clean predictors had measurement error of variance &lt;span class=&#34;math inline&#34;&gt;\(\lambda\)&lt;/span&gt;. This connection completes the circle from Part 1—ridge regularization, which we covered as a shrinkage estimator for means, is the regression analogue of measurement error attenuation. I cover this equivalence in more detail in a &lt;a href=&#34;http://haines-lab.com/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/&#34;&gt;previous post&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div id=&#34;what-this-means-for-science&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;What This Means for Science&lt;/h1&gt;
-&lt;p&gt;If you routinely compute summary statistics (questionnaire summed scores, mean RTs or accuracy rates, etc.) for individuals and then correlate them, you are consistently underestimating the true correlations you care about.&lt;/p&gt;
-&lt;p&gt;Any correlation between summary statistics is attenuated by the measurement error in both variables. If both measures have reliability of 0.5 (which is common for behavioral tasks in psychology), the observed correlation is only &lt;span class=&#34;math inline&#34;&gt;\(\sqrt{0.5 \times 0.5} = 50\)&lt;/span&gt;% of the true value. A true &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; = 0.7 appears as &lt;span class=&#34;math inline&#34;&gt;\(r \approx 0.35\)&lt;/span&gt;. A true &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; = 0.3 appears as &lt;span class=&#34;math inline&#34;&gt;\(r \approx 0.15\)&lt;/span&gt;—barely detectable in a typical sample.&lt;/p&gt;
-&lt;p&gt;One of my favorite recent examples of over-interpreting attenuated correlations is the invention of the so-called &lt;strong&gt;Reliability Paradox&lt;/strong&gt;. Behavioral tasks that produce robust group-level effects (Stroop, IAT, Go/No-go, etc.) consistently show poor test-retest reliability when individual-level performance is estimated with summary statistics (&lt;a href=&#34;https://doi.org/10.3758/s13428-017-0935-1&#34;&gt;Hedge et al., 2017&lt;/a&gt;). As discussed in Part 1 and in a &lt;a href=&#34;http://haines-lab.com/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/&#34;&gt;previous post&lt;/a&gt;, this is not a paradox—it is a direct consequence of using noisy estimators. A low test-retest reliability estimate derived from sample means usually indicates that person-level error is high (either through small &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;, high &lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_{\text{obs}}\)&lt;/span&gt;, or both). If you want to make inferential statements about true changes in some trait (measured per a behavioral task) over time, you need to estimate the test-retest correlation of the “true” parameters—you need multivariate shrinkage estimators!&lt;/p&gt;
-&lt;p&gt;Another high-stakes example is studies looking at &lt;strong&gt;brain-behavior correlations.&lt;/strong&gt; In model-based neuroscience, a common workflow is: (1) estimate cognitive/computational model parameters from a behavioral task, then (2) enter point estimates of parameters into a GLM predicting neural responses. When an hour of fMRI scanning will run you in the neighborhood of $1000 USD, most researchers are stuck with shortened behavioral tasks (i.e. low &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;) in addition to low subject counts—both which exacerbate low reliability issues. In such cases, attenuated estimates are a huge waste of resources (see &lt;a href=&#34;https://doi.org/10.1016/j.bpsc.2023.01.001&#34;&gt;Haines, Sullivan-Toole, &amp;amp; Olino, 2023&lt;/a&gt;), and using generative models that jointly estimate neural and behavioral parameters is an excellent way to get the right estimates while also not compromising on model complexity.&lt;/p&gt;
-&lt;p&gt;More generally, attenuated correlations means &lt;strong&gt;lower statistical power.&lt;/strong&gt; Regardless of the context, if the true correlation is &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; = 0.7 but the observed &lt;span class=&#34;math inline&#34;&gt;\(r \approx 0.37\)&lt;/span&gt; due to attenuation, you would need roughly &lt;span class=&#34;math inline&#34;&gt;\(N \approx 55\)&lt;/span&gt; participants to detect the attenuated effect at 80% power (for &lt;span class=&#34;math inline&#34;&gt;\(r = 0.37\)&lt;/span&gt;), compared to &lt;span class=&#34;math inline&#34;&gt;\(N \approx 13\)&lt;/span&gt; for the true effect (for &lt;span class=&#34;math inline&#34;&gt;\(\rho = 0.7\)&lt;/span&gt;). That is a ~4&lt;span class=&#34;math inline&#34;&gt;\(\times\)&lt;/span&gt; increase in required sample size—not because the effect is small, but because the measurement is noisy. And this is for a &lt;em&gt;large&lt;/em&gt; true effect; for moderate true correlations (&lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; = 0.3), the power implications are even worse. Note that, as we saw in the sampling distributions above, simply disattenuating the correlation doesn’t hand you this power back for free—corrected estimates like Spearman’s have higher variance, partially offsetting the gain from a larger point estimate. Hierarchical models strike a better balance, but either way you still have to pay for your lunch.&lt;/p&gt;
-&lt;p&gt;So, whenever you compute a correlation between &lt;em&gt;estimated&lt;/em&gt; quantities (not raw data), you should worry about attenuation. In order of increasing sophistication, your options for a fix are:&lt;/p&gt;
-&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
-&lt;li&gt;&lt;strong&gt;Spearman’s correction&lt;/strong&gt;: simple, unbiased on average, but high variance and can exceed 1.0. Use for quick sanity checks.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Multivariate shrinkage&lt;/strong&gt;: a natural extension of univariate shrinkage, motivated by James-Stein and empirical Bayesian estimators. More principled than Spearman’s correction (e.g., you won’t get any &lt;span class=&#34;math inline&#34;&gt;\(\hat{\rho}_{\text{true}} &amp;gt; 1\)&lt;/span&gt;), but still uses point estimate plug-ins (so misses some important uncertainty).&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Hierarchical models&lt;/strong&gt;: estimate the correlation directly, with proper uncertainty. You can use &lt;code&gt;brms&lt;/code&gt; or Stan for Bayesian flavor, or &lt;code&gt;lme4&lt;/code&gt; for frequentist.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Of these, hierarchical models are the most principled solution in my opinion—they jointly estimate everything, propagate uncertainty, and naturally produce shrunken estimates and disattenuated correlation estimates that can be used for inference.&lt;/p&gt;
+&lt;p&gt;So, why should you care? If you routinely regress outcomes on noisy predictors—summed scores, mean response times, task performance metrics, self-report scales—your &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta}\)&lt;/span&gt; underestimates the true effect. The attenuation is exactly &lt;span class=&#34;math inline&#34;&gt;\(\rho_{xx}\)&lt;/span&gt;, the predictor reliability, and since reliability is almost always less than 1 in the social and behavioral sciences, this is happening in essentially every regression that uses imperfect predictors.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The multiple regression case is worse.&lt;/strong&gt; As we showed above, when you include multiple noisy predictors that are correlated with each other, the bias is no longer a simple attenuation—coefficients can be inflated, attenuated, or even change sign depending on the correlation structure and differential reliabilities. This has substantial consequences for any study using multiple noisy predictors (which is… most studies).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mediation analysis is especially vulnerable.&lt;/strong&gt; A typical mediation model involves multiple regression paths, each of which can be attenuated by measurement error. The indirect effect (product of two paths) compounds the attenuation, often dramatically. If each path is attenuated by &lt;span class=&#34;math inline&#34;&gt;\(\rho_{xx} = 0.5\)&lt;/span&gt;, the indirect effect is attenuated by &lt;span class=&#34;math inline&#34;&gt;\(0.5 \times 0.5 = 0.25\)&lt;/span&gt;—only a quarter of the true value.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The irony of all this is hard to overstate.&lt;/strong&gt; We named our most widely-used statistical method after the very phenomenon that biases it. “Regression” literally means “shrinkage toward the mean”—which is exactly what measurement error does to regression coefficients. Galton discovered the bias, Pearson formalized it into a method, and generations of scientists have been using that method without accounting for the bias it was named after.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The fix&lt;/strong&gt; is by now familiar from Parts 1 and 2: use hierarchical models that separate signal from noise, or at minimum, reliability-corrected estimates. When predictors have trial-level data (multiple observations per person per predictor), hierarchical models can extract the latent true scores and estimate regression coefficients that are not attenuated. Even when trial-level data are unavailable, reliability corrections can partially address the problem—though with the variance tradeoff we have seen throughout this series. For complex designs with multiple noisy predictors, the hierarchical approach is strongly preferred, since it handles the unpredictable multiple-regression case naturally.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;conclusion&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Conclusion&lt;/h1&gt;
-&lt;p&gt;In Part 1, &lt;span class=&#34;math inline&#34;&gt;\(\sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)&lt;/span&gt; unified mean estimation across six methodological traditions. The same principle applies to correlations:&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}\left(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\right)^{-1}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Univariate shrinkage, while improving individual mean estimates, does not help with correlation estimation. You need multivariate thinking—methods that model the joint distribution of the two measures—to correct for attenuation and recover the true latent correlation. Every method that does this, from Spearman’s 1904 correction to hierarchical Bayesian models, is implementing the same essential principle.&lt;/p&gt;
-&lt;p&gt;Next time you compute a correlation on derived quantities, I hope you consider disattenuating it :D.&lt;/p&gt;
+&lt;p&gt;Across this series, we have traced a single idea through three manifestations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Part 1:&lt;/strong&gt; The scalar shrinkage factor &lt;span class=&#34;math inline&#34;&gt;\(B = \sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)&lt;/span&gt; unifies mean estimation across six methodological traditions.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Part 2:&lt;/strong&gt; The matrix shrinkage factor &lt;span class=&#34;math inline&#34;&gt;\(\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n)^{-1}\)&lt;/span&gt; extends the same principle to correlations.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Part 3:&lt;/strong&gt; The regression coefficient &lt;span class=&#34;math inline&#34;&gt;\(\hat{\beta} = \beta_{\text{true}} \times \rho_{xx}\)&lt;/span&gt;, where &lt;span class=&#34;math inline&#34;&gt;\(\rho_{xx}\)&lt;/span&gt; IS &lt;span class=&#34;math inline&#34;&gt;\(B\)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Galton called it regression to the mean. Pearson formalized it as the regression coefficient. Kelley called it reliability. James and Stein called it shrinkage. Ridge regression calls it regularization. Bayesians call it the posterior. If you have been reading this series, you know by now that these are all the same thing :D.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sessionInfo()&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## R version 4.3.3 (2024-02-29)
 ## Platform: aarch64-apple-darwin20 (64-bit)
@@ -1150,41 +1059,40 @@ Click to show visualization code
 ## [1] stats     graphics  grDevices datasets  utils     methods   base     
 ## 
 ## other attached packages:
-##  [1] kableExtra_1.4.0    rstan_2.32.7        StanHeaders_2.32.10
-##  [4] posterior_1.6.1     lme4_2.0-1          Matrix_1.6-5       
-##  [7] ggplot2_4.0.1       foreach_1.5.2       tidyr_1.3.2        
-## [10] dplyr_1.1.4         MASS_7.3-60.0.1    
+##  [1] rstan_2.32.7        StanHeaders_2.32.10 brms_2.23.0        
+##  [4] Rcpp_1.1.1          lme4_2.0-1          Matrix_1.6-5       
+##  [7] posterior_1.6.1     HistData_1.0.0      MASS_7.3-60.0.1    
+## [10] ggplot2_4.0.1       foreach_1.5.2       tidyr_1.3.2        
+## [13] dplyr_1.1.4        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] tidyselect_1.2.1      viridisLite_0.4.2     farver_2.1.2         
-##  [4] loo_2.9.0             S7_0.2.1              fastmap_1.2.0        
-##  [7] tensorA_0.36.2.1      blogdown_1.23         digest_0.6.39        
-## [10] lifecycle_1.0.5       processx_3.8.6        magrittr_2.0.4       
-## [13] compiler_4.3.3        rlang_1.1.7           sass_0.4.10          
-## [16] tools_4.3.3           yaml_2.3.12           knitr_1.51           
+##  [1] tidyselect_1.2.1      farver_2.1.2          loo_2.9.0            
+##  [4] S7_0.2.1              fastmap_1.2.0         tensorA_0.36.2.1     
+##  [7] blogdown_1.23         digest_0.6.39         lifecycle_1.0.5      
+## [10] processx_3.8.6        magrittr_2.0.4        compiler_4.3.3       
+## [13] rlang_1.1.7           sass_0.4.10           tools_4.3.3          
+## [16] yaml_2.3.12           data.table_1.18.0     knitr_1.51           
 ## [19] labeling_0.4.3        bridgesampling_1.2-1  pkgbuild_1.4.8       
-## [22] xml2_1.5.2            RColorBrewer_1.1-3    cmdstanr_0.8.1       
-## [25] abind_1.4-8           withr_3.0.2           purrr_1.2.1          
-## [28] grid_4.3.3            stats4_4.3.3          inline_0.3.21        
-## [31] scales_1.4.0          iterators_1.0.14      cli_3.6.5            
+## [22] RColorBrewer_1.1-3    cmdstanr_0.8.1        abind_1.4-8          
+## [25] withr_3.0.2           purrr_1.2.1           grid_4.3.3           
+## [28] stats4_4.3.3          inline_0.3.21         scales_1.4.0         
+## [31] iterators_1.0.14      isoband_0.3.0         cli_3.6.5            
 ## [34] mvtnorm_1.3-3         rmarkdown_2.30        reformulas_0.4.4     
 ## [37] generics_0.1.4        otel_0.2.0            RcppParallel_5.1.11-1
 ## [40] rstudioapi_0.18.0     minqa_1.2.8           cachem_1.1.0         
 ## [43] stringr_1.6.0         splines_4.3.3         bayesplot_1.15.0     
 ## [46] parallel_4.3.3        formatR_1.14          matrixStats_1.5.0    
-## [49] brms_2.23.0           vctrs_0.7.1           boot_1.3-32          
-## [52] jsonlite_2.0.0        bookdown_0.46         systemfonts_1.3.1    
-## [55] jquerylib_0.1.4       glue_1.8.0            nloptr_2.2.1         
-## [58] codetools_0.2-20      ps_1.9.1              distributional_0.6.0 
-## [61] stringi_1.8.7         gtable_0.3.6          QuickJSR_1.8.1       
-## [64] tibble_3.3.1          pillar_1.11.1         htmltools_0.5.9      
-## [67] Brobdingnag_1.2-9     R6_2.6.1              textshaping_1.0.4    
-## [70] Rdpack_2.6.6          evaluate_1.0.5        lattice_0.22-7       
-## [73] rbibutils_2.4.1       backports_1.5.0       renv_1.1.6           
-## [76] bslib_0.9.0           rstantools_2.6.0      Rcpp_1.1.1           
-## [79] svglite_2.2.2         coda_0.19-4.1         gridExtra_2.3        
-## [82] nlme_3.1-168          checkmate_2.3.3       xfun_0.56            
-## [85] pkgconfig_2.0.3&lt;/code&gt;&lt;/pre&gt;
+## [49] vctrs_0.7.1           boot_1.3-32           jsonlite_2.0.0       
+## [52] bookdown_0.46         jquerylib_0.1.4       glue_1.8.0           
+## [55] nloptr_2.2.1          ps_1.9.1              codetools_0.2-20     
+## [58] distributional_0.6.0  stringi_1.8.7         gtable_0.3.6         
+## [61] QuickJSR_1.8.1        tibble_3.3.1          pillar_1.11.1        
+## [64] htmltools_0.5.9       Brobdingnag_1.2-9     R6_2.6.1             
+## [67] Rdpack_2.6.6          evaluate_1.0.5        lattice_0.22-7       
+## [70] rbibutils_2.4.1       backports_1.5.0       renv_1.1.6           
+## [73] bslib_0.9.0           rstantools_2.6.0      coda_0.19-4.1        
+## [76] gridExtra_2.3         nlme_3.1-168          checkmate_2.3.3      
+## [79] mgcv_1.9-1            xfun_0.56             pkgconfig_2.0.3&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 </description>
     </item>

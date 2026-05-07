@@ -1,0 +1,2378 @@
+<!DOCTYPE html><html lang="en-us" >
+
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.4.0 for Hugo" />
+  
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Nathaniel Haines" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Introduction If you have been following this series, you might have noticed something hiding in plain sight: the word “regression” literally means shrinkage toward the mean. This is not a metaphor or a historical curiosity—it is the phenomenon itself, and it turns out to be deeply connected to everything we have been discussing." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="http://haines-lab.com/post/what-is-regression-really/" />
+
+  
+  
+  
+    <meta name="theme-color" content="hsl(339, 90%, 68%)" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+
+  <link rel="stylesheet" href="/css/vendor-bundle.min.f1ecf783c14edc00c9320c205831ad8e.css" media="print" onload="this.media='all'">
+
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha512-W0xM4mr6dEP9nREo7Z9z+9X70wytKvMGeDsj7ps2+xg5QPrEBXC8tAW1IFnzjR6eoJ90JmCnFzerQJTLzIEHjA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+    
+    
+    
+      
+      
+    
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'" disabled>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'">
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.css" integrity="" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.483823b49802e3bfc12a727dbc71499e.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106994238-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-106994238-1', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/manifest.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="http://haines-lab.com/post/what-is-regression-really/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+
+  
+  
+    
+    
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="Computational Psychology" />
+  <meta property="og:url" content="http://haines-lab.com/post/what-is-regression-really/" />
+  <meta property="og:title" content="What is Regression, Really? | Computational Psychology" />
+  <meta property="og:description" content="Introduction If you have been following this series, you might have noticed something hiding in plain sight: the word “regression” literally means shrinkage toward the mean. This is not a metaphor or a historical curiosity—it is the phenomenon itself, and it turns out to be deeply connected to everything we have been discussing." /><meta property="og:image" content="http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png" />
+    <meta property="twitter:image" content="http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2026-04-09T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2026-04-09T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://haines-lab.com/post/what-is-regression-really/"
+  },
+  "headline": "What is Regression, Really?",
+  
+  "datePublished": "2026-04-09T00:00:00Z",
+  "dateModified": "2026-04-09T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Nathaniel Haines"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Computational Psychology",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://haines-lab.com/media/icon_hue6a27fe710826f15104e99b090f63ca0_9351_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "Introduction If you have been following this series, you might have noticed something hiding in plain sight: the word “regression” literally means shrinkage toward the mean. This is not a metaphor or a historical curiosity—it is the phenomenon itself, and it turns out to be deeply connected to everything we have been discussing."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>What is Regression, Really? | Computational Psychology</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  dark " data-wc-page-id="b71eddb9a0ea785fe5c8f1fc30ddbcaa" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.b6ac29faab89ee14db88f0bed7aa6622.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="header--fixed">
+  <nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+    <div class="container-xl">
+
+      
+      <div class="d-none d-lg-inline-flex">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+      
+      <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+        <a class="navbar-brand" href="/">Computational Psychology</a>
+      </div>
+      
+
+      
+      
+      <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+        
+        <ul class="navbar-nav d-md-inline-flex">
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#posts"><span>Posts</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#talks"><span>Talks</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#featured"><span>Publications</span></a>
+          </li>
+
+          
+          
+
+          
+
+          
+          
+          
+            
+          
+
+          
+
+          
+          
+          
+          
+
+          
+            
+              
+              
+            
+            
+              
+              
+              
+                
+              
+              
+            
+          
+
+          <li class="nav-item">
+            <a class="nav-link " href="/#contact"><span>Contact</span></a>
+          </li>
+
+          
+          
+
+        
+
+          
+        </ul>
+      </div>
+
+      <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+        
+        
+          
+            
+            <li class="nav-item d-none d-lg-inline-flex">
+              <a class="nav-link" href="https://twitter.com/nate__haines" data-toggle="tooltip" data-placement="bottom" title="Follow me on Twitter" target="_blank" rel="noopener" aria-label="Follow me on Twitter">
+                <i class="fab fa-twitter" aria-hidden="true"></i>
+              </a>
+            </li>
+          
+        
+
+        
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+        
+        <li class="nav-item dropdown theme-dropdown">
+          <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item js-set-theme-light">
+              <span>Light</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-dark">
+              <span>Dark</span>
+            </a>
+            <a href="#" class="dropdown-item js-set-theme-auto">
+              <span>Automatic</span>
+            </a>
+          </div>
+        </li>
+        
+
+        
+        
+
+      </ul>
+
+    </div>
+  </nav>
+</header>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>What is Regression, Really?</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Apr 9, 2026
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    32 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/category/statistical-modeling/">Statistical Modeling</a>, <a href="/category/measurement-error/">Measurement Error</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>If you have been following this series, you might have noticed something hiding in plain sight: the word “regression” literally means shrinkage toward the mean. This is not a metaphor or a historical curiosity—it is the phenomenon itself, and it turns out to be deeply connected to everything we have been discussing.</p>
+<p>In <a href="/post/how-to-estimate-a-mean-and-what-it-means-for-science/">Part 1</a> of this series, we showed that six different methods for estimating individual means—James-Stein, classical true score estimation, empirical Bayes, ridge regression, and hierarchical models—all converge on the same shrinkage factor: <span class="math inline">\(B = \sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)</span>. In <a href="/post/how-to-estimate-a-correlation-and-what-it-means-for-science/">Part 2</a>, we extended this to the multivariate case, showing that measurement error systematically attenuates correlations and that the matrix-valued shrinkage <span class="math inline">\(\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n)^{-1}\)</span> provides the fix.</p>
+<p>In this post, we complete the picture. The regression coefficient <span class="math inline">\(\beta = \text{Cov}(X, Y) / \text{Var}(X)\)</span> is itself a reliability-weighted quantity—when predictors are measured with error, OLS regression coefficients are attenuated by exactly the same shrinkage factor we have been studying all along. We will trace this from Galton’s original discovery through Pearson’s formalization, errors-in-variables models, and multiple regression (where the story becomes considerably more interesting than you might expect), ending with hierarchical Bayesian models that provide a principled solution.</p>
+</div>
+<div id="galtons-discovery-the-origin-of-regression" class="section level1">
+<h1>Galton’s Discovery — The Origin of “Regression”</h1>
+<div id="the-historical-dataset" class="section level2">
+<h2>The Historical Dataset</h2>
+<p>In 1886, Francis Galton published <a href="https://doi.org/10.2307/2841583">“Regression towards Mediocrity in Hereditary Stature”</a>—a paper whose title describes the phenomenon so precisely that it became the name of an entire statistical method. Galton observed that children of tall parents tend to be tall, but <em>less extreme</em> than their parents. Children of short parents tend to be short, but again <em>less extreme</em>. The children’s heights “regressed” toward the population average, and Galton’s <span class="math inline">\(\approx 2/3\)</span> proportionality factor is itself a shrinkage coefficient in the sense we have been discussing.</p>
+<p>Let’s look at the actual data:</p>
+<pre class="r"><code>library(dplyr)
+library(tidyr)
+library(foreach)
+library(ggplot2)
+library(MASS)
+library(HistData)
+library(posterior)
+
+set.seed(43202)
+
+data(Galton)
+
+# Galton&#39;s data: mid-parent height vs child height (in inches)
+galton_df &lt;- Galton %&gt;%
+  mutate(parent = parent, child = child)
+
+# OLS fit
+galton_fit &lt;- lm(child ~ parent, data = galton_df)
+beta_galton &lt;- coef(galton_fit)[2]
+r_galton &lt;- cor(galton_df$parent, galton_df$child)</code></pre>
+<pre class="r"><code>ggplot(galton_df, aes(x = parent, y = child)) +
+  geom_jitter(color = &quot;#DCBCBC&quot;, alpha = 0.4, size = 2, width = 0.3, height = 0.3) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &quot;gray50&quot;, linewidth = 0.8) +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;#8F2727&quot;, linewidth = 1.2) +
+  annotate(&quot;text&quot;, x = 64, y = 78,
+           label = paste0(&quot;OLS slope = &quot;, round(beta_galton, 2)),
+           color = &quot;#8F2727&quot;, size = 4.5) +
+  annotate(&quot;text&quot;, x = 64, y = 76,
+           label = &quot;Identity line (slope = 1)&quot;,
+           color = &quot;gray50&quot;, size = 4.5) +
+  xlab(&quot;Mid-Parent Height (inches)&quot;) +
+  ylab(&quot;Child Height (inches)&quot;) +
+  ggtitle(&quot;Galton&#39;s (1886) Data: Regression to the Mean&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-2-1.svg" alt="" width="672" /></p>
+<p>The dashed gray line is the identity line (slope = 1), which would correspond to children having the <em>same</em> height as their mid-parent value. The dark red line is the OLS regression line, with a slope of 0.65—substantially less than 1. Children of tall parents are tall, but not <em>as</em> tall. Children of short parents are short, but not <em>as</em> short. This is regression to the mean in its original, literal form, and the slope <span class="math inline">\(\hat{\beta} \approx\)</span> 0.65 is the shrinkage coefficient.</p>
+<p>We can also see this as a 2D density:</p>
+<details>
+<summary>
+Click to show visualization code
+</summary>
+<pre class="r"><code>p_galton_density &lt;- ggplot(galton_df, aes(x = parent, y = child)) +
+  stat_density_2d(aes(fill = after_stat(density)), geom = &quot;raster&quot;, contour = FALSE) +
+  scale_fill_gradient(low = &quot;white&quot;, high = &quot;#8F2727&quot;) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, color = &quot;gray50&quot;, linewidth = 0.8) +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;#DCBCBC&quot;, linewidth = 1.2) +
+  xlab(&quot;Mid-Parent Height (inches)&quot;) +
+  ylab(&quot;Child Height (inches)&quot;) +
+  ggtitle(&quot;Galton&#39;s Data: 2D Density&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &quot;none&quot;)</code></pre>
+</details>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-4-1.svg" alt="" width="672" /></p>
+<p>The density cloud is tilted toward the identity line, but the regression line (dusty rose) cuts through it at a shallower angle—the classic signature of regression to the mean.</p>
+</div>
+<div id="the-math" class="section level2">
+<h2>The Math</h2>
+<p>When both variables are standardized, the regression slope equals the Pearson correlation: <span class="math inline">\(\hat{\beta}^{(z)} = r_{XY}\)</span>. And from Part 2, we know that the observed correlation between two noisy measures is attenuated:</p>
+<p><span class="math display">\[r_{XY} = \rho_{\text{true}} \sqrt{\rho_{xx} \cdot \rho_{yy}}\]</span></p>
+<p>So the regression slope is a <em>shrunken</em> version of the true relationship. Galton’s <span class="math inline">\(\approx 2/3\)</span> factor is an estimate of the correlation between mid-parent and child heights, which is itself a product of the true heritability and the reliabilities of both measures.</p>
+</div>
+<div id="simulation" class="section level2">
+<h2>Simulation</h2>
+<p>To evaluate estimators against ground truth—consistent with the approach in Parts 1 and 2—let’s generate data from a known data-generating process where we have a true regression coefficient and measurement error on the predictor:</p>
+<pre class="r"><code># Simulation parameters
+N_subj      &lt;- 200
+n_obs       &lt;- 5       # observations per person per variable
+beta_true   &lt;- 0.8     # true regression coefficient (latent X -&gt; Y)
+mu_x        &lt;- 68      # population mean of latent X
+sigma_x     &lt;- 3       # population SD of latent X (between-person)
+sigma_obs_x &lt;- 4       # observation-level SD for X
+sigma_eta   &lt;- 3       # residual SD in structural equation
+
+# Generate latent true scores
+theta_x &lt;- rnorm(N_subj, mu_x, sigma_x)
+theta_y &lt;- beta_true * theta_x + rnorm(N_subj, 0, sigma_eta)
+
+# Generate noisy observations
+obs_data &lt;- foreach(i = 1:N_subj, .combine = &quot;rbind&quot;) %do% {
+  x_obs &lt;- rnorm(n_obs, theta_x[i], sigma_obs_x)
+  y_obs &lt;- theta_y[i] + rnorm(n_obs, 0, sigma_eta)
+  data.frame(
+    subj    = i,
+    trial   = 1:n_obs,
+    theta_x = theta_x[i],
+    theta_y = theta_y[i],
+    x       = x_obs,
+    y       = y_obs
+  )
+}
+
+# Compute sample means per individual
+subj_summary &lt;- obs_data %&gt;%
+  group_by(subj) %&gt;%
+  summarize(
+    theta_x = unique(theta_x),
+    theta_y = unique(theta_y),
+    x_bar   = mean(x),
+    y_bar   = mean(y),
+    .groups = &quot;drop&quot;
+  )
+
+# Reliability of X
+rho_xx &lt;- sigma_x^2 / (sigma_x^2 + sigma_obs_x^2 / n_obs)
+
+# OLS on sample means
+fit_ols &lt;- lm(y_bar ~ x_bar, data = subj_summary)
+beta_ols &lt;- coef(fit_ols)[2]
+
+# True regression of theta_y on theta_x
+fit_true &lt;- lm(theta_y ~ theta_x, data = subj_summary)
+beta_latent &lt;- coef(fit_true)[2]</code></pre>
+<p>The reliability of <span class="math inline">\(X\)</span> is <span class="math inline">\(\rho_{xx}\)</span> = 0.74, so the predicted attenuation of <span class="math inline">\(\beta\)</span> is <span class="math inline">\(\beta_{\text{true}} \times \rho_{xx}\)</span> = 0.59. Let’s see how the OLS estimate compares:</p>
+<pre class="r"><code>ggplot(subj_summary, aes(x = x_bar, y = y_bar)) +
+  geom_point(color = &quot;#DCBCBC&quot;, alpha = 0.5, size = 2) +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;#DCBCBC&quot;, linewidth = 1.2) +
+  geom_smooth(aes(x = theta_x, y = theta_y), method = &quot;lm&quot;, se = FALSE,
+              color = &quot;#8F2727&quot;, linewidth = 1.2, linetype = 1) +
+  annotate(&quot;text&quot;, x = min(subj_summary$x_bar) + 1, y = max(subj_summary$y_bar),
+           label = paste0(&quot;OLS on observed: \u03B2\u0302 = &quot;, round(beta_ols, 2)),
+           color = &quot;#DCBCBC&quot;, size = 4.5, hjust = 0) +
+  annotate(&quot;text&quot;, x = min(subj_summary$x_bar) + 1, y = max(subj_summary$y_bar) - 3,
+           label = paste0(&quot;True relationship: \u03B2 = &quot;, round(beta_latent, 2)),
+           color = &quot;#8F2727&quot;, size = 4.5, hjust = 0) +
+  xlab(&quot;Observed X (sample mean)&quot;) +
+  ylab(&quot;Observed Y (sample mean)&quot;) +
+  ggtitle(&quot;OLS Regression with Measurement Error in X&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-6-1.svg" alt="" width="672" /></p>
+<p>The OLS slope (dusty rose) is visibly shallower than the true latent relationship (dark red). This is not a small-sample accident—it is a systematic bias caused by measurement error in the predictor. Let’s formalize why.</p>
+</div>
+</div>
+<div id="pearsons-formalization-beta-covvar-as-shrinkage" class="section level1">
+<h1>Pearson’s Formalization — <span class="math inline">\(\beta\)</span> = Cov/Var as Shrinkage</h1>
+<div id="the-clean-case" class="section level2">
+<h2>The Clean Case</h2>
+<p>In 1896, <a href="https://doi.org/10.1098/rsta.1896.0007">Karl Pearson</a> formalized Galton’s observations into the framework we now call regression. The population regression coefficient is:</p>
+<p><span class="math display">\[\beta = \frac{\text{Cov}(X, Y)}{\text{Var}(X)}\]</span></p>
+<p>When <span class="math inline">\(X\)</span> is measured without error, OLS gives an unbiased estimate of <span class="math inline">\(\beta\)</span>. No problems there.</p>
+</div>
+<div id="introducing-measurement-error-on-x" class="section level2">
+<h2>Introducing Measurement Error on X</h2>
+<p>Now suppose we do not observe <span class="math inline">\(X\)</span> directly. Instead, we observe <span class="math inline">\(\tilde{X} = \theta + \epsilon\)</span>, where <span class="math inline">\(\theta\)</span> is the true latent predictor and <span class="math inline">\(\epsilon\)</span> is measurement error. The key decomposition is:</p>
+<p><span class="math display">\[\text{Var}(\tilde{X}) = \text{Var}(\theta) + \text{Var}(\epsilon)\]</span></p>
+<p><span class="math display">\[\text{Cov}(\tilde{X}, Y) = \text{Cov}(\theta + \epsilon, Y) = \text{Cov}(\theta, Y)\]</span></p>
+<p>The covariance is unbiased (error is uncorrelated with <span class="math inline">\(Y\)</span>), but the variance is inflated. Therefore:</p>
+<p><span class="math display">\[\hat{\beta}_{\text{OLS}} = \frac{\text{Cov}(\tilde{X}, Y)}{\text{Var}(\tilde{X})} = \frac{\text{Cov}(\theta, Y)}{\text{Var}(\theta) + \text{Var}(\epsilon)} = \beta_{\text{true}} \cdot \frac{\text{Var}(\theta)}{\text{Var}(\theta) + \text{Var}(\epsilon)} = \beta_{\text{true}} \cdot \rho_{xx}\]</span></p>
+<p>The OLS regression coefficient <strong>is the true coefficient times the predictor reliability</strong>. This is the same signal-over-signal-plus-noise ratio from Parts 1 and 2—<span class="math inline">\(\sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)</span>—now showing up in the context of regression.</p>
+</div>
+<div id="the-asymmetry" class="section level2">
+<h2>The Asymmetry</h2>
+<p>One important subtlety worth highlighting: measurement error in <span class="math inline">\(Y\)</span> increases the residual variance (and thus widens confidence intervals), but it does <strong>not</strong> bias <span class="math inline">\(\hat{\beta}\)</span>. Only measurement error in <span class="math inline">\(X\)</span> causes attenuation. This asymmetry arises because <span class="math inline">\(X\)</span> enters the denominator of <span class="math inline">\(\beta = \text{Cov}/\text{Var}(X)\)</span>, while <span class="math inline">\(Y\)</span> enters only the numerator—and as we showed in Part 2, measurement error in the numerator washes out, while error in the denominator inflates it.</p>
+</div>
+<div id="simulation-varying-predictor-reliability" class="section level2">
+<h2>Simulation: Varying Predictor Reliability</h2>
+<p>Alright, to see this attenuation in action, let’s vary the measurement error on <span class="math inline">\(X\)</span> while holding everything else constant:</p>
+<pre class="r"><code>sigma_obs_x_vec &lt;- c(0.01, 2, 4, 8)
+
+panel_data &lt;- foreach(k = seq_along(sigma_obs_x_vec), .combine = &quot;rbind&quot;) %do% {
+  sigma_k &lt;- sigma_obs_x_vec[k]
+  rho_k   &lt;- sigma_x^2 / (sigma_x^2 + sigma_k^2 / n_obs)
+
+  obs_k &lt;- foreach(i = 1:N_subj, .combine = &quot;rbind&quot;) %do% {
+    data.frame(
+      subj    = i,
+      theta_x = theta_x[i],
+      theta_y = theta_y[i],
+      x       = rnorm(n_obs, theta_x[i], sigma_k),
+      y       = theta_y[i] + rnorm(n_obs, 0, sigma_eta)
+    )
+  }
+
+  summ_k &lt;- obs_k %&gt;%
+    group_by(subj) %&gt;%
+    summarize(theta_x = unique(theta_x), theta_y = unique(theta_y),
+              x_bar = mean(x), y_bar = mean(y), .groups = &quot;drop&quot;)
+
+  fit_k  &lt;- lm(y_bar ~ x_bar, data = summ_k)
+
+  summ_k %&gt;%
+    mutate(
+      rho_xx  = round(rho_k, 2),
+      beta_ols = round(coef(fit_k)[2], 2),
+      panel_label = paste0(&quot;\u03C1_xx = &quot;, round(rho_k, 2),
+                           &quot; (\u03B2\u0302 = &quot;, round(coef(fit_k)[2], 2), &quot;)&quot;)
+    )
+}
+
+panel_data %&gt;%
+  ggplot(aes(x = x_bar, y = y_bar)) +
+  geom_point(color = &quot;#DCBCBC&quot;, alpha = 0.4, size = 1.5) +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;#DCBCBC&quot;, linewidth = 1) +
+  geom_smooth(aes(x = theta_x, y = theta_y), method = &quot;lm&quot;, se = FALSE,
+              color = &quot;#8F2727&quot;, linewidth = 1) +
+  facet_wrap(~panel_label, nrow = 1, scales = &quot;free_x&quot;) +
+  xlab(&quot;Observed X (sample mean)&quot;) +
+  ylab(&quot;Observed Y (sample mean)&quot;) +
+  ggtitle(&quot;Attenuation of Regression Slope with Decreasing Predictor Reliability&quot;) +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-7-1.svg" alt="" width="672" /></p>
+<p>As reliability decreases from left to right, the OLS slope (dusty rose) flattens toward zero while the true relationship (dark red) remains unchanged. The slope is being <em>shrunk</em> by the reliability factor—exactly as predicted by the formula above.</p>
+</div>
+<div id="sampling-distribution" class="section level2">
+<h2>Sampling Distribution</h2>
+<p>To confirm that this is not an (un)lucky simulation seed, we can repeat the simulation many times and look at the sampling distribution of <span class="math inline">\(\hat{\beta}_{\text{OLS}}\)</span>:</p>
+<pre class="r"><code>n_sims &lt;- 1000
+beta_sims &lt;- replicate(n_sims, {
+  theta_sim &lt;- rnorm(N_subj, mu_x, sigma_x)
+  y_sim     &lt;- beta_true * theta_sim + rnorm(N_subj, 0, sigma_eta)
+
+  x_obs_sim &lt;- foreach(i = 1:N_subj, .combine = &quot;c&quot;) %do% {
+    mean(rnorm(n_obs, theta_sim[i], sigma_obs_x))
+  }
+  y_obs_sim &lt;- foreach(i = 1:N_subj, .combine = &quot;c&quot;) %do% {
+    mean(y_sim[i] + rnorm(n_obs, 0, sigma_eta))
+  }
+
+  coef(lm(y_obs_sim ~ x_obs_sim))[2]
+})
+
+data.frame(beta = beta_sims) %&gt;%
+  ggplot(aes(x = beta)) +
+  geom_histogram(fill = &quot;#DCBCBC&quot;, color = &quot;white&quot;, bins = 50) +
+  geom_vline(xintercept = beta_true, color = &quot;gray40&quot;, linewidth = 1.2) +
+  geom_vline(xintercept = beta_true * rho_xx, color = &quot;#8F2727&quot;,
+             linewidth = 1.2, linetype = 2) +
+  annotate(&quot;text&quot;, x = beta_true + 0.02, y = Inf,
+           label = paste0(&quot;\u03B2_true = &quot;, beta_true),
+           hjust = 0, vjust = 1.5, color = &quot;gray40&quot;, size = 4.5) +
+  annotate(&quot;text&quot;, x = beta_true * rho_xx - 0.02, y = Inf,
+           label = paste0(&quot;\u03B2_true \u00D7 \u03C1_xx = &quot;, round(beta_true * rho_xx, 2)),
+           hjust = 1, vjust = 1.5, color = &quot;#8F2727&quot;, size = 4.5) +
+  xlab(expression(hat(beta)[OLS])) +
+  ylab(&quot;Count&quot;) +
+  ggtitle(&quot;Sampling Distribution of OLS Slope with Measurement Error in X&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/sampling-dist-beta-1.svg" alt="" width="672" /></p>
+<p>The sampling distribution is centered at <span class="math inline">\(\beta_{\text{true}} \times \rho_{xx}\)</span> = 0.59, not at the true value <span class="math inline">\(\beta\)</span> = 0.8. The OLS estimator is <em>biased</em>, and the bias is entirely determined by the predictor reliability.</p>
+</div>
+</div>
+<div id="the-standardized-case-connecting-all-three-posts" class="section level1">
+<h1>The Standardized Case — Connecting All Three Posts</h1>
+<p>When both <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are standardized, the regression slope reduces to the Pearson correlation:</p>
+<p><span class="math display">\[\hat{\beta}^{(z)} = r_{XY} = \rho_{\text{true}} \sqrt{\rho_{xx} \cdot \rho_{yy}}\]</span></p>
+<p>This connects all three posts:</p>
+<pre class="r"><code>unification_df &lt;- data.frame(
+  Post = c(&quot;1 (Means)&quot;, &quot;2 (Correlations)&quot;, &quot;3 (Regression)&quot;),
+  Estimand = c(&quot;Mean $\\mu_i$&quot;, &quot;Correlation $\\rho$&quot;, &quot;Regression $\\beta$&quot;),
+  `Attenuation Factor` = c(
+    &quot;$B = \\sigma^2_{\\text{pop}} / (\\sigma^2_{\\text{pop}} + \\sigma^2_{\\text{obs}}/n)$&quot;,
+    &quot;$r = \\rho_{\\text{true}} \\sqrt{\\rho_{xx,1} \\cdot \\rho_{xx,2}}$&quot;,
+    &quot;$\\hat{\\beta} = \\beta_{\\text{true}} \\times \\rho_{xx}$&quot;
+  )
+)
+
+knitr::kable(
+  unification_df,
+  col.names = c(&quot;Post&quot;, &quot;Estimand&quot;, &quot;Attenuation Factor&quot;),
+  align = &quot;lcc&quot;,
+  escape = FALSE
+)</code></pre>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="16%" />
+<col width="68%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Post</th>
+<th align="center">Estimand</th>
+<th align="center">Attenuation Factor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1 (Means)</td>
+<td align="center">Mean <span class="math inline">\(\mu_i\)</span></td>
+<td align="center"><span class="math inline">\(B = \sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">2 (Correlations)</td>
+<td align="center">Correlation <span class="math inline">\(\rho\)</span></td>
+<td align="center"><span class="math inline">\(r = \rho_{\text{true}} \sqrt{\rho_{xx,1} \cdot \rho_{xx,2}}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left">3 (Regression)</td>
+<td align="center">Regression <span class="math inline">\(\beta\)</span></td>
+<td align="center"><span class="math inline">\(\hat{\beta} = \beta_{\text{true}} \times \rho_{xx}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>I absolutely love this table. Three different posts, three different estimands, and the same signal-over-signal-plus-noise structure running through all of them.</p>
+</div>
+<div id="errors-in-variables-the-measurement-model-perspective" class="section level1">
+<h1>Errors-in-Variables — The Measurement Model Perspective</h1>
+<div id="the-eiv-model" class="section level2">
+<h2>The EIV Model</h2>
+<p>At this point, it is worth reframing regression as a latent variable problem. The <strong>errors-in-variables</strong> (EIV) model makes explicit what we have been describing implicitly throughout this post:</p>
+<p><strong>Structural equation:</strong>
+<span class="math display">\[Y_i = \beta_0 + \beta_1 \theta_i + \eta_i\]</span></p>
+<p><strong>Measurement model:</strong>
+<span class="math display">\[\tilde{X}_i = \theta_i + \epsilon_i\]</span></p>
+<p>We observe <span class="math inline">\(\tilde{X}\)</span>, not the latent <span class="math inline">\(\theta\)</span>. This is exactly the measurement model from Parts 1 and 2, now applied to regression predictors. The key reframe is that OLS on observed <span class="math inline">\(\tilde{X}\)</span> is <strong>not</strong> estimating the relationship between the true <span class="math inline">\(\theta\)</span> and <span class="math inline">\(Y\)</span>—it is estimating a shrunken version of that relationship, attenuated by the predictor reliability.</p>
+</div>
+<div id="reliability-correction" class="section level2">
+<h2>Reliability Correction</h2>
+<p>If we know (or can estimate) the reliability <span class="math inline">\(\rho_{xx}\)</span>, we can correct the OLS estimate:</p>
+<p><span class="math display">\[\hat{\beta}_{\text{corrected}} = \frac{\hat{\beta}_{\text{OLS}}}{\rho_{xx}}\]</span></p>
+<p>This is the regression analogue of Spearman’s correction from Part 2. And like Spearman’s correction, it is unbiased on average but can have high variance—the same bias-variance tradeoff we have seen throughout this series.</p>
+<pre class="r"><code># Reliability-corrected estimate
+beta_corrected &lt;- beta_ols / rho_xx
+
+# Sampling distributions: naive OLS vs corrected
+beta_corrected_sims &lt;- beta_sims / rho_xx
+
+beta_compare_df &lt;- data.frame(
+  beta   = c(beta_sims, beta_corrected_sims),
+  Method = rep(c(&quot;Naive OLS&quot;, &quot;Reliability-Corrected&quot;), each = n_sims)
+)
+
+beta_compare_df %&gt;%
+  ggplot(aes(x = beta, fill = Method)) +
+  geom_histogram(color = &quot;white&quot;, bins = 80, alpha = 0.6, position = &quot;identity&quot;) +
+  geom_vline(xintercept = beta_true, color = &quot;gray40&quot;, linewidth = 1.2) +
+  scale_fill_manual(values = c(&quot;Naive OLS&quot; = &quot;#DCBCBC&quot;,
+                                &quot;Reliability-Corrected&quot; = &quot;#8F2727&quot;)) +
+  xlab(expression(hat(beta))) +
+  ylab(&quot;Count&quot;) +
+  ggtitle(&quot;Naive OLS vs. Reliability-Corrected Estimates&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = c(0.8, 0.85))</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-9-1.svg" alt="" width="672" /></p>
+<p>The corrected estimates (dark red) are centered on the true <span class="math inline">\(\beta\)</span> = 0.8, but with considerably higher variance than the naive OLS (dusty rose). We saw this exact pattern with Spearman’s correction in Part 2—dividing one noisy quantity by another can produce extreme values, so the correction removes bias at the cost of increased variance.</p>
+</div>
+</div>
+<div id="multiple-regression-with-measurement-error" class="section level1">
+<h1>Multiple Regression with Measurement Error</h1>
+<div id="an-important-complication" class="section level2">
+<h2>An Important Complication</h2>
+<p>So far, the story has been straightforward: measurement error on the predictor attenuates <span class="math inline">\(\beta\)</span> toward zero, and the attenuation factor is the reliability <span class="math inline">\(\rho_{xx}\)</span>. You might reasonably expect the same thing to happen in multiple regression. It does not—at least, not in the simple way you would expect.</p>
+<p>With two predictors <span class="math inline">\(\tilde{X}_1\)</span> and <span class="math inline">\(\tilde{X}_2\)</span> both measured with error:</p>
+<p><span class="math display">\[\hat{\boldsymbol{\beta}}_{\text{OLS}} = (\tilde{\mathbf{X}}&#39;\tilde{\mathbf{X}})^{-1}\tilde{\mathbf{X}}&#39;\mathbf{Y}\]</span></p>
+<p>The matrix <span class="math inline">\(\tilde{\mathbf{X}}&#39;\tilde{\mathbf{X}}\)</span> has inflated diagonal entries (<span class="math inline">\(\text{Var}(\theta_k) + \text{Var}(\epsilon_k)\)</span>) but unchanged off-diagonal entries (<span class="math inline">\(\text{Cov}(\theta_1, \theta_2)\)</span>). This asymmetric distortion of the covariance matrix, once inverted, can push coefficients in <em>either</em> direction—a coefficient can be attenuated, inflated, or even change sign, depending on the correlation structure among the predictors and how reliable each one is.</p>
+</div>
+<div id="intuition" class="section level2">
+<h2>Intuition</h2>
+<p>Why does this happen? When two correlated predictors have different reliabilities, the more reliable predictor effectively “steals” variance from the less reliable one during the partialing process that multiple regression performs. This creates suppression-like effects that are qualitatively different from the simple regression case.</p>
+</div>
+<div id="simulation-two-correlated-predictors" class="section level2">
+<h2>Simulation: Two Correlated Predictors</h2>
+<pre class="r"><code># Multiple regression setup
+N_mr        &lt;- 300
+n_obs_mr    &lt;- 5
+sigma_pop1  &lt;- 3
+sigma_pop2  &lt;- 3
+rho_x1x2    &lt;- 0.6
+beta1_true  &lt;- 0.5
+beta2_true  &lt;- 0.5
+sigma_eta_mr &lt;- 4
+
+# Varying reliabilities
+sigma_obs1_mr &lt;- 4    # moderate reliability for X1
+sigma_obs2_mr &lt;- 8    # low reliability for X2
+
+# Population covariance matrix for latent predictors
+Sigma_theta &lt;- matrix(c(sigma_pop1^2, rho_x1x2 * sigma_pop1 * sigma_pop2,
+                          rho_x1x2 * sigma_pop1 * sigma_pop2, sigma_pop2^2), 2, 2)
+
+# Reliabilities
+rho_xx1 &lt;- sigma_pop1^2 / (sigma_pop1^2 + sigma_obs1_mr^2 / n_obs_mr)
+rho_xx2 &lt;- sigma_pop2^2 / (sigma_pop2^2 + sigma_obs2_mr^2 / n_obs_mr)
+
+# Simulate data
+theta_mr &lt;- MASS::mvrnorm(N_mr, mu = c(0, 0), Sigma = Sigma_theta)
+y_mr     &lt;- beta1_true * theta_mr[, 1] + beta2_true * theta_mr[, 2] + rnorm(N_mr, 0, sigma_eta_mr)
+
+obs_mr &lt;- foreach(i = 1:N_mr, .combine = &quot;rbind&quot;) %do% {
+  data.frame(
+    subj = i,
+    trial = 1:n_obs_mr,
+    theta1 = theta_mr[i, 1],
+    theta2 = theta_mr[i, 2],
+    y_true = y_mr[i],
+    x1 = rnorm(n_obs_mr, theta_mr[i, 1], sigma_obs1_mr),
+    x2 = rnorm(n_obs_mr, theta_mr[i, 2], sigma_obs2_mr),
+    y  = y_mr[i] + rnorm(n_obs_mr, 0, sigma_eta_mr)
+  )
+}
+
+summ_mr &lt;- obs_mr %&gt;%
+  group_by(subj) %&gt;%
+  summarize(
+    theta1 = unique(theta1), theta2 = unique(theta2), y_true = unique(y_true),
+    x1_bar = mean(x1), x2_bar = mean(x2), y_bar = mean(y),
+    .groups = &quot;drop&quot;
+  )
+
+# OLS on sample means
+fit_mr_ols &lt;- lm(y_bar ~ x1_bar + x2_bar, data = summ_mr)
+beta_mr_ols &lt;- coef(fit_mr_ols)[-1]
+
+# True regression on latent
+fit_mr_true &lt;- lm(y_true ~ theta1 + theta2, data = summ_mr)
+beta_mr_true &lt;- coef(fit_mr_true)[-1]</code></pre>
+<p>With <span class="math inline">\(\rho_{xx,1}\)</span> = 0.74 and <span class="math inline">\(\rho_{xx,2}\)</span> = 0.41, the OLS estimates are <span class="math inline">\(\hat{\beta}_1\)</span> = 0.52 and <span class="math inline">\(\hat{\beta}_2\)</span> = 0.22 (true values: <span class="math inline">\(\beta_1 = \beta_2\)</span> = 0.5). Notice what has happened—the more reliable predictor (<span class="math inline">\(X_1\)</span>) has an <em>inflated</em> coefficient, while the less reliable one (<span class="math inline">\(X_2\)</span>) is more severely attenuated than it would be in simple regression. The measurement error has not just shrunk things toward zero; it has redistributed variance across the predictors in a way that depends on their relative reliabilities and intercorrelation.</p>
+</div>
+<div id="how-bias-depends-on-reliability-and-correlation" class="section level2">
+<h2>How Bias Depends on Reliability and Correlation</h2>
+<pre class="r"><code># Analytical computation of OLS bias in multiple regression
+# For two predictors with equal true betas
+rho_grid     &lt;- seq(0, 0.9, by = 0.05)
+rho_xx2_grid &lt;- seq(0.1, 0.95, by = 0.05)
+
+bias_grid &lt;- expand.grid(rho_12 = rho_grid, rho_xx2 = rho_xx2_grid)
+
+bias_grid$beta1_ratio &lt;- sapply(1:nrow(bias_grid), function(k) {
+  rho_12_k   &lt;- bias_grid$rho_12[k]
+  rho_xx2_k  &lt;- bias_grid$rho_xx2[k]
+  rho_xx1_k  &lt;- rho_xx1  # fix X1 reliability
+
+  # Observed covariance matrix of sample means
+  # Var(x_bar_j) = sigma_pop_j^2 + sigma_obs_j^2 / n = sigma_pop_j^2 / rho_xx_j
+  var_x1 &lt;- sigma_pop1^2 / rho_xx1_k
+  var_x2 &lt;- sigma_pop2^2 / rho_xx2_k
+  cov_12 &lt;- rho_12_k * sigma_pop1 * sigma_pop2  # unchanged by measurement error
+
+  Sigma_obs &lt;- matrix(c(var_x1, cov_12, cov_12, var_x2), 2, 2)
+
+  # Cov(X_obs, Y) = Cov(theta, Y) = beta_true * Sigma_theta columns
+  cov_xy &lt;- c(beta1_true * sigma_pop1^2 + beta2_true * rho_12_k * sigma_pop1 * sigma_pop2,
+              beta2_true * sigma_pop2^2 + beta1_true * rho_12_k * sigma_pop1 * sigma_pop2)
+
+  beta_ols_k &lt;- solve(Sigma_obs) %*% cov_xy
+  beta_ols_k[1] / beta1_true  # ratio of OLS to true for beta1
+})
+
+bias_grid %&gt;%
+  ggplot(aes(x = rho_12, y = rho_xx2, fill = beta1_ratio)) +
+  geom_tile() +
+  scale_fill_gradient2(low = &quot;#2166AC&quot;, mid = &quot;white&quot;, high = &quot;#8F2727&quot;,
+                       midpoint = 1, name = expression(hat(beta)[1] / beta[1])) +
+  geom_contour(aes(z = beta1_ratio), color = &quot;gray30&quot;, breaks = 1, linewidth = 0.8) +
+  xlab(expression(&quot;Correlation between predictors &quot; * rho(X[1], X[2]))) +
+  ylab(expression(&quot;Reliability of X&quot;[2] * &quot; (&quot; * rho[xx2] * &quot;)&quot;)) +
+  ggtitle(expression(&quot;Bias of &quot; * hat(beta)[1] * &quot; in Multiple Regression&quot;),
+          subtitle = paste0(&quot;(\u03C1_xx1 = &quot;, round(rho_xx1, 2), &quot; held fixed)&quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank())</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-11-1.svg" alt="" width="672" /></p>
+<p>The contour line at 1.0 marks the boundary between attenuation (blue, <span class="math inline">\(\hat{\beta}_1 / \beta_1 &lt; 1\)</span>) and inflation (red, <span class="math inline">\(\hat{\beta}_1 / \beta_1 &gt; 1\)</span>). When predictors are uncorrelated (<span class="math inline">\(\rho_{12} = 0\)</span>), <span class="math inline">\(\hat{\beta}_1\)</span> is simply attenuated by <span class="math inline">\(\rho_{xx,1}\)</span> as in simple regression—the familiar story. But when predictors are correlated and have differential reliabilities, <span class="math inline">\(\hat{\beta}_1\)</span> can be <em>inflated beyond its true value</em>. I think this is genuinely underappreciated in the social sciences, where multiple regression with noisy predictors is the bread and butter of empirical research.</p>
+<p>We can also see this as a coefficient comparison across several configurations:</p>
+<pre class="r"><code># Run multiple regression sims across different reliability configurations
+configs &lt;- list(
+  list(s1 = 0.01, s2 = 0.01, label = &quot;Both reliable&quot;),
+  list(s1 = 4,    s2 = 4,    label = &quot;Equal error&quot;),
+  list(s1 = 4,    s2 = 8,    label = &quot;X2 noisier&quot;),
+  list(s1 = 8,    s2 = 4,    label = &quot;X1 noisier&quot;)
+)
+
+coef_compare &lt;- foreach(cfg = configs, .combine = &quot;rbind&quot;) %do% {
+  obs_cfg &lt;- foreach(i = 1:N_mr, .combine = &quot;rbind&quot;) %do% {
+    data.frame(
+      subj = i,
+      x1 = rnorm(n_obs_mr, theta_mr[i, 1], cfg$s1),
+      x2 = rnorm(n_obs_mr, theta_mr[i, 2], cfg$s2),
+      y  = y_mr[i] + rnorm(n_obs_mr, 0, sigma_eta_mr)
+    )
+  }
+
+  summ_cfg &lt;- obs_cfg %&gt;%
+    group_by(subj) %&gt;%
+    summarize(x1_bar = mean(x1), x2_bar = mean(x2), y_bar = mean(y), .groups = &quot;drop&quot;)
+
+  fit_cfg &lt;- lm(y_bar ~ x1_bar + x2_bar, data = summ_cfg)
+
+  data.frame(
+    config = cfg$label,
+    predictor = c(&quot;X1&quot;, &quot;X2&quot;),
+    beta_ols = coef(fit_cfg)[-1],
+    beta_true = c(beta1_true, beta2_true)
+  )
+}
+
+coef_compare %&gt;%
+  mutate(config = factor(config, levels = sapply(configs, `[[`, &quot;label&quot;))) %&gt;%
+  ggplot(aes(x = predictor)) +
+  geom_col(aes(y = beta_ols, fill = &quot;OLS&quot;), alpha = 0.7, width = 0.4,
+           position = position_nudge(x = -0.2)) +
+  geom_col(aes(y = beta_true, fill = &quot;True&quot;), alpha = 0.7, width = 0.4,
+           position = position_nudge(x = 0.2)) +
+  scale_fill_manual(values = c(&quot;OLS&quot; = &quot;#DCBCBC&quot;, &quot;True&quot; = &quot;#8F2727&quot;)) +
+  facet_wrap(~config, nrow = 1) +
+  xlab(&quot;Predictor&quot;) +
+  ylab(expression(beta)) +
+  ggtitle(&quot;OLS vs True Coefficients Across Reliability Configurations&quot;) +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-12-1.svg" alt="" width="672" /></p>
+<p>When both predictors have equal reliability, both coefficients are attenuated proportionally—similar to the simple regression case. But with differential reliability, the more reliable predictor absorbs variance from the less reliable one, producing inflation in one coefficient and stronger attenuation in the other. The pattern flips when you flip which predictor is noisier.</p>
+</div>
+</div>
+<div id="hierarchical-bayesian-regression" class="section level1">
+<h1>Hierarchical / Bayesian Regression</h1>
+<div id="from-measurement-models-to-generative-models" class="section level2">
+<h2>From Measurement Models to Generative Models</h2>
+<p>OK, so we have seen that OLS regression coefficients are systematically biased when predictors are measured with error, and that in the multiple regression case this bias can go in unpredictable directions. The errors-in-variables perspective from the previous section makes the problem clear by distinguishing between the latent <span class="math inline">\(\theta\)</span> and the observed <span class="math inline">\(\tilde{X}\)</span>—and this distinction naturally suggests a solution. If we acknowledge that predictors are noisy measures of latent constructs, we should model that explicitly. The generative model jointly estimates the latent <span class="math inline">\(\theta_i\)</span>, the regression coefficient <span class="math inline">\(\beta\)</span>, and all variance components:</p>
+<p><strong>Structural equation:</strong>
+<span class="math display">\[Y_i = \beta_0 + \beta_1 \theta_i + \eta_i\]</span></p>
+<p><strong>Measurement model:</strong>
+<span class="math display">\[\tilde{X}_{i,t} \sim \mathcal{N}(\theta_i, \sigma_{\text{obs}})\]</span></p>
+<p><strong>Population model:</strong>
+<span class="math display">\[\theta_i \sim \mathcal{N}(\mu_\theta, \sigma_\theta)\]</span></p>
+<p>Because the model separates signal from noise, the posterior for <span class="math inline">\(\beta\)</span> is centered on <span class="math inline">\(\beta_{\text{true}}\)</span> rather than the attenuated value. This is the same principle from Parts 1 and 2—hierarchical models produce the right amount of shrinkage because they jointly estimate the variance components that determine it, rather than plugging in point estimates.</p>
+</div>
+<div id="simple-regression-comparing-methods" class="section level2">
+<h2>Simple Regression: Comparing Methods</h2>
+<div id="frequentist-lme4" class="section level3">
+<h3>Frequentist: lme4</h3>
+<p>We can approximate the EIV model with <code>lme4</code> by fitting a hierarchical model with random intercepts per subject on <span class="math inline">\(X\)</span>, and then using the BLUPs as denoised predictors:</p>
+<pre class="r"><code>library(lme4)
+
+# Fit random-intercept model for X to get denoised estimates
+fit_x_lmer &lt;- lmer(x ~ 1 + (1 | subj), data = obs_data)
+theta_hat_lmer &lt;- coef(fit_x_lmer)$subj[, &quot;(Intercept)&quot;]
+
+# Fit random-intercept model for Y
+fit_y_lmer &lt;- lmer(y ~ 1 + (1 | subj), data = obs_data)
+theta_y_hat_lmer &lt;- coef(fit_y_lmer)$subj[, &quot;(Intercept)&quot;]
+
+# Regression on denoised estimates
+subj_summary &lt;- subj_summary %&gt;%
+  mutate(x_lmer = theta_hat_lmer,
+         y_lmer = theta_y_hat_lmer)
+
+fit_lmer_reg &lt;- lm(y_lmer ~ x_lmer, data = subj_summary)
+beta_lmer &lt;- coef(fit_lmer_reg)[2]</code></pre>
+</div>
+<div id="bayesian-brms-eiv-model" class="section level3">
+<h3>Bayesian: brms EIV Model</h3>
+<p>For a fully Bayesian analysis, we can specify the errors-in-variables model directly in <code>brms</code>. We first fit a measurement model for <span class="math inline">\(X\)</span> to get posterior estimates of <span class="math inline">\(\theta_i\)</span>, then use these in the structural model:</p>
+<pre class="r"><code>library(brms)
+
+# Bayesian measurement model for X
+fit_x_brms &lt;- brm(
+  x ~ 1 + (1 | subj),
+  data   = obs_data,
+  family = gaussian(),
+  backend = &quot;cmdstanr&quot;,
+  prior  = c(
+    prior(normal(70, 10), class = &quot;Intercept&quot;),
+    prior(normal(0, 5),   class = &quot;sd&quot;),
+    prior(normal(0, 10),  class = &quot;sigma&quot;)
+  ),
+  chains  = 8,
+  cores   = 8,
+  iter    = 1500,
+  warmup  = 500,
+  seed    = 43202,
+  silent  = 2,
+  refresh = 0
+)
+
+# Extract posterior mean of theta_i for each subject
+ranefs_x  &lt;- ranef(fit_x_brms)$subj[, , &quot;Intercept&quot;]
+fixef_x   &lt;- fixef(fit_x_brms)[&quot;Intercept&quot;, &quot;Estimate&quot;]
+theta_hat_brms &lt;- fixef_x + ranefs_x[, &quot;Estimate&quot;]
+
+# Bayesian measurement model for Y
+fit_y_brms &lt;- brm(
+  y ~ 1 + (1 | subj),
+  data   = obs_data,
+  family = gaussian(),
+  backend = &quot;cmdstanr&quot;,
+  prior  = c(
+    prior(normal(0, 50), class = &quot;Intercept&quot;),
+    prior(normal(0, 10), class = &quot;sd&quot;),
+    prior(normal(0, 10), class = &quot;sigma&quot;)
+  ),
+  chains  = 8,
+  cores   = 8,
+  iter    = 1500,
+  warmup  = 500,
+  seed    = 43202,
+  silent  = 2,
+  refresh = 0
+)
+
+ranefs_y &lt;- ranef(fit_y_brms)$subj[, , &quot;Intercept&quot;]
+fixef_y  &lt;- fixef(fit_y_brms)[&quot;Intercept&quot;, &quot;Estimate&quot;]
+theta_y_hat_brms &lt;- fixef_y + ranefs_y[, &quot;Estimate&quot;]
+
+subj_summary &lt;- subj_summary %&gt;%
+  mutate(x_brms = theta_hat_brms,
+         y_brms = theta_y_hat_brms)
+
+fit_brms_reg &lt;- lm(y_brms ~ x_brms, data = subj_summary)
+beta_brms &lt;- coef(fit_brms_reg)[2]</code></pre>
+</div>
+<div id="comparing-all-methods" class="section level3">
+<h3>Comparing All Methods</h3>
+<pre class="r"><code>ggplot(subj_summary) +
+  geom_point(aes(x = x_bar, y = y_bar), color = &quot;#DCBCBC&quot;, alpha = 0.3, size = 2) +
+  geom_smooth(aes(x = x_bar, y = y_bar, color = &quot;Naive OLS&quot;),
+              method = &quot;lm&quot;, se = FALSE, linewidth = 1.2) +
+  geom_smooth(aes(x = x_bar, y = y_bar, color = &quot;Reliability-Corrected&quot;),
+              method = &quot;lm&quot;, se = FALSE, linewidth = 1.2,
+              formula = y ~ I(x / rho_xx)) +
+  geom_smooth(aes(x = x_lmer, y = y_lmer, color = &quot;Hierarchical (lme4)&quot;),
+              method = &quot;lm&quot;, se = FALSE, linewidth = 1.2) +
+  geom_smooth(aes(x = x_brms, y = y_brms, color = &quot;Hierarchical (brms)&quot;),
+              method = &quot;lm&quot;, se = FALSE, linewidth = 1.2) +
+  geom_abline(aes(slope = beta_true, intercept = mean(theta_y) - beta_true * mean(theta_x),
+                  color = &quot;True Relationship&quot;),
+              linewidth = 1, linetype = 2) +
+  scale_color_manual(values = c(
+    &quot;Naive OLS&quot;              = &quot;#DCBCBC&quot;,
+    &quot;Reliability-Corrected&quot;  = &quot;#B2182B&quot;,
+    &quot;Hierarchical (lme4)&quot;    = &quot;#4daf4a&quot;,
+    &quot;Hierarchical (brms)&quot;    = &quot;#2166AC&quot;,
+    &quot;True Relationship&quot;      = &quot;gray40&quot;
+  )) +
+  xlab(&quot;X&quot;) +
+  ylab(&quot;Y&quot;) +
+  ggtitle(&quot;All Methods&#39; Regression Lines&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.25, 0.85))</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-14-1.svg" alt="" width="672" /></p>
+<p>The naive OLS line (dusty rose) is visibly shallower than the others. The reliability-corrected, <code>lme4</code>, and <code>brms</code> estimates all cluster near the true relationship (gray dashed). What I find most appealing about the hierarchical approaches is that they recover <span class="math inline">\(\beta_{\text{true}}\)</span> without requiring knowledge of the reliability coefficient—the model figures out the right amount of denoising from the data itself.</p>
+</div>
+</div>
+<div id="multiple-regression" class="section level2">
+<h2>Multiple Regression</h2>
+<p>Now let’s extend to the multiple regression case, where we showed that OLS biases can go in unpredictable directions. The hierarchical approach generalizes naturally—we simply fit a separate measurement model for each predictor:</p>
+<pre class="r"><code># lme4: denoise each predictor separately
+fit_x1_lmer &lt;- lmer(x1 ~ 1 + (1 | subj), data = obs_mr)
+fit_x2_lmer &lt;- lmer(x2 ~ 1 + (1 | subj), data = obs_mr)
+fit_y_mr_lmer &lt;- lmer(y ~ 1 + (1 | subj), data = obs_mr)
+
+x1_hat_lmer &lt;- coef(fit_x1_lmer)$subj[, &quot;(Intercept)&quot;]
+x2_hat_lmer &lt;- coef(fit_x2_lmer)$subj[, &quot;(Intercept)&quot;]
+y_hat_mr_lmer &lt;- coef(fit_y_mr_lmer)$subj[, &quot;(Intercept)&quot;]
+
+fit_mr_lmer &lt;- lm(y_hat_mr_lmer ~ x1_hat_lmer + x2_hat_lmer)
+beta_mr_lmer &lt;- coef(fit_mr_lmer)[-1]</code></pre>
+<pre class="r"><code># brms: denoise each predictor separately
+fit_x1_brms &lt;- brm(
+  x1 ~ 1 + (1 | subj), data = obs_mr, family = gaussian(),
+  backend = &quot;cmdstanr&quot;,
+  prior = c(prior(normal(0, 10), class = &quot;Intercept&quot;),
+            prior(normal(0, 5),  class = &quot;sd&quot;),
+            prior(normal(0, 10), class = &quot;sigma&quot;)),
+  chains = 8, cores = 8, iter = 1500, warmup = 500, seed = 43202,
+  silent = 2, refresh = 0
+)
+
+fit_x2_brms &lt;- brm(
+  x2 ~ 1 + (1 | subj), data = obs_mr, family = gaussian(),
+  backend = &quot;cmdstanr&quot;,
+  prior = c(prior(normal(0, 10), class = &quot;Intercept&quot;),
+            prior(normal(0, 5),  class = &quot;sd&quot;),
+            prior(normal(0, 10), class = &quot;sigma&quot;)),
+  chains = 8, cores = 8, iter = 1500, warmup = 500, seed = 43202,
+  silent = 2, refresh = 0
+)
+
+fit_y_mr_brms &lt;- brm(
+  y ~ 1 + (1 | subj), data = obs_mr, family = gaussian(),
+  backend = &quot;cmdstanr&quot;,
+  prior = c(prior(normal(0, 50), class = &quot;Intercept&quot;),
+            prior(normal(0, 10), class = &quot;sd&quot;),
+            prior(normal(0, 10), class = &quot;sigma&quot;)),
+  chains = 8, cores = 8, iter = 1500, warmup = 500, seed = 43202,
+  silent = 2, refresh = 0
+)
+
+x1_hat_brms &lt;- fixef(fit_x1_brms)[&quot;Intercept&quot;, &quot;Estimate&quot;] +
+  ranef(fit_x1_brms)$subj[, , &quot;Intercept&quot;][, &quot;Estimate&quot;]
+x2_hat_brms &lt;- fixef(fit_x2_brms)[&quot;Intercept&quot;, &quot;Estimate&quot;] +
+  ranef(fit_x2_brms)$subj[, , &quot;Intercept&quot;][, &quot;Estimate&quot;]
+y_hat_mr_brms &lt;- fixef(fit_y_mr_brms)[&quot;Intercept&quot;, &quot;Estimate&quot;] +
+  ranef(fit_y_mr_brms)$subj[, , &quot;Intercept&quot;][, &quot;Estimate&quot;]
+
+fit_mr_brms &lt;- lm(y_hat_mr_brms ~ x1_hat_brms + x2_hat_brms)
+beta_mr_brms &lt;- coef(fit_mr_brms)[-1]</code></pre>
+<pre class="r"><code># Coefficient comparison plot
+mr_coef_df &lt;- data.frame(
+  Method = rep(c(&quot;True&quot;, &quot;Naive OLS&quot;, &quot;Hier. (lme4)&quot;, &quot;Hier. (brms)&quot;), each = 2),
+  Predictor = rep(c(&quot;\u03B21&quot;, &quot;\u03B22&quot;), 4),
+  Beta = c(beta1_true, beta2_true,
+           beta_mr_ols[1], beta_mr_ols[2],
+           beta_mr_lmer[1], beta_mr_lmer[2],
+           beta_mr_brms[1], beta_mr_brms[2])
+) %&gt;%
+  mutate(Method = factor(Method, levels = c(&quot;True&quot;, &quot;Naive OLS&quot;,
+                                             &quot;Hier. (lme4)&quot;, &quot;Hier. (brms)&quot;)))
+
+mr_coef_df %&gt;%
+  ggplot(aes(x = Predictor, y = Beta, fill = Method)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6) +
+  scale_fill_manual(values = c(&quot;True&quot; = &quot;gray40&quot;, &quot;Naive OLS&quot; = &quot;#DCBCBC&quot;,
+                                &quot;Hier. (lme4)&quot; = &quot;#4daf4a&quot;, &quot;Hier. (brms)&quot; = &quot;#2166AC&quot;)) +
+  geom_hline(yintercept = beta1_true, linetype = 2, color = &quot;gray40&quot;) +
+  xlab(&quot;&quot;) +
+  ylab(expression(hat(beta))) +
+  ggtitle(&quot;Multiple Regression: Hierarchical Models Recover True Coefficients&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-16-1.svg" alt="" width="672" /></p>
+<p>The hierarchical models (green and blue) recover both true coefficients far more accurately than naive OLS (dusty rose), which shows the pattern of inflation and attenuation we saw in the previous section. This is where hierarchical models really earn their keep—in the simple regression case, you could get away with a reliability correction, but in the multiple regression case the bias structure is too complex for a simple scalar fix.</p>
+</div>
+<div id="posterior-density-for-beta" class="section level2">
+<h2>Posterior Density for <span class="math inline">\(\beta\)</span></h2>
+<p>We can also look at the full posterior distribution from a Bayesian regression using the denoised predictors:</p>
+<pre class="r"><code># Bayesian regression on denoised predictors
+hier_reg_data &lt;- data.frame(
+  y     = y_hat_mr_brms,
+  x1    = x1_hat_brms,
+  x2    = x2_hat_brms
+)
+
+fit_beta_brms &lt;- brm(
+  y ~ x1 + x2,
+  data   = hier_reg_data,
+  family = gaussian(),
+  backend = &quot;cmdstanr&quot;,
+  prior  = c(
+    prior(normal(0, 10), class = &quot;Intercept&quot;),
+    prior(normal(0, 5),  class = &quot;b&quot;),
+    prior(normal(0, 10), class = &quot;sigma&quot;)
+  ),
+  chains  = 8,
+  cores   = 8,
+  iter    = 1500,
+  warmup  = 500,
+  seed    = 43202,
+  silent  = 2,
+  refresh = 0
+)</code></pre>
+<pre class="r"><code>post_beta &lt;- as_draws_df(fit_beta_brms)
+
+data.frame(
+  beta = c(post_beta$b_x1, post_beta$b_x2),
+  Predictor = rep(c(&quot;\u03B21 (X1)&quot;, &quot;\u03B22 (X2)&quot;), each = nrow(post_beta))
+) %&gt;%
+  ggplot(aes(x = beta, fill = Predictor)) +
+  geom_histogram(color = &quot;white&quot;, bins = 50, alpha = 0.6, position = &quot;identity&quot;) +
+  geom_vline(xintercept = beta1_true, color = &quot;gray40&quot;, linewidth = 1.2) +
+  geom_vline(xintercept = beta_mr_ols[1], color = &quot;#DCBCBC&quot;, linewidth = 1, linetype = 2) +
+  geom_vline(xintercept = beta_mr_ols[2], color = &quot;#DCBCBC&quot;, linewidth = 1, linetype = 3) +
+  scale_fill_manual(values = c(&quot;\u03B21 (X1)&quot; = &quot;#8F2727&quot;, &quot;\u03B22 (X2)&quot; = &quot;#2166AC&quot;)) +
+  annotate(&quot;text&quot;, x = beta1_true + 0.02, y = Inf,
+           label = paste0(&quot;\u03B2_true = &quot;, beta1_true),
+           hjust = 0, vjust = 1.5, color = &quot;gray40&quot;, size = 4.5) +
+  xlab(expression(hat(beta))) +
+  ylab(&quot;Count&quot;) +
+  ggtitle(&quot;Posterior Densities for Multiple Regression Coefficients&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = c(0.85, 0.85))</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/unnamed-chunk-17-1.svg" alt="" width="672" /></p>
+<p>The posteriors for both coefficients are centered near <span class="math inline">\(\beta_{\text{true}}\)</span> = 0.5 (gray line), while the naive OLS estimates (dashed dusty rose lines) are off in different directions—one inflated, one attenuated. The hierarchical model does not have this problem because it estimates the latent predictors directly.</p>
+</div>
+</div>
+<div id="putting-it-all-together" class="section level1">
+<h1>Putting It All Together</h1>
+<div id="shrinkage-factor-table" class="section level2">
+<h2>Shrinkage Factor Table</h2>
+<p>As in Parts 1 and 2, let’s compare the shrinkage factors across all methods:</p>
+<pre class="r"><code># Compute effective shrinkage / beta estimates for simple regression
+beta_df &lt;- data.frame(
+  Method = c(&quot;Naive OLS&quot;, &quot;Reliability-Corrected&quot;,
+             &quot;Hierarchical (lme4)&quot;, &quot;Hierarchical (brms)&quot;),
+  Formula = c(
+    &quot;$\\hat{\\beta}_{\\text{OLS}} = \\beta_{\\text{true}} \\times \\rho_{xx}$&quot;,
+    &quot;$\\hat{\\beta}_{\\text{OLS}} / \\hat{\\rho}_{xx}$&quot;,
+    &quot;$\\hat{\\beta}$ from regression on BLUPs&quot;,
+    &quot;$\\hat{\\beta}$ from regression on posterior means&quot;
+  ),
+  Estimate = round(c(beta_ols, beta_corrected, beta_lmer, beta_brms), 3),
+  True = beta_true
+)
+
+knitr::kable(
+  beta_df,
+  col.names = c(&quot;Method&quot;, &quot;Formula&quot;, &quot;$\\hat{\\beta}$&quot;, &quot;$\\beta_{\\text{true}}$&quot;),
+  align = &quot;lccc&quot;,
+  escape = FALSE
+)</code></pre>
+<table>
+<colgroup>
+<col width="17%" />
+<col width="52%" />
+<col width="11%" />
+<col width="18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Method</th>
+<th align="center">Formula</th>
+<th align="center"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="center"><span class="math inline">\(\beta_{\text{true}}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Naive OLS</td>
+<td align="center"><span class="math inline">\(\hat{\beta}_{\text{OLS}} = \beta_{\text{true}} \times \rho_{xx}\)</span></td>
+<td align="center">0.567</td>
+<td align="center">0.8</td>
+</tr>
+<tr class="even">
+<td align="left">Reliability-Corrected</td>
+<td align="center"><span class="math inline">\(\hat{\beta}_{\text{OLS}} / \hat{\rho}_{xx}\)</span></td>
+<td align="center">0.769</td>
+<td align="center">0.8</td>
+</tr>
+<tr class="odd">
+<td align="left">Hierarchical (lme4)</td>
+<td align="center"><span class="math inline">\(\hat{\beta}\)</span> from regression on BLUPs</td>
+<td align="center">0.645</td>
+<td align="center">0.8</td>
+</tr>
+<tr class="even">
+<td align="left">Hierarchical (brms)</td>
+<td align="center"><span class="math inline">\(\hat{\beta}\)</span> from regression on posterior means</td>
+<td align="center">0.645</td>
+<td align="center">0.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="rmse-comparison" class="section level2">
+<h2>RMSE Comparison</h2>
+<pre class="r"><code># Run simulation to get RMSE across methods
+n_sims_rmse &lt;- 500
+
+rmse_results &lt;- foreach(i = 1:n_sims_rmse, .combine = &quot;rbind&quot;) %do% {
+  theta_sim &lt;- rnorm(N_subj, mu_x, sigma_x)
+  y_true_sim &lt;- beta_true * theta_sim + rnorm(N_subj, 0, sigma_eta)
+
+  obs_sim &lt;- foreach(j = 1:N_subj, .combine = &quot;rbind&quot;) %do% {
+    data.frame(
+      subj = j,
+      x = rnorm(n_obs, theta_sim[j], sigma_obs_x),
+      y = y_true_sim[j] + rnorm(n_obs, 0, sigma_eta)
+    )
+  }
+
+  summ_sim &lt;- obs_sim %&gt;%
+    group_by(subj) %&gt;%
+    summarize(x_bar = mean(x), y_bar = mean(y), .groups = &quot;drop&quot;)
+
+  # Naive OLS
+  beta_naive_sim &lt;- coef(lm(y_bar ~ x_bar, data = summ_sim))[2]
+
+  # Reliability-corrected
+  beta_corr_sim &lt;- beta_naive_sim / rho_xx
+
+  # lme4 denoising
+  fit_x_sim &lt;- tryCatch({
+    lmer(x ~ 1 + (1 | subj), data = obs_sim)
+  }, error = function(e) NULL)
+
+  fit_y_sim &lt;- tryCatch({
+    lmer(y ~ 1 + (1 | subj), data = obs_sim)
+  }, error = function(e) NULL)
+
+  if (!is.null(fit_x_sim) &amp;&amp; !is.null(fit_y_sim)) {
+    x_hat_sim &lt;- coef(fit_x_sim)$subj[, &quot;(Intercept)&quot;]
+    y_hat_sim &lt;- coef(fit_y_sim)$subj[, &quot;(Intercept)&quot;]
+    beta_lmer_sim &lt;- coef(lm(y_hat_sim ~ x_hat_sim))[2]
+  } else {
+    beta_lmer_sim &lt;- NA
+  }
+
+  data.frame(naive = beta_naive_sim, corrected = beta_corr_sim,
+             hier_lmer = beta_lmer_sim)
+}
+
+rmse_beta &lt;- data.frame(
+  Method = c(&quot;Naive OLS&quot;, &quot;Reliability-Corrected&quot;, &quot;Hierarchical (lme4)&quot;),
+  RMSE = c(
+    sqrt(mean((rmse_results$naive - beta_true)^2)),
+    sqrt(mean((rmse_results$corrected - beta_true)^2)),
+    sqrt(mean((rmse_results$hier_lmer[!is.na(rmse_results$hier_lmer)] - beta_true)^2))
+  )
+) %&gt;%
+  mutate(Method = factor(Method, levels = Method))
+
+rmse_beta %&gt;%
+  ggplot(aes(x = Method, y = RMSE, fill = Method)) +
+  geom_col() +
+  scale_fill_manual(values = c(&quot;Naive OLS&quot; = &quot;#DCBCBC&quot;,
+                                &quot;Reliability-Corrected&quot; = &quot;#8F2727&quot;,
+                                &quot;Hierarchical (lme4)&quot; = &quot;#4daf4a&quot;)) +
+  xlab(&quot;&quot;) +
+  ylab(&quot;RMSE&quot;) +
+  ggtitle(expression(&quot;RMSE for &quot; * hat(beta) * &quot; Across Methods&quot;)) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 20, hjust = 1),
+        legend.position = &quot;none&quot;)</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/rmse-comparison-1.svg" alt="" width="672" /></p>
+<p>As we have seen throughout this series, the hierarchical approach provides the best balance of bias and variance. The reliability-corrected estimate removes bias but at the cost of higher variance (dividing one noisy estimate by another), while naive OLS has low variance but is systematically biased. The hierarchical model threads the needle.</p>
+</div>
+<div id="rmse-vs.-sample-size" class="section level2">
+<h2>RMSE vs. Sample Size</h2>
+<pre class="r"><code>n_obs_vec &lt;- c(3, 5, 10, 25, 50, 100)
+n_sims_n &lt;- 200
+
+rmse_by_n &lt;- foreach(n_k = n_obs_vec, .combine = &quot;rbind&quot;) %do% {
+  rho_xx_k &lt;- sigma_x^2 / (sigma_x^2 + sigma_obs_x^2 / n_k)
+
+  sim_k &lt;- foreach(i = 1:n_sims_n, .combine = &quot;rbind&quot;) %do% {
+    theta_sim &lt;- rnorm(N_subj, mu_x, sigma_x)
+    y_true_sim &lt;- beta_true * theta_sim + rnorm(N_subj, 0, sigma_eta)
+
+    obs_sim &lt;- foreach(j = 1:N_subj, .combine = &quot;rbind&quot;) %do% {
+      data.frame(subj = j,
+                 x = rnorm(n_k, theta_sim[j], sigma_obs_x),
+                 y = y_true_sim[j] + rnorm(n_k, 0, sigma_eta))
+    }
+
+    summ_sim &lt;- obs_sim %&gt;%
+      group_by(subj) %&gt;%
+      summarize(x_bar = mean(x), y_bar = mean(y), .groups = &quot;drop&quot;)
+
+    beta_naive_k &lt;- coef(lm(y_bar ~ x_bar, data = summ_sim))[2]
+    beta_corr_k  &lt;- beta_naive_k / rho_xx_k
+
+    fit_x_k &lt;- tryCatch(lmer(x ~ 1 + (1 | subj), data = obs_sim), error = function(e) NULL)
+    fit_y_k &lt;- tryCatch(lmer(y ~ 1 + (1 | subj), data = obs_sim), error = function(e) NULL)
+
+    if (!is.null(fit_x_k) &amp;&amp; !is.null(fit_y_k)) {
+      x_hat_k &lt;- coef(fit_x_k)$subj[, &quot;(Intercept)&quot;]
+      y_hat_k &lt;- coef(fit_y_k)$subj[, &quot;(Intercept)&quot;]
+      beta_lmer_k &lt;- coef(lm(y_hat_k ~ x_hat_k))[2]
+    } else {
+      beta_lmer_k &lt;- NA
+    }
+
+    data.frame(naive = beta_naive_k, corrected = beta_corr_k, hier = beta_lmer_k)
+  }
+
+  data.frame(
+    n_obs = n_k,
+    Method = c(&quot;Naive OLS&quot;, &quot;Reliability-Corrected&quot;, &quot;Hierarchical (lme4)&quot;),
+    RMSE = c(
+      sqrt(mean((sim_k$naive - beta_true)^2)),
+      sqrt(mean((sim_k$corrected - beta_true)^2)),
+      sqrt(mean((sim_k$hier[!is.na(sim_k$hier)] - beta_true)^2))
+    )
+  )
+}
+
+rmse_by_n %&gt;%
+  mutate(Method = factor(Method, levels = c(&quot;Naive OLS&quot;, &quot;Reliability-Corrected&quot;,
+                                             &quot;Hierarchical (lme4)&quot;))) %&gt;%
+  ggplot(aes(x = n_obs, y = RMSE, color = Method)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  scale_color_manual(values = c(&quot;Naive OLS&quot; = &quot;#DCBCBC&quot;,
+                                 &quot;Reliability-Corrected&quot; = &quot;#8F2727&quot;,
+                                 &quot;Hierarchical (lme4)&quot; = &quot;#4daf4a&quot;)) +
+  xlab(&quot;Observations per Individual (n)&quot;) +
+  ylab(expression(&quot;RMSE for &quot; * hat(beta))) +
+  ggtitle(&quot;Advantage of Hierarchical Models Largest with High Measurement Error&quot;) +
+  theme_minimal(base_size = 15) +
+  theme(panel.grid = element_blank(),
+        legend.position = c(0.7, 0.7))</code></pre>
+<p><img src="http://haines-lab.com/post/what-is-regression-really/index_files/figure-html/rmse-by-sample-size-1.svg" alt="" width="672" /></p>
+<p>As in Parts 1 and 2, the advantage of hierarchical approaches is <strong>largest when data are sparse</strong> (small <span class="math inline">\(n\)</span>). As <span class="math inline">\(n\)</span> grows and the reliability approaches 1, all methods converge because there is less measurement error to correct for. This is the same pattern we have seen throughout the series—shrinkage helps most when the data are noisy, and gracefully steps aside when the data speak for themselves.</p>
+</div>
+<div id="a-brief-note-on-ridge-regression" class="section level2">
+<h2>A Brief Note on Ridge Regression</h2>
+<p>One connection worth noting: the ridge regression penalty <span class="math inline">\(\lambda \mathbf{I}\)</span> added to <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> is structurally identical to measurement error inflating <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span>. Ridge literally behaves <em>as if</em> your clean predictors had measurement error of variance <span class="math inline">\(\lambda\)</span>. This connection completes the circle from Part 1—ridge regularization, which we covered as a shrinkage estimator for means, is the regression analogue of measurement error attenuation. I cover this equivalence in more detail in a <a href="/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/">previous post</a>.</p>
+</div>
+</div>
+<div id="what-this-means-for-science" class="section level1">
+<h1>What This Means for Science</h1>
+<p>So, why should you care? If you routinely regress outcomes on noisy predictors—summed scores, mean response times, task performance metrics, self-report scales—your <span class="math inline">\(\hat{\beta}\)</span> underestimates the true effect. The attenuation is exactly <span class="math inline">\(\rho_{xx}\)</span>, the predictor reliability, and since reliability is almost always less than 1 in the social and behavioral sciences, this is happening in essentially every regression that uses imperfect predictors.</p>
+<p><strong>The multiple regression case is worse.</strong> As we showed above, when you include multiple noisy predictors that are correlated with each other, the bias is no longer a simple attenuation—coefficients can be inflated, attenuated, or even change sign depending on the correlation structure and differential reliabilities. This has substantial consequences for any study using multiple noisy predictors (which is… most studies).</p>
+<p><strong>Mediation analysis is especially vulnerable.</strong> A typical mediation model involves multiple regression paths, each of which can be attenuated by measurement error. The indirect effect (product of two paths) compounds the attenuation, often dramatically. If each path is attenuated by <span class="math inline">\(\rho_{xx} = 0.5\)</span>, the indirect effect is attenuated by <span class="math inline">\(0.5 \times 0.5 = 0.25\)</span>—only a quarter of the true value.</p>
+<p><strong>The irony of all this is hard to overstate.</strong> We named our most widely-used statistical method after the very phenomenon that biases it. “Regression” literally means “shrinkage toward the mean”—which is exactly what measurement error does to regression coefficients. Galton discovered the bias, Pearson formalized it into a method, and generations of scientists have been using that method without accounting for the bias it was named after.</p>
+<p><strong>The fix</strong> is by now familiar from Parts 1 and 2: use hierarchical models that separate signal from noise, or at minimum, reliability-corrected estimates. When predictors have trial-level data (multiple observations per person per predictor), hierarchical models can extract the latent true scores and estimate regression coefficients that are not attenuated. Even when trial-level data are unavailable, reliability corrections can partially address the problem—though with the variance tradeoff we have seen throughout this series. For complex designs with multiple noisy predictors, the hierarchical approach is strongly preferred, since it handles the unpredictable multiple-regression case naturally.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Across this series, we have traced a single idea through three manifestations:</p>
+<ul>
+<li><strong>Part 1:</strong> The scalar shrinkage factor <span class="math inline">\(B = \sigma^2_{\text{pop}} / (\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n)\)</span> unifies mean estimation across six methodological traditions.</li>
+<li><strong>Part 2:</strong> The matrix shrinkage factor <span class="math inline">\(\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n)^{-1}\)</span> extends the same principle to correlations.</li>
+<li><strong>Part 3:</strong> The regression coefficient <span class="math inline">\(\hat{\beta} = \beta_{\text{true}} \times \rho_{xx}\)</span>, where <span class="math inline">\(\rho_{xx}\)</span> IS <span class="math inline">\(B\)</span>.</li>
+</ul>
+<p>Galton called it regression to the mean. Pearson formalized it as the regression coefficient. Kelley called it reliability. James and Stein called it shrinkage. Ridge regression calls it regularization. Bayesians call it the posterior. If you have been reading this series, you know by now that these are all the same thing :D.</p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 4.3.3 (2024-02-29)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Monterey 12.6
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## time zone: America/New_York
+## tzcode source: internal
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices datasets  utils     methods   base     
+## 
+## other attached packages:
+##  [1] rstan_2.32.7        StanHeaders_2.32.10 brms_2.23.0        
+##  [4] Rcpp_1.1.1          lme4_2.0-1          Matrix_1.6-5       
+##  [7] posterior_1.6.1     HistData_1.0.0      MASS_7.3-60.0.1    
+## [10] ggplot2_4.0.1       foreach_1.5.2       tidyr_1.3.2        
+## [13] dplyr_1.1.4        
+## 
+## loaded via a namespace (and not attached):
+##  [1] tidyselect_1.2.1      farver_2.1.2          loo_2.9.0            
+##  [4] S7_0.2.1              fastmap_1.2.0         tensorA_0.36.2.1     
+##  [7] blogdown_1.23         digest_0.6.39         lifecycle_1.0.5      
+## [10] processx_3.8.6        magrittr_2.0.4        compiler_4.3.3       
+## [13] rlang_1.1.7           sass_0.4.10           tools_4.3.3          
+## [16] yaml_2.3.12           data.table_1.18.0     knitr_1.51           
+## [19] labeling_0.4.3        bridgesampling_1.2-1  pkgbuild_1.4.8       
+## [22] RColorBrewer_1.1-3    cmdstanr_0.8.1        abind_1.4-8          
+## [25] withr_3.0.2           purrr_1.2.1           grid_4.3.3           
+## [28] stats4_4.3.3          inline_0.3.21         scales_1.4.0         
+## [31] iterators_1.0.14      isoband_0.3.0         cli_3.6.5            
+## [34] mvtnorm_1.3-3         rmarkdown_2.30        reformulas_0.4.4     
+## [37] generics_0.1.4        otel_0.2.0            RcppParallel_5.1.11-1
+## [40] rstudioapi_0.18.0     minqa_1.2.8           cachem_1.1.0         
+## [43] stringr_1.6.0         splines_4.3.3         bayesplot_1.15.0     
+## [46] parallel_4.3.3        formatR_1.14          matrixStats_1.5.0    
+## [49] vctrs_0.7.1           boot_1.3-32           jsonlite_2.0.0       
+## [52] bookdown_0.46         jquerylib_0.1.4       glue_1.8.0           
+## [55] nloptr_2.2.1          ps_1.9.1              codetools_0.2-20     
+## [58] distributional_0.6.0  stringi_1.8.7         gtable_0.3.6         
+## [61] QuickJSR_1.8.1        tibble_3.3.1          pillar_1.11.1        
+## [64] htmltools_0.5.9       Brobdingnag_1.2-9     R6_2.6.1             
+## [67] Rdpack_2.6.6          evaluate_1.0.5        lattice_0.22-7       
+## [70] rbibutils_2.4.1       backports_1.5.0       renv_1.1.6           
+## [73] bslib_0.9.0           rstantools_2.6.0      coda_0.19-4.1        
+## [76] gridExtra_2.3         nlme_3.1-168          checkmate_2.3.3      
+## [79] mgcv_1.9-1            xfun_0.56             pkgconfig_2.0.3</code></pre>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/r/">R</a>
+  
+  <a class="badge badge-light" href="/tag/bayesian-statistics/">Bayesian Statistics</a>
+  
+</div>
+
+
+
+<div class="share-box">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=http://haines-lab.com/post/what-is-regression-really/&amp;text=What%20is%20Regression,%20Really?" target="_blank" rel="noopener" class="share-btn-twitter" aria-label="twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=http://haines-lab.com/post/what-is-regression-really/&amp;t=What%20is%20Regression,%20Really?" target="_blank" rel="noopener" class="share-btn-facebook" aria-label="facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=What%20is%20Regression,%20Really?&amp;body=http://haines-lab.com/post/what-is-regression-really/" target="_blank" rel="noopener" class="share-btn-email" aria-label="envelope">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=http://haines-lab.com/post/what-is-regression-really/&amp;title=What%20is%20Regression,%20Really?" target="_blank" rel="noopener" class="share-btn-linkedin" aria-label="linkedin-in">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=What%20is%20Regression,%20Really?%20http://haines-lab.com/post/what-is-regression-really/" target="_blank" rel="noopener" class="share-btn-whatsapp" aria-label="whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=http://haines-lab.com/post/what-is-regression-really/&amp;title=What%20is%20Regression,%20Really?" target="_blank" rel="noopener" class="share-btn-weibo" aria-label="weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="http://haines-lab.com/"><img class="avatar mr-3 avatar-circle" src="/author/nathaniel-haines/avatar_hu46ca18ad745f0410f34f184d73ea03a3_141031_270x270_fill_q75_lanczos_center.jpeg" alt="Nathaniel Haines"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="http://haines-lab.com/">Nathaniel Haines</a></h5>
+      <h6 class="card-subtitle">Senior Manager, Data Science</h6>
+      <p class="card-text">An academic Bayesian who is currently exploring the high dimensional posterior distribution of life</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/nate__haines" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=lg741SgAAAAJ" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/Nathaniel-Haines" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/nathaniel-haines-216049101/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  <section id="comments">
+    
+
+<script src="https://giscus.app/client.js"
+        data-repo="Nathaniel-Haines/haines-lab"
+        data-repo-id="MDEwOlJlcG9zaXRvcnk4NzM3NzgxMg=="
+        data-category="Comments"
+        data-category-id="DIC_kwDOBTVHlM4C8iCU"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+  </section>
+  
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="/post/how-to-estimate-a-mean-and-what-it-means-for-science/">How to Estimate a Mean, and What It Means for Science</a></li>
+      
+      <li><a href="/post/2021-01-10-modeling-classic-effects-dunning-kruger/2021-01-10-modeling-classic-effects-dunning-kruger/">A Series on Building Formal Models of Classic Psychological Effects: Part 1, the Dunning-Kruger Effect</a></li>
+      
+      <li><a href="/post/2020-06-13-on-curbing-your-measurement-error/2020-06-13-on-curbing-your-measurement-error/">On Curbing Your Measurement Error: From Classical Corrections to Generative Models</a></li>
+      
+      <li><a href="/post/2019-05-29-thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/thinking-generatively-why-do-we-use-atheoretical-statistical-models-to-test-substantive-psychological-theories/">Thinking generatively: Why do we use atheoretical statistical models to test substantive psychological theories?</a></li>
+      
+      <li><a href="/post/2019-05-06-on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/on-the-equivalency-between-the-lasso-ridge-regression-and-specific-bayesian-priors/">On the equivalency between frequentist Ridge (and LASSO) regression and hierarchial Bayesian regression</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Nathaniel Haines, PhD
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a> — the free, <a href="https://github.com/wowchemy/wowchemy-hugo-themes" target="_blank" rel="noopener">open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    <script src="/js/vendor-bundle.min.b73dfaac3b6499dc997741748a7c3fe2.js"></script>
+
+    
+    
+    
+      
+      
+        <script src="https://cdn.jsdelivr.net/gh/desandro/imagesloaded@v4.1.4/imagesloaded.pkgd.min.js" integrity="sha512-S5PZ9GxJZO16tT9r3WJp/Safn31eu8uWrzglMahDT4dsmgqWonRY9grk3j+3tfuPr9WJNsfooOR7Gi7HL5W2jw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/metafizzy/isotope@v3.0.6/dist/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js" integrity="sha512-Ypjm0o7jOxAd4hpdoppSEN0TQOC19UtPAqD+4s5AlXmUvbmmS/YMxYqAqarQYyxTnB6/rqip9qcxlNB/3U9Wdg==" crossorigin="anonymous"></script>
+        
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/r.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/python.min.js" crossorigin="anonymous"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/languages/latex.min.js" crossorigin="anonymous"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.js" integrity="" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdn.jsdelivr.net/gh/krisk/Fuse@v3.2.1/dist/fuse.min.js" integrity="sha512-o38bmzBGX+hD3JHWUFCDA09btWaqrNmoJ3RXLlrysA7PP01Kgs4UlE4MhelE1v5dJR3+cxlR4qQlotsW7jKsnw==" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/gh/julmot/mark.js@8.11.1/dist/jquery.mark.min.js" integrity="sha512-mhbv5DqBMgrWL+32MmsDOt/OAvqr/cHimk6B8y/bx/xS88MVkYGPiVv2ixKVrkywF2qHplNRUvFsAHUdxZ3Krg==" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+
+    
+    
+    
+    <script id="page-data" type="application/json">{"use_headroom":true}</script>
+
+    
+    
+      <script src="/js/wowchemy-headroom.1cb9e2fc8399acee94eab837265b73bf.js" type="module"></script>
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="/en/js/wowchemy.min.247fd8f54253895301106e3006f53f38.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>
