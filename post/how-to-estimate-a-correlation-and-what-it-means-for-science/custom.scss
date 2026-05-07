@@ -1,0 +1,118 @@
+/*-- scss:defaults --*/
+
+$font-family-sans-serif: "Gill Sans MT", "Gill Sans", "Century Gothic", Calibri, "Trebuchet MS", sans-serif;
+$presentation-heading-font: "Gill Sans MT", "Gill Sans", "Century Gothic", Calibri, "Trebuchet MS", sans-serif;
+$body-bg: #ffffff;
+$body-color: #000000;
+$presentation-heading-color: #1F497D;
+$link-color: #4F81BD;
+$code-block-bg: #f8f8f8;
+
+$presentation-font-size-root: 32px;
+$presentation-h1-font-size: 1.4em;
+$presentation-h2-font-size: 1.15em;
+$presentation-h3-font-size: 1.0em;
+
+/*-- scss:rules --*/
+
+.reveal .slide-background {
+  background-color: #ffffff;
+}
+
+.reveal h1 {
+  font-weight: bold;
+  text-align: center;
+}
+
+.reveal h2 {
+  font-weight: bold;
+  border-bottom: 3px solid #1F497D;
+  padding-bottom: 0.3em;
+}
+
+/* Section header slides (level 1 headings) */
+.reveal section.title-slide h1,
+.reveal .slide h1:only-child {
+  color: #ffffff;
+  background-color: #1F497D;
+  padding: 0.6em 0.8em;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 1.3em;
+}
+
+/* Key term highlighting */
+.reveal .burgundy {
+  color: #C0504D;
+  font-weight: bold;
+}
+
+.reveal .steelblue {
+  color: #4F81BD;
+  font-weight: bold;
+}
+
+.reveal .darkblue {
+  color: #1F497D;
+  font-weight: bold;
+}
+
+/* Center class */
+.reveal .center {
+  text-align: center;
+}
+
+/* Table styling */
+.reveal table {
+  font-size: 0.75em;
+  margin: 0.5em auto;
+}
+
+.reveal table th {
+  background-color: #1F497D;
+  color: white;
+  padding: 0.4em 0.6em;
+}
+
+.reveal table td {
+  padding: 0.3em 0.6em;
+  border-bottom: 1px solid #EEECE1;
+}
+
+/* Speaker notes */
+.reveal .speaker-notes {
+  font-size: 0.7em;
+}
+
+/* Columns */
+.reveal .columns {
+  display: flex;
+  gap: 2em;
+}
+
+/* Smaller text utility */
+.reveal .smaller {
+  font-size: 0.8em;
+}
+
+.reveal .smallest {
+  font-size: 0.65em;
+}
+
+/* Code blocks */
+.reveal pre code {
+  font-size: 0.7em;
+  max-height: 500px;
+}
+
+/* Figure captions */
+.reveal figcaption {
+  font-size: 0.6em;
+  color: #666;
+  text-align: center;
+}
+
+/* MathJax sizing */
+.reveal .MathJax {
+  font-size: 0.95em;
+}

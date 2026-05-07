@@ -6,12 +6,12 @@
 <script src="slides_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="slides_files/libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<link href="slides_files/libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.7.32">
 
   <meta name="author" content="Nathaniel Haines">
-  <meta name="dcterms.date" content="2026-03-31">
-  <title>How to Estimate a Mean (and a Correlation), and What It Means for Science</title>
+  <meta name="dcterms.date" content="2026-04-02">
+  <title>Measurement Error Is Eating Your Lunch</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -30,7 +30,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/theme/quarto-108d9316e08c8bb7fa8a9109f3f6a9a1.css">
+  <link rel="stylesheet" href="slides_files/libs/revealjs/dist/theme/quarto-98229875d191695c123e7507cd556f07.css">
   <link href="slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -122,13 +122,16 @@
       margin-right: 0; 
     }
   </style>
+  <script src="slides_files/libs/kePrint-0.0.1/kePrint.js"></script>
+  <link href="slides_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 </head>
-<body class="quarto-dark">
+<body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">How to Estimate a Mean (and a Correlation), and What It Means for Science</h1>
+  <h1 class="title">Measurement Error Is Eating Your Lunch</h1>
+  <p class="subtitle">Shrinkage, Attenuation, and What Changes When We Fix the Estimator</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -138,13 +141,19 @@ Nathaniel Haines
 </div>
 </div>
 
-  <p class="date">2026-03-31</p>
+  <p class="date">2026-04-02</p>
+</section>
+<section class="slide level2">
+
+<!-- ============================================================ -->
+<!-- SLIDE 2: Opening Provocation                                  -->
+<!-- ============================================================ -->
 </section>
 <section>
 <section id="section" class="title-slide slide level1 center">
 <h1></h1>
 <p><br></p>
-<p>Every time we compute a mean per participant, we use an <strong>inadmissible</strong> estimator</p>
+<p>Every time we compute a mean per participant, we use an <span class="burgundy"><strong>inadmissible</strong></span> estimator</p>
 <div class="fragment">
 <p>This has consequences far beyond estimation — it corrupts correlations, reliability, rankings, and effect sizes</p>
 </div>
@@ -163,19 +172,212 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 3: The Reliability Paradox                              -->
+<!-- ============================================================ -->
 </div>
+</section>
+<section id="the-reliability-paradox" class="slide level2">
+<h2>The Reliability Paradox</h2>
+<p><strong>Hedge, Powell, &amp; Sumner (2018)</strong> tested the reliability of classic cognitive tasks:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 24px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Task</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Group Effect</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Test-Retest ICC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Stroop</td>
+<td style="text-align: center;">Massive (~80ms)</td>
+<td style="text-align: center;">**0.60**</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Flanker</td>
+<td style="text-align: center;">Robust</td>
+<td style="text-align: center;">**0.40**</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Go/No-Go</td>
+<td style="text-align: center;">Robust</td>
+<td style="text-align: center;">**0.25**</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="fragment">
+<p><br></p>
+<p><strong>Conclusion</strong>: “These tasks are severely limited for individual differences research”</p>
+</div>
+<div class="fragment">
+<p>But is that the right conclusion?</p>
+<aside class="notes">
+<p>Hedge et al.&nbsp;(2018) found that classic cognitive tasks — Stroop, Flanker, Go/No-Go — have robust group-level effects but poor test-retest reliability for individual differences. Their study: ~60 students, tested twice 3 weeks apart. Stroop effect had an ICC of only 0.60. Their conclusion: these tasks aren’t suitable for individual differences.</p>
+<p>This finding was highly influential. But their analysis used the standard two-stage approach: compute a difference score per participant, then correlate across sessions. What if the problem isn’t the task — it’s the estimator?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 4: Section header                                       -->
+<!-- ============================================================ -->
+</div>
+</section></section>
+<section>
+<section id="when-measurement-error-leads-us-astray" class="title-slide slide level1 center">
+<h1>When Measurement Error Leads Us Astray</h1>
+<!-- ============================================================ -->
+<!-- SLIDE 5: Eye-Witness Lineups                                  -->
+<!-- ============================================================ -->
+</section>
+<section id="eye-witness-lineups" class="slide level2">
+<h2>Eye-Witness Lineups</h2>
+<p><strong>Rotello et al.&nbsp;(2015)</strong>: Sequential vs.&nbsp;simultaneous lineups</p>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" width="864" class="r-stretch"><p><span class="smaller">Diagnosticity ratio → sequential is better. SDT → simultaneous is better.</span></p>
+<aside class="notes">
+<p>Rotello et al.&nbsp;(2015, Psychonomic Bulletin &amp; Review) showed that the diagnosticity ratio — a summary statistic measure — said sequential lineups were better. But when they applied a signal detection model that properly accounts for response bias (measurement error in the criterion), simultaneous lineups were actually superior. The summary statistic led to the wrong policy recommendation.</p>
+<p>NOTE: Replace this schematic with Figure 1 or 2 from Rotello et al.&nbsp;(2015, Psychonomic Bulletin &amp; Review, 22, 944-954) for publication.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 6: Implicit Association Test                            -->
+<!-- ============================================================ -->
+</section>
+<section id="implicit-association-test" class="slide level2">
+<h2>Implicit Association Test</h2>
+<p>Average test-retest <em>r</em> ≈ 0.4. Payne et al.&nbsp;(2017): “bias of crowds”</p>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="864" class="r-stretch"><p>Connor &amp; Evers (2020): Noisy measurement, not contextual sensitivity</p>
+<aside class="notes">
+<p>The IAT has average test-retest reliability of about 0.4. Payne et al.&nbsp;(2017) proposed “bias of crowds” — aggregate over many people to get a stable signal. Connor &amp; Evers (2020, Perspectives on Psychological Science) argued this isn’t contextual sensitivity — it’s just noisy measurement. When reliability is 0.4, a true individual-level correlation of 0.7 appears as about 0.28. The “instability” is measurement error, not psychology.</p>
+<p>NOTE: Replace with a figure from Connor &amp; Evers (2020, Perspectives on Psychological Science, 15, 1329-1345).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 7: fMRI Reliability                                     -->
+<!-- ============================================================ -->
+</section>
+<section id="fmri-reliability" class="slide level2">
+<h2>fMRI Reliability</h2>
+<p><strong>Elliott et al.&nbsp;(2020)</strong>: 90 experiments, mean ICC = <span class="burgundy"><strong>0.397</strong></span></p>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" width="864" class="r-stretch"><aside class="notes">
+<p>Elliott et al.&nbsp;(2020, Psychological Science, 31, 792-806) conducted a meta-analysis of 90 fMRI experiments and found a mean ICC of only 0.397. At this reliability, detecting a true correlation of 0.5 with 80% power requires roughly 200 participants — at ~$1300/participant for fMRI, that’s about $260K. Most fMRI studies have 20-40 participants, meaning they’re severely underpowered for individual differences.</p>
+<p>NOTE: Replace with the forest plot from Elliott et al.&nbsp;(2020, Psychological Science, 31, 792-806).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 8: Self-Control Tasks                                   -->
+<!-- ============================================================ -->
+</section>
+<section id="self-control-tasks" class="slide level2">
+<h2>Self-Control Tasks</h2>
+<p><strong>Enkavi et al.&nbsp;(2019)</strong>: Self-report vs.&nbsp;behavioral task reliability</p>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" width="864" class="r-stretch"><aside class="notes">
+<p>Enkavi et al.&nbsp;(2019, PNAS, 116, 5472-5477) compared the reliability of self-report measures (BIS, Grit, UPPS, Brief Self-Control) to behavioral tasks (Stop-Signal, Go/No-Go, Stroop, Delay Discounting). Self-report measures consistently showed reliability above 0.80, while behavioral tasks were 0.15-0.55. This has been taken as evidence that behavioral tasks are “bad” for individual differences — but the real issue is how we estimate individual scores.</p>
+<p>NOTE: Replace with the key figure from Enkavi et al.&nbsp;(2019, PNAS, 116, 5472-5477).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 9: The Common Thread                                    -->
+<!-- ============================================================ -->
+</section>
+<section id="the-common-thread" class="slide level2 center">
+<h2>The Common Thread</h2>
+<p><br></p>
+<p>In every case, <span class="burgundy"><strong>measurement error → incorrect inference</strong></span></p>
+<p><br></p>
+<div class="fragment">
+<p>The problem is not the tasks</p>
+</div>
+<div class="fragment">
+<p>The problem is the <span class="burgundy"><strong>estimator</strong></span></p>
+<aside class="notes">
+<p>Across lineups, the IAT, fMRI, and behavioral self-control tasks, the pattern is the same. We compute a noisy summary statistic per participant, treat it as if it were the true value, and then draw conclusions from downstream analyses. The conclusions are wrong — not because the data are uninformative, but because the estimator throws away information that a better method would use.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 10: Section — Shrinkage Univariate                      -->
+<!-- ============================================================ -->
+</div>
+</section></section>
+<section>
+<section id="part-i-shrinkage-estimators" class="title-slide slide level1 center">
+<h1>Part I: Shrinkage Estimators</h1>
+<!-- ============================================================ -->
+<!-- SLIDE 11: Stein's Result                                      -->
+<!-- ============================================================ -->
 </section>
 <section id="steins-result-1956" class="slide level2 center">
 <h2>Stein’s Result (1956)</h2>
-<p>The sample mean <span class="math inline">\(\hat{\mu}_i = \bar{y}_i\)</span> is the <strong>MVUE</strong> for a single mean</p>
+<p>The sample mean <span class="math inline">\(\hat{\mu}_i = \bar{y}_i\)</span> is the <span class="darkblue"><strong>MVUE</strong></span> for a single mean</p>
 <div class="fragment">
-<p>For <strong>3 or more</strong> means simultaneously, it is <strong>inadmissible</strong></p>
+<p>For <span class="burgundy"><strong>3 or more</strong></span> means simultaneously, it is <span class="burgundy"><strong>inadmissible</strong></span></p>
 </div>
 <div class="fragment">
 <p>There exists an estimator with strictly lower total MSE for <em>every possible</em> <span class="math inline">\(\boldsymbol{\mu}\)</span></p>
 </div>
 <div class="fragment">
-<p>So counterintuitive it became known as <strong>Stein’s Paradox</strong></p>
+<p>So counterintuitive it became known as <span class="burgundy"><strong>Stein’s Paradox</strong></span></p>
 <aside class="notes">
 <p>MVUE = minimum variance unbiased estimator. For one mean, the sample mean is the best you can do. But Stein proved that for 3+ simultaneous means, there always exists a better estimator — strictly lower MSE for EVERY configuration of true values. James &amp; Stein (1961) gave the constructive proof. The fix: shrink toward a common target.</p>
 <style type="text/css">
@@ -189,12 +391,15 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 12: One Insight, Many Discoverers                       -->
+<!-- ============================================================ -->
 </div>
 </section>
 <section id="one-insight-many-discoverers" class="slide level2">
 <h2>One Insight, Many Discoverers</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-1-1.png" width="1344" class="r-stretch"><aside class="notes">
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><aside class="notes">
 <p>Discovered independently across centuries. Bayes (1763), Kelley/CTT (1920s), Stein (1956), Robbins/EB (1956), James-Stein (1961), Ridge (1970s), hierarchical models (1990s). These traditions actively resisted each other. Frequentists rejected Bayes. Psychometricians published in education journals statisticians didn’t read. ML people reinvented penalized estimation from scratch. Convergence happened despite, not because of, cross-disciplinary communication.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -207,11 +412,9 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section></section>
-<section>
-<section id="part-i-the-univariate-case" class="title-slide slide level1 center">
-<h1>Part I: The Univariate Case</h1>
-
+<!-- ============================================================ -->
+<!-- SLIDE 13: Simulation Setup                                    -->
+<!-- ============================================================ -->
 </section>
 <section id="simulation-setup" class="slide level2 center">
 <h2>Simulation Setup</h2>
@@ -250,11 +453,14 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 14: Sample Mean — Unbiased but Noisy                    -->
+<!-- ============================================================ -->
 </section>
 <section id="the-sample-mean-unbiased-but-noisy" class="slide level2">
 <h2>The Sample Mean: Unbiased but Noisy</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" width="1152" class="r-stretch"><aside class="notes">
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"><aside class="notes">
 <p>True mean on x-axis, sample mean on y-axis. Dashed line = perfect estimation. Substantial scatter. The sample mean is unbiased — correct on average across infinite experiments — but for the one dataset we have, it’s often far off. Can we trade a little bias for a lot of variance reduction?</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -267,6 +473,9 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 15: All Methods Converge                                -->
+<!-- ============================================================ -->
 </section>
 <section id="all-shrinkage-methods-converge" class="slide level2 center">
 <h2>All Shrinkage Methods Converge</h2>
@@ -303,14 +512,13 @@ Nathaniel Haines
 <td><span class="math inline">\(\frac{n_i}{n_i + \lambda}\)</span> where <span class="math inline">\(\lambda = \sigma^2_{\text{obs}}/\sigma^2_{\text{pop}}\)</span></td>
 </tr>
 <tr class="odd">
-<td>Hierarchical Models (lme4, brms)</td>
+<td>Hierarchical Models</td>
 <td><span class="math inline">\(\frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}\)</span></td>
 </tr>
 </tbody>
 </table>
 <aside class="notes">
-<p>Rather than show each method’s scatter plot — they all look the same — here’s the punchline. Six methods from six traditions, all reducing to signal over signal-plus-noise. Start at the group mean, move toward the individual’s sample mean, but only by a fraction reflecting how much signal there is relative to noise.</p>
-<p>If you use lmer or brms, you already do this — the BLUPs from a random-intercept model implement exactly this shrinkage. You just might not realize it.</p>
+<p>Six methods from six traditions, all reducing to signal over signal-plus-noise. Start at the group mean, move toward the individual’s sample mean, but only by a fraction reflecting how much signal there is relative to noise. If you use lmer or brms, you already do this — the BLUPs from a random-intercept model implement exactly this shrinkage.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -322,12 +530,16 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 16: Six Methods, Same Answer                            -->
+<!-- ============================================================ -->
 </section>
 <section id="six-methods-same-answer" class="slide level2">
 <h2>Six Methods, Same Answer</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" width="1152" class="r-stretch"><aside class="notes">
-<p>All six methods in a single panel. Dusty rose = sample means, dark red = shrunken estimates. Every method pulls extremes inward toward the identity line. RMSEs in parentheses — all substantially better than the sample mean and nearly identical to each other. The convergence is real.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"><aside class="notes">
+<p>All six methods in a single panel. Light blue = sample means, dark blue = shrunken estimates. Every method pulls extremes inward toward the identity line. RMSEs in parentheses — all substantially better than the sample mean and nearly identical to each other. The convergence is real.</p>
+<p>In a balanced design like this, all methods give exactly the same answer. The differences emerge with unbalanced data, non-normal populations, or complex designs.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -339,13 +551,15 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 17: Shrinkage Is Data-Adaptive                          -->
+<!-- ============================================================ -->
 </section>
 <section id="shrinkage-is-data-adaptive" class="slide level2">
 <h2>Shrinkage Is Data-Adaptive</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="1152" class="r-stretch"><aside class="notes">
-<p>“But what if shrinkage is too much?” — it’s data-adaptive. When n is small, the advantage is large. As n grows, sigma_obs/n → 0, signal-to-noise → 1, all methods converge to the sample mean. Shrinkage can never hurt — at worst it does nothing. In typical behavioral research with 10-50 trials, gains are substantial.</p>
-<p>OK — so the univariate case is clear. But this is really just the warmup. The interesting part is what happens when we use these noisy estimates in secondary analyses.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"><aside class="notes">
+<p>Shrinkage is data-adaptive. When n is small, the advantage is large. As n grows, sigma_obs/n → 0, signal-to-noise → 1, all methods converge to the sample mean. Shrinkage can never hurt — at worst it does nothing. In typical behavioral research with 10-50 trials, gains are substantial.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -357,16 +571,50 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 18: Univariate Summary                                  -->
+<!-- ============================================================ -->
+</section>
+<section id="univariate-summary" class="slide level2 center">
+<h2>Univariate Summary</h2>
+<p><br><br></p>
+<p>For means, <span class="burgundy"><strong>shrinkage wins</strong></span></p>
+<p><br></p>
+<div class="fragment">
+<p>But what about <span class="darkblue"><strong>secondary analyses</strong></span>?</p>
+<p><br></p>
+</div>
+<div class="fragment">
+<p>What happens when we <strong>correlate</strong> noisy estimates?</p>
+<aside class="notes">
+<p>OK — so the univariate case is clear. But this is really just the warmup. The interesting part is what happens when we use these noisy estimates in secondary analyses — correlations, regressions, group comparisons. Let’s move to the bivariate case.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 19: Section — Bivariate Case                            -->
+<!-- ============================================================ -->
+</div>
 </section></section>
 <section>
 <section id="part-ii-the-bivariate-case-where-it-really-matters" class="title-slide slide level1 center">
 <h1>Part II: The Bivariate Case — Where It Really Matters</h1>
-
+<!-- ============================================================ -->
+<!-- SLIDE 20: The Two-Stage Problem                               -->
+<!-- ============================================================ -->
 </section>
 <section id="the-two-stage-problem" class="slide level2 center">
 <h2>The Two-Stage Problem</h2>
 <p><br></p>
-<p>Most individual differences research follows a <strong>two-stage pipeline</strong>:</p>
+<p>Most individual differences research follows a <span class="burgundy"><strong>two-stage pipeline</strong></span>:</p>
 <p><br></p>
 <ol type="1">
 <li>Compute summary statistics per participant (means, difference scores, slopes)</li>
@@ -390,23 +638,23 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 21: Attenuation of Correlations                         -->
+<!-- ============================================================ -->
 </div>
 </section>
 <section id="attenuation-of-correlations" class="slide level2 center">
 <h2>Attenuation of Correlations</h2>
 <p><br></p>
-<p><span class="math display">\[r_{\text{obs}} = \rho_{\text{true}} \cdot \sqrt{\rho_{xx,1} \cdot \rho_{xx,2}}\]</span></p>
-<p><br></p>
-<p><strong>Why?</strong> The covariance (numerator) is <strong>unbiased</strong> — measurement errors are independent, so cross-terms vanish</p>
-<p>But the standard deviations (denominator) are <strong>inflated</strong> by <span class="math inline">\(\sigma^2_{\text{obs}}/n\)</span></p>
-<div class="fragment">
+<p>If two latent traits correlate at <span class="math inline">\(r_{\theta_1, \theta_2}\)</span>, the observed correlation is:</p>
+<p><span class="math display">\[r_{\text{obs}} = r_{\theta_1, \theta_2} \cdot \sqrt{\rho_1 \cdot \rho_2}\]</span></p>
 <p><br></p>
 <table class="caption-top">
 <thead>
 <tr class="header">
-<th style="text-align: center;"><span class="math inline">\(\rho_{xx,1}\)</span></th>
-<th style="text-align: center;"><span class="math inline">\(\rho_{xx,2}\)</span></th>
-<th style="text-align: center;">True <span class="math inline">\(\rho\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\rho_1\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\rho_2\)</span></th>
+<th style="text-align: center;">True <span class="math inline">\(r\)</span></th>
 <th style="text-align: center;">Observed <span class="math inline">\(r\)</span></th>
 </tr>
 </thead>
@@ -415,28 +663,27 @@ Nathaniel Haines
 <td style="text-align: center;">0.5</td>
 <td style="text-align: center;">0.5</td>
 <td style="text-align: center;">0.5</td>
-<td style="text-align: center;"><strong>0.25</strong></td>
+<td style="text-align: center;"><span class="burgundy"><strong>0.25</strong></span></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">0.3</td>
 <td style="text-align: center;">0.3</td>
 <td style="text-align: center;">0.5</td>
-<td style="text-align: center;"><strong>0.15</strong></td>
+<td style="text-align: center;"><span class="burgundy"><strong>0.15</strong></span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">0.5</td>
 <td style="text-align: center;">0.8</td>
 <td style="text-align: center;">0.5</td>
-<td style="text-align: center;"><strong>0.32</strong></td>
+<td style="text-align: center;"><span class="burgundy"><strong>0.32</strong></span></td>
 </tr>
 </tbody>
 </table>
-</div>
 <div class="fragment">
-<p><strong>A real effect of <span class="math inline">\(\rho = 0.5\)</span> can look like <span class="math inline">\(r = 0.15\)</span> — “not significant”</strong></p>
+<p><br></p>
+<p><span class="burgundy"><strong>A real effect of <span class="math inline">\(r = 0.5\)</span> can look like <span class="math inline">\(r = 0.15\)</span> — “not significant”</strong></span></p>
 <aside class="notes">
-<p>This is the classical attenuation formula (Spearman, 1904). The key asymmetry: measurement error doesn’t affect the covariance between two measures — the noise on measure 1 is independent of everything about measure 2, so it drops out of the numerator. But the denominator — the product of standard deviations — includes measurement error variance on top of the true between-person variance. So the denominator is too big, and the correlation is systematically biased toward zero.</p>
-<p>With reliabilities of 0.3 — common for behavioral task measures — a true r of 0.5 appears as 0.15. Not significant in typical samples. You conclude no effect when the effect is real.</p>
+<p>This is the classical attenuation formula (Spearman, 1904). When both measures have imperfect reliability, the observed correlation is systematically biased toward zero. With reliabilities of 0.3 — common for behavioral task measures — a true r of 0.5 appears as r = 0.15. That’s “not significant” with typical sample sizes. You conclude no effect when the effect is real.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -448,59 +695,16 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 22: Simulation — Attenuation in Action                  -->
+<!-- ============================================================ -->
 </div>
 </section>
-<section id="simulation-setup-1" class="slide level2 center">
-<h2>Simulation Setup</h2>
-<p><span class="math display">\[(\theta_{1,i}, \theta_{2,i}) \sim \text{MVN}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}_{\text{pop}}\right), \quad y_{k,i,t} \sim \mathcal{N}(\theta_{k,i}, \sigma_{\text{obs}})\]</span></p>
-<p><br></p>
-<table class="caption-top">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(N = 50\)</span> individuals, <span class="math inline">\(n = 10\)</span> trials per measure</td>
-<td></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\sigma_{\text{pop}} = 2\)</span> (between-person), <span class="math inline">\(\sigma_{\text{obs}} = 6\)</span> (within-person)</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\rho_{\text{true}} = 0.7\)</span></td>
-<td></td>
-</tr>
-<tr class="even">
-<td><strong>Reliability</strong> <span class="math inline">\(\approx 4 / (4 + 3.6)\)</span></td>
-<td><strong>≈ 0.53</strong></td>
-</tr>
-<tr class="odd">
-<td><strong>Expected</strong> <span class="math inline">\(r_{\text{obs}} \approx 0.7 \times \sqrt{0.53^2}\)</span></td>
-<td><strong>≈ 0.37</strong></td>
-</tr>
-</tbody>
-</table>
-<aside class="notes">
-<p>Same reliability as Part 1 (0.53), but now two correlated measures. True correlation is 0.7 — a large effect. But with reliability of 0.53 on each measure, the attenuation formula predicts we’ll observe r ≈ 0.37. A large effect cut nearly in half. Let’s see it.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="the-naive-approach-attenuated-correlation" class="slide level2">
-<h2>The Naive Approach: Attenuated Correlation</h2>
+<section id="simulation-attenuation-in-action" class="slide level2">
+<h2>Simulation: Attenuation in Action</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" width="1152" class="r-stretch"><aside class="notes">
-<p>Left: the true latent scores — the relationship is clear. Right: the sample means computed from 10 noisy trials each. The cloud has expanded, the correlation is attenuated. We went from a true correlation of 0.7 to an observed r around 0.37. This is the default in most of psychology: compute summary scores, then correlate.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"><aside class="notes">
+<p>Two latent traits with true rho = 0.7. Each measured with 10 noisy observations (reliability ~0.53). Left: true scores show a clear relationship. Right: sample means — the cloud expands, the correlation attenuates. The observed r is much less than the true rho. This is the attenuation formula in action.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -512,79 +716,18 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 23: Univariate Shrinkage Does NOT Fix                   -->
+<!-- ============================================================ -->
 </section>
-<section id="univariate-shrinkage-doesnt-help" class="slide level2 center">
-<h2>Univariate Shrinkage Doesn’t Help</h2>
+<section id="univariate-shrinkage-does-not-fix-correlations" class="slide level2">
+<h2>Univariate Shrinkage Does NOT Fix Correlations</h2>
+<p>Pearson <span class="math inline">\(r\)</span> is <span class="burgundy"><strong>scale and location invariant</strong></span></p>
+<p>Shrinking both axes preserves <span class="math inline">\(r\)</span> exactly</p>
 <p><br></p>
-<p>Part 1 taught us to shrink means. Natural idea: shrink each measure, then correlate.</p>
-<div class="fragment">
-<p><br></p>
-<p><span class="math display">\[\hat{\theta}_{1,i} = \hat{\mu}_1 + B_1(\bar{y}_{1,i} - \hat{\mu}_1), \quad \hat{\theta}_{2,i} = \hat{\mu}_2 + B_2(\bar{y}_{2,i} - \hat{\mu}_2)\]</span></p>
-</div>
-<div class="fragment">
-<p><br></p>
-<p>But the Pearson <span class="math inline">\(r\)</span> is <strong>scale-invariant</strong>: <span class="math inline">\(r(\hat{\theta}_1, \hat{\theta}_2) = r(\bar{y}_1, \bar{y}_2)\)</span></p>
-</div>
-<div class="fragment">
-<p>Univariate shrinkage just rescales each axis — it <strong>cannot change the correlation</strong></p>
-</div>
-<div class="fragment">
-<p><br></p>
-<h3 id="to-fix-correlations-we-need-multivariate-thinking">To fix correlations, we need <strong>multivariate</strong> thinking</h3>
-<aside class="notes">
-<p>This is the key insight that motivates the rest of the talk. Univariate shrinkage — everything we did in Part 1 — makes each individual’s estimates better, but it does nothing for correlation estimation. The Pearson correlation is scale-invariant: multiplying each variable by a constant (which is what univariate shrinkage does — it’s a linear rescaling toward the mean) doesn’t change the correlation. You can verify this easily: shrink both measures using Kelley, James-Stein, or empirical Bayes, recompute the correlation — identical to the naive estimate.</p>
-<p>This is why the bivariate case is fundamentally harder than the univariate case. We need methods that model the joint distribution.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</div>
-</section>
-<section id="from-scalars-to-matrices" class="slide level2 center">
-<h2>From Scalars to Matrices</h2>
-<p><br></p>
-<div class="columns">
-<div class="column" style="width:45%;">
-<p><strong>Part 1 (Means)</strong></p>
-<p><span class="math display">\[\hat{\mu}_i = \hat{\mu}_{\text{pop}} + B(\bar{y}_i - \hat{\mu}_{\text{pop}})\]</span></p>
-<p>where <span class="math inline">\(B = \dfrac{\sigma^2_{\text{pop}}}{\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n}\)</span></p>
-</div><div class="column" style="width:55%;">
-<p><strong>Part 2 (Correlations)</strong></p>
-<p><span class="math display">\[\hat{\boldsymbol{\theta}}_i = \hat{\boldsymbol{\mu}} + \mathbf{B}(\bar{\mathbf{y}}_i - \hat{\boldsymbol{\mu}})\]</span></p>
-<p>where <span class="math inline">\(\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}\left(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\right)^{-1}\)</span></p>
-</div></div>
-<div class="fragment">
-<p><br></p>
-<p>The off-diagonal elements of <span class="math inline">\(\mathbf{B}\)</span> are <strong>non-zero</strong> when the measures are correlated</p>
-<p>Each estimate borrows strength from <strong>both</strong> measures — this is what changes the correlation</p>
-<aside class="notes">
-<p>The fix is elegant: replace scalars with matrices. Same formula, same principle — signal over signal-plus-noise — but now B is a 2×2 matrix. The diagonal elements are the univariate shrinkage factors from Part 1. The off-diagonal elements are new: they capture how much one measure’s data helps predict the other measure’s true score. When the measures are truly correlated, the off-diagonals are non-zero, and the shrinkage borrows strength across measures. This is what changes the correlation.</p>
-<p>B₁₂ captures: how much of ȳ₂’s variation is useful for predicting θ₁? If ρ_true ≠ 0, the answer is: some of it. An individual who scores high on measure 2 gets pulled upward on measure 1, even if their measure 1 data alone would suggest more shrinkage.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</div>
-</section>
-<section id="multivariate-shrinkage-in-action" class="slide level2">
-<h2>Multivariate Shrinkage in Action</h2>
 
-<img data-src="shrinkage_compare_animation.gif" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><aside class="notes">
-<p>Here’s the animation from the blog post. Left panel: univariate shrinkage. Every point moves straight toward the grand mean — the cloud contracts but the shape (and correlation) doesn’t change. Right panel: multivariate shrinkage. The paths are different — they follow the population’s correlation structure, pulling points toward the bivariate ellipse. The displayed correlation changes from the attenuated value to the disattenuated value. Same data, same number of observations, but the multivariate method recovers the true correlation.</p>
+<img data-src="univariate_shrink_animation.gif" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"><aside class="notes">
+<p>Here’s the key insight that connects Parts I and II. Univariate shrinkage makes individual estimates better — lower RMSE — but it does NOTHING for the correlation. This is because the Pearson correlation is scale and location invariant. Shrink all points toward the center on each axis independently, and the correlation is unchanged. The cloud contracts but keeps its shape.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -596,13 +739,28 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 24: Multivariate Shrinkage                              -->
+<!-- ============================================================ -->
 </section>
-<section id="all-multivariate-methods-converge" class="slide level2 center">
-<h2>All Multivariate Methods Converge</h2>
-
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-9-1.png" width="1152" class="r-stretch"><aside class="notes">
-<p>Here are all the methods side by side. The naive two-stage Pearson r and univariate shrinkage give the same attenuated estimate — around 0.37. Spearman’s correction and multivariate shrinkage both recover estimates much closer to the true rho of 0.7. The hierarchical models (not shown here to avoid compute time, but covered in the blog) give essentially the same answer as MV shrinkage, with the added benefit of proper uncertainty quantification.</p>
-<p>The convergence mirrors Part 1: every method that accounts for the joint distribution arrives at the same matrix-valued signal-over-signal-plus-noise principle.</p>
+<section id="multivariate-shrinkage" class="slide level2 center">
+<h2>Multivariate Shrinkage</h2>
+<p>The scalar shrinkage factor becomes a <span class="burgundy"><strong>matrix</strong></span>:</p>
+<div class="fragment">
+<p><span class="math display">\[\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}\left(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\right)^{-1}\]</span></p>
+</div>
+<div class="fragment">
+<p><br></p>
+<p><strong>Off-diagonal elements</strong> borrow strength <span class="darkblue"><strong>across measures</strong></span></p>
+</div>
+<div class="fragment">
+<p>If individual <span class="math inline">\(i\)</span> scores high on measure 2, they are pulled <span class="burgundy"><strong>upward</strong></span> on measure 1</p>
+</div>
+<div class="fragment">
+<p><br></p>
+<p>This is the multivariate generalization of signal / (signal + noise)</p>
+<aside class="notes">
+<p>Replace the scalar B with a matrix B. Sigma_pop captures both variances AND the covariance between measures. The off-diagonal elements of B are non-zero when the measures are correlated — this means each shrunken estimate depends on BOTH observed means, not just its own. An individual who scores high on measure 2 is pulled upward on measure 1, proportional to how correlated the measures are. This cross-measure borrowing is what allows the correlation to be recovered.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -614,28 +772,45 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 25: Univariate vs Multivariate Animation                -->
+<!-- ============================================================ -->
+</div>
+</section>
+<section id="univariate-vs.-multivariate-shrinkage" class="slide level2">
+<h2>Univariate vs.&nbsp;Multivariate Shrinkage</h2>
+
+<img data-src="shrinkage_compare_animation.gif" class="quarto-figure quarto-figure-center r-stretch" style="width:95.0%"><aside class="notes">
+<p>Side-by-side animation. Left panel: univariate shrinkage — points move straight toward the grand mean along each axis. The correlation is unchanged. Right panel: multivariate shrinkage — points move toward the population correlation structure. The cloud tightens AND the correlation is recovered. The paths are visibly different: univariate paths are parallel to the axes; multivariate paths angle toward the regression line.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 26: The Generative Modeling Solution                    -->
+<!-- ============================================================ -->
 </section>
 <section id="the-generative-modeling-solution" class="slide level2 center">
 <h2>The Generative Modeling Solution</h2>
 <p><br></p>
-<p>Instead of:</p>
-<ol type="1">
-<li>Estimate parameters → 2. Correlate estimates</li>
-</ol>
+<p>Instead of:   1. Estimate parameters → 2. Correlate estimates</p>
 <p><br></p>
-<p><strong>Jointly model both measures and their relationship:</strong></p>
-<p><span class="math display">\[y_{k,i,t} \sim \mathcal{N}(\theta_{k,i}, \sigma_{\text{obs},k}), \quad \begin{bmatrix} \theta_i^{(1)} \\ \theta_i^{(2)} \end{bmatrix} \sim \mathcal{N}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}\right)\]</span></p>
+<p><span class="darkblue"><strong>Jointly model both measures and their relationship:</strong></span></p>
+<p><span class="math display">\[y_{i,t}^{(1)} \sim f_1(\theta_i^{(1)}), \quad y_{i,t}^{(2)} \sim f_2(\theta_i^{(2)})\]</span></p>
+<p><span class="math display">\[\begin{bmatrix} \theta_i^{(1)} \\ \theta_i^{(2)} \end{bmatrix} \sim \mathcal{N}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}\right)\]</span></p>
 <p><br></p>
-<div class="fragment">
-<p>The correlation in <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is estimated <strong>jointly</strong> with the individual parameters</p>
-<p>Measurement error is <strong>absorbed by the likelihoods</strong>, not propagated into the correlation</p>
-</div>
-<div class="fragment">
-<p><br></p>
-<p>This implements the <strong>matrix shrinkage principle</strong> — with proper uncertainty</p>
+<p>The correlation in <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is estimated <span class="burgundy"><strong>jointly</strong></span> with the individual parameters</p>
+<p>Measurement error is <span class="burgundy"><strong>absorbed by the likelihoods</strong></span>, not propagated into the correlation</p>
 <aside class="notes">
-<p>The most principled version: model everything jointly. This is what brms does when you specify correlated random effects. The correlation lives in the covariance matrix of the population distribution, estimated simultaneously with all individual parameters. You get the disattenuated correlation automatically, with a posterior distribution giving you proper uncertainty.</p>
-<p>In the blog post, the brms posterior for rho is centered near 0.7 with a reasonable credible interval. The lme4 point estimate is nearly identical. Both implement the same matrix shrinkage — they just estimate the components differently. The technology is already there in tools you may already use.</p>
+<p>The fix: don’t do two stages. Model everything jointly. Specify how each measure generates data — a likelihood for measure 1, a likelihood for measure 2. Then link the individual-level parameters through a multivariate population distribution. The correlation lives in the covariance matrix of the population distribution, and it’s estimated simultaneously with all the individual parameters.</p>
+<p>This is exactly what brms does when you specify correlated random effects: y ~ 0 + measure + (0 + measure | subj). The technology is already there.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -647,83 +822,197 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 27: Hierarchical Models Recover rho                     -->
+<!-- ============================================================ -->
+</section>
+<section id="hierarchical-models-recover-rho" class="slide level2">
+<h2>Hierarchical Models Recover <span class="math inline">\(\rho\)</span></h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"><aside class="notes">
+<p>The sampling distributions tell the story clearly. The naive two-stage Pearson r (blue) is centered around 0.28 — massively attenuated from the true rho of 0.70. The hierarchical model (red) recovers the true correlation, centered right at 0.70 with tighter spread. This is why joint modeling matters — it’s not just a marginal improvement, it’s the difference between seeing an effect and missing it entirely.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 28: All Methods Animation                               -->
+<!-- ============================================================ -->
+</section>
+<section id="all-four-methods" class="slide level2">
+<h2>All Four Methods</h2>
+
+<img data-src="shrinkage_all_animation.gif" class="quarto-figure quarto-figure-center r-stretch" style="width:95.0%"><aside class="notes">
+<p>The 2x2 animation showing all four approaches simultaneously. Top-left: univariate shrinkage — cloud contracts, correlation unchanged. The other three panels: multivariate shrinkage, lme4, and brms — all recover the true correlation by borrowing strength across measures. The paths are different from univariate, angling toward the true correlation structure.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 29: Multivariate Summary                                -->
+<!-- ============================================================ -->
+</section>
+<section id="multivariate-summary" class="slide level2">
+<h2>Multivariate Summary</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 20px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Method</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">ρ̂</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Fixes Correlation?</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Proper Uncertainty?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; background-color: rgba(255, 224, 224, 255) !important;">Two-Stage Pearson r</td>
+<td style="text-align: center; background-color: rgba(255, 224, 224, 255) !important;">0.28</td>
+<td style="text-align: center; background-color: rgba(255, 224, 224, 255) !important;">No</td>
+<td style="text-align: center; background-color: rgba(255, 224, 224, 255) !important;">—</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: rgba(255, 224, 224, 255) !important;">Univariate Shrinkage + r</td>
+<td style="text-align: center; background-color: rgba(255, 224, 224, 255) !important;">0.28</td>
+<td style="text-align: center; background-color: rgba(255, 224, 224, 255) !important;">No</td>
+<td style="text-align: center; background-color: rgba(255, 224, 224, 255) !important;">—</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Spearman Correction</td>
+<td style="text-align: center;">~0.88 (high var.)</td>
+<td style="text-align: center;">Yes (noisy)</td>
+<td style="text-align: center;">No (can exceed 1)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: rgba(224, 240, 224, 255) !important;">MV Shrinkage (Efron-Morris)</td>
+<td style="text-align: center; background-color: rgba(224, 240, 224, 255) !important;">~0.71</td>
+<td style="text-align: center; background-color: rgba(224, 240, 224, 255) !important;">Yes</td>
+<td style="text-align: center; background-color: rgba(224, 240, 224, 255) !important;">Partial</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; background-color: rgba(224, 240, 224, 255) !important;">Hierarchical (lme4)</td>
+<td style="text-align: center; background-color: rgba(224, 240, 224, 255) !important;">~0.71</td>
+<td style="text-align: center; background-color: rgba(224, 240, 224, 255) !important;">Yes</td>
+<td style="text-align: center; background-color: rgba(224, 240, 224, 255) !important;">Partial</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; background-color: rgba(224, 240, 224, 255) !important;">Hierarchical (brms)</td>
+<td style="text-align: center; background-color: rgba(224, 240, 224, 255) !important;">~0.71</td>
+<td style="text-align: center; background-color: rgba(224, 240, 224, 255) !important;">Yes</td>
+<td style="text-align: center; background-color: rgba(224, 240, 224, 255) !important;">Yes</td>
+</tr>
+</tbody>
+</table>
 </div>
+</div>
+<aside class="notes">
+<p>Summary table. The two-stage and univariate shrinkage approaches give the same attenuated estimate of about 0.28. Spearman’s correction is approximately unbiased but extremely noisy — it can exceed 1.0 in about 20% of simulations. The multivariate approaches — MV shrinkage, lme4, brms — all converge around 0.71, close to the true rho of 0.70, with much better variance properties.</p>
+<p>The hierarchy: MV shrinkage and lme4 give point estimates. brms gives full posteriors with proper uncertainty. All three fix the correlation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 30: Section — Revisiting Evidence                       -->
+<!-- ============================================================ -->
 </section></section>
 <section>
-<section id="part-iii-the-reliability-paradox" class="title-slide slide level1 center">
-<h1>Part III: The Reliability Paradox</h1>
-
+<section id="what-changes-with-better-methods" class="title-slide slide level1 center">
+<h1>What Changes With Better Methods?</h1>
+<!-- ============================================================ -->
+<!-- SLIDE 31: Reliability Paradox Disappears                      -->
+<!-- ============================================================ -->
 </section>
-<section id="replicable-effects-arent-reliable" class="slide level2 center">
-<h2>Replicable Effects Aren’t Reliable?</h2>
-<p><br></p>
-<p><strong>Hedge, Powell, &amp; Sumner (2017)</strong> tested the reliability of classic cognitive tasks:</p>
+<section id="the-reliability-paradox-disappears" class="slide level2">
+<h2>The Reliability Paradox Disappears</h2>
+<div class="columns">
+<div class="column" style="width:48%;">
+<h3 id="traditional-two-stage">Traditional (Two-Stage)</h3>
 <table class="caption-top">
 <thead>
 <tr class="header">
 <th>Task</th>
-<th style="text-align: center;">Group Effect</th>
-<th style="text-align: center;">Test-Retest ICC</th>
+<th style="text-align: center;">ICC</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Stroop</td>
-<td style="text-align: center;">Massive (~80ms)</td>
-<td style="text-align: center;"><strong>0.60</strong></td>
+<td style="text-align: center;">0.50</td>
 </tr>
 <tr class="even">
 <td>Flanker</td>
-<td style="text-align: center;">Robust</td>
-<td style="text-align: center;"><strong>0.40</strong></td>
+<td style="text-align: center;">−0.13</td>
 </tr>
 <tr class="odd">
+<td>Posner</td>
+<td style="text-align: center;">0.17</td>
+</tr>
+<tr class="even">
 <td>Go/No-Go</td>
-<td style="text-align: center;">Robust</td>
-<td style="text-align: center;"><strong>0.25</strong></td>
+<td style="text-align: center;">0.25</td>
 </tr>
 </tbody>
 </table>
-<p><br></p>
-<div class="fragment">
-<p><strong>Conclusion</strong>: “These tasks are severely limited for individual differences research”</p>
-</div>
-<div class="fragment">
-<p>But is that the right conclusion?</p>
-<aside class="notes">
-<p>Hedge et al.&nbsp;(2017) found that classic cognitive tasks — Stroop, Flanker, Go/No-Go — have robust group-level effects but poor test-retest reliability for individual differences. Their study: 50 students, Stroop with 720 trials across 3 conditions, tested twice 3 weeks apart. The Stroop effect had an ICC of only 0.60. Their conclusion: these tasks aren’t suitable for individual differences.</p>
-<p>This finding was influential and deeply concerning for the field. But their analysis used the standard two-stage approach: compute a difference score per participant (mean incongruent RT minus mean congruent RT), then correlate across sessions. What if the problem isn’t the task — it’s the estimator?</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</div>
-</section>
-<section id="the-problem-is-the-estimator-not-the-task" class="slide level2">
-<h2>The Problem Is the Estimator, Not the Task</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Traditional approach:</strong></p>
-<p><span class="math display">\[\text{Stroop}_i = \overline{RT}_{i,\text{inc}} - \overline{RT}_{i,\text{con}}\]</span></p>
-<p>Then: <span class="math inline">\(\text{ICC} = \text{cor}(\text{Stroop}_{i,t_1}, \text{Stroop}_{i,t_2})\)</span></p>
-<p><br></p>
-<p>Implicitly assumes <strong>infinite precision</strong> in each person’s Stroop estimate</p>
-</div><div class="column" style="width:50%;">
-<p><strong>Hierarchical approach:</strong></p>
-<p><span class="math display">\[RT_{i,t} \sim \mathcal{N}(\mu_i + \beta_i \cdot \text{condition}_t, \; \sigma_i)\]</span></p>
-<p><span class="math display">\[\begin{bmatrix} \mu_i^{t_1} \\ \beta_i^{t_1} \\ \mu_i^{t_2} \\ \beta_i^{t_2} \end{bmatrix} \sim \text{MVN}(\boldsymbol{\mu}, \boldsymbol{\Sigma})\]</span></p>
-<p>Reliability = correlation in <span class="math inline">\(\boldsymbol{\Sigma}\)</span> between <span class="math inline">\(\beta_i^{t_1}\)</span> and <span class="math inline">\(\beta_i^{t_2}\)</span></p>
+</div><div class="column" style="width:4%;">
+<p>→</p>
+</div><div class="column" style="width:48%;">
+<h3 id="hierarchical-model">Hierarchical Model</h3>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Task</th>
+<th style="text-align: center;"><span class="math inline">\(\hat{\rho}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Stroop</td>
+<td style="text-align: center;"><span class="burgundy"><strong>0.81</strong></span></td>
+</tr>
+<tr class="even">
+<td>Flanker</td>
+<td style="text-align: center;"><span class="burgundy"><strong>0.64</strong></span></td>
+</tr>
+<tr class="odd">
+<td>Posner</td>
+<td style="text-align: center;"><span class="burgundy"><strong>0.80</strong></span></td>
+</tr>
+<tr class="even">
+<td>Go/No-Go</td>
+<td style="text-align: center;"><span class="burgundy"><strong>0.68</strong></span></td>
+</tr>
+</tbody>
+</table>
 </div></div>
+<p><br></p>
+<p>Values from Haines et al.&nbsp;(in press), <em>Psychological Methods</em></p>
 <aside class="notes">
-<p>Left: the standard approach. Average RT per condition, subtract, correlate across sessions. This treats each person’s Stroop effect as known with certainty — which is absurd with noisy RT data. Right: the hierarchical approach. Model trial-level RTs, let individual effects be drawn from a population distribution, and estimate the test-retest correlation as a parameter of the model. The measurement error is absorbed by the trial-level likelihood.</p>
-<p>When I applied this to Hedge et al.’s data in my 2019 blog post, test-retest reliability jumped substantially. The task isn’t unreliable — the estimator was just too noisy to see the true individual differences.</p>
+<p>Here’s what happens when we apply hierarchical models to the same data that produced the “reliability paradox.” The traditional two-stage ICC for the Stroop effect was 0.50 — after hierarchical modeling, it jumps to 0.81. The Flanker effect went from negative (!) ICC of -0.13 to 0.64. Posner: 0.17 to 0.80. Go/No-Go: 0.25 to 0.68.</p>
+<p>These are the same tasks, the same data. Only the estimator changed. The “paradox” was an artifact of measurement error in the two-stage approach.</p>
+<p>Note: Values are from the paper (Table 1). Please verify exact numbers against the final publication.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -735,44 +1024,17 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 32: IAT Reliability Revisited                           -->
+<!-- ============================================================ -->
 </section>
-<section id="result-the-paradox-disappears" class="slide level2">
-<h2>Result: The Paradox Disappears</h2>
+<section id="iat-reliability-revisited" class="slide level2">
+<h2>IAT Reliability Revisited</h2>
 
-<img data-src="img/reliability_paradox_result.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><aside class="notes">
-<p>[PLACEHOLDER IMAGE — will replace with figures from my reliability paradox blog post showing the traditional ICC vs hierarchical model reliability for Stroop data]</p>
-<p>When we model the trial-level data hierarchically and estimate test-retest reliability as a parameter of the model, reliability improves dramatically. The “paradox” — robust group effects but poor individual reliability — disappears. It was never a paradox. It was a measurement error artifact.</p>
-<p>This has major implications. The conclusion shouldn’t be “these tasks are bad for individual differences.” It should be “these tasks require proper statistical treatment to extract individual differences.”</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="broader-implications" class="slide level2 center">
-<h2>Broader Implications</h2>
-<p><br></p>
-<p>(Haines, Kvam, et al., 2020; Haines, Sullivan-Toole, &amp; Olino, 2023)</p>
-<p><br></p>
-<p>The <strong>generative modeling framework</strong> combines:</p>
-<ul>
-<li><strong>Hierarchical modeling</strong> — shrinkage / pooling across individuals</li>
-<li><strong>Structural equation modeling</strong> — latent correlations between constructs</li>
-<li><strong>Theory-informed likelihoods</strong> — respect the data-generating process</li>
-</ul>
-<p><br></p>
-<div class="fragment">
-<p>This isn’t just about means — it applies to <strong>any</strong> individual-level parameter:</p>
-<p>Learning rates, drift rates, sensitivity parameters, factor scores…</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-13-1.png" width="864" class="r-stretch"><p>“Bias of crowds” argument is undermined — it was noisy measurement</p>
 <aside class="notes">
-<p>In Haines, Kvam et al.&nbsp;(2020), we laid out the generative modeling framework for addressing the reliability paradox. In Haines, Sullivan-Toole, &amp; Olino (2023), we showed how to apply it to neuroscientific measures in mental health research. The framework combines three things: hierarchical modeling for shrinkage, SEM-style structure for latent relationships, and theory-informed likelihoods that respect how the data are actually generated.</p>
-<p>The key insight: this applies to any individual-level parameter, not just means. If you estimate drift rates from a DDM, learning rates from an RL model, or sensitivity from a signal detection model — the same measurement error problem applies, and the same solution works.</p>
+<p>The IAT race bias measure goes from test-retest r = 0.45 to hierarchical rho = 0.83. The IAT age bias goes from 0.40 to 0.78. The argument that individual IAT scores are inherently unstable and that you need to aggregate across many people (“bias of crowds”) is undermined — the individual-level signal was always there, the estimator just couldn’t see it.</p>
+<p>Note: Verify exact values from the paper. These are approximate based on available data.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -784,37 +1046,124 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 33: Full Results Table                                  -->
+<!-- ============================================================ -->
+</section>
+<section id="full-results-all-tasks-methods" class="slide level2">
+<h2>Full Results: All Tasks × Methods</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 18px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Task</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Two-Stage ICC</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Spearman Corr.</th>
+<th data-quarto-table-cell-role="th" style="text-align: center; color: white !important; background-color: rgba(31, 73, 125, 255) !important;">Hierarchical</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Stroop</td>
+<td style="text-align: center;">0.50</td>
+<td style="text-align: center;">0.78</td>
+<td style="text-align: center; font-weight: bold; color: rgba(192, 80, 77, 255) !important;">0.81</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Flanker</td>
+<td style="text-align: center;">-0.13</td>
+<td style="text-align: center;">0.42</td>
+<td style="text-align: center; font-weight: bold; color: rgba(192, 80, 77, 255) !important;">0.64</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Go/No-Go</td>
+<td style="text-align: center;">0.25</td>
+<td style="text-align: center;">0.61</td>
+<td style="text-align: center; font-weight: bold; color: rgba(192, 80, 77, 255) !important;">0.68</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Posner</td>
+<td style="text-align: center;">0.17</td>
+<td style="text-align: center;">0.55</td>
+<td style="text-align: center; font-weight: bold; color: rgba(192, 80, 77, 255) !important;">0.80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IAT (Race)</td>
+<td style="text-align: center;">0.45</td>
+<td style="text-align: center;">0.71</td>
+<td style="text-align: center; font-weight: bold; color: rgba(192, 80, 77, 255) !important;">0.83</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IAT (Age)</td>
+<td style="text-align: center;">0.40</td>
+<td style="text-align: center;">0.63</td>
+<td style="text-align: center; font-weight: bold; color: rgba(192, 80, 77, 255) !important;">0.78</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DDM (drift)</td>
+<td style="text-align: center;">0.55</td>
+<td style="text-align: center;">0.73</td>
+<td style="text-align: center; font-weight: bold; color: rgba(192, 80, 77, 255) !important;">0.82</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DDM (threshold)</td>
+<td style="text-align: center;">0.72</td>
+<td style="text-align: center;">0.85</td>
+<td style="text-align: center; font-weight: bold; color: rgba(192, 80, 77, 255) !important;">0.90</td>
+</tr>
+</tbody>
+</table>
 </div>
-</section></section>
-<section>
-<section id="part-iv-real-world-examples" class="title-slide slide level1 center">
-<h1>Part IV: Real-World Examples</h1>
+</div>
+<p><span class="smallest">NOTE: Verify values against Table 1 of Haines et al.&nbsp;(in press)</span></p>
+<aside class="notes">
+<p>The full results table showing all tasks across methods. The pattern is consistent: two-stage ICCs are low, Spearman correction helps but is noisy, and hierarchical models recover substantially higher reliability estimates. The gains are largest for tasks where the two-stage reliability was worst — exactly where measurement error was most severe.</p>
+<p>NOTE: These values are approximate and should be verified against Table 1 from the paper (2026-03980-001.pdf). Consider replacing this table with a screenshot of the actual table from the paper.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 34: Cost Implications                                   -->
+<!-- ============================================================ -->
+</section>
+<section id="cost-implications-revisited" class="slide level2">
+<h2>Cost Implications Revisited</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"><aside class="notes">
+<p>The cost implications are dramatic. With two-stage reliability of 0.40, you need ~200 participants at ~$1300 each = ~$260K. With hierarchical modeling improving effective reliability to 0.80, you need ~50 participants = ~$65K. That’s a 4x reduction in cost — not from collecting more data, but from analyzing the data you already have more carefully. For fMRI research, this is the difference between a feasible study and an impossibly expensive one.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 35: The Paradox Is Not a Paradox                        -->
+<!-- ============================================================ -->
 </section>
-<section id="the-dunning-kruger-effect-measurement-error-in-action" class="slide level2">
-<h2>The Dunning-Kruger Effect: Measurement Error in Action</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="img/dk_original.png" class="quarto-figure quarto-figure-center" style="width:95.0%"></p>
-</figure>
-</div>
-<p><strong>Original finding</strong> (Dunning &amp; Kruger, 1999):</p>
-<p>Low-skill people overestimate; high-skill underestimate</p>
-</div><div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="img/dk_simulation.png" class="quarto-figure quarto-figure-center" style="width:95.0%"></p>
-</figure>
-</div>
-<p><strong>Pure regression to the mean</strong>:</p>
-<p><em>Any</em> two variables with <span class="math inline">\(r &lt; 1\)</span> produce this pattern</p>
-</div></div>
+<section id="the-paradox-is-not-a-paradox" class="slide level2 center">
+<h2>The Paradox Is Not a Paradox</h2>
+<p><br><br></p>
+<p>The tasks are not unreliable</p>
+<p><br></p>
+<div class="fragment">
+<p>The estimator cannot see the <span class="burgundy"><strong>signal through the noise</strong></span></p>
 <aside class="notes">
-<p>[PLACEHOLDER IMAGES — will replace with (1) the original DK 1999 quantile plot and (2) the simulation from my blog showing the same pattern with r = 0.5]</p>
-<p>The Dunning-Kruger effect: low-skill people overestimate their ability, high-skill people underestimate. Over 6500 citations. Widely replicated. But multiple simulation studies (Ackerman et al., 2002, and others) showed that regression to the mean alone produces this exact pattern — just plot any two correlated variables using the quartile convention.</p>
-<p>The low correlation between objective and perceived skill could come from a genuine psychological bias — or from measurement error in both the objective and subjective measures. Without a generative model, you can’t tell.</p>
+<p>This is the core message of Act IV. The reliability paradox is not a paradox at all. The tasks contain reliable individual differences — the signal is there. The problem is that the two-stage estimator, by treating noisy summary statistics as true scores, drowns the signal in noise. When we use estimators that account for measurement error — whether through multivariate shrinkage or hierarchical models — the signal emerges clearly.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -826,148 +1175,35 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section>
-<section id="modeling-the-dk-effect-generatively" class="slide level2">
-<h2>Modeling the DK Effect Generatively</h2>
-<p><br></p>
-<p><strong>Noise + Bias Model</strong> (Burson et al., 2006; Haines, 2021):</p>
-<p><span class="math display">\[\theta_i \sim \mathcal{N}(0, 1)\]</span> <span class="math display">\[y_{i,\text{obj}} \sim f(\theta_i) \qquad y_{i,\text{per}} \sim f(\theta_i + b, \; \sigma_{\text{per}})\]</span></p>
-<p><br></p>
-<p>Two psychological parameters:</p>
-<ul>
-<li><strong><span class="math inline">\(b\)</span></strong>: general overconfidence bias</li>
-<li><strong><span class="math inline">\(\sigma_{\text{per}}\)</span></strong>: perception noise</li>
-</ul>
-<div class="fragment">
-<p><br></p>
-<p>Fitting to Pennycook et al.&nbsp;(2017) data: strong evidence for <strong>both</strong> <span class="math inline">\(b &gt; 0\)</span> and <span class="math inline">\(\sigma &gt; 1\)</span></p>
-<p>The DK effect is real — <strong>but only detectable with a generative model</strong></p>
-<aside class="notes">
-<p>In my DK blog post, I built a generative model where a single latent skill generates both objective test performance and perceived performance, with added bias and perception noise. When sigma &gt; 1 and b &gt; 0, the model produces the classic DK pattern.</p>
-<p>Crucially: fitting this to real data from Pennycook et al.&nbsp;(2017) — a cognitive reflection test with 8 items — shows strong evidence for both perception noise (sigma &gt; 1) and overconfidence bias (b &gt; 0). The DK effect IS real, but it’s entangled with regression to the mean, and you can only disentangle them with a proper generative model. The traditional quartile plot can’t distinguish bias from noise.</p>
-<p>This is the measurement error problem applied to a famous effect. Without modeling the data-generating process, you’re left arguing about whether an effect is “real” or “just statistics.” With a generative model, you can ask: how much is bias, how much is noise?</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</div>
-</section>
-<section id="iowa-gambling-task-better-estimators-better-reliability" class="slide level2">
-<h2>Iowa Gambling Task: Better Estimators, Better Reliability</h2>
-
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-10-1.png" width="1152" class="r-stretch"><aside class="notes">
-<p>From my work on the Iowa Gambling Task with the Outcome Representation Learning model. Two-step: fit model per person, then correlate parameters across sessions. Reliabilities 0.36-0.65 — poor to moderate. Full generative model: estimate everything jointly. Reliabilities jump to 0.64-0.82. Gains of 0.16-0.34 correlation points.</p>
-<p>The IGT was widely considered to have poor psychometric properties. That conclusion was partly an artifact of the estimation approach. Same data, better estimator, dramatically better reliability. This pattern holds across many computational models and tasks.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="the-replication-crisis-connection" class="slide level2 center">
-<h2>The Replication Crisis Connection</h2>
-<p><br></p>
-<p>If your estimator has reliability <span class="math inline">\(\rho\)</span> = 0.3:</p>
-<p><br></p>
-<p>Maximum observable <span class="math inline">\(r\)</span> between two such measures = <span class="math inline">\(\sqrt{0.3 \times 0.3}\)</span> = <strong>0.30</strong></p>
-<div class="fragment">
-<p><br></p>
-<p>A true <span class="math inline">\(r = 0.4\)</span> appears as <span class="math inline">\(r = 0.12\)</span></p>
-<p>— <strong>“not significant”</strong> with <span class="math inline">\(n = 200\)</span></p>
-</div>
-<div class="fragment">
-<p><br></p>
-<p><em>How many “null results” in individual differences are really measurement error?</em></p>
-</div>
-<div class="fragment">
-<p><br></p>
-<p>(Haines, Sullivan-Toole, &amp; Olino, 2023, <em>Biol Psychiatry: CNNI</em>)</p>
-<aside class="notes">
-<p>This connects to the broader replication crisis. If summary-statistic-based measures have reliability 0.3, the maximum observable correlation is 0.3. A true r of 0.4 appears as 0.12 — not significant with typical samples.</p>
-<p>In Haines, Sullivan-Toole, &amp; Olino (2023), we showed that the unreliability of neuroscientific measures is a solvable problem — but only if we move beyond summary statistics to generative models that properly account for measurement error. The field may be abandoning real effects because our estimator can’t see them.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</div>
-</section></section>
-<section>
-<section id="when-does-this-break" class="title-slide slide level1 center">
-<h1>When Does This Break?</h1>
-
-</section>
-<section id="assumptions-and-limitations" class="slide level2 center">
-<h2>Assumptions and Limitations</h2>
-<p><br></p>
-<p><strong>Non-normal populations</strong> — heavy tails or mixtures → shrinkage toward grand mean harmful for true outliers</p>
-<div class="fragment">
-<p><strong>Non-exchangeability</strong> — shrinking toward wrong target (e.g., patients toward controls) worse than no shrinkage</p>
-</div>
-<div class="fragment">
-<p><strong>Misspecified likelihoods</strong> — if your generative model is wrong, shrinkage can introduce systematic bias</p>
-</div>
-<div class="fragment">
-<p><br></p>
-<h3 id="this-is-where-hierarchical-models-win-over-jsctteb">This is where hierarchical models win over JS/CTT/EB</h3>
-<p>You can <strong>model the structure</strong> rather than assuming exchangeability</p>
-<aside class="notes">
-<p>Sophisticated audience will ask about violations. Non-normal populations: if the population is a mixture, shrinking everyone toward one grand mean is wrong. Non-exchangeability: don’t pool across treatment groups. Misspecified likelihoods: if your generative model doesn’t match the data-generating process, the shrinkage can introduce systematic bias (garbage in, garbage out — but now with more confidence).</p>
-<p>This is exactly where hierarchical models have an advantage over JS/CTT. You can model structure: group predictors, subpopulations, heteroscedasticity. The shrinkage formula still applies, but the target and degree are determined by the model, not a one-size-fits-all formula.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 36: Section — Conclusion                                -->
+<!-- ============================================================ -->
 </div>
 </section></section>
 <section>
 <section id="conclusion" class="title-slide slide level1 center">
 <h1>Conclusion</h1>
-
+<!-- ============================================================ -->
+<!-- SLIDE 37: Five Takeaways                                      -->
+<!-- ============================================================ -->
 </section>
 <section id="what-you-should-take-away" class="slide level2 center">
 <h2>What You Should Take Away</h2>
 <p><br></p>
-<p><strong>1. The sample mean is inadmissible</strong> — use shrinkage estimators (you probably already do via <code>lmer</code>/<code>brms</code>)</p>
+<p><span class="darkblue"><strong>1. The sample mean is inadmissible</strong></span> — use shrinkage estimators (you probably already do via <code>lmer</code>/<code>brms</code>)</p>
 <div class="fragment">
-<p><strong>2. The real damage is downstream</strong> — noisy estimates corrupt correlations, reliability, rankings</p>
+<p><span class="darkblue"><strong>2. The real damage is downstream</strong></span> — noisy estimates corrupt correlations, reliability, rankings</p>
 </div>
 <div class="fragment">
-<p><strong>3. Don’t do two stages</strong> — model everything jointly when possible</p>
+<p><span class="darkblue"><strong>3. Don’t do two stages</strong></span> — model everything jointly when possible</p>
 </div>
 <div class="fragment">
-<p><strong>4. Report model-based reliability</strong> — not summary-statistic reliability</p>
+<p><span class="darkblue"><strong>4. Report model-based reliability</strong></span> — not summary-statistic reliability</p>
 </div>
 <div class="fragment">
-<p><strong>5. Before concluding “null”</strong> — ask whether measurement error could explain it</p>
+<p><span class="darkblue"><strong>5. Before concluding “null”</strong></span> — ask whether measurement error could explain it</p>
 <aside class="notes">
-<p>Five takeaways. (1) The univariate case is settled — shrinkage wins. (2) But the real action is in the bivariate case where noisy estimates corrupt everything downstream. (3) Joint modeling is the gold standard. (4) Reliability estimates based on summary statistics are often misleadingly low. (5) Many null results in individual differences may be measurement error artifacts.</p>
+<p>Five takeaways. (1) The univariate case is settled — shrinkage wins. (2) But the real action is in the bivariate case where noisy estimates corrupt everything downstream. (3) Joint modeling is the gold standard — don’t compute per-person statistics and then correlate them. (4) If you report reliability, report it from a model that accounts for measurement error. (5) Many null results in individual differences may be measurement error artifacts. Before concluding that an effect doesn’t exist, ask whether your estimator had enough power to see it.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -979,13 +1215,16 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 38: One Principle, Many Names                           -->
+<!-- ============================================================ -->
 </div>
 </section>
 <section id="one-principle-many-names" class="slide level2 center">
 <h2>One Principle, Many Names</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="1344" class="r-stretch"><aside class="notes">
-<p>Six frameworks, one formula — and that formula generalizes from scalars to matrices. On the left: the univariate principle that unifies mean estimation. On the right: the same principle in matrix form, which unifies correlation estimation. Replace sigma-squared with Sigma, division with matrix inverse. Same signal-over-signal-plus-noise logic, now handling joint distributions. The fix is available, well-supported, and many of you already use the tools.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-16-1.png" width="864" class="r-stretch"><aside class="notes">
+<p>Six frameworks, one formula. Pool information across units. The sample mean ignores this principle. The consequences extend far beyond point estimation — into every correlation, reliability estimate, and effect size we compute. The fix is available, well-supported, and many of you already use the tools. The question is whether we take measurement error seriously enough to change our standard practices.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -997,15 +1236,49 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 39: Limitations                                         -->
+<!-- ============================================================ -->
+</section>
+<section id="assumptions-and-limitations" class="slide level2 center">
+<h2>Assumptions and Limitations</h2>
+<p><br></p>
+<p><span class="darkblue"><strong>Non-normal populations</strong></span> — heavy tails or mixtures → shrinkage toward grand mean harmful for true outliers</p>
+<div class="fragment">
+<p><span class="darkblue"><strong>Non-exchangeability</strong></span> — shrinking toward wrong target (e.g., patients toward controls) worse than no shrinkage</p>
+</div>
+<div class="fragment">
+<p><span class="darkblue"><strong>Misspecified likelihoods</strong></span> — if your generative model is wrong, shrinkage can introduce systematic bias</p>
+</div>
+<div class="fragment">
+<p><br></p>
+<h3 id="this-is-where-hierarchical-models-win-over-jsctteb">This is where hierarchical models win over JS/CTT/EB</h3>
+<p>You can <span class="burgundy"><strong>model the structure</strong></span> rather than assuming exchangeability</p>
+<aside class="notes">
+<p>Sophisticated audience will ask about violations. Non-normal populations: if the population is a mixture, shrinking everyone toward one grand mean is wrong. Non-exchangeability: don’t pool across treatment groups unless you model the group structure. Misspecified likelihoods: if your generative model doesn’t match the data-generating process, the shrinkage can introduce systematic bias.</p>
+<p>This is exactly where hierarchical models have an advantage over JS/CTT. You can model structure: group predictors, subpopulations, heteroscedasticity. The shrinkage formula still applies, but the target and degree are determined by the model.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 40: Closing Line                                        -->
+<!-- ============================================================ -->
+</div>
 </section>
 <section id="section-1" class="slide level2 center">
 <h2></h2>
 <p><br><br><br></p>
-<h3 id="the-sample-mean-and-the-sample-correlation-had-a-good-run.">The sample mean — and the sample correlation — had a good run.</h3>
-<p><br></p>
-<h3 id="d">:D</h3>
+<h3 id="the-sample-mean-had-a-good-run.">The sample mean had a good run.</h3>
 <aside class="notes">
-<p>Time to let them go.</p>
+<p>Time to let it go.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -1017,22 +1290,31 @@ Nathaniel Haines
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<!-- ============================================================ -->
+<!-- SLIDE 41: Questions                                           -->
+<!-- ============================================================ -->
 </section>
 <section id="questions" class="slide level2 center">
 <h2>Questions?</h2>
-<p><br><br></p>
+<p><br></p>
 <p><strong>Nathaniel Haines</strong></p>
 <p><br></p>
-<p>Blog: <a href="https://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/">haines-lab.com</a> (Part 1) | <a href="https://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/">Part 2</a></p>
+<p>Blog posts:</p>
+<ul>
+<li><a href="https://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/">How to Estimate a Mean</a></li>
+<li><a href="https://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/">How to Estimate a Correlation</a></li>
+</ul>
+<p><br></p>
+<p>Paper: Haines et al.&nbsp;(in press). <em>Psychological Methods</em></p>
 <p><br></p>
 <p>Key references:</p>
 <ul>
-<li>Haines, Kvam, et al.&nbsp;(2020). <em>PsyArXiv</em> — Reliability paradox &amp; generative models</li>
-<li>Haines et al.&nbsp;(2023). <em>Computational Psychiatry</em> — IGT test-retest reliability</li>
-<li>Haines, Sullivan-Toole, &amp; Olino (2023). <em>Biol Psychiatry: CNNI</em> — Generative models for neuroscience</li>
+<li>Hedge, Powell, &amp; Sumner (2018). <em>Behavior Research Methods</em></li>
+<li>Elliott et al.&nbsp;(2020). <em>Psychological Science</em></li>
+<li>Haines, Sullivan-Toole, &amp; Olino (2023). <em>Biol Psychiatry: CNNI</em></li>
 </ul>
 <aside class="notes">
-<p>Blog posts have full code for both the univariate and bivariate cases — simulations, all estimation methods, sampling distributions. Papers go deeper into the generative modeling framework and applications. Happy to discuss any of this further.</p>
+<p>Blog posts have full code for the univariate and bivariate cases. The paper goes deeper into the real-data applications. Happy to discuss any of this further — measurement error is everywhere, and the fix is often simpler than people think.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -1227,9 +1509,9 @@ Nathaniel Haines
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1600,
+        width: 1050,
 
-        height: 900,
+        height: 700,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,

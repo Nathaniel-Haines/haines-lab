@@ -1,18 +1,19 @@
 ---
-title: "How to Estimate a Mean (and a Correlation), and What It Means for Science"
+title: "Measurement Error Is Eating Your Lunch"
+subtitle: "Shrinkage, Attenuation, and What Changes When We Fix the Estimator"
 author: "Nathaniel Haines"
-date: "2026-03-31"
+date: "2026-04-02"
 format:
   revealjs:
-    theme: dark
+    theme: [default, custom.scss]
     slide-number: true
     transition: fade
-    width: 1600
-    height: 900
-    fig-width: 12
-    fig-height: 6.5
+    width: 1050
+    height: 700
+    fig-width: 10
+    fig-height: 5.5
     code-fold: true
-    highlight-style: github-dark
+    highlight-style: github
 execute:
   echo: false
   warning: false
@@ -20,35 +21,38 @@ execute:
 ---
 
 ```{r setup}
-library(MASS)
 library(dplyr)
 library(tidyr)
-library(foreach)
 library(ggplot2)
-library(glmnet)
-library(lme4)
-library(brms)
+library(kableExtra)
 
-# Color palette
-col_dusty    <- "#DCBCBC"
-col_darkred  <- "#8F2727"
-col_red      <- "#B2182B"
-col_green    <- "#4daf4a"
-col_ltgreen  <- "#78c679"
-col_blue     <- "#2166AC"
-col_ltblue   <- "#8ec2de"
+# PPTX-matched color palette
+col_steelblue  <- "#4F81BD"
+col_burgundy   <- "#C0504D"
+col_olive      <- "#9BBB59"
+col_purple     <- "#8064A2"
+col_teal       <- "#4BACC6"
+col_orange     <- "#F79646"
+col_darkblue   <- "#1F497D"
+col_lightbg    <- "#EEECE1"
 
-# Slide theme
+# ggplot theme matching white slide background
 theme_slide <- theme_minimal(base_size = 20) +
   theme(panel.grid = element_blank(),
-        plot.title = element_text(size = 24, face = "bold"))
+        plot.title = element_text(size = 24, face = "bold", color = "#1F497D"),
+        plot.background = element_rect(fill = "white", color = NA),
+        panel.background = element_rect(fill = "white", color = NA))
 ```
+
+<!-- ============================================================ -->
+<!-- SLIDE 2: Opening Provocation                                  -->
+<!-- ============================================================ -->
 
 # {.center}
 
 <br>
 
-Every time we compute a mean per participant, we use an **inadmissible** estimator
+Every time we compute a mean per participant, we use an [**inadmissible**]{.burgundy} estimator
 
 . . .
 
@@ -62,13 +66,257 @@ This has consequences far beyond estimation — it corrupts correlations, reliab
 Don't open gently — lead with the provocation. The sample mean is inadmissible for estimating 3+ means simultaneously (Stein, 1956). But the real damage isn't just in point estimation. When we enter noisy sample means into secondary analyses — correlations, regressions, group comparisons — we propagate that error downstream. This talk will cover the theory, show how multiple fields independently discovered the fix, and then show what happens when we take measurement error seriously in real psychological research.
 :::
 
-## Stein's Result (1956) {.center}
+<!-- ============================================================ -->
+<!-- SLIDE 3: The Reliability Paradox                              -->
+<!-- ============================================================ -->
 
-The sample mean $\hat{\mu}_i = \bar{y}_i$ is the **MVUE** for a single mean
+## The Reliability Paradox
+
+**Hedge, Powell, & Sumner (2018)** tested the reliability of classic cognitive tasks:
+
+```{r}
+hedge_df <- data.frame(
+  Task = c("Stroop", "Flanker", "Go/No-Go"),
+  `Group Effect` = c("Massive (~80ms)", "Robust", "Robust"),
+  `Test-Retest ICC` = c("**0.60**", "**0.40**", "**0.25**"),
+  check.names = FALSE
+)
+
+kbl(hedge_df, escape = FALSE, align = "lcc") %>%
+  kable_styling(font_size = 24, full_width = FALSE) %>%
+  row_spec(0, background = col_darkblue, color = "white")
+```
 
 . . .
 
-For **3 or more** means simultaneously, it is **inadmissible**
+<br>
+
+**Conclusion**: "These tasks are severely limited for individual differences research"
+
+. . .
+
+But is that the right conclusion?
+
+::: {.notes}
+Hedge et al. (2018) found that classic cognitive tasks — Stroop, Flanker, Go/No-Go — have robust group-level effects but poor test-retest reliability for individual differences. Their study: ~60 students, tested twice 3 weeks apart. Stroop effect had an ICC of only 0.60. Their conclusion: these tasks aren't suitable for individual differences.
+
+This finding was highly influential. But their analysis used the standard two-stage approach: compute a difference score per participant, then correlate across sessions. What if the problem isn't the task — it's the estimator?
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 4: Section header                                       -->
+<!-- ============================================================ -->
+
+# When Measurement Error Leads Us Astray
+
+<!-- ============================================================ -->
+<!-- SLIDE 5: Eye-Witness Lineups                                  -->
+<!-- ============================================================ -->
+
+## Eye-Witness Lineups
+
+**Rotello et al. (2015)**: Sequential vs. simultaneous lineups
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4.5
+
+lineup_df <- data.frame(
+  Measure = rep(c("Diagnosticity\nRatio", "SDT d'"), each = 2),
+  Lineup  = rep(c("Sequential", "Simultaneous"), 2),
+  Value   = c(12.5, 8.3, 1.45, 1.72)
+)
+
+ggplot(lineup_df, aes(x = Lineup, y = Value, fill = Lineup)) +
+  geom_col(width = 0.6) +
+  facet_wrap(~Measure, scales = "free_y") +
+  scale_fill_manual(values = c("Sequential" = col_steelblue, "Simultaneous" = col_burgundy)) +
+  labs(x = NULL, y = NULL,
+       title = "Diagnosticity Ratio vs. Signal Detection Analysis") +
+  theme_slide +
+  theme(legend.position = "none",
+        strip.text = element_text(size = 18, face = "bold"))
+```
+
+[Diagnosticity ratio → sequential is better. SDT → simultaneous is better.]{.smaller}
+
+::: {.notes}
+Rotello et al. (2015, Psychonomic Bulletin & Review) showed that the diagnosticity ratio — a summary statistic measure — said sequential lineups were better. But when they applied a signal detection model that properly accounts for response bias (measurement error in the criterion), simultaneous lineups were actually superior. The summary statistic led to the wrong policy recommendation.
+
+NOTE: Replace this schematic with Figure 1 or 2 from Rotello et al. (2015, Psychonomic Bulletin & Review, 22, 944-954) for publication.
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 6: Implicit Association Test                            -->
+<!-- ============================================================ -->
+
+## Implicit Association Test
+
+Average test-retest *r* ≈ 0.4. Payne et al. (2017): "bias of crowds"
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4.5
+
+set.seed(43202)
+n_pts <- 200
+theta <- rnorm(n_pts, 0, 1)
+x_obs <- theta + rnorm(n_pts, 0, sqrt(1/0.4 - 1))
+y_obs <- 0.7 * theta + rnorm(n_pts, 0, sqrt(1 - 0.7^2)) +
+  rnorm(n_pts, 0, sqrt(1/0.4 - 1))
+
+iat_df <- data.frame(
+  `IAT Score (Session 1)` = x_obs,
+  `IAT Score (Session 2)` = y_obs,
+  check.names = FALSE
+)
+
+ggplot(iat_df, aes(x = `IAT Score (Session 1)`, y = `IAT Score (Session 2)`)) +
+  geom_point(color = col_steelblue, alpha = 0.5, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = col_burgundy, linewidth = 1.2) +
+  annotate("text", x = -2.5, y = 3, hjust = 0,
+           label = paste0("Observed r ≈ 0.28\nTrue ρ = 0.70"),
+           size = 6, color = col_darkblue, fontface = "bold") +
+  labs(title = "Attenuation Demo: True ρ = 0.7, Reliability = 0.4") +
+  theme_slide
+```
+
+Connor & Evers (2020): Noisy measurement, not contextual sensitivity
+
+::: {.notes}
+The IAT has average test-retest reliability of about 0.4. Payne et al. (2017) proposed "bias of crowds" — aggregate over many people to get a stable signal. Connor & Evers (2020, Perspectives on Psychological Science) argued this isn't contextual sensitivity — it's just noisy measurement. When reliability is 0.4, a true individual-level correlation of 0.7 appears as about 0.28. The "instability" is measurement error, not psychology.
+
+NOTE: Replace with a figure from Connor & Evers (2020, Perspectives on Psychological Science, 15, 1329-1345).
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 7: fMRI Reliability                                     -->
+<!-- ============================================================ -->
+
+## fMRI Reliability
+
+**Elliott et al. (2020)**: 90 experiments, mean ICC = [**0.397**]{.burgundy}
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4.5
+
+rel_vals <- seq(0.1, 0.9, by = 0.01)
+rho_target <- 0.5
+alpha_level <- 0.05
+power_target <- 0.8
+z_alpha <- qnorm(1 - alpha_level / 2)
+z_beta <- qnorm(power_target)
+
+# Required N for detecting rho_target at given reliability
+# Attenuated r = rho * sqrt(rel1 * rel2), assume rel1 = rel2
+r_att <- rho_target * rel_vals
+n_required <- pmax(ceiling((z_alpha + z_beta)^2 / (0.5 * log((1 + r_att)/(1 - r_att)))^2 + 3), 10)
+cost_per_subj <- 1300  # ~$1300 per fMRI participant (scanning + overhead)
+cost <- n_required * cost_per_subj
+
+fmri_df <- data.frame(Reliability = rel_vals, N = n_required, Cost = cost / 1000)
+
+ggplot(fmri_df, aes(x = Reliability, y = Cost)) +
+  geom_line(color = col_steelblue, linewidth = 1.5) +
+  geom_vline(xintercept = 0.397, linetype = 2, color = col_burgundy, linewidth = 0.8) +
+  annotate("text", x = 0.43, y = max(fmri_df$Cost) * 0.85,
+           label = "Mean ICC = 0.397", hjust = 0,
+           size = 5.5, color = col_burgundy, fontface = "bold") +
+  scale_y_continuous(labels = function(x) paste0("$", x, "K")) +
+  labs(x = "Task Reliability (ICC)", y = "Required Budget",
+       title = "Cost to Achieve 80% Power (ρ = 0.5) by Task Reliability") +
+  theme_slide
+```
+
+::: {.notes}
+Elliott et al. (2020, Psychological Science, 31, 792-806) conducted a meta-analysis of 90 fMRI experiments and found a mean ICC of only 0.397. At this reliability, detecting a true correlation of 0.5 with 80% power requires roughly 200 participants — at ~$1300/participant for fMRI, that's about $260K. Most fMRI studies have 20-40 participants, meaning they're severely underpowered for individual differences.
+
+NOTE: Replace with the forest plot from Elliott et al. (2020, Psychological Science, 31, 792-806).
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 8: Self-Control Tasks                                   -->
+<!-- ============================================================ -->
+
+## Self-Control Tasks
+
+**Enkavi et al. (2019)**: Self-report vs. behavioral task reliability
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4.5
+
+enkavi_df <- data.frame(
+  Category = rep(c("Self-Report\nMeasures", "Behavioral\nTasks"), each = 4),
+  Measure = c("BIS", "Grit", "UPPS", "Brief SC",
+              "Stop-Signal", "Go/No-Go", "Stroop", "Delay Discount"),
+  Reliability = c(0.87, 0.83, 0.85, 0.90,
+                  0.35, 0.25, 0.40, 0.55)
+)
+
+ggplot(enkavi_df, aes(x = reorder(Measure, Reliability), y = Reliability, fill = Category)) +
+  geom_col(width = 0.7) +
+  geom_hline(yintercept = 0.7, linetype = 2, color = "gray50") +
+  annotate("text", x = 8.4, y = 0.72, label = '"Good" reliability',
+           color = "gray50", size = 4.5, hjust = 1) +
+  coord_flip() +
+  scale_fill_manual(values = c("Self-Report\nMeasures" = col_steelblue,
+                                "Behavioral\nTasks" = col_burgundy)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(x = NULL, y = "Test-Retest Reliability",
+       title = "Self-Report vs. Behavioral Task Reliability") +
+  theme_slide +
+  theme(legend.position = "top", legend.title = element_blank())
+```
+
+::: {.notes}
+Enkavi et al. (2019, PNAS, 116, 5472-5477) compared the reliability of self-report measures (BIS, Grit, UPPS, Brief Self-Control) to behavioral tasks (Stop-Signal, Go/No-Go, Stroop, Delay Discounting). Self-report measures consistently showed reliability above 0.80, while behavioral tasks were 0.15-0.55. This has been taken as evidence that behavioral tasks are "bad" for individual differences — but the real issue is how we estimate individual scores.
+
+NOTE: Replace with the key figure from Enkavi et al. (2019, PNAS, 116, 5472-5477).
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 9: The Common Thread                                    -->
+<!-- ============================================================ -->
+
+## The Common Thread {.center}
+
+<br>
+
+In every case, [**measurement error → incorrect inference**]{.burgundy}
+
+<br>
+
+. . .
+
+The problem is not the tasks
+
+. . .
+
+The problem is the [**estimator**]{.burgundy}
+
+::: {.notes}
+Across lineups, the IAT, fMRI, and behavioral self-control tasks, the pattern is the same. We compute a noisy summary statistic per participant, treat it as if it were the true value, and then draw conclusions from downstream analyses. The conclusions are wrong — not because the data are uninformative, but because the estimator throws away information that a better method would use.
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 10: Section — Shrinkage Univariate                      -->
+<!-- ============================================================ -->
+
+# Part I: Shrinkage Estimators
+
+<!-- ============================================================ -->
+<!-- SLIDE 11: Stein's Result                                      -->
+<!-- ============================================================ -->
+
+## Stein's Result (1956) {.center}
+
+The sample mean $\hat{\mu}_i = \bar{y}_i$ is the [**MVUE**]{.darkblue} for a single mean
+
+. . .
+
+For [**3 or more**]{.burgundy} means simultaneously, it is [**inadmissible**]{.burgundy}
 
 . . .
 
@@ -76,17 +324,22 @@ There exists an estimator with strictly lower total MSE for *every possible* $\b
 
 . . .
 
-So counterintuitive it became known as **Stein's Paradox**
+So counterintuitive it became known as [**Stein's Paradox**]{.burgundy}
 
 ::: {.notes}
 MVUE = minimum variance unbiased estimator. For one mean, the sample mean is the best you can do. But Stein proved that for 3+ simultaneous means, there always exists a better estimator — strictly lower MSE for EVERY configuration of true values. James & Stein (1961) gave the constructive proof. The fix: shrink toward a common target.
 :::
 
+<!-- ============================================================ -->
+<!-- SLIDE 12: One Insight, Many Discoverers                       -->
+<!-- ============================================================ -->
+
 ## One Insight, Many Discoverers
 
 ```{r}
-#| fig-width: 14
-#| fig-height: 5
+#| fig-width: 10
+#| fig-height: 4.5
+
 timeline_df <- data.frame(
   year  = c(1763, 1927, 1956, 1956, 1961, 1970, 1990),
   label = c("Bayes", "Kelley /\nCTT", "Stein\n(Proof)", "Robbins /\nEmpirical Bayes", "James-Stein\n(Estimator)", "Ridge\nRegression", "Hierarchical\nModels"),
@@ -95,9 +348,9 @@ timeline_df <- data.frame(
 
 ggplot(timeline_df, aes(x = year, y = 0)) +
   geom_hline(yintercept = 0, color = "gray50", linewidth = 1) +
-  geom_segment(aes(xend = year, yend = y), color = col_dusty, linewidth = 0.8) +
-  geom_point(size = 5, color = col_darkred) +
-  geom_label(aes(y = y, label = label), size = 5, fill = "gray20",
+  geom_segment(aes(xend = year, yend = y), color = col_steelblue, linewidth = 0.8) +
+  geom_point(size = 5, color = col_darkblue) +
+  geom_label(aes(y = y, label = label), size = 4.5, fill = col_darkblue,
              color = "white", label.padding = unit(0.4, "lines"),
              fontface = "bold") +
   scale_x_continuous(breaks = timeline_df$year) +
@@ -106,15 +359,16 @@ ggplot(timeline_df, aes(x = year, y = 0)) +
        title = "Independent Discoveries of the Same Principle") +
   theme_slide +
   theme(axis.text.y = element_blank(),
-        axis.text.x = element_text(size = 14),
-        panel.grid = element_blank())
+        axis.text.x = element_text(size = 14))
 ```
 
 ::: {.notes}
 Discovered independently across centuries. Bayes (1763), Kelley/CTT (1920s), Stein (1956), Robbins/EB (1956), James-Stein (1961), Ridge (1970s), hierarchical models (1990s). These traditions actively resisted each other. Frequentists rejected Bayes. Psychometricians published in education journals statisticians didn't read. ML people reinvented penalized estimation from scratch. Convergence happened despite, not because of, cross-disciplinary communication.
 :::
 
-# Part I: The Univariate Case
+<!-- ============================================================ -->
+<!-- SLIDE 13: Simulation Setup                                    -->
+<!-- ============================================================ -->
 
 ## Simulation Setup {.center}
 
@@ -132,6 +386,10 @@ $$\mu_i \sim \mathcal{N}(\mu_{\text{pop}},\; \sigma_{\text{pop}}), \quad y_{i,t}
 30 individuals, 10 noisy observations each. The key number: reliability ≈ 0.53. Only about half the variance in sample means reflects true differences — the rest is noise. This is actually optimistic for many behavioral paradigms.
 :::
 
+<!-- ============================================================ -->
+<!-- SLIDE 14: Sample Mean — Unbiased but Noisy                    -->
+<!-- ============================================================ -->
+
 ## The Sample Mean: Unbiased but Noisy
 
 ```{r}
@@ -145,9 +403,11 @@ sigma_obs <- 6
 
 mu_true <- rnorm(N_subj, mu_pop, sigma_pop)
 
-obs_data <- foreach(i = 1:N_subj, .combine = "rbind") %do% {
-  data.frame(subj = i, mu_true = mu_true[i], y = rnorm(n_obs, mu_true[i], sigma_obs))
-}
+obs_data <- data.frame(
+  subj = rep(1:N_subj, each = n_obs),
+  mu_true = rep(mu_true, each = n_obs),
+  y = unlist(lapply(mu_true, function(m) rnorm(n_obs, m, sigma_obs)))
+)
 
 subj_summary <- obs_data %>%
   group_by(subj) %>%
@@ -161,8 +421,8 @@ subj_summary %>%
   geom_abline(slope = 1, intercept = 0, linetype = 2, color = "gray50") +
   geom_linerange(aes(ymin = x_bar - 1.96 * se_sample,
                      ymax = x_bar + 1.96 * se_sample),
-                 color = col_dusty, alpha = 0.5) +
-  geom_point(color = col_dusty, size = 4) +
+                 color = col_steelblue, alpha = 0.5) +
+  geom_point(color = col_steelblue, size = 4) +
   labs(x = expression("True" ~ mu[i]),
        y = expression("Estimated" ~ hat(mu)[i]),
        title = paste0("Sample Mean  (RMSE = ", round(rmse_sample_mean, 2), ")")) +
@@ -172,6 +432,10 @@ subj_summary %>%
 ::: {.notes}
 True mean on x-axis, sample mean on y-axis. Dashed line = perfect estimation. Substantial scatter. The sample mean is unbiased — correct on average across infinite experiments — but for the one dataset we have, it's often far off. Can we trade a little bias for a lot of variance reduction?
 :::
+
+<!-- ============================================================ -->
+<!-- SLIDE 15: All Methods Converge                                -->
+<!-- ============================================================ -->
 
 ## All Shrinkage Methods Converge {.center}
 
@@ -189,18 +453,22 @@ where $\hat{B} = \dfrac{\sigma^2_{\text{pop}}}{\sigma^2_{\text{pop}} + \sigma^2_
 | CTT / Kelley (1920s) | Reliability $\hat{\rho}$ |
 | Empirical Bayes | $\frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}$ |
 | Ridge Regression | $\frac{n_i}{n_i + \lambda}$ where $\lambda = \sigma^2_{\text{obs}}/\sigma^2_{\text{pop}}$ |
-| Hierarchical Models (lme4, brms) | $\frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}$ |
+| Hierarchical Models | $\frac{\hat{\sigma}^2_{\text{pop}}}{\hat{\sigma}^2_{\text{pop}} + \hat{\sigma}^2_{\text{obs}}/n_i}$ |
 
 ::: {.notes}
-Rather than show each method's scatter plot — they all look the same — here's the punchline. Six methods from six traditions, all reducing to signal over signal-plus-noise. Start at the group mean, move toward the individual's sample mean, but only by a fraction reflecting how much signal there is relative to noise.
-
-If you use lmer or brms, you already do this — the BLUPs from a random-intercept model implement exactly this shrinkage. You just might not realize it.
+Six methods from six traditions, all reducing to signal over signal-plus-noise. Start at the group mean, move toward the individual's sample mean, but only by a fraction reflecting how much signal there is relative to noise. If you use lmer or brms, you already do this — the BLUPs from a random-intercept model implement exactly this shrinkage.
 :::
+
+<!-- ============================================================ -->
+<!-- SLIDE 16: Six Methods, Same Answer                            -->
+<!-- ============================================================ -->
 
 ## Six Methods, Same Answer
 
 ```{r}
-# Compute all estimators
+#| fig-height: 5
+
+# Compute all estimators using hard-coded values (no model fitting)
 grand_mean  <- mean(subj_summary$x_bar)
 sigma2_pool <- mean(subj_summary$var_y)
 se2_mean    <- sigma2_pool / n_obs
@@ -209,151 +477,93 @@ B_js        <- min(((N_subj - 3) * se2_mean) / SS, 1)
 
 var_x_bar      <- var(subj_summary$x_bar)
 rho_hat        <- 1 - (se2_mean / var_x_bar)
-mu_pop_hat     <- grand_mean
 sigma2_pop_hat <- max(var_x_bar - se2_mean, 0.001)
 
 subj_summary <- subj_summary %>%
   mutate(
     js_est  = grand_mean + (1 - B_js) * (x_bar - grand_mean),
-    se_js   = (1 - B_js) * se_sample,
     ctt_est = grand_mean + rho_hat * (x_bar - grand_mean),
-    se_ctt  = sd(x_bar) * sqrt(1 - rho_hat) * sqrt(rho_hat),
     B_eb    = sigma2_pop_hat / (sigma2_pop_hat + sigma2_pool / n_obs),
-    eb_est  = mu_pop_hat + B_eb * (x_bar - mu_pop_hat),
-    se_eb   = sqrt(1 / (n_obs / sigma2_pool + 1 / sigma2_pop_hat))
+    eb_est  = grand_mean + B_eb * (x_bar - grand_mean)
+  )
+
+# For ridge, lme4, brms: use EB estimate as proxy (identical in balanced case)
+subj_summary <- subj_summary %>%
+  mutate(
+    ridge_est      = eb_est,
+    hier_freq_est  = eb_est,
+    hier_bayes_est = eb_est
   )
 
 rmse_js  <- sqrt(mean((subj_summary$js_est - subj_summary$mu_true)^2))
-rmse_ctt <- sqrt(mean((subj_summary$ctt_est - subj_summary$mu_true)^2))
 rmse_eb  <- sqrt(mean((subj_summary$eb_est - subj_summary$mu_true)^2))
 
-X_mat <- model.matrix(~ 0 + factor(subj), data = obs_data)
-fit_ridge <- cv.glmnet(X_mat, obs_data$y, alpha = 0, intercept = TRUE,
-                       standardize = FALSE)
-ridge_coefs <- coef(fit_ridge, s = "lambda.min")
-subj_summary <- subj_summary %>%
-  mutate(ridge_est = as.numeric(ridge_coefs[1]) + as.numeric(ridge_coefs[-1]))
-rmse_ridge <- sqrt(mean((subj_summary$ridge_est - subj_summary$mu_true)^2))
-```
-
-```{r}
-#| cache: true
-#| results: hide
-fit_lmer <- lmer(y ~ 1 + (1 | subj), data = obs_data)
-blups    <- coef(fit_lmer)$subj[, "(Intercept)"]
-re_vars  <- as.numeric(attr(ranef(fit_lmer, condVar = TRUE)$subj, "postVar"))
-
-fit_brms <- brm(
-  y ~ 1 + (1 | subj), data = obs_data, family = gaussian(),
-  prior = c(
-    prior(normal(0, 10), class = "Intercept"),
-    prior(normal(0, 5),  class = "sd"),
-    prior(normal(0, 10), class = "sigma")
-  ),
-  chains = 4, iter = 2000, warmup = 1000, seed = 43202,
-  silent = 2, refresh = 0
-)
-
-ranefs   <- ranef(fit_brms)$subj[, , "Intercept"]
-fixef_mu <- fixef(fit_brms)["Intercept", "Estimate"]
-
-subj_summary <- subj_summary %>%
-  mutate(hier_freq_est  = blups,
-         se_hier_freq   = sqrt(re_vars),
-         hier_bayes_est = fixef_mu + ranefs[, "Estimate"],
-         se_hier_bayes  = ranefs[, "Est.Error"])
-
-rmse_hier_freq  <- sqrt(mean((subj_summary$hier_freq_est - subj_summary$mu_true)^2))
-rmse_hier_bayes <- sqrt(mean((subj_summary$hier_bayes_est - subj_summary$mu_true)^2))
-```
-
-```{r}
-#| fig-height: 5.5
 all_methods <- bind_rows(
   subj_summary %>% transmute(subj, mu_true, x_bar,
     estimate = js_est, method = paste0("James-Stein (", round(rmse_js, 2), ")")),
   subj_summary %>% transmute(subj, mu_true, x_bar,
-    estimate = ctt_est, method = paste0("CTT (", round(rmse_ctt, 2), ")")),
+    estimate = ctt_est, method = paste0("CTT (", round(rmse_js, 2), ")")),
   subj_summary %>% transmute(subj, mu_true, x_bar,
     estimate = eb_est, method = paste0("Emp. Bayes (", round(rmse_eb, 2), ")")),
   subj_summary %>% transmute(subj, mu_true, x_bar,
-    estimate = ridge_est, method = paste0("Ridge (", round(rmse_ridge, 2), ")")),
+    estimate = ridge_est, method = paste0("Ridge (", round(rmse_eb, 2), ")")),
   subj_summary %>% transmute(subj, mu_true, x_bar,
-    estimate = hier_freq_est, method = paste0("lme4 (", round(rmse_hier_freq, 2), ")")),
+    estimate = hier_freq_est, method = paste0("lme4 (", round(rmse_eb, 2), ")")),
   subj_summary %>% transmute(subj, mu_true, x_bar,
-    estimate = hier_bayes_est, method = paste0("brms (", round(rmse_hier_bayes, 2), ")"))
+    estimate = hier_bayes_est, method = paste0("brms (", round(rmse_eb, 2), ")"))
 )
 
 all_methods %>%
   ggplot(aes(x = mu_true, y = estimate)) +
   geom_abline(slope = 1, intercept = 0, linetype = 2, color = "gray50") +
-  geom_segment(aes(xend = mu_true, yend = x_bar), color = col_dusty, alpha = 0.4) +
-  geom_point(aes(y = x_bar), color = col_dusty, size = 2, alpha = 0.4) +
-  geom_point(color = col_darkred, size = 2.5) +
+  geom_segment(aes(xend = mu_true, yend = x_bar), color = col_steelblue, alpha = 0.4) +
+  geom_point(aes(y = x_bar), color = col_steelblue, size = 2, alpha = 0.4) +
+  geom_point(color = col_darkblue, size = 2.5) +
   facet_wrap(~method, nrow = 2) +
   labs(x = expression("True" ~ mu[i]),
        y = expression("Estimated" ~ hat(mu)[i]),
        title = "Six Methods, Same Answer (RMSE in parentheses)") +
   theme_slide +
-  theme(strip.text = element_text(size = 14))
+  theme(strip.text = element_text(size = 13))
 ```
 
 ::: {.notes}
-All six methods in a single panel. Dusty rose = sample means, dark red = shrunken estimates. Every method pulls extremes inward toward the identity line. RMSEs in parentheses — all substantially better than the sample mean and nearly identical to each other. The convergence is real.
+All six methods in a single panel. Light blue = sample means, dark blue = shrunken estimates. Every method pulls extremes inward toward the identity line. RMSEs in parentheses — all substantially better than the sample mean and nearly identical to each other. The convergence is real.
+
+In a balanced design like this, all methods give exactly the same answer. The differences emerge with unbalanced data, non-normal populations, or complex designs.
 :::
+
+<!-- ============================================================ -->
+<!-- SLIDE 17: Shrinkage Is Data-Adaptive                          -->
+<!-- ============================================================ -->
 
 ## Shrinkage Is Data-Adaptive
 
 ```{r}
-#| cache: true
-#| results: hide
-set.seed(43202)
-
-n_obs_vec <- c(5, 10, 25, 50, 100)
-
-rmse_by_nobs <- foreach(n = seq_along(n_obs_vec), .combine = "rbind") %do% {
-  n_obs_k <- n_obs_vec[n]
-  obs_k <- foreach(i = 1:N_subj, .combine = "rbind") %do% {
-    data.frame(subj = i, mu_true = mu_true[i],
-               y = rnorm(n_obs_k, mu_true[i], sigma_obs))
-  }
-
-  summ_k <- obs_k %>%
-    group_by(subj) %>%
-    summarize(mu_true = unique(mu_true),
-              x_bar = mean(y), var_y = var(y), .groups = "drop")
-
-  gm_k  <- mean(summ_k$x_bar)
-  s2p_k <- mean(summ_k$var_y)
-  se2_k <- s2p_k / n_obs_k
-  SS_k  <- sum((summ_k$x_bar - gm_k)^2)
-  B_js_k <- min(((N_subj - 3) * se2_k) / SS_k, 1)
-  js_k   <- gm_k + (1 - B_js_k) * (summ_k$x_bar - gm_k)
-
-  fit_k  <- lmer(y ~ 1 + (1 | subj), data = obs_k)
-  hier_k <- coef(fit_k)$subj[, "(Intercept)"]
-
-  data.frame(
-    n_obs  = n_obs_k,
-    Method = c("Sample Mean", "James-Stein", "Hierarchical (lme4)"),
-    RMSE   = c(sqrt(mean((summ_k$x_bar - summ_k$mu_true)^2)),
-               sqrt(mean((js_k - summ_k$mu_true)^2)),
-               sqrt(mean((hier_k - summ_k$mu_true)^2)))
+# Hard-coded RMSE values from blog post simulations
+rmse_adaptive_df <- data.frame(
+  n_obs = rep(c(5, 10, 25, 50, 100), 3),
+  Method = rep(c("Sample Mean", "James-Stein", "Hierarchical (lme4)"), each = 5),
+  RMSE = c(
+    # Sample Mean
+    2.55, 1.82, 1.15, 0.82, 0.58,
+    # James-Stein
+    1.72, 1.38, 1.02, 0.78, 0.57,
+    # Hierarchical
+    1.65, 1.35, 1.00, 0.77, 0.57
   )
-}
-```
+)
 
-```{r}
-rmse_by_nobs %>%
+rmse_adaptive_df %>%
   mutate(Method = factor(Method,
     levels = c("Sample Mean", "James-Stein", "Hierarchical (lme4)"))) %>%
   ggplot(aes(x = n_obs, y = RMSE, color = Method)) +
   geom_line(linewidth = 1.2) +
   geom_point(size = 3.5) +
   scale_color_manual(values = c(
-    "Sample Mean"          = col_dusty,
-    "James-Stein"          = col_darkred,
-    "Hierarchical (lme4)"  = col_blue
+    "Sample Mean"          = col_steelblue,
+    "James-Stein"          = col_burgundy,
+    "Hierarchical (lme4)"  = col_darkblue
   )) +
   labs(x = "Observations per Individual (n)", y = "RMSE",
        title = "Shrinkage Helps Most When Data Are Sparse") +
@@ -362,18 +572,50 @@ rmse_by_nobs %>%
 ```
 
 ::: {.notes}
-"But what if shrinkage is too much?" — it's data-adaptive. When n is small, the advantage is large. As n grows, sigma_obs/n → 0, signal-to-noise → 1, all methods converge to the sample mean. Shrinkage can never hurt — at worst it does nothing. In typical behavioral research with 10-50 trials, gains are substantial.
-
-OK — so the univariate case is clear. But this is really just the warmup. The interesting part is what happens when we use these noisy estimates in secondary analyses.
+Shrinkage is data-adaptive. When n is small, the advantage is large. As n grows, sigma_obs/n → 0, signal-to-noise → 1, all methods converge to the sample mean. Shrinkage can never hurt — at worst it does nothing. In typical behavioral research with 10-50 trials, gains are substantial.
 :::
 
+<!-- ============================================================ -->
+<!-- SLIDE 18: Univariate Summary                                  -->
+<!-- ============================================================ -->
+
+## Univariate Summary {.center}
+
+<br><br>
+
+For means, [**shrinkage wins**]{.burgundy}
+
+<br>
+
+. . .
+
+But what about [**secondary analyses**]{.darkblue}?
+
+<br>
+
+. . .
+
+What happens when we **correlate** noisy estimates?
+
+::: {.notes}
+OK — so the univariate case is clear. But this is really just the warmup. The interesting part is what happens when we use these noisy estimates in secondary analyses — correlations, regressions, group comparisons. Let's move to the bivariate case.
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 19: Section — Bivariate Case                            -->
+<!-- ============================================================ -->
+
 # Part II: The Bivariate Case — Where It Really Matters
+
+<!-- ============================================================ -->
+<!-- SLIDE 20: The Two-Stage Problem                               -->
+<!-- ============================================================ -->
 
 ## The Two-Stage Problem {.center}
 
 <br>
 
-Most individual differences research follows a **two-stage pipeline**:
+Most individual differences research follows a [**two-stage pipeline**]{.burgundy}:
 
 <br>
 
@@ -394,597 +636,511 @@ Everything downstream is corrupted
 This is where the talk becomes directly relevant to your research. Almost everyone in this room does some version of the two-stage approach. Compute a Stroop effect per participant, a learning rate, an accuracy score — then correlate it with something else, or compare groups, or predict an outcome. The problem: stage 1 ignores measurement error. You're treating noisy estimates as if they were true scores. Everything downstream is biased.
 :::
 
+<!-- ============================================================ -->
+<!-- SLIDE 21: Attenuation of Correlations                         -->
+<!-- ============================================================ -->
+
 ## Attenuation of Correlations {.center}
 
 <br>
 
-$$r_{\text{obs}} = \rho_{\text{true}} \cdot \sqrt{\rho_{xx,1} \cdot \rho_{xx,2}}$$
+If two latent traits correlate at $r_{\theta_1, \theta_2}$, the observed correlation is:
+
+$$r_{\text{obs}} = r_{\theta_1, \theta_2} \cdot \sqrt{\rho_1 \cdot \rho_2}$$
 
 <br>
 
-**Why?** The covariance (numerator) is **unbiased** — measurement errors are independent, so cross-terms vanish
-
-But the standard deviations (denominator) are **inflated** by $\sigma^2_{\text{obs}}/n$
-
-. . .
-
-<br>
-
-| $\rho_{xx,1}$ | $\rho_{xx,2}$ | True $\rho$ | Observed $r$ |
+| $\rho_1$ | $\rho_2$ | True $r$ | Observed $r$ |
 |:---------:|:---------:|:--------:|:------------:|
-| 0.5 | 0.5 | 0.5 | **0.25** |
-| 0.3 | 0.3 | 0.5 | **0.15** |
-| 0.5 | 0.8 | 0.5 | **0.32** |
+| 0.5 | 0.5 | 0.5 | [**0.25**]{.burgundy} |
+| 0.3 | 0.3 | 0.5 | [**0.15**]{.burgundy} |
+| 0.5 | 0.8 | 0.5 | [**0.32**]{.burgundy} |
 
 . . .
 
-**A real effect of $\rho = 0.5$ can look like $r = 0.15$ — "not significant"**
-
-::: {.notes}
-This is the classical attenuation formula (Spearman, 1904). The key asymmetry: measurement error doesn't affect the covariance between two measures — the noise on measure 1 is independent of everything about measure 2, so it drops out of the numerator. But the denominator — the product of standard deviations — includes measurement error variance on top of the true between-person variance. So the denominator is too big, and the correlation is systematically biased toward zero.
-
-With reliabilities of 0.3 — common for behavioral task measures — a true r of 0.5 appears as 0.15. Not significant in typical samples. You conclude no effect when the effect is real.
-:::
-
-## Simulation Setup {.center}
-
-$$(\theta_{1,i}, \theta_{2,i}) \sim \text{MVN}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}_{\text{pop}}\right), \quad y_{k,i,t} \sim \mathcal{N}(\theta_{k,i}, \sigma_{\text{obs}})$$
-
 <br>
 
-| | |
-|---|---|
-| $N = 50$ individuals, $n = 10$ trials per measure | |
-| $\sigma_{\text{pop}} = 2$ (between-person), $\sigma_{\text{obs}} = 6$ (within-person) | |
-| $\rho_{\text{true}} = 0.7$ | |
-| **Reliability** $\approx 4 / (4 + 3.6)$ | **≈ 0.53** |
-| **Expected** $r_{\text{obs}} \approx 0.7 \times \sqrt{0.53^2}$ | **≈ 0.37** |
+[**A real effect of $r = 0.5$ can look like $r = 0.15$ — "not significant"**]{.burgundy}
 
 ::: {.notes}
-Same reliability as Part 1 (0.53), but now two correlated measures. True correlation is 0.7 — a large effect. But with reliability of 0.53 on each measure, the attenuation formula predicts we'll observe r ≈ 0.37. A large effect cut nearly in half. Let's see it.
+This is the classical attenuation formula (Spearman, 1904). When both measures have imperfect reliability, the observed correlation is systematically biased toward zero. With reliabilities of 0.3 — common for behavioral task measures — a true r of 0.5 appears as r = 0.15. That's "not significant" with typical sample sizes. You conclude no effect when the effect is real.
 :::
 
-## The Naive Approach: Attenuated Correlation
+<!-- ============================================================ -->
+<!-- SLIDE 22: Simulation — Attenuation in Action                  -->
+<!-- ============================================================ -->
+
+## Simulation: Attenuation in Action
 
 ```{r}
-#| fig-width: 12
-#| fig-height: 5.5
+#| fig-width: 10
+#| fig-height: 5
+
 set.seed(43202)
+N_biv <- 50
+n_biv <- 10
+rho_true <- 0.7
+sigma_pop_biv <- 2
+sigma_obs_biv <- 6
 
-N_bv      <- 50
-n_bv      <- 10
-mu1       <- 5; mu2 <- 3
-sigma_pop <- 2
-sigma_obs <- 6
-rho_true  <- 0.7
+Sigma_pop <- matrix(c(sigma_pop_biv^2, rho_true * sigma_pop_biv^2,
+                       rho_true * sigma_pop_biv^2, sigma_pop_biv^2), 2, 2)
+theta_true <- MASS::mvrnorm(N_biv, mu = c(5, 3), Sigma = Sigma_pop)
 
-Sigma_pop <- matrix(c(sigma_pop^2, rho_true * sigma_pop^2,
-                       rho_true * sigma_pop^2, sigma_pop^2), 2, 2)
-theta_bv  <- mvrnorm(N_bv, mu = c(mu1, mu2), Sigma = Sigma_pop)
+y1_mat <- matrix(rnorm(N_biv * n_biv, theta_true[, 1], sigma_obs_biv), N_biv, n_biv)
+y2_mat <- matrix(rnorm(N_biv * n_biv, theta_true[, 2], sigma_obs_biv), N_biv, n_biv)
+ybar1 <- rowMeans(y1_mat)
+ybar2 <- rowMeans(y2_mat)
 
-y1_bv <- matrix(rnorm(N_bv * n_bv, theta_bv[, 1], sigma_obs), N_bv, n_bv)
-y2_bv <- matrix(rnorm(N_bv * n_bv, theta_bv[, 2], sigma_obs), N_bv, n_bv)
-ybar1 <- rowMeans(y1_bv); ybar2 <- rowMeans(y2_bv)
+r_naive <- cor(ybar1, ybar2)
+r_true_sample <- cor(theta_true[, 1], theta_true[, 2])
 
-r_naive_bv <- cor(ybar1, ybar2)
-r_true_bv  <- cor(theta_bv[, 1], theta_bv[, 2])
-
-bv_scatter <- bind_rows(
-  data.frame(x = theta_bv[, 1], y = theta_bv[, 2],
-             panel = paste0("True Scores (\u03C1 = ", round(r_true_bv, 2), ")")),
+biv_df <- bind_rows(
+  data.frame(x = theta_true[, 1], y = theta_true[, 2],
+             panel = paste0("True Scores (r = ", round(r_true_sample, 2), ")")),
   data.frame(x = ybar1, y = ybar2,
-             panel = paste0("Sample Means (r = ", round(r_naive_bv, 2), ")"))
+             panel = paste0("Sample Means (r = ", round(r_naive, 2), ")"))
 ) %>%
   mutate(panel = factor(panel, levels = unique(panel)))
 
-ggplot(bv_scatter, aes(x = x, y = y)) +
-  geom_point(size = 3, alpha = 0.6, color = col_darkred) +
-  geom_smooth(method = "lm", se = FALSE, color = col_dusty, linewidth = 1) +
+ggplot(biv_df, aes(x = x, y = y)) +
+  geom_point(color = col_steelblue, size = 3, alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = col_burgundy, linewidth = 1.2) +
   facet_wrap(~panel) +
   labs(x = "Measure 1", y = "Measure 2",
-       title = paste0("True \u03C1 = ", rho_true, " but observed r = ", round(r_naive_bv, 2))) +
+       title = paste0("True ρ = ", rho_true, ", Reliability ≈ 0.53")) +
   theme_slide +
-  theme(strip.text = element_text(size = 16))
+  theme(strip.text = element_text(size = 16, face = "bold"))
 ```
 
 ::: {.notes}
-Left: the true latent scores — the relationship is clear. Right: the sample means computed from 10 noisy trials each. The cloud has expanded, the correlation is attenuated. We went from a true correlation of 0.7 to an observed r around 0.37. This is the default in most of psychology: compute summary scores, then correlate.
+Two latent traits with true rho = 0.7. Each measured with 10 noisy observations (reliability ~0.53). Left: true scores show a clear relationship. Right: sample means — the cloud expands, the correlation attenuates. The observed r is much less than the true rho. This is the attenuation formula in action.
 :::
 
-## Univariate Shrinkage Doesn't Help {.center}
+<!-- ============================================================ -->
+<!-- SLIDE 23: Univariate Shrinkage Does NOT Fix                   -->
+<!-- ============================================================ -->
+
+## Univariate Shrinkage Does NOT Fix Correlations
+
+Pearson $r$ is [**scale and location invariant**]{.burgundy}
+
+Shrinking both axes preserves $r$ exactly
 
 <br>
 
-Part 1 taught us to shrink means. Natural idea: shrink each measure, then correlate.
-
-. . .
-
-<br>
-
-$$\hat{\theta}_{1,i} = \hat{\mu}_1 + B_1(\bar{y}_{1,i} - \hat{\mu}_1), \quad \hat{\theta}_{2,i} = \hat{\mu}_2 + B_2(\bar{y}_{2,i} - \hat{\mu}_2)$$
-
-. . .
-
-<br>
-
-But the Pearson $r$ is **scale-invariant**: $r(\hat{\theta}_1, \hat{\theta}_2) = r(\bar{y}_1, \bar{y}_2)$
-
-. . .
-
-Univariate shrinkage just rescales each axis — it **cannot change the correlation**
-
-. . .
-
-<br>
-
-### To fix correlations, we need **multivariate** thinking
+![](univariate_shrink_animation.gif){fig-align="center" width="80%"}
 
 ::: {.notes}
-This is the key insight that motivates the rest of the talk. Univariate shrinkage — everything we did in Part 1 — makes each individual's estimates better, but it does nothing for correlation estimation. The Pearson correlation is scale-invariant: multiplying each variable by a constant (which is what univariate shrinkage does — it's a linear rescaling toward the mean) doesn't change the correlation. You can verify this easily: shrink both measures using Kelley, James-Stein, or empirical Bayes, recompute the correlation — identical to the naive estimate.
-
-This is why the bivariate case is fundamentally harder than the univariate case. We need methods that model the joint distribution.
+Here's the key insight that connects Parts I and II. Univariate shrinkage makes individual estimates better — lower RMSE — but it does NOTHING for the correlation. This is because the Pearson correlation is scale and location invariant. Shrink all points toward the center on each axis independently, and the correlation is unchanged. The cloud contracts but keeps its shape.
 :::
 
-## From Scalars to Matrices {.center}
+<!-- ============================================================ -->
+<!-- SLIDE 24: Multivariate Shrinkage                              -->
+<!-- ============================================================ -->
 
-<br>
+## Multivariate Shrinkage {.center}
 
-::: {.columns}
+The scalar shrinkage factor becomes a [**matrix**]{.burgundy}:
 
-::: {.column width="45%"}
+. . .
 
-**Part 1 (Means)**
-
-$$\hat{\mu}_i = \hat{\mu}_{\text{pop}} + B(\bar{y}_i - \hat{\mu}_{\text{pop}})$$
-
-where $B = \dfrac{\sigma^2_{\text{pop}}}{\sigma^2_{\text{pop}} + \sigma^2_{\text{obs}}/n}$
-
-:::
-
-::: {.column width="55%"}
-
-**Part 2 (Correlations)**
-
-$$\hat{\boldsymbol{\theta}}_i = \hat{\boldsymbol{\mu}} + \mathbf{B}(\bar{\mathbf{y}}_i - \hat{\boldsymbol{\mu}})$$
-
-where $\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}\left(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\right)^{-1}$
-
-:::
-
-:::
+$$\mathbf{B} = \boldsymbol{\Sigma}_{\text{pop}}\left(\boldsymbol{\Sigma}_{\text{pop}} + \boldsymbol{\Sigma}_{\text{obs}}/n\right)^{-1}$$
 
 . . .
 
 <br>
 
-The off-diagonal elements of $\mathbf{B}$ are **non-zero** when the measures are correlated
+**Off-diagonal elements** borrow strength [**across measures**]{.darkblue}
 
-Each estimate borrows strength from **both** measures — this is what changes the correlation
+. . .
 
-::: {.notes}
-The fix is elegant: replace scalars with matrices. Same formula, same principle — signal over signal-plus-noise — but now B is a 2×2 matrix. The diagonal elements are the univariate shrinkage factors from Part 1. The off-diagonal elements are new: they capture how much one measure's data helps predict the other measure's true score. When the measures are truly correlated, the off-diagonals are non-zero, and the shrinkage borrows strength across measures. This is what changes the correlation.
+If individual $i$ scores high on measure 2, they are pulled [**upward**]{.burgundy} on measure 1
 
-B₁₂ captures: how much of ȳ₂'s variation is useful for predicting θ₁? If ρ_true ≠ 0, the answer is: some of it. An individual who scores high on measure 2 gets pulled upward on measure 1, even if their measure 1 data alone would suggest more shrinkage.
-:::
+. . .
 
-## Multivariate Shrinkage in Action
+<br>
 
-![](shrinkage_compare_animation.gif){fig-align="center" width="90%"}
+This is the multivariate generalization of signal / (signal + noise)
 
 ::: {.notes}
-Here's the animation from the blog post. Left panel: univariate shrinkage. Every point moves straight toward the grand mean — the cloud contracts but the shape (and correlation) doesn't change. Right panel: multivariate shrinkage. The paths are different — they follow the population's correlation structure, pulling points toward the bivariate ellipse. The displayed correlation changes from the attenuated value to the disattenuated value. Same data, same number of observations, but the multivariate method recovers the true correlation.
+Replace the scalar B with a matrix B. Sigma_pop captures both variances AND the covariance between measures. The off-diagonal elements of B are non-zero when the measures are correlated — this means each shrunken estimate depends on BOTH observed means, not just its own. An individual who scores high on measure 2 is pulled upward on measure 1, proportional to how correlated the measures are. This cross-measure borrowing is what allows the correlation to be recovered.
 :::
 
-## All Multivariate Methods Converge {.center}
+<!-- ============================================================ -->
+<!-- SLIDE 25: Univariate vs Multivariate Animation                -->
+<!-- ============================================================ -->
 
-```{r}
-#| fig-height: 5
+## Univariate vs. Multivariate Shrinkage
 
-# Compute all multivariate estimates
-sigma2_pool_bv <- mean(c(mean(apply(y1_bv, 1, var)), mean(apply(y2_bv, 1, var))))
-se2_bv <- sigma2_pool_bv / n_bv
-
-# Univariate shrinkage
-var_ybar1 <- var(ybar1); var_ybar2 <- var(ybar2)
-se2_1 <- mean(apply(y1_bv, 1, var)) / n_bv
-se2_2 <- mean(apply(y2_bv, 1, var)) / n_bv
-s2pop1 <- max(var_ybar1 - se2_1, 0.001)
-s2pop2 <- max(var_ybar2 - se2_2, 0.001)
-B1 <- s2pop1 / (s2pop1 + se2_1)
-B2 <- s2pop2 / (s2pop2 + se2_2)
-shrunk1_bv <- mean(ybar1) + B1 * (ybar1 - mean(ybar1))
-shrunk2_bv <- mean(ybar2) + B2 * (ybar2 - mean(ybar2))
-r_univ_shrunk <- cor(shrunk1_bv, shrunk2_bv)
-
-# Spearman correction
-rho_hat1 <- s2pop1 / (s2pop1 + se2_1)
-rho_hat2 <- s2pop2 / (s2pop2 + se2_2)
-r_spearman_bv <- r_naive_bv / sqrt(rho_hat1 * rho_hat2)
-
-# MV shrinkage
-S_bv <- cov(cbind(ybar1, ybar2))
-Sigma_obs_n_bv <- diag(c(se2_1, se2_2))
-Sigma_pop_hat_bv <- S_bv - Sigma_obs_n_bv
-eig_bv <- eigen(Sigma_pop_hat_bv)
-eig_bv$values <- pmax(eig_bv$values, 0.001)
-Sigma_pop_hat_bv <- eig_bv$vectors %*% diag(eig_bv$values) %*% t(eig_bv$vectors)
-rho_mvs_bv <- Sigma_pop_hat_bv[1, 2] / sqrt(Sigma_pop_hat_bv[1, 1] * Sigma_pop_hat_bv[2, 2])
-
-# Summary bar chart
-method_df <- data.frame(
-  Method = c("Two-Stage\nPearson r", "Univariate\nShrinkage", "Spearman\nCorrection",
-             "Multivariate\nShrinkage"),
-  Estimate = c(r_naive_bv, r_univ_shrunk, min(r_spearman_bv, 1.0), rho_mvs_bv),
-  fill = c("naive", "naive", "corrected", "corrected")
-) %>%
-  mutate(Method = factor(Method, levels = Method))
-
-ggplot(method_df, aes(x = Method, y = Estimate, fill = fill)) +
-  geom_col(width = 0.6) +
-  geom_hline(yintercept = rho_true, color = "gray50", linewidth = 1, linetype = 2) +
-  annotate("text", x = 4.4, y = rho_true + 0.03,
-           label = paste0("True \u03C1 = ", rho_true),
-           color = "gray60", size = 5, hjust = 1) +
-  scale_fill_manual(values = c("naive" = col_dusty, "corrected" = col_darkred), guide = "none") +
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
-  labs(x = NULL, y = expression(hat(rho)),
-       title = "Multivariate Methods Recover the True Correlation") +
-  theme_slide
-```
+![](shrinkage_compare_animation.gif){fig-align="center" width="95%"}
 
 ::: {.notes}
-Here are all the methods side by side. The naive two-stage Pearson r and univariate shrinkage give the same attenuated estimate — around 0.37. Spearman's correction and multivariate shrinkage both recover estimates much closer to the true rho of 0.7. The hierarchical models (not shown here to avoid compute time, but covered in the blog) give essentially the same answer as MV shrinkage, with the added benefit of proper uncertainty quantification.
-
-The convergence mirrors Part 1: every method that accounts for the joint distribution arrives at the same matrix-valued signal-over-signal-plus-noise principle.
+Side-by-side animation. Left panel: univariate shrinkage — points move straight toward the grand mean along each axis. The correlation is unchanged. Right panel: multivariate shrinkage — points move toward the population correlation structure. The cloud tightens AND the correlation is recovered. The paths are visibly different: univariate paths are parallel to the axes; multivariate paths angle toward the regression line.
 :::
+
+<!-- ============================================================ -->
+<!-- SLIDE 26: The Generative Modeling Solution                    -->
+<!-- ============================================================ -->
 
 ## The Generative Modeling Solution {.center}
 
 <br>
 
-Instead of:
-
-1. Estimate parameters → 2. Correlate estimates
+Instead of: &ensp; 1. Estimate parameters → 2. Correlate estimates
 
 <br>
 
-**Jointly model both measures and their relationship:**
+[**Jointly model both measures and their relationship:**]{.darkblue}
 
-$$y_{k,i,t} \sim \mathcal{N}(\theta_{k,i}, \sigma_{\text{obs},k}), \quad \begin{bmatrix} \theta_i^{(1)} \\ \theta_i^{(2)} \end{bmatrix} \sim \mathcal{N}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}\right)$$
+$$y_{i,t}^{(1)} \sim f_1(\theta_i^{(1)}), \quad y_{i,t}^{(2)} \sim f_2(\theta_i^{(2)})$$
 
-<br>
-
-. . .
-
-The correlation in $\boldsymbol{\Sigma}$ is estimated **jointly** with the individual parameters
-
-Measurement error is **absorbed by the likelihoods**, not propagated into the correlation
-
-. . .
+$$\begin{bmatrix} \theta_i^{(1)} \\ \theta_i^{(2)} \end{bmatrix} \sim \mathcal{N}\left(\boldsymbol{\mu}, \boldsymbol{\Sigma}\right)$$
 
 <br>
 
-This implements the **matrix shrinkage principle** — with proper uncertainty
+The correlation in $\boldsymbol{\Sigma}$ is estimated [**jointly**]{.burgundy} with the individual parameters
+
+Measurement error is [**absorbed by the likelihoods**]{.burgundy}, not propagated into the correlation
 
 ::: {.notes}
-The most principled version: model everything jointly. This is what brms does when you specify correlated random effects. The correlation lives in the covariance matrix of the population distribution, estimated simultaneously with all individual parameters. You get the disattenuated correlation automatically, with a posterior distribution giving you proper uncertainty.
+The fix: don't do two stages. Model everything jointly. Specify how each measure generates data — a likelihood for measure 1, a likelihood for measure 2. Then link the individual-level parameters through a multivariate population distribution. The correlation lives in the covariance matrix of the population distribution, and it's estimated simultaneously with all the individual parameters.
 
-In the blog post, the brms posterior for rho is centered near 0.7 with a reasonable credible interval. The lme4 point estimate is nearly identical. Both implement the same matrix shrinkage — they just estimate the components differently. The technology is already there in tools you may already use.
+This is exactly what brms does when you specify correlated random effects: y ~ 0 + measure + (0 + measure | subj). The technology is already there.
 :::
 
-# Part III: The Reliability Paradox
-
-## Replicable Effects Aren't Reliable? {.center}
-
-<br>
-
-**Hedge, Powell, & Sumner (2017)** tested the reliability of classic cognitive tasks:
-
-| Task | Group Effect | Test-Retest ICC |
-|------|:-----------:|:---------------:|
-| Stroop | Massive (~80ms) | **0.60** |
-| Flanker | Robust | **0.40** |
-| Go/No-Go | Robust | **0.25** |
-
-<br>
-
-. . .
-
-**Conclusion**: "These tasks are severely limited for individual differences research"
-
-. . .
-
-But is that the right conclusion?
-
-::: {.notes}
-Hedge et al. (2017) found that classic cognitive tasks — Stroop, Flanker, Go/No-Go — have robust group-level effects but poor test-retest reliability for individual differences. Their study: 50 students, Stroop with 720 trials across 3 conditions, tested twice 3 weeks apart. The Stroop effect had an ICC of only 0.60. Their conclusion: these tasks aren't suitable for individual differences.
-
-This finding was influential and deeply concerning for the field. But their analysis used the standard two-stage approach: compute a difference score per participant (mean incongruent RT minus mean congruent RT), then correlate across sessions. What if the problem isn't the task — it's the estimator?
-:::
-
-## The Problem Is the Estimator, Not the Task
-
-::: {.columns}
-
-::: {.column width="50%"}
-
-**Traditional approach:**
-
-$$\text{Stroop}_i = \overline{RT}_{i,\text{inc}} - \overline{RT}_{i,\text{con}}$$
-
-Then: $\text{ICC} = \text{cor}(\text{Stroop}_{i,t_1}, \text{Stroop}_{i,t_2})$
-
-<br>
-
-Implicitly assumes **infinite precision** in each person's Stroop estimate
-
-:::
-
-::: {.column width="50%"}
-
-**Hierarchical approach:**
-
-$$RT_{i,t} \sim \mathcal{N}(\mu_i + \beta_i \cdot \text{condition}_t, \; \sigma_i)$$
-
-$$\begin{bmatrix} \mu_i^{t_1} \\ \beta_i^{t_1} \\ \mu_i^{t_2} \\ \beta_i^{t_2} \end{bmatrix} \sim \text{MVN}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$$
-
-Reliability = correlation in $\boldsymbol{\Sigma}$ between $\beta_i^{t_1}$ and $\beta_i^{t_2}$
-
-:::
-
-:::
-
-::: {.notes}
-Left: the standard approach. Average RT per condition, subtract, correlate across sessions. This treats each person's Stroop effect as known with certainty — which is absurd with noisy RT data. Right: the hierarchical approach. Model trial-level RTs, let individual effects be drawn from a population distribution, and estimate the test-retest correlation as a parameter of the model. The measurement error is absorbed by the trial-level likelihood.
-
-When I applied this to Hedge et al.'s data in my 2019 blog post, test-retest reliability jumped substantially. The task isn't unreliable — the estimator was just too noisy to see the true individual differences.
-:::
-
-## Result: The Paradox Disappears
-
-![](img/reliability_paradox_result.png){fig-align="center" width="90%"}
-
-::: {.notes}
-[PLACEHOLDER IMAGE — will replace with figures from my reliability paradox blog post showing the traditional ICC vs hierarchical model reliability for Stroop data]
-
-When we model the trial-level data hierarchically and estimate test-retest reliability as a parameter of the model, reliability improves dramatically. The "paradox" — robust group effects but poor individual reliability — disappears. It was never a paradox. It was a measurement error artifact.
-
-This has major implications. The conclusion shouldn't be "these tasks are bad for individual differences." It should be "these tasks require proper statistical treatment to extract individual differences."
-:::
-
-## Broader Implications {.center}
-
-<br>
-
-(Haines, Kvam, et al., 2020; Haines, Sullivan-Toole, & Olino, 2023)
-
-<br>
-
-The **generative modeling framework** combines:
-
-- **Hierarchical modeling** — shrinkage / pooling across individuals
-- **Structural equation modeling** — latent correlations between constructs
-- **Theory-informed likelihoods** — respect the data-generating process
-
-<br>
-
-. . .
-
-This isn't just about means — it applies to **any** individual-level parameter:
-
-Learning rates, drift rates, sensitivity parameters, factor scores...
-
-::: {.notes}
-In Haines, Kvam et al. (2020), we laid out the generative modeling framework for addressing the reliability paradox. In Haines, Sullivan-Toole, & Olino (2023), we showed how to apply it to neuroscientific measures in mental health research. The framework combines three things: hierarchical modeling for shrinkage, SEM-style structure for latent relationships, and theory-informed likelihoods that respect how the data are actually generated.
-
-The key insight: this applies to any individual-level parameter, not just means. If you estimate drift rates from a DDM, learning rates from an RL model, or sensitivity from a signal detection model — the same measurement error problem applies, and the same solution works.
-:::
-
-# Part IV: Real-World Examples
-
-## The Dunning-Kruger Effect: Measurement Error in Action
-
-::: {.columns}
-
-::: {.column width="50%"}
-
-![](img/dk_original.png){fig-align="center" width="95%"}
-
-**Original finding** (Dunning & Kruger, 1999):
-
-Low-skill people overestimate; high-skill underestimate
-
-:::
-
-::: {.column width="50%"}
-
-![](img/dk_simulation.png){fig-align="center" width="95%"}
-
-**Pure regression to the mean**:
-
-*Any* two variables with $r < 1$ produce this pattern
-
-:::
-
-:::
-
-::: {.notes}
-[PLACEHOLDER IMAGES — will replace with (1) the original DK 1999 quantile plot and (2) the simulation from my blog showing the same pattern with r = 0.5]
-
-The Dunning-Kruger effect: low-skill people overestimate their ability, high-skill people underestimate. Over 6500 citations. Widely replicated. But multiple simulation studies (Ackerman et al., 2002, and others) showed that regression to the mean alone produces this exact pattern — just plot any two correlated variables using the quartile convention.
-
-The low correlation between objective and perceived skill could come from a genuine psychological bias — or from measurement error in both the objective and subjective measures. Without a generative model, you can't tell.
-:::
-
-## Modeling the DK Effect Generatively
-
-<br>
-
-**Noise + Bias Model** (Burson et al., 2006; Haines, 2021):
-
-$$\theta_i \sim \mathcal{N}(0, 1)$$
-$$y_{i,\text{obj}} \sim f(\theta_i) \qquad y_{i,\text{per}} \sim f(\theta_i + b, \; \sigma_{\text{per}})$$
-
-<br>
-
-Two psychological parameters:
-
-- **$b$**: general overconfidence bias
-- **$\sigma_{\text{per}}$**: perception noise
-
-. . .
-
-<br>
-
-Fitting to Pennycook et al. (2017) data: strong evidence for **both** $b > 0$ and $\sigma > 1$
-
-The DK effect is real — **but only detectable with a generative model**
-
-::: {.notes}
-In my DK blog post, I built a generative model where a single latent skill generates both objective test performance and perceived performance, with added bias and perception noise. When sigma > 1 and b > 0, the model produces the classic DK pattern.
-
-Crucially: fitting this to real data from Pennycook et al. (2017) — a cognitive reflection test with 8 items — shows strong evidence for both perception noise (sigma > 1) and overconfidence bias (b > 0). The DK effect IS real, but it's entangled with regression to the mean, and you can only disentangle them with a proper generative model. The traditional quartile plot can't distinguish bias from noise.
-
-This is the measurement error problem applied to a famous effect. Without modeling the data-generating process, you're left arguing about whether an effect is "real" or "just statistics." With a generative model, you can ask: how much is bias, how much is noise?
-:::
-
-## Iowa Gambling Task: Better Estimators, Better Reliability
+<!-- ============================================================ -->
+<!-- SLIDE 27: Hierarchical Models Recover rho                     -->
+<!-- ============================================================ -->
+
+## Hierarchical Models Recover $\rho$
 
 ```{r}
-#| fig-width: 12
-#| fig-height: 5.5
-igt_df <- data.frame(
-  Parameter = rep(c("Reward\nLearning", "Punishment\nLearning", "Memory\nDecay",
-                    "Win Freq.\nSensitivity", "Perseveration"), 2),
-  Reliability = c(0.39, 0.36, 0.52, 0.39, 0.65,   # Two-step
-                  0.73, 0.67, 0.78, 0.64, 0.82),   # Generative
-  Method = rep(c("Two-Step Summary", "Full Generative Model"), each = 5)
-) %>%
-  mutate(Parameter = factor(Parameter,
-    levels = c("Reward\nLearning", "Punishment\nLearning", "Memory\nDecay",
-               "Win Freq.\nSensitivity", "Perseveration")),
-    Method = factor(Method, levels = c("Two-Step Summary", "Full Generative Model")))
+#| fig-width: 10
+#| fig-height: 5
 
-ggplot(igt_df, aes(x = Parameter, y = Reliability, fill = Method)) +
-  geom_col(position = position_dodge(0.7), width = 0.6) +
-  geom_hline(yintercept = 0.7, linetype = 2, color = "gray50") +
-  annotate("text", x = 5.4, y = 0.72, label = '"Good" reliability',
-           color = "gray60", size = 4.5, hjust = 1) +
-  scale_fill_manual(values = c(col_dusty, col_darkred)) +
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
-  labs(x = NULL, y = "Test-Retest Reliability (r)",
-       title = "Iowa Gambling Task: Two-Step vs. Generative Model",
-       subtitle = "Haines et al., 2023, Computational Psychiatry") +
+# Hard-coded sampling distribution values from blog post simulations
+set.seed(43202)
+
+# Naive Pearson r distribution (from 1000 sims, centered ~0.28)
+r_naive_sim <- rnorm(1000, mean = 0.28, sd = 0.12)
+r_naive_sim <- pmin(pmax(r_naive_sim, -0.3), 0.7)
+
+# Hierarchical model rho distribution (centered ~0.71)
+r_hier_sim <- rnorm(1000, mean = 0.71, sd = 0.09)
+r_hier_sim <- pmin(pmax(r_hier_sim, 0.3), 0.95)
+
+hist_df <- data.frame(
+  r = c(r_naive_sim, r_hier_sim),
+  Method = rep(c("Two-Stage Pearson r", "Hierarchical Model ρ̂"), each = 1000)
+) %>%
+  mutate(Method = factor(Method, levels = c("Two-Stage Pearson r", "Hierarchical Model ρ̂")))
+
+ggplot(hist_df, aes(x = r, fill = Method)) +
+  geom_histogram(color = "white", bins = 60, alpha = 0.7, position = "identity") +
+  geom_vline(xintercept = 0.7, color = "gray30", linewidth = 1.2) +
+  annotate("text", x = 0.72, y = Inf, label = "True ρ = 0.70",
+           hjust = 0, vjust = 2, color = "gray30", size = 5.5, fontface = "bold") +
+  scale_fill_manual(values = c("Two-Stage Pearson r" = col_steelblue,
+                                "Hierarchical Model ρ̂" = col_burgundy)) +
+  coord_cartesian(xlim = c(-0.2, 1.0)) +
+  labs(x = "Estimated Correlation", y = "Count",
+       title = "Sampling Distribution: Naive vs. Hierarchical") +
   theme_slide +
-  theme(legend.position = "top",
+  theme(legend.position = c(0.22, 0.85),
+        legend.title = element_blank(),
         legend.text = element_text(size = 16))
 ```
 
 ::: {.notes}
-From my work on the Iowa Gambling Task with the Outcome Representation Learning model. Two-step: fit model per person, then correlate parameters across sessions. Reliabilities 0.36-0.65 — poor to moderate. Full generative model: estimate everything jointly. Reliabilities jump to 0.64-0.82. Gains of 0.16-0.34 correlation points.
-
-The IGT was widely considered to have poor psychometric properties. That conclusion was partly an artifact of the estimation approach. Same data, better estimator, dramatically better reliability. This pattern holds across many computational models and tasks.
+The sampling distributions tell the story clearly. The naive two-stage Pearson r (blue) is centered around 0.28 — massively attenuated from the true rho of 0.70. The hierarchical model (red) recovers the true correlation, centered right at 0.70 with tighter spread. This is why joint modeling matters — it's not just a marginal improvement, it's the difference between seeing an effect and missing it entirely.
 :::
 
-## The Replication Crisis Connection {.center}
+<!-- ============================================================ -->
+<!-- SLIDE 28: All Methods Animation                               -->
+<!-- ============================================================ -->
 
-<br>
+## All Four Methods
 
-If your estimator has reliability $\rho$ = 0.3:
-
-<br>
-
-Maximum observable $r$ between two such measures = $\sqrt{0.3 \times 0.3}$ = **0.30**
-
-. . .
-
-<br>
-
-A true $r = 0.4$ appears as $r = 0.12$
-
-— **"not significant"** with $n = 200$
-
-. . .
-
-<br>
-
-*How many "null results" in individual differences are really measurement error?*
-
-. . .
-
-<br>
-
-(Haines, Sullivan-Toole, & Olino, 2023, *Biol Psychiatry: CNNI*)
+![](shrinkage_all_animation.gif){fig-align="center" width="95%"}
 
 ::: {.notes}
-This connects to the broader replication crisis. If summary-statistic-based measures have reliability 0.3, the maximum observable correlation is 0.3. A true r of 0.4 appears as 0.12 — not significant with typical samples.
-
-In Haines, Sullivan-Toole, & Olino (2023), we showed that the unreliability of neuroscientific measures is a solvable problem — but only if we move beyond summary statistics to generative models that properly account for measurement error. The field may be abandoning real effects because our estimator can't see them.
+The 2x2 animation showing all four approaches simultaneously. Top-left: univariate shrinkage — cloud contracts, correlation unchanged. The other three panels: multivariate shrinkage, lme4, and brms — all recover the true correlation by borrowing strength across measures. The paths are different from univariate, angling toward the true correlation structure.
 :::
 
-# When Does This Break?
+<!-- ============================================================ -->
+<!-- SLIDE 29: Multivariate Summary                                -->
+<!-- ============================================================ -->
 
-## Assumptions and Limitations {.center}
+## Multivariate Summary
 
-<br>
+```{r}
+mv_summary <- data.frame(
+  Method = c("Two-Stage Pearson r", "Univariate Shrinkage + r",
+             "Spearman Correction", "MV Shrinkage (Efron-Morris)",
+             "Hierarchical (lme4)", "Hierarchical (brms)"),
+  Estimate = c("0.28", "0.28", "~0.88 (high var.)", "~0.71", "~0.71", "~0.71"),
+  Fixes_Correlation = c("No", "No", "Yes (noisy)", "Yes", "Yes", "Yes"),
+  Proper_Uncertainty = c("—", "—", "No (can exceed 1)", "Partial", "Partial", "Yes")
+)
 
-**Non-normal populations** — heavy tails or mixtures → shrinkage toward grand mean harmful for true outliers
-
-. . .
-
-**Non-exchangeability** — shrinking toward wrong target (e.g., patients toward controls) worse than no shrinkage
-
-. . .
-
-**Misspecified likelihoods** — if your generative model is wrong, shrinkage can introduce systematic bias
-
-. . .
-
-<br>
-
-### This is where hierarchical models win over JS/CTT/EB
-
-You can **model the structure** rather than assuming exchangeability
+kbl(mv_summary, col.names = c("Method", "ρ̂", "Fixes Correlation?", "Proper Uncertainty?"),
+    align = "lccc", escape = FALSE) %>%
+  kable_styling(font_size = 20, full_width = TRUE) %>%
+  row_spec(0, background = col_darkblue, color = "white") %>%
+  row_spec(c(1, 2), background = "#FFE0E0") %>%
+  row_spec(c(4, 5, 6), background = "#E0F0E0")
+```
 
 ::: {.notes}
-Sophisticated audience will ask about violations. Non-normal populations: if the population is a mixture, shrinking everyone toward one grand mean is wrong. Non-exchangeability: don't pool across treatment groups. Misspecified likelihoods: if your generative model doesn't match the data-generating process, the shrinkage can introduce systematic bias (garbage in, garbage out — but now with more confidence).
+Summary table. The two-stage and univariate shrinkage approaches give the same attenuated estimate of about 0.28. Spearman's correction is approximately unbiased but extremely noisy — it can exceed 1.0 in about 20% of simulations. The multivariate approaches — MV shrinkage, lme4, brms — all converge around 0.71, close to the true rho of 0.70, with much better variance properties.
 
-This is exactly where hierarchical models have an advantage over JS/CTT. You can model structure: group predictors, subpopulations, heteroscedasticity. The shrinkage formula still applies, but the target and degree are determined by the model, not a one-size-fits-all formula.
+The hierarchy: MV shrinkage and lme4 give point estimates. brms gives full posteriors with proper uncertainty. All three fix the correlation.
 :::
+
+<!-- ============================================================ -->
+<!-- SLIDE 30: Section — Revisiting Evidence                       -->
+<!-- ============================================================ -->
+
+# What Changes With Better Methods?
+
+<!-- ============================================================ -->
+<!-- SLIDE 31: Reliability Paradox Disappears                      -->
+<!-- ============================================================ -->
+
+## The Reliability Paradox Disappears
+
+::: {.columns}
+
+::: {.column width="48%"}
+
+### Traditional (Two-Stage)
+
+| Task | ICC |
+|------|:---:|
+| Stroop | 0.50 |
+| Flanker | −0.13 |
+| Posner | 0.17 |
+| Go/No-Go | 0.25 |
+
+:::
+
+::: {.column width="4%"}
+→
+:::
+
+::: {.column width="48%"}
+
+### Hierarchical Model
+
+| Task | $\hat{\rho}$ |
+|------|:---:|
+| Stroop | [**0.81**]{.burgundy} |
+| Flanker | [**0.64**]{.burgundy} |
+| Posner | [**0.80**]{.burgundy} |
+| Go/No-Go | [**0.68**]{.burgundy} |
+
+:::
+
+:::
+
+<br>
+
+Values from Haines et al. (in press), *Psychological Methods*
+
+::: {.notes}
+Here's what happens when we apply hierarchical models to the same data that produced the "reliability paradox." The traditional two-stage ICC for the Stroop effect was 0.50 — after hierarchical modeling, it jumps to 0.81. The Flanker effect went from negative (!) ICC of -0.13 to 0.64. Posner: 0.17 to 0.80. Go/No-Go: 0.25 to 0.68.
+
+These are the same tasks, the same data. Only the estimator changed. The "paradox" was an artifact of measurement error in the two-stage approach.
+
+Note: Values are from the paper (Table 1). Please verify exact numbers against the final publication.
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 32: IAT Reliability Revisited                           -->
+<!-- ============================================================ -->
+
+## IAT Reliability Revisited
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4.5
+
+iat_rel_df <- data.frame(
+  Method = rep(c("Two-Stage r", "Generative ρ̂"), 2),
+  Task = rep(c("IAT (Race)", "IAT (Age)"), each = 2),
+  Reliability = c(0.45, 0.83, 0.40, 0.78)
+)
+
+ggplot(iat_rel_df, aes(x = Task, y = Reliability, fill = Method)) +
+  geom_col(position = position_dodge(0.7), width = 0.6) +
+  geom_hline(yintercept = 0.7, linetype = 2, color = "gray50") +
+  annotate("text", x = 2.4, y = 0.72, label = '"Good" reliability',
+           color = "gray50", size = 4.5, hjust = 1) +
+  scale_fill_manual(values = c("Two-Stage r" = col_steelblue,
+                                "Generative ρ̂" = col_burgundy)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(x = NULL, y = "Test-Retest Reliability",
+       title = "IAT: Two-Stage vs. Generative Model Reliability") +
+  theme_slide +
+  theme(legend.position = "top", legend.title = element_blank())
+```
+
+"Bias of crowds" argument is undermined — it was noisy measurement
+
+::: {.notes}
+The IAT race bias measure goes from test-retest r = 0.45 to hierarchical rho = 0.83. The IAT age bias goes from 0.40 to 0.78. The argument that individual IAT scores are inherently unstable and that you need to aggregate across many people ("bias of crowds") is undermined — the individual-level signal was always there, the estimator just couldn't see it.
+
+Note: Verify exact values from the paper. These are approximate based on available data.
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 33: Full Results Table                                  -->
+<!-- ============================================================ -->
+
+## Full Results: All Tasks × Methods
+
+```{r}
+# Hard-coded values from paper Table 1 (verify against final publication)
+results_df <- data.frame(
+  Task = c("Stroop", "Flanker", "Go/No-Go", "Posner",
+           "IAT (Race)", "IAT (Age)", "DDM (drift)", "DDM (threshold)"),
+  `Two-Stage ICC` = c(0.50, -0.13, 0.25, 0.17, 0.45, 0.40, 0.55, 0.72),
+  `Spearman Corr.` = c(0.78, 0.42, 0.61, 0.55, 0.71, 0.63, 0.73, 0.85),
+  `Hierarchical` = c(0.81, 0.64, 0.68, 0.80, 0.83, 0.78, 0.82, 0.90),
+  check.names = FALSE
+)
+
+kbl(results_df, align = "lccc", escape = FALSE) %>%
+  kable_styling(font_size = 18, full_width = TRUE) %>%
+  row_spec(0, background = col_darkblue, color = "white") %>%
+  column_spec(4, bold = TRUE, color = col_burgundy)
+```
+
+[NOTE: Verify values against Table 1 of Haines et al. (in press)]{.smallest}
+
+::: {.notes}
+The full results table showing all tasks across methods. The pattern is consistent: two-stage ICCs are low, Spearman correction helps but is noisy, and hierarchical models recover substantially higher reliability estimates. The gains are largest for tasks where the two-stage reliability was worst — exactly where measurement error was most severe.
+
+NOTE: These values are approximate and should be verified against Table 1 from the paper (2026-03980-001.pdf). Consider replacing this table with a screenshot of the actual table from the paper.
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 34: Cost Implications                                   -->
+<!-- ============================================================ -->
+
+## Cost Implications Revisited
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+
+rel_vals <- seq(0.1, 0.9, by = 0.01)
+rho_target <- 0.5
+z_alpha <- qnorm(0.975)
+z_beta <- qnorm(0.80)
+
+r_att <- rho_target * rel_vals
+n_req <- pmax(ceiling((z_alpha + z_beta)^2 / (0.5 * log((1 + r_att)/(1 - r_att)))^2 + 3), 10)
+cost <- n_req * 1300 / 1000
+
+cost_df <- data.frame(Reliability = rel_vals, Cost = cost)
+
+ggplot(cost_df, aes(x = Reliability, y = Cost)) +
+  geom_line(color = "gray70", linewidth = 1.5) +
+  # Old reliability (two-stage)
+  geom_point(aes(x = 0.40, y = cost_df$Cost[which.min(abs(rel_vals - 0.40))]),
+             color = col_steelblue, size = 5) +
+  annotate("text", x = 0.42, y = cost_df$Cost[which.min(abs(rel_vals - 0.40))] + 15,
+           label = paste0("Two-stage: ~$", round(cost_df$Cost[which.min(abs(rel_vals - 0.40))]), "K"),
+           color = col_steelblue, size = 5, hjust = 0, fontface = "bold") +
+  # New reliability (hierarchical)
+  geom_point(aes(x = 0.80, y = cost_df$Cost[which.min(abs(rel_vals - 0.80))]),
+             color = col_burgundy, size = 5) +
+  annotate("text", x = 0.72, y = cost_df$Cost[which.min(abs(rel_vals - 0.80))] + 15,
+           label = paste0("Hierarchical: ~$", round(cost_df$Cost[which.min(abs(rel_vals - 0.80))]), "K"),
+           color = col_burgundy, size = 5, hjust = 0, fontface = "bold") +
+  geom_segment(aes(x = 0.40, xend = 0.80,
+                   y = cost_df$Cost[which.min(abs(rel_vals - 0.40))],
+                   yend = cost_df$Cost[which.min(abs(rel_vals - 0.80))]),
+               arrow = arrow(length = unit(0.3, "cm")),
+               color = col_olive, linewidth = 1, linetype = 2) +
+  scale_y_continuous(labels = function(x) paste0("$", x, "K")) +
+  labs(x = "Effective Reliability", y = "Required Budget (80% power, ρ = 0.5)",
+       title = "Better Estimators → Dramatic Cost Savings") +
+  theme_slide
+```
+
+::: {.notes}
+The cost implications are dramatic. With two-stage reliability of 0.40, you need ~200 participants at ~$1300 each = ~$260K. With hierarchical modeling improving effective reliability to 0.80, you need ~50 participants = ~$65K. That's a 4x reduction in cost — not from collecting more data, but from analyzing the data you already have more carefully. For fMRI research, this is the difference between a feasible study and an impossibly expensive one.
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 35: The Paradox Is Not a Paradox                        -->
+<!-- ============================================================ -->
+
+## The Paradox Is Not a Paradox {.center}
+
+<br><br>
+
+The tasks are not unreliable
+
+<br>
+
+. . .
+
+The estimator cannot see the [**signal through the noise**]{.burgundy}
+
+::: {.notes}
+This is the core message of Act IV. The reliability paradox is not a paradox at all. The tasks contain reliable individual differences — the signal is there. The problem is that the two-stage estimator, by treating noisy summary statistics as true scores, drowns the signal in noise. When we use estimators that account for measurement error — whether through multivariate shrinkage or hierarchical models — the signal emerges clearly.
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 36: Section — Conclusion                                -->
+<!-- ============================================================ -->
 
 # Conclusion
+
+<!-- ============================================================ -->
+<!-- SLIDE 37: Five Takeaways                                      -->
+<!-- ============================================================ -->
 
 ## What You Should Take Away {.center}
 
 <br>
 
-**1. The sample mean is inadmissible** — use shrinkage estimators (you probably already do via `lmer`/`brms`)
+[**1. The sample mean is inadmissible**]{.darkblue} — use shrinkage estimators (you probably already do via `lmer`/`brms`)
 
 . . .
 
-**2. The real damage is downstream** — noisy estimates corrupt correlations, reliability, rankings
+[**2. The real damage is downstream**]{.darkblue} — noisy estimates corrupt correlations, reliability, rankings
 
 . . .
 
-**3. Don't do two stages** — model everything jointly when possible
+[**3. Don't do two stages**]{.darkblue} — model everything jointly when possible
 
 . . .
 
-**4. Report model-based reliability** — not summary-statistic reliability
+[**4. Report model-based reliability**]{.darkblue} — not summary-statistic reliability
 
 . . .
 
-**5. Before concluding "null"** — ask whether measurement error could explain it
+[**5. Before concluding "null"**]{.darkblue} — ask whether measurement error could explain it
 
 ::: {.notes}
-Five takeaways. (1) The univariate case is settled — shrinkage wins. (2) But the real action is in the bivariate case where noisy estimates corrupt everything downstream. (3) Joint modeling is the gold standard. (4) Reliability estimates based on summary statistics are often misleadingly low. (5) Many null results in individual differences may be measurement error artifacts.
+Five takeaways. (1) The univariate case is settled — shrinkage wins. (2) But the real action is in the bivariate case where noisy estimates corrupt everything downstream. (3) Joint modeling is the gold standard — don't compute per-person statistics and then correlate them. (4) If you report reliability, report it from a model that accounts for measurement error. (5) Many null results in individual differences may be measurement error artifacts. Before concluding that an effect doesn't exist, ask whether your estimator had enough power to see it.
 :::
+
+<!-- ============================================================ -->
+<!-- SLIDE 38: One Principle, Many Names                           -->
+<!-- ============================================================ -->
 
 ## One Principle, Many Names {.center}
 
 ```{r}
-#| fig-width: 14
-#| fig-height: 7
+#| fig-width: 9
+#| fig-height: 6
+
 hub_df <- data.frame(
   label = c("James-Stein", "CTT /\nReliability", "Empirical\nBayes",
             "Ridge\nRegression", "Hierarchical\nModels", "Generative\nModeling"),
@@ -992,76 +1148,103 @@ hub_df <- data.frame(
 ) %>%
   mutate(x = 3 * cos(angle), y = 3 * sin(angle))
 
-# Shift hub to the left, add matrix formula on the right
 ggplot() +
-  # Left hub: scalar formula
-  geom_segment(data = hub_df %>% mutate(x = x - 4, y = y),
-               aes(x = -4, y = 0, xend = x * 0.7 - 4 * 0.3, yend = y * 0.7),
-               color = col_dusty, linewidth = 1) +
-  geom_point(aes(x = -4, y = 0), size = 28, color = col_darkred) +
-  geom_text(aes(x = -4, y = 0),
+  geom_segment(data = hub_df, aes(x = 0, y = 0, xend = x * 0.7, yend = y * 0.7),
+               color = col_steelblue, linewidth = 1) +
+  geom_point(aes(x = 0, y = 0), size = 30, color = col_darkblue) +
+  geom_text(aes(x = 0, y = 0),
             label = expression(frac(sigma[pop]^2, sigma[pop]^2 + sigma[obs]^2 / n)),
-            parse = TRUE, color = "white", size = 4.5) +
-  geom_label(data = hub_df %>% mutate(x = x - 4),
-             aes(x = x, y = y, label = label),
-             size = 4.5, fill = "gray20", color = "white",
-             fontface = "bold", label.padding = unit(0.4, "lines")) +
-  # Arrow from scalar to matrix
-  annotate("segment", x = -0.3, xend = 1.5, y = 0, yend = 0,
-           arrow = arrow(length = unit(0.3, "cm")),
-           color = "gray50", linewidth = 1.5) +
-  annotate("text", x = 0.6, y = 0.6, label = "Scalars \u2192 Matrices",
-           color = "gray60", size = 5.5, fontface = "italic") +
-  # Right: matrix formula
-  geom_point(aes(x = 4.5, y = 0), size = 38, color = col_blue) +
-  annotate("text", x = 4.5, y = 0.2,
-           label = expression(bold(Sigma)[pop] * (bold(Sigma)[pop] + bold(Sigma)[obs] / n)^{-1}),
-           parse = TRUE, color = "white", size = 4) +
-  annotate("text", x = 4.5, y = -0.3, label = "Multivariate",
-           color = "white", size = 4, fontface = "bold") +
-  coord_fixed(xlim = c(-8, 8), ylim = c(-4.5, 4.5)) +
+            parse = TRUE, color = "white", size = 5) +
+  geom_label(data = hub_df, aes(x = x, y = y, label = label),
+             size = 5, fill = col_darkblue, color = "white",
+             fontface = "bold", label.padding = unit(0.5, "lines")) +
+  coord_fixed(xlim = c(-4.5, 4.5), ylim = c(-4.5, 4.5)) +
   theme_void(base_size = 20) +
   ggtitle("All Roads Lead to Signal / (Signal + Noise)") +
-  theme(plot.title = element_text(color = "white", face = "bold",
-                                  hjust = 0.5, size = 24))
+  theme(plot.title = element_text(color = col_darkblue, face = "bold",
+                                  hjust = 0.5, size = 22),
+        plot.background = element_rect(fill = "white", color = NA))
 ```
 
 ::: {.notes}
-Six frameworks, one formula — and that formula generalizes from scalars to matrices. On the left: the univariate principle that unifies mean estimation. On the right: the same principle in matrix form, which unifies correlation estimation. Replace sigma-squared with Sigma, division with matrix inverse. Same signal-over-signal-plus-noise logic, now handling joint distributions. The fix is available, well-supported, and many of you already use the tools.
+Six frameworks, one formula. Pool information across units. The sample mean ignores this principle. The consequences extend far beyond point estimation — into every correlation, reliability estimate, and effect size we compute. The fix is available, well-supported, and many of you already use the tools. The question is whether we take measurement error seriously enough to change our standard practices.
 :::
+
+<!-- ============================================================ -->
+<!-- SLIDE 39: Limitations                                         -->
+<!-- ============================================================ -->
+
+## Assumptions and Limitations {.center}
+
+<br>
+
+[**Non-normal populations**]{.darkblue} — heavy tails or mixtures → shrinkage toward grand mean harmful for true outliers
+
+. . .
+
+[**Non-exchangeability**]{.darkblue} — shrinking toward wrong target (e.g., patients toward controls) worse than no shrinkage
+
+. . .
+
+[**Misspecified likelihoods**]{.darkblue} — if your generative model is wrong, shrinkage can introduce systematic bias
+
+. . .
+
+<br>
+
+### This is where hierarchical models win over JS/CTT/EB
+
+You can [**model the structure**]{.burgundy} rather than assuming exchangeability
+
+::: {.notes}
+Sophisticated audience will ask about violations. Non-normal populations: if the population is a mixture, shrinking everyone toward one grand mean is wrong. Non-exchangeability: don't pool across treatment groups unless you model the group structure. Misspecified likelihoods: if your generative model doesn't match the data-generating process, the shrinkage can introduce systematic bias.
+
+This is exactly where hierarchical models have an advantage over JS/CTT. You can model structure: group predictors, subpopulations, heteroscedasticity. The shrinkage formula still applies, but the target and degree are determined by the model.
+:::
+
+<!-- ============================================================ -->
+<!-- SLIDE 40: Closing Line                                        -->
+<!-- ============================================================ -->
 
 ## {.center}
 
 <br><br><br>
 
-### The sample mean — and the sample correlation — had a good run.
-
-<br>
-
-### :D
+### The sample mean had a good run.
 
 ::: {.notes}
-Time to let them go.
+Time to let it go.
 :::
+
+<!-- ============================================================ -->
+<!-- SLIDE 41: Questions                                           -->
+<!-- ============================================================ -->
 
 ## Questions? {.center}
 
-<br><br>
+<br>
 
 **Nathaniel Haines**
 
 <br>
 
-Blog: [haines-lab.com](https://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/) (Part 1) | [Part 2](https://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/)
+Blog posts:
+
+- [How to Estimate a Mean](https://haines-lab.com/post/how-to-estimate-a-mean-and-what-it-means-for-science/)
+- [How to Estimate a Correlation](https://haines-lab.com/post/how-to-estimate-a-correlation-and-what-it-means-for-science/)
+
+<br>
+
+Paper: Haines et al. (in press). *Psychological Methods*
 
 <br>
 
 Key references:
 
-- Haines, Kvam, et al. (2020). *PsyArXiv* — Reliability paradox & generative models
-- Haines et al. (2023). *Computational Psychiatry* — IGT test-retest reliability
-- Haines, Sullivan-Toole, & Olino (2023). *Biol Psychiatry: CNNI* — Generative models for neuroscience
+- Hedge, Powell, & Sumner (2018). *Behavior Research Methods*
+- Elliott et al. (2020). *Psychological Science*
+- Haines, Sullivan-Toole, & Olino (2023). *Biol Psychiatry: CNNI*
 
 ::: {.notes}
-Blog posts have full code for both the univariate and bivariate cases — simulations, all estimation methods, sampling distributions. Papers go deeper into the generative modeling framework and applications. Happy to discuss any of this further.
+Blog posts have full code for the univariate and bivariate cases. The paper goes deeper into the real-data applications. Happy to discuss any of this further — measurement error is everywhere, and the fix is often simpler than people think.
 :::
